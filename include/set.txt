@@ -1,0 +1,115 @@
+#include "lvars.xh"
+
+// "find and replace" each occurrence of "TYPE" with your desired datatype name,
+// and each occurrence of "ACTUAL_TYPE" with the actual datatype (including *)
+// Your desired type should have its own show function, named showTYPE
+// Your desired type should have its own eq function, names eqTYPE
+
+typedef datatype Set_TYPE Set_TYPE;
+datatype Set_TYPE {
+  TYPE_Empty ();
+  TYPE_Set (ACTUAL_TYPE, Set_TYPE*);
+  TYPE_Top();
+};
+
+string showInner_TYPE(Set_TYPE* set) {
+  string result = str("");
+  match (set) {
+    TYPE_Empty() -> {}
+    TYPE_Set(hd, tl) -> {
+      result = showTYPE(hd);
+      match (tl) {
+        TYPE_Empty() -> {} 
+        _ -> {
+          result += ", " + showInner_TYPE(tl);
+        }
+      }
+    }
+    TYPE_Top() -> {result = str("Top()");}
+  }
+  return result;
+}
+
+string showSet_TYPE(Set_TYPE* set) {
+  return "{" + showInner_TYPE(set) + "}";
+}
+
+// returns 1 if set1 is a subset of set2, 0 otherwise
+int isSubset_TYPE(Set_TYPE* set1, Set_TYPE* set2) {
+  match (set1) {
+    TYPE_Empty() -> {return 1;}
+    TYPE_Top() -> {return 0;}
+    TYPE_Set(hd1, tl1) -> {
+      match (set2) {
+        TYPE_Empty() -> {return 0;}
+        TYPE_Top() -> {return 0;}
+        TYPE_Set(hd2, tl2) -> {
+          if (eqTYPE(hd1, hd2)) {
+            return isSubset_TYPE(tl1, tl2);
+          }
+          return isSubset_TYPE(TYPE_Set(hd1, TYPE_Empty()), tl2) &&
+                 isSubset_TYPE(tl1, set2);
+        }
+      }
+    }
+  }
+}
+
+int eqSet_TYPE(Set_TYPE* set1, Set_TYPE* set2) {
+  match (set1) {
+    TYPE_Top() -> {
+      match (set2) {
+        TYPE_Top() -> {return 1;}
+        _ -> {return 0;}
+      }
+    }
+    _ -> {return isSubset_TYPE(set1, set2) && isSubset_TYPE(set2, set1);}
+  } 
+}
+
+int leqSet_TYPE(Set_TYPE* set1, Set_TYPE* set2) {
+  return isSubset_TYPE(set1, set2);
+}
+
+int isInSet_TYPE(ACTUAL_TYPE item, Set_TYPE* set) {
+  match (set) {
+    TYPE_Empty() -> {return 0;}
+    TYPE_Top() -> {return 0;}
+    TYPE_Set(hd, tl) -> {
+      if (eqTYPE(hd, item)) {
+        return 1;
+      }
+      return isInSet_TYPE(item, tl);
+    }
+  }
+}
+
+Set_TYPE* lubSet_TYPE(Set_TYPE* set1, Set_TYPE* set2) {
+  match (set1) {
+    TYPE_Empty() -> {return set2;}
+    TYPE_Top() -> {return TYPE_Top();}
+    TYPE_Set(hd1, tl1) -> {
+      match (set2) {
+        TYPE_Empty() -> {return set1;}
+        TYPE_Top() -> {return TYPE_Top();}
+        TYPE_Set(_, _) -> {
+          Set_TYPE* partial = lubSet_TYPE(tl1, set2);
+          match (partial) {
+            TYPE_Empty() -> {return TYPE_Set(hd1, TYPE_Empty());}
+            TYPE_Top() -> {return TYPE_Top();}
+            TYPE_Set(_, _) -> {
+              if (isInSet_TYPE(hd1, partial)) {
+                return partial;
+              }
+              return TYPE_Set(hd1, partial);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+Lattice<Set_TYPE*> * latticeTYPE() {
+  return lattice(TYPE_Empty(), TYPE_Top(), leqSet_TYPE, lubSet_TYPE, eqSet_TYPE, showSet_TYPE);
+}

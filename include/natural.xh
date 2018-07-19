@@ -1,0 +1,91 @@
+#include "lvars.xh"
+
+#ifndef _NATURAL_XH
+#define _NATURAL_XH
+
+typedef datatype Nat Nat;
+datatype Nat {
+  TopNat ();
+  BotNat ();
+  Int (int);
+};
+
+int leqNat(Nat* n1, Nat* n2) {
+  int result;
+  match (n1) {
+    TopNat() -> {result = 0;}
+    BotNat() -> {result = 1;}
+    Int(i1) ->  {
+      match (n2) {
+        TopNat() -> {result =  1;}
+        BotNat() -> {result = 0;}
+        Int(i2) -> {result = i1 == i2;}
+      }
+    }
+  }
+  return result;
+} 
+
+Nat* lubNat(Nat* n1, Nat* n2) {
+  Nat* result;
+  match (n1) {
+    TopNat() -> {result = TopNat();}
+    BotNat() -> {result = n2;}
+    Int(i1) ->  {
+      match (n2) {
+        TopNat() -> {result =  TopNat();}
+        BotNat() -> {result = n1;}
+        Int(i2) -> {
+          if (i1 == i2) {
+            result = n1;
+          }
+          else {
+           result = TopNat();
+          }
+        }
+      }
+    }
+  }
+  return result;
+}
+
+
+int eqNat(Nat* n1, Nat* n2) {
+  match (n1) {
+    TopNat() -> {
+      match (n2) {
+        TopNat() -> {return 1;}
+        other -> {return 0;}
+      } 
+    }
+    BotNat() -> {
+      match (n2) {
+        BotNat() -> {return 1;}
+        other -> {return 0;}
+      }
+    }
+    Int(i1) -> {
+      match (n2) {
+        Int(i2) -> {return i1 == i2;}
+        other -> {return 0;}
+      } 
+    }
+  } 
+  return 0;
+}
+
+string showNat(Nat* n) {
+  string result;
+  match (n) {
+    TopNat() -> {result = str("TopNat()");}
+    BotNat() -> {result = str("BotNat()");}
+    Int(i) -> {result = "Int(" + show(i) + ")";}
+  }
+  return result;
+}
+
+Lattice<Nat*> * natLattice() {
+  return lattice(BotNat(), TopNat(), leqNat, lubNat, eqNat, showNat);
+}
+
+#endif
