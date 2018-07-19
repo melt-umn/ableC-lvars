@@ -206,7 +206,13 @@ int main (int argc, char **argv) {
   put(boolPair2, Pair(T(), Bot()));
   put(boolPair2, Pair(Bot(), F()));
   ActivationSet<State*>* result2 = get(boolPair2, thresh);
-  printf("result2: %s\n", show(result2).text);
+
+  if (result2 != NULL) {
+    printf("result2: %s\n", show(result2).text);
+  }
+  else {
+    printf("result2: NULL\n");
+  }
 
   int mainRes;
   if (result1 == tSet && result2 == fSet) {

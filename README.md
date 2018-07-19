@@ -2,22 +2,23 @@
 
 ## To-do:
 
-+ Add to MELT repo
+### Urgent:
+
++ Fix segfault errors with empty activation sets and threshold sets (see emptyActSet.txt)
 + Write up a page about extension
-+ Reason about determinism
++ Think about determinism (esp. when invalid put doesn't error out)
++ Implement better cilk examples (Read from different files? Sum random numbers until they reach a certain point? A better set example?) Check out Cilk paper
+
+### Less urgent:
+
 + Look over and tidy up examples and header file
 + Add freezing examples
 + Implement more prefab lattices
-+ Implement better cilk examples (Read from different files? Sum random numbers until they reach a certain point? A better set example?) Check out Cilk paper
-+ Fix segfault errors with empty activation sets and threshold sets (see emptyActSet.txt)
 + Update readme to include new examples and the addition of freezing
 + Could overload get so that if no threshold is specified, defaults to bottom element?
-+ Would it be better to create a set "template" based on C arrays (more space-efficient)?
++ Would it be better to create a set "template" based on C arrays instead of algebraic datatypes (more space-efficient)?
 + If an update would take the state of an lvar to top(), should the update just not be performed, or should the program error out? Or should this depend on the debug mode? Does this affect determinism?
-+ Why are non-cilk versions of code (including fib.xc example from cilk extension) usually so much faster than cilk versions? Should I mess with number of workers or something?
-+ What are good cilk examples?
 + Is there a way to error out only on the first missing include of a header?
-+ Fix timing in Cilk examples
 + Better positive tests
 
 ## Guide:
