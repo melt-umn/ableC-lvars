@@ -4,14 +4,14 @@
 
 ### Urgent:
 
-+ Fix segfault errors with empty activation sets and threshold sets (see emptyActSet.txt)
 + Write up a page about extension
 + Think about determinism (esp. when invalid put doesn't error out)
 + Implement better cilk examples (Read from different files? Sum random numbers until they reach a certain point? A better set example?) Check out Cilk paper
++ Look over and tidy up examples and header file
++ Fix top <= top in examples and tests
 
 ### Less urgent:
 
-+ Look over and tidy up examples and header file
 + Add freezing examples
 + Implement more prefab lattices
 + Update readme to include new examples and the addition of freezing
@@ -20,6 +20,8 @@
 + If an update would take the state of an lvar to top(), should the update just not be performed, or should the program error out? Or should this depend on the debug mode? Does this affect determinism?
 + Is there a way to error out only on the first missing include of a header?
 + Better positive tests
++ Check on leq with freezing-- do I need to check further?
++ Implement getFst and getSnd
 
 ## Guide:
 
