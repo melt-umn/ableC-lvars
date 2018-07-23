@@ -6,7 +6,7 @@
 
 + Write up a page about extension
 + Think about determinism (esp. when invalid put doesn't error out)
-+ Implement better cilk examples (Read from different files? Sum random numbers until they reach a certain point? A better set example?) Check out Cilk paper
++ Implement better cilk examples (Read from different files? Sum random numbers until they reach a certain point? A better set example?) Bitwise or? Check out Cilk paper
 + Look over and tidy up examples and header file
 + Fix top <= top in examples and tests
 
@@ -21,7 +21,8 @@
 + Is there a way to error out only on the first missing include of a header?
 + Better positive tests
 + Check on leq with freezing-- do I need to check further?
-+ Implement getFst and getSnd
++ Implement getFst and getSnd to help users avoid creating threshold sets/activation sets
++ Implement other Lvish features
 
 ## Guide:
 
