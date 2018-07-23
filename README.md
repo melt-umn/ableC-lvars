@@ -9,6 +9,7 @@
 + Implement better cilk examples (Read from different files? Sum random numbers until they reach a certain point? A better set example?) Bitwise or? Check out Cilk paper
 + Look over and tidy up examples and header file
 + Fix top <= top in examples and tests
++ Fix bitwise or example-- nondeterminism is currently present
 
 ### Less urgent:
 

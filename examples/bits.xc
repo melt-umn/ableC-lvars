@@ -1,8 +1,9 @@
 #define DEBUG
+#define GC_THREADS
 #include "lvars.xh"
 #include <cilk.xh>
 
-int ARRSIZE = 4;
+int ARRSIZE = 10;
 
 int eqArr(int* arr1, int* arr2) {
   if (arr1 == NULL && arr2 == NULL) {
@@ -59,9 +60,9 @@ int* lubArr(int* arr1, int* arr2) {
   return newArr;
 }
 
-cilk int putOnes(Lvar<int*>* x, int index, ThresholdSet<int*>* t, int count);
-cilk int putOnes(Lvar<int*>* x, int index, ThresholdSet<int*>* t, int count) {
-  if (index < 0 || index >= ARRSIZE || count > 10) {
+cilk int putOnes(Lvar<int*>* x, int index, ThresholdSet<int*>* t);
+cilk int putOnes(Lvar<int*>* x, int index, ThresholdSet<int*>* t) {
+  if (index < 0 || index >= ARRSIZE) {
     cilk return 0;
   }
   if (get(x, t) == NULL) {
@@ -72,8 +73,8 @@ cilk int putOnes(Lvar<int*>* x, int index, ThresholdSet<int*>* t, int count) {
     newArr[index] = 1;
     put(x, newArr);
     int result1, result2;
-    spawn result1 = putOnes(x, index - 2, t, count + 1);
-    spawn result2 = putOnes(x, index - 1, t, count + 1);
+    spawn result1 = putOnes(x, index - 2, t);
+    spawn result2 = putOnes(x, index - 1, t);
     sync;
     cilk return result1 && result2;
   }
@@ -82,18 +83,18 @@ cilk int putOnes(Lvar<int*>* x, int index, ThresholdSet<int*>* t, int count) {
         
 
 cilk int main(int argc, char **argv) {
-  int* bottom = malloc(sizeof(int) * ARRSIZE);
+  int* bottom = GC_MALLOC(sizeof(int) * ARRSIZE);
   for (int i = 0; i < ARRSIZE; i++){
     bottom[i] = 0;
   }
 
-  int* top = malloc(sizeof(int) * ARRSIZE);
+  int* top = GC_MALLOC(sizeof(int) * ARRSIZE);
   top = NULL;
 
   Lattice<int*>* D = lattice(bottom, top, leqArr, lubArr, eqArr, showArr);
   Lvar<int*> * x = newLvar(D);
 
-  int* act1 = malloc(ARRSIZE * sizeof(int));
+  int* act1 = GC_MALLOC(ARRSIZE * sizeof(int));
   for (int i = 0; i < ARRSIZE; i++) {
     act1[i] = 1;
   }
@@ -102,7 +103,7 @@ cilk int main(int argc, char **argv) {
   ThresholdSet<int*> * t = thresholdSet(D){a1};
 
   int result;
-  spawn result = putOnes(x, ARRSIZE - 1, t, 0);
+  spawn result = putOnes(x, ARRSIZE - 1, t);
   sync;
 
   if (get(x, t) != NULL){ 
@@ -112,11 +113,8 @@ cilk int main(int argc, char **argv) {
   else { 
     printf("Result is NULL\n");
   }
-  free(bottom);
-  free(top);
   free(D);
   free(x);
-  free(act1);
   freeSet(a1);
   freeSet(t);
   cilk return 1;
