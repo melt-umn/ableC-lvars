@@ -1,0 +1,455 @@
+#define DEBUG
+#include "lvars.xh"
+
+typedef datatype Color Color;
+datatype Color {
+  Bottom();
+  Red();
+  RedOrange();
+  Orange();
+  YellowOrange();
+  Yellow();
+  YellowGreen();
+  Green();
+  BlueGreen();
+  Blue();
+  BlueViolet();
+  Violet();
+  RedViolet();
+  Top();
+};
+
+int eqColor(Color* c1, Color* c2) {
+  match (c1) {
+    Bottom() -> { 
+      match (c2) {
+        Bottom() -> {return 1;}
+        _ -> {return 0;}
+      }
+    }
+    Red() -> { 
+      match (c2) {
+        Red() -> {return 1;}
+        _ -> {return 0;}
+      }
+    }
+    RedOrange() -> { 
+      match (c2) {
+        RedOrange() -> {return 1;}
+        _ -> {return 0;}
+      }
+    }
+    Orange() -> { 
+      match (c2) {
+        Orange() -> {return 1;}
+        _ -> {return 0;}
+      }
+    }
+    YellowOrange() -> { 
+      match (c2) {
+        YellowOrange() -> {return 1;}
+        _ -> {return 0;}
+      }
+    }
+    Yellow() -> { 
+      match (c2) {
+        Yellow() -> {return 1;}
+        _ -> {return 0;}
+      }
+    }
+    YellowGreen() -> { 
+      match (c2) {
+        YellowGreen() -> {return 1;}
+        _ -> {return 0;}
+      }
+    }
+    Green() -> { 
+      match (c2) {
+        Green() -> {return 1;}
+        _ -> {return 0;}
+      }
+    }
+    BlueGreen() -> { 
+      match (c2) {
+        BlueGreen() -> {return 1;}
+        _ -> {return 0;}
+      }
+    }
+    Blue() -> { 
+      match (c2) {
+        Blue() -> {return 1;}
+        _ -> {return 0;}
+      }
+    }
+    BlueViolet() -> { 
+      match (c2) {
+        BlueViolet() -> {return 1;}
+        _ -> {return 0;}
+      }
+    }
+    Violet() -> { 
+      match (c2) {
+        Violet() -> {return 1;}
+        _ -> {return 0;}
+      }
+    }
+    RedViolet() -> { 
+      match (c2) {
+        RedViolet() -> {return 1;}
+        _ -> {return 0;}
+      }
+    }
+    Top() -> { 
+      match (c2) {
+        Top() -> {return 1;}
+        _ -> {return 0;}
+      }
+    }
+  }
+}
+
+int leqColor(Color* c1, Color* c2) {
+  match (c1) {
+    Bottom() -> { 
+      return 1;
+    }
+    Red() -> { 
+      match (c2) {
+        Red() -> {return 1;}
+        RedOrange() -> {return 1;}
+        RedViolet() -> {return 1;}
+        Top() -> {return 1;}
+        _ -> {return 0;}
+      }
+    }
+    RedOrange() -> { 
+      match (c2) {
+        RedOrange() -> {return 1;}
+        Top() -> {return 1;}
+        _ -> {return 0;}
+      }
+    }
+    Orange() -> { 
+      match (c2) {
+        Orange() -> {return 1;}
+        RedOrange() -> {return 1;}
+        YellowOrange() -> {return 1;}
+        Top() -> {return 1;}
+        _ -> {return 0;}
+      }
+    }
+    YellowOrange() -> { 
+      match (c2) {
+        YellowOrange() -> {return 1;}
+        Top() -> {return 1;}
+        _ -> {return 0;}
+      }
+    }
+    Yellow() -> { 
+      match (c2) {
+        Yellow() -> {return 1;}
+        YellowGreen() -> {return 1;}
+        YellowOrange() -> {return 1;}
+        Top() -> {return 1;}
+        _ -> {return 0;}
+      }
+    }
+    YellowGreen() -> { 
+      match (c2) {
+        YellowGreen() -> {return 1;}
+        Top() -> {return 1;}
+        _ -> {return 0;}
+      }
+    }
+    Green() -> { 
+      match (c2) {
+        Green() -> {return 1;}
+        BlueGreen() -> {return 1;}
+        YellowGreen() -> {return 1;}
+        Top() -> {return 1;}
+        _ -> {return 0;}
+      }
+    }
+    BlueGreen() -> { 
+      match (c2) {
+        BlueGreen() -> {return 1;}
+        Top() -> {return 1;}
+        _ -> {return 0;}
+      }
+    }
+    Blue() -> { 
+      match (c2) {
+        Blue() -> {return 1;}
+        BlueGreen() -> {return 1;}
+        BlueViolet() -> {return 1;}
+        Top() -> {return 1;}
+        _ -> {return 0;}
+      }
+    }
+    BlueViolet() -> { 
+      match (c2) {
+        BlueViolet() -> {return 1;}
+        Top() -> {return 1;}
+        _ -> {return 0;}
+      }
+    }
+    Violet() -> { 
+      match (c2) {
+        Violet() -> {return 1;} 
+        BlueViolet() -> {return 1;}
+        RedViolet() -> {return 1;}
+        Top() -> {return 1;}
+        _ -> {return 0;}
+      }
+    }
+    RedViolet() -> { 
+      match (c2) {
+        RedViolet() -> {return 1;}
+        Top() -> {return 1;}
+        _ -> {return 0;}
+      }
+    }
+    Top() -> { 
+      match (c2) {
+        Top() -> {return 1;}
+        _ -> {return 0;}
+      }
+    }
+  }
+}
+
+Color* lubColor(Color* c1, Color* c2) {
+  match (c1) {
+    Bottom() -> { 
+      return c2;
+    }
+    Red() -> { 
+      match (c2) {
+        Bottom() -> {return c1;}
+        Red() -> {return c1;}
+        RedOrange() -> {return RedOrange();}
+        Orange() -> {return RedOrange();}
+        Yellow() -> {return Orange();}
+        Blue() -> {return Violet();}
+        Violet() -> {return RedViolet();}
+        RedViolet() -> {return RedViolet();}
+        _ -> {return Top();}
+      }
+    }
+    RedOrange() -> { 
+      match (c2) {
+        RedOrange() -> {return c1;}
+        Red() -> {return c1;}
+        Orange() -> {return c1;}
+        _ -> {return Top();}
+      }
+    }
+    Orange() -> { 
+      match (c2) {
+        Bottom() -> {return c1;}
+        Red() -> {return RedOrange();}
+        RedOrange() -> {return RedOrange();}
+        Orange() -> {return Orange();}
+        YellowOrange() -> {return YellowOrange();}
+        Yellow() -> {return YellowOrange();}
+        _ -> {return Top();}
+      }
+    }
+    YellowOrange() -> { 
+      match (c2) {
+        YellowOrange() -> {return c1;}
+        Yellow() -> {return c1;}
+        Orange() -> {return c1;}
+        _ -> {return Top();}
+      }
+    }
+    Yellow() -> { 
+      match (c2) {
+        Bottom() -> {return c1;}
+        Red() -> {return Orange();}
+        Orange() -> {return YellowOrange();}
+        YellowOrange() -> {return YellowOrange();}
+        Yellow() -> {return Yellow();}
+        YellowGreen() -> {return YellowGreen();}
+        Green() -> {return YellowGreen();}
+        Blue() -> {return Green();}
+        _ -> {return Top();}
+      }
+    }
+    YellowGreen() -> { 
+      match (c2) {
+        YellowGreen() -> {return c1;}
+        Yellow() -> {return c1;}
+        Green() -> {return c1;}
+        _ -> {return Top();}
+      }
+    }
+    Green() -> { 
+      match (c2) {
+        Bottom() -> {return c1;}
+        Yellow() -> {return YellowGreen();}
+        YellowGreen() -> {return YellowGreen();}
+        Green() -> {return Green();}
+        BlueGreen() -> {return BlueGreen();}
+        Blue() -> {return BlueGreen();}
+        _ -> {return Top();}
+      }
+    }
+    BlueGreen() -> { 
+      match (c2) {
+        BlueGreen() -> {return c1;}
+        Blue() -> {return c1;}
+        Green() -> {return c1;}
+        _ -> {return Top();}
+      }
+    }
+    Blue() -> { 
+      match (c2) {
+        Bottom() -> {return c1;}
+        Red() -> {return Violet();}
+        Yellow() -> {return Green();}
+        Green() -> {return BlueGreen();}
+        BlueGreen() -> {return BlueGreen();}
+        Blue() -> {return Blue();}
+        BlueViolet() -> {return BlueViolet();}
+        Violet() -> {return BlueViolet();}
+        _ -> {return Top();}
+      }
+    }
+    BlueViolet() -> { 
+      match (c2) {
+        BlueViolet() -> {return c1;}
+        Blue() -> {return c1;}
+        Violet() -> {return c1;}
+        _ -> {return Top();}
+      }
+    }
+    Violet() -> { 
+      match (c2) {
+        Bottom() -> {return c1;}
+        Red() -> {return RedViolet();}
+        RedViolet() -> {return RedViolet();}
+        Blue() -> {return BlueViolet();}
+        BlueViolet() -> {return BlueViolet();}
+        Violet() -> {return Violet();}
+        _ -> {return Top();}
+      }
+    }
+    RedViolet() -> { 
+      match (c2) {
+        RedViolet() -> {return c1;}
+        Red() -> {return c1;}
+        Violet() -> {return c1;}
+        _ -> {return Top();}
+      }
+    }
+    Top() -> { 
+      return Top();
+    }
+  }
+}
+
+string showColor(Color* c) {
+  match (c) {
+    Bottom() -> { 
+      return str("Uncolored");
+    }
+    Red() -> { 
+      return str("Red");
+    }
+    RedOrange() -> { 
+      return str("Red-Orange");
+    }
+    Orange() -> { 
+      return str("Orange");
+    }
+    YellowOrange() -> { 
+      return str("Yellow-Orange");
+    }
+    Yellow() -> { 
+      return str("Yellow");
+    }
+    YellowGreen() -> { 
+      return str("Yellow-Green");
+    }
+    Green() -> { 
+      return str("Green");
+    }
+    BlueGreen() -> { 
+      return str("Blue-Green");
+    }
+    Blue() -> { 
+      return str("Blue");
+    }
+    BlueViolet() -> { 
+      return str("Blue-Violet");
+    }
+    Violet() -> { 
+      return str("Violet");
+    }
+    RedViolet() -> { 
+      return str("Red-Violet");
+    }
+    Top() -> { 
+      return str("Invalid Color");
+    }
+  }
+}
+
+Color* getColor(char* c) {
+  if (strcmp("red\0", c) == 0) {
+    return Red();
+  }
+  if (strcmp("orange\0", c) == 0) {
+    return Orange();
+  }
+  if (strcmp("yellow\0", c) == 0) {
+    return Yellow();
+  }
+  if (strcmp("green\0", c) == 0) {
+    return Green();
+  }
+  if (strcmp("blue\0", c) == 0) {
+    return Blue();
+  }
+  if (strcmp("violet\0", c) == 0) {
+    return Violet();
+  }
+  else {
+    return Top();
+  }
+}
+
+int main(int argc, char **argv) {
+  if (argc != 3) {
+    printf("Must enter two color names\n");
+  }
+  else {
+    Lattice<Color*> * D = lattice(Bottom(), Top(), leqColor, lubColor, eqColor, showColor);
+    Color* c1 = getColor(argv[1]);
+    Color* c2 = getColor(argv[2]);
+    Lvar<Color*>* x = newLvar(D);
+    put(x, c1);
+    put(x, c2);
+    ActivationSet<Color*> * orange = activationSet(D){Orange()};     
+    ActivationSet<Color*> * green = activationSet(D){Green()};
+    ActivationSet<Color*> * violet = activationSet(D){Violet()};
+    ThresholdSet<Color*> * t = thresholdSet(D){orange, green, violet};
+    ActivationSet<Color*> * result = get(x, t);  
+    if (result == NULL) {
+      printf("Invalid get.\n");
+    }
+    else {
+      printf("Activation Set Matched: %s\n", show(result).text);
+      freeze(x);
+      printf("Actual value: %s\n", show(x).text);
+    }
+    free(D);
+    free(c1);
+    free(c2);
+    freeSet(orange);
+    freeSet(green);
+    freeSet(violet); 
+    freeSet(t);         
+  }
+}
