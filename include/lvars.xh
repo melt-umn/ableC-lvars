@@ -30,7 +30,8 @@ template<a> struct _Lattice {
   int (*_leq)();
   a (* _lub)();
   int (*_eq)(); 
-  string (*_show)();    
+  string (*_show)();
+  //Lvar<a>** _blocked;    
 };
 
 // to create a new lattice with the fields specified by the user
@@ -45,8 +46,25 @@ static Lattice<a>* _newLattice(a least, a greatest, int (*leq)(),
   l-> _lub = lub;
   l->_eq = eq;
   l->_show = showMethod;
+  //l->_blocked = malloc(20 * sizeof(Lvar<a>*));
+  //l->_blockedIndex = 0;
+  //l->_blockedSize = 20;
   return l;
 }
+
+/*
+template<a>
+static int _resizeBlocked(Lattice<a>* lat, int newSize) {
+  Lvar<a>** newSet = malloc(sizeof(Lvar<a>*) * newSize);
+  for (int i = 0; i < lat->_blockedSize; i++) {
+    newSet[i] = lat->_blocked[i];
+  }
+  free(lat->_blocked);
+  lat->_blocked = newSet;
+  lat->_blockedSize = newSize;
+  return 1;
+} 
+*/
 
 //********************************* Lvar **************************************
 

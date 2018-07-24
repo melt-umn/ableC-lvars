@@ -1877,208 +1877,465 @@ static inline void Cilk_cilk2c_before_return_slow_cp(CilkWorkerState  *const  ws
     ;
   }
 }
-signed int ARRSIZE = 15;
-signed int eqArr(signed int  * arr1, signed int  * arr2)
+signed int eqInt(signed int  n1, signed int  n2)
 {
 
   {
-    if ((((arr1) == (((void *)0))) && ((arr2) == (((void *)0)))))
+    if ((((((n1) > 100) || ((n2) > 100)) || ((n1) < 0)) || ((n2) < 0)))
     {
       {
-        return 1;
+        ((exit)(0));
       }
     } else {
       ;
     }
-    if ((((arr1) == (((void *)0))) || ((arr2) == (((void *)0)))))
-    {
-      {
-        return 0;
-      }
-    } else {
-      ;
-    }
-    for (signed int i = 0; ((i) < (ARRSIZE)); ((i)++))
-    {
-      {
-        if ((((arr1)[(i)]) != ((arr2)[(i)])))
-        {
-          {
-            return 0;
-          }
-        } else {
-          ;
-        }
-      }
-    }
-    return 1;
+    return ((n1) == (n2));
   }
 }
-signed int leqArr(signed int  * arr1, signed int  * arr2)
+signed int leqInt(signed int  n1, signed int  n2)
 {
 
   {
-    if (((arr2) == (((void *)0))))
+    if ((((((n1) > 100) || ((n2) > 100)) || ((n1) < 0)) || ((n2) < 0)))
     {
       {
-        return 1;
+        ((exit)(0));
       }
     } else {
       ;
     }
-    if (((arr1) == (((void *)0))))
-    {
-      {
-        return 0;
-      }
-    } else {
-      ;
-    }
-    for (signed int i = 0; ((i) < (ARRSIZE)); ((i)++))
-    {
-      {
-        if (((((arr1)[(i)]) == 1) && (((arr2)[(i)]) == 0)))
-        {
-          {
-            return 0;
-          }
-        } else {
-          ;
-        }
-      }
-    }
-    return 1;
+    return ((n1) <= (n2));
   }
 }
-struct _string_s showArr(signed int  * arr)
+signed int lubInt(signed int  n1, signed int  n2)
 {
 
   {
-    struct _string_s result = ((strCharPointer)("["));
-    signed int i = 0;
-    for(; ((i) < ((ARRSIZE) - 1)); ((i)++))
+    if ((((((n1) > 100) || ((n2) > 100)) || ((n1) < 0)) || ((n2) < 0)))
     {
       {
-        ({
-          struct _string_s  *_tmp29 = (&(result));
-          ((*(_tmp29)) = ((_append_string)((*(_tmp29)), ((_append_string)(((showInt)(((arr)[(i)]))), ((strCharPointer)(", "))))))); })
-        ;
-      }
-    }
-    return ((_append_string)(((_append_string)((result), ((showInt)(((arr)[(i)]))))), ((strCharPointer)("]"))));
-  }
-}
-signed int  *lubArr(signed int  * arr1, signed int  * arr2)
-{
-
-  {
-    if ((((arr1) == (((void *)0))) || ((arr2) == (((void *)0)))))
-    {
-      {
-        return (((void *)0));
+        ((exit)(0));
       }
     } else {
       ;
     }
-    signed int  *newArr = ((GC_malloc)(((ARRSIZE) * (sizeof(signed int)))));
-    for (signed int i = 0; ((i) < (ARRSIZE)); ((i)++))
+    if (((n1) >= (n2)))
     {
       {
-        (((newArr)[(i)]) = 0);
+        return (n1);
       }
+    } else {
+      ;
     }
-    for (signed int i = 0; ((i) < (ARRSIZE)); ((i)++))
-    {
-      {
-        if (((((arr1)[(i)]) == 1) || (((arr2)[(i)]) == 1)))
-        {
-          {
-            (((newArr)[(i)]) = 1);
-          }
-        } else {
-          ;
-        }
-      }
-    }
-    return (newArr);
+    return (n2);
   }
 }
-struct _cilk_putOnes_frame;
-struct _cilk_putOnes_args;
-typedef signed int  *_template_param_unused_30;
-typedef __attribute__(()) struct _template__Lvar__pointer__builtin_signed_int__ _template__Lvar__pointer__builtin_signed_int__;
-typedef signed int  *_template_param_unused_31;
-typedef __attribute__(()) struct _template__Lattice__pointer__builtin_signed_int__ _template__Lattice__pointer__builtin_signed_int__;
-struct _template__Lattice__pointer__builtin_signed_int__ {
-  signed int  *_bottom;
-  signed int  *_top;
+struct _string_s showInteger(signed int  n)
+{
+
+  {
+    return ((showInt)((n)));
+  }
+}
+struct _cilk_putCilk_frame;
+struct _cilk_putCilk_args;
+typedef signed int _template_param_unused_29;
+typedef __attribute__(()) struct _template__Lvar__builtin_signed_int_ _template__Lvar__builtin_signed_int_;
+typedef signed int _template_param_unused_30;
+typedef __attribute__(()) struct _template__Lattice__builtin_signed_int_ _template__Lattice__builtin_signed_int_;
+struct _template__Lattice__builtin_signed_int_ {
+  signed int _bottom;
+  signed int _top;
   signed int ( *_leq)();
-  signed int  *( *_lub)();
+  signed int ( *_lub)();
   signed int ( *_eq)();
   struct _string_s ( *_show)();
   
 };
-struct _template__Lvar__pointer__builtin_signed_int__ {
-  struct _template__Lattice__pointer__builtin_signed_int__  *_lattice;
-  signed int  *_value;
+struct _template__Lvar__builtin_signed_int_ {
+  struct _template__Lattice__builtin_signed_int_  *_lattice;
+  signed int _value;
   signed int _frozen;
   
 };
-typedef signed int  *_template_param_unused_32;
-typedef __attribute__(()) struct _template__ThresholdSet__pointer__builtin_signed_int__ _template__ThresholdSet__pointer__builtin_signed_int__;
-typedef signed int  *_template_param_unused_33;
-typedef __attribute__(()) struct _template__ActivationSet__pointer__builtin_signed_int__ _template__ActivationSet__pointer__builtin_signed_int__;
-struct _template__ActivationSet__pointer__builtin_signed_int__ {
-  signed int _size;
-  signed int  * *_set;
-  signed int _index;
-  struct _template__Lattice__pointer__builtin_signed_int__  *_lattice;
-  
-};
-struct _template__ThresholdSet__pointer__builtin_signed_int__ {
-  struct _template__Lattice__pointer__builtin_signed_int__  *_lattice;
-  signed int _size;
-  signed int _index;
-  struct _template__ActivationSet__pointer__builtin_signed_int__  * *_a_sets;
-  
-};
-signed int putOnes(CilkWorkerState  *const  _cilk_ws, struct _template__Lvar__pointer__builtin_signed_int__  * x, signed int  index, struct _template__ThresholdSet__pointer__builtin_signed_int__  * t);
-static void _cilk_putOnes_import(CilkWorkerState *const _cilk_ws, void *_cilk_procargs_v);
-struct _cilk_putOnes_frame {
+signed int putCilk(CilkWorkerState  *const  _cilk_ws, struct _template__Lvar__builtin_signed_int_  * x, signed int  val, signed int  count);
+static void _cilk_putCilk_import(CilkWorkerState *const _cilk_ws, void *_cilk_procargs_v);
+struct _cilk_putCilk_frame {
   CilkStackFrame header;
   struct  {
-    struct _template__ThresholdSet__pointer__builtin_signed_int__  *t;
-    signed int index;
-    struct _template__Lvar__pointer__builtin_signed_int__  *x;
+    signed int count;
+    signed int val;
+    struct _template__Lvar__builtin_signed_int_  *x;
     
-  } scope63;
+  } scope42;
   struct  {
-    signed int  *newArr;
+    signed int result;
     
-  } scope71;
-  struct  {
-    signed int i;
-    
-  } scope73;
-  struct  {
-    signed int result1, result2;
-    
-  } scope81;
+  } scope44;
   
 };
-struct _cilk_putOnes_args {
+struct _cilk_putCilk_args {
   signed int _cilk_proc_result;
-  struct _template__Lvar__pointer__builtin_signed_int__  *x;
-  signed int index;
-  struct _template__ThresholdSet__pointer__builtin_signed_int__  *t;
+  struct _template__Lvar__builtin_signed_int_  *x;
+  signed int val;
+  signed int count;
   
 };
 
 #undef CILK_WHERE_AM_I
 #define CILK_WHERE_AM_I IN_SLOW_PROCEDURE
 
-typedef signed int  *_template_param_unused_48;
-static struct _template__ActivationSet__pointer__builtin_signed_int__  *_template__get__pointer__builtin_signed_int__(struct _template__Lvar__pointer__builtin_signed_int__  * l, struct _template__ThresholdSet__pointer__builtin_signed_int__  * t)
+typedef signed int _template_param_unused_44;
+static signed int _template__put__builtin_signed_int_(struct _template__Lvar__builtin_signed_int_  * l, signed int  newState)
+{
+
+  {
+    if (((l)->_frozen))
+    {
+      {
+        ((printf)("Error: can't write to a frozen lvar.\n"));
+        ((exit)(0));
+        return 0;
+      }
+    } else {
+      ;
+    }
+    signed int oldState = ((l)->_value);
+    signed int newValue = ((((l)->_lattice)->_lub)((oldState), (newState)));
+    if (((((l)->_lattice)->_eq)((((l)->_lattice)->_top), (newValue))))
+    {
+      {
+        ((printf)("Error: invalid put of %s\n", (((((l)->_lattice)->_show)((newState))).text)));
+        ((exit)(0));
+        return 0;
+      }
+    } else {
+      ;
+    }
+    (((l)->_value) = (newValue));
+    return 1;
+  }
+}
+static void _cilk_putCilk_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_putCilk_frame  * _cilk_frame)
+{
+
+  
+  struct _template__Lvar__builtin_signed_int_  *x;
+  signed int val;
+  signed int count;
+  ;
+  /* expand CILK2C_START_THREAD_SLOW() macro */;
+  ((Cilk_cilk2c_start_thread_slow_cp)((_cilk_ws), (&((_cilk_frame)->header))));
+  ((Cilk_cilk2c_start_thread_slow)((_cilk_ws), (&((_cilk_frame)->header))));
+  switch (_cilk_frame->header.entry) {case 3: goto _cilk_sync3; case 2: goto _cilk_sync2; case 1: goto _cilk_sync1; }
+  /* TODO: restore only live variables */;
+  ;
+  ;
+  {
+    if (((count) < 1000))
+    {
+      {
+        signed int result;
+        ((((_cilk_frame)->header).entry) = 1);
+        /* TODO: save only live, dirty variables */;
+        ((((_cilk_frame)->scope44).result) = (result));
+        ;
+        ;
+        ((((_cilk_frame)->scope42).count) = (count));
+        ((((_cilk_frame)->scope42).val) = (val));
+        ((((_cilk_frame)->scope42).x) = (x));
+        /* expand CILK2C_BEFORE_SPAWN_SLOW() macro */;
+        ((Cilk_cilk2c_before_spawn_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+        /* expand CILK2C_PUSH_FRAME() macro */;
+        ((Cilk_cilk2c_push_frame)((_cilk_ws), (&(((_cilk_frame)->header)))));
+        ((result) = ((putCilk)((_cilk_ws), (x), (val), ((count) + 1))));
+        ((((_cilk_frame)->scope44).result) = (result));
+        {
+          /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
+          signed int __tmp35;
+          if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
+          {
+            ((__tmp35) = (result));
+            if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp35)), (sizeof((__tmp35))))))
+            {
+              ((Cilk_cilk2c_pop)((_cilk_ws)));
+              return ;
+            } else {
+              ;
+            }
+          } else {
+            ;
+          }
+        }
+        /* TODO: restore only live variables */;
+        ((result) = (((_cilk_frame)->scope44).result));
+        ;
+        ;
+        ((count) = (((_cilk_frame)->scope42).count));
+        ((val) = (((_cilk_frame)->scope42).val));
+        ((x) = (((_cilk_frame)->scope42).x));
+        /* expand CILK2C_AFTER_SPAWN_SLOW() macro */;
+        ((Cilk_cilk2c_after_spawn_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+        /* TODO: save only live, dirty variables */;
+        ((((_cilk_frame)->scope44).result) = (result));
+        ;
+        ;
+        ((((_cilk_frame)->scope42).count) = (count));
+        ((((_cilk_frame)->scope42).val) = (val));
+        ((((_cilk_frame)->scope42).x) = (x));
+        if (0)
+        {
+          _cilk_sync1:;
+          /* TODO: restore only live variables */;
+          ((result) = (((_cilk_frame)->scope44).result));
+          ;
+          ;
+          ((count) = (((_cilk_frame)->scope42).count));
+          ((val) = (((_cilk_frame)->scope42).val));
+          ((x) = (((_cilk_frame)->scope42).x));
+        } else {
+          ;
+        }
+        /* expand CILK2C_AT_THREAD_BOUNDARY_SLOW() macro */;
+        ((Cilk_cilk2c_at_thread_boundary_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+        ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
+        /* expand CILK2C_BEFORE_SYNC_SLOW() macro */;
+        ((Cilk_cilk2c_before_sync_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+        ((((_cilk_frame)->header).entry) = 2);
+        /* TODO: save only live, dirty variables */;
+        ((((_cilk_frame)->scope44).result) = (result));
+        ;
+        ;
+        ((((_cilk_frame)->scope42).count) = (count));
+        ((((_cilk_frame)->scope42).val) = (val));
+        ((((_cilk_frame)->scope42).x) = (x));
+        if (((Cilk_sync)((_cilk_ws))))
+        {
+          return ;
+          _cilk_sync2:;
+        } else {
+          ;
+        }
+        /* TODO: restore only live variables */;
+        ((result) = (((_cilk_frame)->scope44).result));
+        ;
+        ;
+        ((count) = (((_cilk_frame)->scope42).count));
+        ((val) = (((_cilk_frame)->scope42).val));
+        ((x) = (((_cilk_frame)->scope42).x));
+        /* expand CILK2C_AFTER_SYNC_SLOW() macro */;
+        ((Cilk_cilk2c_after_sync_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+        /* expand CILK2C_AT_THREAD_BOUNDARY_SLOW() macro */;
+        ((Cilk_cilk2c_at_thread_boundary_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+        ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
+        {
+          signed int __tmp36 = (result);
+          ((Cilk_set_result)((_cilk_ws), (&(__tmp36)), (sizeof((__tmp36)))));
+          /* expand CILK2C_BEFORE_RETURN_SLOW macro */;
+          ((Cilk_cilk2c_before_return_slow_cp)((_cilk_ws), (&((_cilk_frame)->header))));
+          ((Cilk_cilk2c_before_return_slow)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
+          return ;
+        }
+      }
+    } else {
+      ;
+    }
+    {
+      signed int __tmp45 = ((_template__put__builtin_signed_int_)((x), (val)));
+      ((Cilk_set_result)((_cilk_ws), (&(__tmp45)), (sizeof((__tmp45)))));
+      /* expand CILK2C_BEFORE_RETURN_SLOW macro */;
+      ((Cilk_cilk2c_before_return_slow_cp)((_cilk_ws), (&((_cilk_frame)->header))));
+      ((Cilk_cilk2c_before_return_slow)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
+      return ;
+    }
+  }
+  /* expand CILK2C_BEFORE_SYNC_SLOW() macro */;
+  ((Cilk_cilk2c_before_sync_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+  ((((_cilk_frame)->header).entry) = 3);
+  /* TODO: save only live, dirty variables */;
+  ;
+  ;
+  ((((_cilk_frame)->scope42).count) = (count));
+  ((((_cilk_frame)->scope42).val) = (val));
+  ((((_cilk_frame)->scope42).x) = (x));
+  if (((Cilk_sync)((_cilk_ws))))
+  {
+    return ;
+    _cilk_sync3:;
+  } else {
+    ;
+  }
+  /* TODO: restore only live variables */;
+  ;
+  ;
+  ((count) = (((_cilk_frame)->scope42).count));
+  ((val) = (((_cilk_frame)->scope42).val));
+  ((x) = (((_cilk_frame)->scope42).x));
+  /* expand CILK2C_AFTER_SYNC_SLOW() macro */;
+  ((Cilk_cilk2c_after_sync_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+  /* expand CILK2C_AT_THREAD_BOUNDARY_SLOW() macro */;
+  ((Cilk_cilk2c_at_thread_boundary_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+  ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
+}
+
+#undef CILK_WHERE_AM_I
+#define CILK_WHERE_AM_I IN_C_CODE
+
+static CilkProcInfo _cilk_putCilk_sig[] = {{(sizeof(signed int)), (sizeof(struct _cilk_putCilk_frame)), (_cilk_putCilk_slow), 0, 0}, {(sizeof(signed int)), ((size_t)(((char *)(&((((struct _cilk_putCilk_frame *)0)->scope44).result))) - ((char *)((struct _cilk_putCilk_frame *)0)))), 0, 0, 0}, {0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}};
+
+#undef CILK_WHERE_AM_I
+#define CILK_WHERE_AM_I IN_FAST_PROCEDURE
+
+signed int putCilk(CilkWorkerState  *const  _cilk_ws, struct _template__Lvar__builtin_signed_int_  * x, signed int  val, signed int  count)
+{
+
+  
+  /* declare _cilk_frame and expand CILK2C_INIT_FRAME() macro */;
+  struct _cilk_putCilk_frame  *_cilk_frame = ((Cilk_cilk2c_init_frame)((_cilk_ws), (sizeof(struct _cilk_putCilk_frame)), (_cilk_putCilk_sig)));
+  /* expand CILK2C_START_THREAD_FAST() macro */;
+  ((Cilk_cilk2c_start_thread_fast_cp)((_cilk_ws), (&((_cilk_frame)->header))));
+  ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
+  {
+    if (((count) < 1000))
+    {
+      {
+        signed int result;
+        ((((_cilk_frame)->header).entry) = 1);
+        /* TODO: save only live, dirty variables */;
+        ((((_cilk_frame)->scope44).result) = (result));
+        ;
+        ;
+        ((((_cilk_frame)->scope42).count) = (count));
+        ((((_cilk_frame)->scope42).val) = (val));
+        ((((_cilk_frame)->scope42).x) = (x));
+        /* expand CILK2C_BEFORE_SPAWN_FAST() macro */;
+        ((Cilk_cilk2c_before_spawn_fast_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+        /* expand CILK2C_PUSH_FRAME() macro */;
+        ((Cilk_cilk2c_push_frame)((_cilk_ws), (&(((_cilk_frame)->header)))));
+        ((result) = ((putCilk)((_cilk_ws), (x), (val), ((count) + 1))));
+        {
+          /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
+          signed int __tmp55;
+          if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
+          {
+            ((__tmp55) = (result));
+            if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp55)), (sizeof((__tmp55))))))
+            {
+              ((Cilk_cilk2c_pop)((_cilk_ws)));
+              return 0;
+            } else {
+              ;
+            }
+          } else {
+            ;
+          }
+        }
+        /* expand CILK2C_AFTER_SPAWN_FAST() macro */;
+        ((Cilk_cilk2c_after_spawn_fast_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+        ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
+        /* expand CILK2C_AT_SYNC_FAST() macro */;
+        ((Cilk_cilk2c_at_sync_fast_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+        ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
+        {
+          signed int _cilk_tmp = (result);
+          /* expand CILK2C_BEFORE_RETURN_FAST() macro */;
+          ((Cilk_cilk2c_before_return_fast_cp)((_cilk_ws), (&((_cilk_frame)->header))));
+          ((Cilk_cilk2c_before_return_fast)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
+          return (_cilk_tmp);
+        }
+      }
+    } else {
+      ;
+    }
+    {
+      signed int _cilk_tmp = ((_template__put__builtin_signed_int_)((x), (val)));
+      /* expand CILK2C_BEFORE_RETURN_FAST() macro */;
+      ((Cilk_cilk2c_before_return_fast_cp)((_cilk_ws), (&((_cilk_frame)->header))));
+      ((Cilk_cilk2c_before_return_fast)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
+      return (_cilk_tmp);
+    }
+  }
+  /* expand CILK2C_AT_SYNC_FAST() macro */;
+  ((Cilk_cilk2c_at_sync_fast_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+  ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
+}
+
+#undef CILK_WHERE_AM_I
+#define CILK_WHERE_AM_I IN_C_CODE
+
+static void _cilk_putCilk_import(CilkWorkerState  *const  _cilk_ws, void  * _cilk_procargs_v)
+{
+
+  ((void)(_cilk_ws));
+  ((void)(_cilk_procargs_v));
+  ((((struct _cilk_putCilk_args *)(_cilk_procargs_v))->_cilk_proc_result) = ((putCilk)((_cilk_ws), (((struct _cilk_putCilk_args *)(_cilk_procargs_v))->x), (((struct _cilk_putCilk_args *)(_cilk_procargs_v))->val), (((struct _cilk_putCilk_args *)(_cilk_procargs_v))->count))));
+}
+
+#undef CILK_WHERE_AM_I
+#define CILK_WHERE_AM_I IN_C_CODE
+
+signed int mt_putCilk(CilkContext  *const  context, struct _template__Lvar__builtin_signed_int_  * x, signed int  val, signed int  count)
+{
+
+  struct _cilk_putCilk_args  *_cilk_procargs = ((struct _cilk_putCilk_args *)((Cilk_malloc_fixed)((sizeof(struct _cilk_putCilk_args)))));
+  (((_cilk_procargs)->x) = (x));
+  (((_cilk_procargs)->val) = (val));
+  (((_cilk_procargs)->count) = (count));
+  ;
+  ((Cilk_start)((context), (_cilk_putCilk_import), (_cilk_procargs), (sizeof(signed int))));
+  signed int _cilk_proc_result = ((_cilk_procargs)->_cilk_proc_result);
+  ((Cilk_free)((_cilk_procargs)));
+  return (_cilk_proc_result);
+}
+struct _cilk_getCilk_frame;
+struct _cilk_getCilk_args;
+typedef signed int _template_param_unused_56;
+typedef __attribute__(()) struct _template__ActivationSet__builtin_signed_int_ _template__ActivationSet__builtin_signed_int_;
+struct _template__ActivationSet__builtin_signed_int_ {
+  signed int _size;
+  signed int  *_set;
+  signed int _index;
+  struct _template__Lattice__builtin_signed_int_  *_lattice;
+  
+};
+typedef signed int _template_param_unused_57;
+typedef __attribute__(()) struct _template__ThresholdSet__builtin_signed_int_ _template__ThresholdSet__builtin_signed_int_;
+struct _template__ThresholdSet__builtin_signed_int_ {
+  struct _template__Lattice__builtin_signed_int_  *_lattice;
+  signed int _size;
+  signed int _index;
+  struct _template__ActivationSet__builtin_signed_int_  * *_a_sets;
+  
+};
+struct _template__ActivationSet__builtin_signed_int_  *getCilk(CilkWorkerState  *const  _cilk_ws, struct _template__Lvar__builtin_signed_int_  * x, struct _template__ThresholdSet__builtin_signed_int_  * t, signed int  count);
+static void _cilk_getCilk_import(CilkWorkerState *const _cilk_ws, void *_cilk_procargs_v);
+struct _cilk_getCilk_frame {
+  CilkStackFrame header;
+  struct  {
+    signed int count;
+    struct _template__ThresholdSet__builtin_signed_int_  *t;
+    struct _template__Lvar__builtin_signed_int_  *x;
+    
+  } scope53;
+  struct  {
+    struct _template__ActivationSet__builtin_signed_int_  *result;
+    
+  } scope55;
+  
+};
+struct _cilk_getCilk_args {
+  struct _template__ActivationSet__builtin_signed_int_  *_cilk_proc_result;
+  struct _template__Lvar__builtin_signed_int_  *x;
+  struct _template__ThresholdSet__builtin_signed_int_  *t;
+  signed int count;
+  
+};
+
+#undef CILK_WHERE_AM_I
+#define CILK_WHERE_AM_I IN_SLOW_PROCEDURE
+
+typedef signed int _template_param_unused_71;
+static struct _template__ActivationSet__builtin_signed_int_  *_template__get__builtin_signed_int_(struct _template__Lvar__builtin_signed_int_  * l, struct _template__ThresholdSet__builtin_signed_int_  * t)
 {
 
   {
@@ -2112,112 +2369,47 @@ static struct _template__ActivationSet__pointer__builtin_signed_int__  *_templat
     return (((void *)0));
   }
 }
-typedef signed int  *_template_param_unused_52;
-static signed int _template__put__pointer__builtin_signed_int__(struct _template__Lvar__pointer__builtin_signed_int__  * l, signed int  * newState)
-{
-
-  {
-    if (((l)->_frozen))
-    {
-      {
-        ((printf)("Error: can't write to a frozen lvar.\n"));
-        ((exit)(0));
-        return 0;
-      }
-    } else {
-      ;
-    }
-    signed int  *oldState = ((l)->_value);
-    signed int  *newValue = ((((l)->_lattice)->_lub)((oldState), (newState)));
-    if (((((l)->_lattice)->_eq)((((l)->_lattice)->_top), (newValue))))
-    {
-      {
-        ((printf)("Error: invalid put of %s\n", (((((l)->_lattice)->_show)((newState))).text)));
-        ((exit)(0));
-        return 0;
-      }
-    } else {
-      ;
-    }
-    (((l)->_value) = (newValue));
-    return 1;
-  }
-}
-static void _cilk_putOnes_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_putOnes_frame  * _cilk_frame)
+static void _cilk_getCilk_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_getCilk_frame  * _cilk_frame)
 {
 
   
-  struct _template__Lvar__pointer__builtin_signed_int__  *x;
-  signed int index;
-  struct _template__ThresholdSet__pointer__builtin_signed_int__  *t;
+  struct _template__Lvar__builtin_signed_int_  *x;
+  struct _template__ThresholdSet__builtin_signed_int_  *t;
+  signed int count;
   ;
   /* expand CILK2C_START_THREAD_SLOW() macro */;
   ((Cilk_cilk2c_start_thread_slow_cp)((_cilk_ws), (&((_cilk_frame)->header))));
   ((Cilk_cilk2c_start_thread_slow)((_cilk_ws), (&((_cilk_frame)->header))));
-  switch (_cilk_frame->header.entry) {case 4: goto _cilk_sync4; case 3: goto _cilk_sync3; case 2: goto _cilk_sync2; case 1: goto _cilk_sync1; }
+  switch (_cilk_frame->header.entry) {case 3: goto _cilk_sync3; case 2: goto _cilk_sync2; case 1: goto _cilk_sync1; }
   /* TODO: restore only live variables */;
   ;
   ;
   {
-    ((printf)("a\n"));
-    if ((((index) < 0) || ((index) >= (ARRSIZE))))
+    if (((count) < 1000))
     {
       {
-        {
-          signed int __tmp40 = 0;
-          ((Cilk_set_result)((_cilk_ws), (&(__tmp40)), (sizeof((__tmp40)))));
-          /* expand CILK2C_BEFORE_RETURN_SLOW macro */;
-          ((Cilk_cilk2c_before_return_slow_cp)((_cilk_ws), (&((_cilk_frame)->header))));
-          ((Cilk_cilk2c_before_return_slow)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
-          return ;
-        }
-      }
-    } else {
-      ;
-    }
-    ((printf)("b\n"));
-    if ((((_template__get__pointer__builtin_signed_int__)((x), (t))) == (((void *)0))))
-    {
-      {
-        ((printf)("c\n"));
-        signed int  *newArr = ((GC_malloc)(((sizeof(signed int)) * (ARRSIZE))));
-        ((printf)("d\n"));
-        for (signed int i = 0; ((i) < (ARRSIZE)); ((i)++))
-        {
-          {
-            (((newArr)[(i)]) = 0);
-          }
-        }
-        ((printf)("e\n"));
-        (((newArr)[(index)]) = 1);
-        ((printf)("f\n"));
-        ((_template__put__pointer__builtin_signed_int__)((x), (newArr)));
-        ((printf)("g\n"));
-        signed int result1, result2;
-        ((printf)("h\n"));
+        struct _template__ActivationSet__builtin_signed_int_  *result;
         ((((_cilk_frame)->header).entry) = 1);
         /* TODO: save only live, dirty variables */;
-        ((((_cilk_frame)->scope71).newArr) = (newArr));
-        ((((_cilk_frame)->scope81).result1) = (result1));
-        ((((_cilk_frame)->scope81).result2) = (result2));
+        ((((_cilk_frame)->scope55).result) = (result));
         ;
         ;
-        ((((_cilk_frame)->scope63).index) = (index));
-        ((((_cilk_frame)->scope63).t) = (t));
-        ((((_cilk_frame)->scope63).x) = (x));
+        ((((_cilk_frame)->scope53).count) = (count));
+        ((((_cilk_frame)->scope53).t) = (t));
+        ((((_cilk_frame)->scope53).x) = (x));
         /* expand CILK2C_BEFORE_SPAWN_SLOW() macro */;
         ((Cilk_cilk2c_before_spawn_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
         /* expand CILK2C_PUSH_FRAME() macro */;
         ((Cilk_cilk2c_push_frame)((_cilk_ws), (&(((_cilk_frame)->header)))));
-        ((result1) = ((putOnes)((_cilk_ws), (x), ((index) - 2), (t))));
-        ((((_cilk_frame)->scope81).result1) = (result1));
+        ((result) = ((getCilk)((_cilk_ws), (x), (t), ((count) + 1))));
+        ((((_cilk_frame)->scope55).result) = (result));
         {
           /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-          signed int __tmp53;
+          struct _template__ActivationSet__builtin_signed_int_  *__tmp62;
           if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
           {
-            ((__tmp53) = (result1));
-            if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp53)), (sizeof((__tmp53))))))
+            ((__tmp62) = (result));
+            if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp62)), (sizeof((__tmp62))))))
             {
               ((Cilk_cilk2c_pop)((_cilk_ws)));
               return ;
@@ -2229,153 +2421,69 @@ static void _cilk_putOnes_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_p
           }
         }
         /* TODO: restore only live variables */;
-        ((newArr) = (((_cilk_frame)->scope71).newArr));
-        ((result1) = (((_cilk_frame)->scope81).result1));
-        ((result2) = (((_cilk_frame)->scope81).result2));
+        ((result) = (((_cilk_frame)->scope55).result));
         ;
         ;
-        ((index) = (((_cilk_frame)->scope63).index));
-        ((t) = (((_cilk_frame)->scope63).t));
-        ((x) = (((_cilk_frame)->scope63).x));
+        ((count) = (((_cilk_frame)->scope53).count));
+        ((t) = (((_cilk_frame)->scope53).t));
+        ((x) = (((_cilk_frame)->scope53).x));
         /* expand CILK2C_AFTER_SPAWN_SLOW() macro */;
         ((Cilk_cilk2c_after_spawn_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
         /* TODO: save only live, dirty variables */;
-        ((((_cilk_frame)->scope71).newArr) = (newArr));
-        ((((_cilk_frame)->scope81).result1) = (result1));
-        ((((_cilk_frame)->scope81).result2) = (result2));
+        ((((_cilk_frame)->scope55).result) = (result));
         ;
         ;
-        ((((_cilk_frame)->scope63).index) = (index));
-        ((((_cilk_frame)->scope63).t) = (t));
-        ((((_cilk_frame)->scope63).x) = (x));
+        ((((_cilk_frame)->scope53).count) = (count));
+        ((((_cilk_frame)->scope53).t) = (t));
+        ((((_cilk_frame)->scope53).x) = (x));
         if (0)
         {
           _cilk_sync1:;
           /* TODO: restore only live variables */;
-          ((newArr) = (((_cilk_frame)->scope71).newArr));
-          ((result1) = (((_cilk_frame)->scope81).result1));
-          ((result2) = (((_cilk_frame)->scope81).result2));
+          ((result) = (((_cilk_frame)->scope55).result));
           ;
           ;
-          ((index) = (((_cilk_frame)->scope63).index));
-          ((t) = (((_cilk_frame)->scope63).t));
-          ((x) = (((_cilk_frame)->scope63).x));
+          ((count) = (((_cilk_frame)->scope53).count));
+          ((t) = (((_cilk_frame)->scope53).t));
+          ((x) = (((_cilk_frame)->scope53).x));
         } else {
           ;
         }
         /* expand CILK2C_AT_THREAD_BOUNDARY_SLOW() macro */;
         ((Cilk_cilk2c_at_thread_boundary_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
         ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
-        ((printf)("i\n"));
-        ((((_cilk_frame)->header).entry) = 2);
-        /* TODO: save only live, dirty variables */;
-        ((((_cilk_frame)->scope71).newArr) = (newArr));
-        ((((_cilk_frame)->scope81).result1) = (result1));
-        ((((_cilk_frame)->scope81).result2) = (result2));
-        ;
-        ;
-        ((((_cilk_frame)->scope63).index) = (index));
-        ((((_cilk_frame)->scope63).t) = (t));
-        ((((_cilk_frame)->scope63).x) = (x));
-        /* expand CILK2C_BEFORE_SPAWN_SLOW() macro */;
-        ((Cilk_cilk2c_before_spawn_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
-        /* expand CILK2C_PUSH_FRAME() macro */;
-        ((Cilk_cilk2c_push_frame)((_cilk_ws), (&(((_cilk_frame)->header)))));
-        ((result2) = ((putOnes)((_cilk_ws), (x), ((index) - 1), (t))));
-        ((((_cilk_frame)->scope81).result2) = (result2));
-        {
-          /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-          signed int __tmp54;
-          if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
-          {
-            ((__tmp54) = (result2));
-            if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp54)), (sizeof((__tmp54))))))
-            {
-              ((Cilk_cilk2c_pop)((_cilk_ws)));
-              return ;
-            } else {
-              ;
-            }
-          } else {
-            ;
-          }
-        }
-        /* TODO: restore only live variables */;
-        ((newArr) = (((_cilk_frame)->scope71).newArr));
-        ((result1) = (((_cilk_frame)->scope81).result1));
-        ((result2) = (((_cilk_frame)->scope81).result2));
-        ;
-        ;
-        ((index) = (((_cilk_frame)->scope63).index));
-        ((t) = (((_cilk_frame)->scope63).t));
-        ((x) = (((_cilk_frame)->scope63).x));
-        /* expand CILK2C_AFTER_SPAWN_SLOW() macro */;
-        ((Cilk_cilk2c_after_spawn_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
-        /* TODO: save only live, dirty variables */;
-        ((((_cilk_frame)->scope71).newArr) = (newArr));
-        ((((_cilk_frame)->scope81).result1) = (result1));
-        ((((_cilk_frame)->scope81).result2) = (result2));
-        ;
-        ;
-        ((((_cilk_frame)->scope63).index) = (index));
-        ((((_cilk_frame)->scope63).t) = (t));
-        ((((_cilk_frame)->scope63).x) = (x));
-        if (0)
-        {
-          _cilk_sync2:;
-          /* TODO: restore only live variables */;
-          ((newArr) = (((_cilk_frame)->scope71).newArr));
-          ((result1) = (((_cilk_frame)->scope81).result1));
-          ((result2) = (((_cilk_frame)->scope81).result2));
-          ;
-          ;
-          ((index) = (((_cilk_frame)->scope63).index));
-          ((t) = (((_cilk_frame)->scope63).t));
-          ((x) = (((_cilk_frame)->scope63).x));
-        } else {
-          ;
-        }
-        /* expand CILK2C_AT_THREAD_BOUNDARY_SLOW() macro */;
-        ((Cilk_cilk2c_at_thread_boundary_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
-        ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
-        ((printf)("j\n"));
         /* expand CILK2C_BEFORE_SYNC_SLOW() macro */;
         ((Cilk_cilk2c_before_sync_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
-        ((((_cilk_frame)->header).entry) = 3);
+        ((((_cilk_frame)->header).entry) = 2);
         /* TODO: save only live, dirty variables */;
-        ((((_cilk_frame)->scope71).newArr) = (newArr));
-        ((((_cilk_frame)->scope81).result1) = (result1));
-        ((((_cilk_frame)->scope81).result2) = (result2));
+        ((((_cilk_frame)->scope55).result) = (result));
         ;
         ;
-        ((((_cilk_frame)->scope63).index) = (index));
-        ((((_cilk_frame)->scope63).t) = (t));
-        ((((_cilk_frame)->scope63).x) = (x));
+        ((((_cilk_frame)->scope53).count) = (count));
+        ((((_cilk_frame)->scope53).t) = (t));
+        ((((_cilk_frame)->scope53).x) = (x));
         if (((Cilk_sync)((_cilk_ws))))
         {
           return ;
-          _cilk_sync3:;
+          _cilk_sync2:;
         } else {
           ;
         }
         /* TODO: restore only live variables */;
-        ((newArr) = (((_cilk_frame)->scope71).newArr));
-        ((result1) = (((_cilk_frame)->scope81).result1));
-        ((result2) = (((_cilk_frame)->scope81).result2));
+        ((result) = (((_cilk_frame)->scope55).result));
         ;
         ;
-        ((index) = (((_cilk_frame)->scope63).index));
-        ((t) = (((_cilk_frame)->scope63).t));
-        ((x) = (((_cilk_frame)->scope63).x));
+        ((count) = (((_cilk_frame)->scope53).count));
+        ((t) = (((_cilk_frame)->scope53).t));
+        ((x) = (((_cilk_frame)->scope53).x));
         /* expand CILK2C_AFTER_SYNC_SLOW() macro */;
         ((Cilk_cilk2c_after_sync_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
         /* expand CILK2C_AT_THREAD_BOUNDARY_SLOW() macro */;
         ((Cilk_cilk2c_at_thread_boundary_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
         ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
-        ((printf)("k\n"));
         {
-          signed int __tmp55 = ((result1) && (result2));
-          ((Cilk_set_result)((_cilk_ws), (&(__tmp55)), (sizeof((__tmp55)))));
+          struct _template__ActivationSet__builtin_signed_int_  *__tmp63 = (result);
+          ((Cilk_set_result)((_cilk_ws), (&(__tmp63)), (sizeof((__tmp63)))));
           /* expand CILK2C_BEFORE_RETURN_SLOW macro */;
           ((Cilk_cilk2c_before_return_slow_cp)((_cilk_ws), (&((_cilk_frame)->header))));
           ((Cilk_cilk2c_before_return_slow)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
@@ -2383,39 +2491,40 @@ static void _cilk_putOnes_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_p
         }
       }
     } else {
-      ;
-    }
-    {
-      signed int __tmp56 = 1;
-      ((Cilk_set_result)((_cilk_ws), (&(__tmp56)), (sizeof((__tmp56)))));
-      /* expand CILK2C_BEFORE_RETURN_SLOW macro */;
-      ((Cilk_cilk2c_before_return_slow_cp)((_cilk_ws), (&((_cilk_frame)->header))));
-      ((Cilk_cilk2c_before_return_slow)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
-      return ;
+      {
+        {
+          struct _template__ActivationSet__builtin_signed_int_  *__tmp72 = ((_template__get__builtin_signed_int_)((x), (t)));
+          ((Cilk_set_result)((_cilk_ws), (&(__tmp72)), (sizeof((__tmp72)))));
+          /* expand CILK2C_BEFORE_RETURN_SLOW macro */;
+          ((Cilk_cilk2c_before_return_slow_cp)((_cilk_ws), (&((_cilk_frame)->header))));
+          ((Cilk_cilk2c_before_return_slow)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
+          return ;
+        }
+      }
     }
   }
   /* expand CILK2C_BEFORE_SYNC_SLOW() macro */;
   ((Cilk_cilk2c_before_sync_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
-  ((((_cilk_frame)->header).entry) = 4);
+  ((((_cilk_frame)->header).entry) = 3);
   /* TODO: save only live, dirty variables */;
   ;
   ;
-  ((((_cilk_frame)->scope63).index) = (index));
-  ((((_cilk_frame)->scope63).t) = (t));
-  ((((_cilk_frame)->scope63).x) = (x));
+  ((((_cilk_frame)->scope53).count) = (count));
+  ((((_cilk_frame)->scope53).t) = (t));
+  ((((_cilk_frame)->scope53).x) = (x));
   if (((Cilk_sync)((_cilk_ws))))
   {
     return ;
-    _cilk_sync4:;
+    _cilk_sync3:;
   } else {
     ;
   }
   /* TODO: restore only live variables */;
   ;
   ;
-  ((index) = (((_cilk_frame)->scope63).index));
-  ((t) = (((_cilk_frame)->scope63).t));
-  ((x) = (((_cilk_frame)->scope63).x));
+  ((count) = (((_cilk_frame)->scope53).count));
+  ((t) = (((_cilk_frame)->scope53).t));
+  ((x) = (((_cilk_frame)->scope53).x));
   /* expand CILK2C_AFTER_SYNC_SLOW() macro */;
   ((Cilk_cilk2c_after_sync_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
   /* expand CILK2C_AT_THREAD_BOUNDARY_SLOW() macro */;
@@ -2426,78 +2535,45 @@ static void _cilk_putOnes_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_p
 #undef CILK_WHERE_AM_I
 #define CILK_WHERE_AM_I IN_C_CODE
 
-static CilkProcInfo _cilk_putOnes_sig[] = {{(sizeof(signed int)), (sizeof(struct _cilk_putOnes_frame)), (_cilk_putOnes_slow), 0, 0}, {(sizeof(signed int)), ((size_t)(((char *)(&((((struct _cilk_putOnes_frame *)0)->scope81).result1))) - ((char *)((struct _cilk_putOnes_frame *)0)))), 0, 0, 0}, {(sizeof(signed int)), ((size_t)(((char *)(&((((struct _cilk_putOnes_frame *)0)->scope81).result2))) - ((char *)((struct _cilk_putOnes_frame *)0)))), 0, 0, 0}, {0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}};
+static CilkProcInfo _cilk_getCilk_sig[] = {{(sizeof(struct _template__ActivationSet__builtin_signed_int_)), (sizeof(struct _cilk_getCilk_frame)), (_cilk_getCilk_slow), 0, 0}, {(sizeof(struct _template__ActivationSet__builtin_signed_int_ *)), ((size_t)(((char *)(&((((struct _cilk_getCilk_frame *)0)->scope55).result))) - ((char *)((struct _cilk_getCilk_frame *)0)))), 0, 0, 0}, {0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}};
 
 #undef CILK_WHERE_AM_I
 #define CILK_WHERE_AM_I IN_FAST_PROCEDURE
 
-signed int putOnes(CilkWorkerState  *const  _cilk_ws, struct _template__Lvar__pointer__builtin_signed_int__  * x, signed int  index, struct _template__ThresholdSet__pointer__builtin_signed_int__  * t)
+struct _template__ActivationSet__builtin_signed_int_  *getCilk(CilkWorkerState  *const  _cilk_ws, struct _template__Lvar__builtin_signed_int_  * x, struct _template__ThresholdSet__builtin_signed_int_  * t, signed int  count)
 {
 
   
   /* declare _cilk_frame and expand CILK2C_INIT_FRAME() macro */;
-  struct _cilk_putOnes_frame  *_cilk_frame = ((Cilk_cilk2c_init_frame)((_cilk_ws), (sizeof(struct _cilk_putOnes_frame)), (_cilk_putOnes_sig)));
+  struct _cilk_getCilk_frame  *_cilk_frame = ((Cilk_cilk2c_init_frame)((_cilk_ws), (sizeof(struct _cilk_getCilk_frame)), (_cilk_getCilk_sig)));
   /* expand CILK2C_START_THREAD_FAST() macro */;
   ((Cilk_cilk2c_start_thread_fast_cp)((_cilk_ws), (&((_cilk_frame)->header))));
   ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
   {
-    ((printf)("a\n"));
-    if ((((index) < 0) || ((index) >= (ARRSIZE))))
+    if (((count) < 1000))
     {
       {
-        {
-          signed int _cilk_tmp = 0;
-          /* expand CILK2C_BEFORE_RETURN_FAST() macro */;
-          ((Cilk_cilk2c_before_return_fast_cp)((_cilk_ws), (&((_cilk_frame)->header))));
-          ((Cilk_cilk2c_before_return_fast)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
-          return (_cilk_tmp);
-        }
-      }
-    } else {
-      ;
-    }
-    ((printf)("b\n"));
-    if ((((_template__get__pointer__builtin_signed_int__)((x), (t))) == (((void *)0))))
-    {
-      {
-        ((printf)("c\n"));
-        signed int  *newArr = ((GC_malloc)(((sizeof(signed int)) * (ARRSIZE))));
-        ((printf)("d\n"));
-        for (signed int i = 0; ((i) < (ARRSIZE)); ((i)++))
-        {
-          {
-            (((newArr)[(i)]) = 0);
-          }
-        }
-        ((printf)("e\n"));
-        (((newArr)[(index)]) = 1);
-        ((printf)("f\n"));
-        ((_template__put__pointer__builtin_signed_int__)((x), (newArr)));
-        ((printf)("g\n"));
-        signed int result1, result2;
-        ((printf)("h\n"));
+        struct _template__ActivationSet__builtin_signed_int_  *result;
         ((((_cilk_frame)->header).entry) = 1);
         /* TODO: save only live, dirty variables */;
-        ((((_cilk_frame)->scope71).newArr) = (newArr));
-        ((((_cilk_frame)->scope81).result1) = (result1));
-        ((((_cilk_frame)->scope81).result2) = (result2));
+        ((((_cilk_frame)->scope55).result) = (result));
         ;
         ;
-        ((((_cilk_frame)->scope63).index) = (index));
-        ((((_cilk_frame)->scope63).t) = (t));
-        ((((_cilk_frame)->scope63).x) = (x));
+        ((((_cilk_frame)->scope53).count) = (count));
+        ((((_cilk_frame)->scope53).t) = (t));
+        ((((_cilk_frame)->scope53).x) = (x));
         /* expand CILK2C_BEFORE_SPAWN_FAST() macro */;
         ((Cilk_cilk2c_before_spawn_fast_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
         /* expand CILK2C_PUSH_FRAME() macro */;
         ((Cilk_cilk2c_push_frame)((_cilk_ws), (&(((_cilk_frame)->header)))));
-        ((result1) = ((putOnes)((_cilk_ws), (x), ((index) - 2), (t))));
+        ((result) = ((getCilk)((_cilk_ws), (x), (t), ((count) + 1))));
         {
           /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-          signed int __tmp71;
+          struct _template__ActivationSet__builtin_signed_int_  *__tmp82;
           if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
           {
-            ((__tmp71) = (result1));
-            if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp71)), (sizeof((__tmp71))))))
+            ((__tmp82) = (result));
+            if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp82)), (sizeof((__tmp82))))))
             {
               ((Cilk_cilk2c_pop)((_cilk_ws)));
               return 0;
@@ -2511,49 +2587,11 @@ signed int putOnes(CilkWorkerState  *const  _cilk_ws, struct _template__Lvar__po
         /* expand CILK2C_AFTER_SPAWN_FAST() macro */;
         ((Cilk_cilk2c_after_spawn_fast_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
         ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
-        ((printf)("i\n"));
-        ((((_cilk_frame)->header).entry) = 2);
-        /* TODO: save only live, dirty variables */;
-        ((((_cilk_frame)->scope71).newArr) = (newArr));
-        ((((_cilk_frame)->scope81).result1) = (result1));
-        ((((_cilk_frame)->scope81).result2) = (result2));
-        ;
-        ;
-        ((((_cilk_frame)->scope63).index) = (index));
-        ((((_cilk_frame)->scope63).t) = (t));
-        ((((_cilk_frame)->scope63).x) = (x));
-        /* expand CILK2C_BEFORE_SPAWN_FAST() macro */;
-        ((Cilk_cilk2c_before_spawn_fast_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
-        /* expand CILK2C_PUSH_FRAME() macro */;
-        ((Cilk_cilk2c_push_frame)((_cilk_ws), (&(((_cilk_frame)->header)))));
-        ((result2) = ((putOnes)((_cilk_ws), (x), ((index) - 1), (t))));
-        {
-          /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-          signed int __tmp72;
-          if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
-          {
-            ((__tmp72) = (result2));
-            if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp72)), (sizeof((__tmp72))))))
-            {
-              ((Cilk_cilk2c_pop)((_cilk_ws)));
-              return 0;
-            } else {
-              ;
-            }
-          } else {
-            ;
-          }
-        }
-        /* expand CILK2C_AFTER_SPAWN_FAST() macro */;
-        ((Cilk_cilk2c_after_spawn_fast_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
-        ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
-        ((printf)("j\n"));
         /* expand CILK2C_AT_SYNC_FAST() macro */;
         ((Cilk_cilk2c_at_sync_fast_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
         ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
-        ((printf)("k\n"));
         {
-          signed int _cilk_tmp = ((result1) && (result2));
+          struct _template__ActivationSet__builtin_signed_int_  *_cilk_tmp = (result);
           /* expand CILK2C_BEFORE_RETURN_FAST() macro */;
           ((Cilk_cilk2c_before_return_fast_cp)((_cilk_ws), (&((_cilk_frame)->header))));
           ((Cilk_cilk2c_before_return_fast)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
@@ -2561,10 +2599,488 @@ signed int putOnes(CilkWorkerState  *const  _cilk_ws, struct _template__Lvar__po
         }
       }
     } else {
+      {
+        {
+          struct _template__ActivationSet__builtin_signed_int_  *_cilk_tmp = ((_template__get__builtin_signed_int_)((x), (t)));
+          /* expand CILK2C_BEFORE_RETURN_FAST() macro */;
+          ((Cilk_cilk2c_before_return_fast_cp)((_cilk_ws), (&((_cilk_frame)->header))));
+          ((Cilk_cilk2c_before_return_fast)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
+          return (_cilk_tmp);
+        }
+      }
+    }
+  }
+  /* expand CILK2C_AT_SYNC_FAST() macro */;
+  ((Cilk_cilk2c_at_sync_fast_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+  ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
+}
+
+#undef CILK_WHERE_AM_I
+#define CILK_WHERE_AM_I IN_C_CODE
+
+static void _cilk_getCilk_import(CilkWorkerState  *const  _cilk_ws, void  * _cilk_procargs_v)
+{
+
+  ((void)(_cilk_ws));
+  ((void)(_cilk_procargs_v));
+  ((((struct _cilk_getCilk_args *)(_cilk_procargs_v))->_cilk_proc_result) = ((getCilk)((_cilk_ws), (((struct _cilk_getCilk_args *)(_cilk_procargs_v))->x), (((struct _cilk_getCilk_args *)(_cilk_procargs_v))->t), (((struct _cilk_getCilk_args *)(_cilk_procargs_v))->count))));
+}
+
+#undef CILK_WHERE_AM_I
+#define CILK_WHERE_AM_I IN_C_CODE
+
+struct _template__ActivationSet__builtin_signed_int_  *mt_getCilk(CilkContext  *const  context, struct _template__Lvar__builtin_signed_int_  * x, struct _template__ThresholdSet__builtin_signed_int_  * t, signed int  count)
+{
+
+  struct _cilk_getCilk_args  *_cilk_procargs = ((struct _cilk_getCilk_args *)((Cilk_malloc_fixed)((sizeof(struct _cilk_getCilk_args)))));
+  (((_cilk_procargs)->x) = (x));
+  (((_cilk_procargs)->t) = (t));
+  (((_cilk_procargs)->count) = (count));
+  ;
+  ((Cilk_start)((context), (_cilk_getCilk_import), (_cilk_procargs), (sizeof(struct _template__ActivationSet__builtin_signed_int_))));
+  struct _template__ActivationSet__builtin_signed_int_  *_cilk_proc_result = ((_cilk_procargs)->_cilk_proc_result);
+  ((Cilk_free)((_cilk_procargs)));
+  return (_cilk_proc_result);
+}
+struct _cilk_putGetEx_frame {
+  CilkStackFrame header;
+  struct  {
+    struct _template__ThresholdSet__builtin_signed_int_  *t;
+    struct _template__Lvar__builtin_signed_int_  *x;
+    
+  } scope65;
+  struct  {
+    struct _template__ActivationSet__builtin_signed_int_  *y;
+    
+  } scope66;
+  struct  {
+    signed int result1, result2;
+    
+  } scope67;
+  
+};
+struct _cilk_putGetEx_args {
+  struct _template__ActivationSet__builtin_signed_int_  *_cilk_proc_result;
+  struct _template__Lvar__builtin_signed_int_  *x;
+  struct _template__ThresholdSet__builtin_signed_int_  *t;
+  
+};
+
+#undef CILK_WHERE_AM_I
+#define CILK_WHERE_AM_I IN_SLOW_PROCEDURE
+
+static void _cilk_putGetEx_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_putGetEx_frame  * _cilk_frame)
+{
+
+  
+  struct _template__Lvar__builtin_signed_int_  *x;
+  struct _template__ThresholdSet__builtin_signed_int_  *t;
+  ;
+  /* expand CILK2C_START_THREAD_SLOW() macro */;
+  ((Cilk_cilk2c_start_thread_slow_cp)((_cilk_ws), (&((_cilk_frame)->header))));
+  ((Cilk_cilk2c_start_thread_slow)((_cilk_ws), (&((_cilk_frame)->header))));
+  switch (_cilk_frame->header.entry) {case 5: goto _cilk_sync5; case 4: goto _cilk_sync4; case 3: goto _cilk_sync3; case 2: goto _cilk_sync2; case 1: goto _cilk_sync1; }
+  /* TODO: restore only live variables */;
+  ;
+  ;
+  {
+    struct _template__ActivationSet__builtin_signed_int_  *y;
+    signed int result1, result2;
+    ((((_cilk_frame)->header).entry) = 1);
+    /* TODO: save only live, dirty variables */;
+    ((((_cilk_frame)->scope67).result1) = (result1));
+    ((((_cilk_frame)->scope67).result2) = (result2));
+    ((((_cilk_frame)->scope66).y) = (y));
+    ;
+    ;
+    ((((_cilk_frame)->scope65).t) = (t));
+    ((((_cilk_frame)->scope65).x) = (x));
+    /* expand CILK2C_BEFORE_SPAWN_SLOW() macro */;
+    ((Cilk_cilk2c_before_spawn_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+    /* expand CILK2C_PUSH_FRAME() macro */;
+    ((Cilk_cilk2c_push_frame)((_cilk_ws), (&(((_cilk_frame)->header)))));
+    ((y) = ((getCilk)((_cilk_ws), (x), (t), 0)));
+    ((((_cilk_frame)->scope66).y) = (y));
+    {
+      /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
+      struct _template__ActivationSet__builtin_signed_int_  *__tmp88;
+      if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
+      {
+        ((__tmp88) = (y));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp88)), (sizeof((__tmp88))))))
+        {
+          ((Cilk_cilk2c_pop)((_cilk_ws)));
+          return ;
+        } else {
+          ;
+        }
+      } else {
+        ;
+      }
+    }
+    /* TODO: restore only live variables */;
+    ((result1) = (((_cilk_frame)->scope67).result1));
+    ((result2) = (((_cilk_frame)->scope67).result2));
+    ((y) = (((_cilk_frame)->scope66).y));
+    ;
+    ;
+    ((t) = (((_cilk_frame)->scope65).t));
+    ((x) = (((_cilk_frame)->scope65).x));
+    /* expand CILK2C_AFTER_SPAWN_SLOW() macro */;
+    ((Cilk_cilk2c_after_spawn_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+    /* TODO: save only live, dirty variables */;
+    ((((_cilk_frame)->scope67).result1) = (result1));
+    ((((_cilk_frame)->scope67).result2) = (result2));
+    ((((_cilk_frame)->scope66).y) = (y));
+    ;
+    ;
+    ((((_cilk_frame)->scope65).t) = (t));
+    ((((_cilk_frame)->scope65).x) = (x));
+    if (0)
+    {
+      _cilk_sync1:;
+      /* TODO: restore only live variables */;
+      ((result1) = (((_cilk_frame)->scope67).result1));
+      ((result2) = (((_cilk_frame)->scope67).result2));
+      ((y) = (((_cilk_frame)->scope66).y));
+      ;
+      ;
+      ((t) = (((_cilk_frame)->scope65).t));
+      ((x) = (((_cilk_frame)->scope65).x));
+    } else {
       ;
     }
+    /* expand CILK2C_AT_THREAD_BOUNDARY_SLOW() macro */;
+    ((Cilk_cilk2c_at_thread_boundary_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+    ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
+    ((((_cilk_frame)->header).entry) = 2);
+    /* TODO: save only live, dirty variables */;
+    ((((_cilk_frame)->scope67).result1) = (result1));
+    ((((_cilk_frame)->scope67).result2) = (result2));
+    ((((_cilk_frame)->scope66).y) = (y));
+    ;
+    ;
+    ((((_cilk_frame)->scope65).t) = (t));
+    ((((_cilk_frame)->scope65).x) = (x));
+    /* expand CILK2C_BEFORE_SPAWN_SLOW() macro */;
+    ((Cilk_cilk2c_before_spawn_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+    /* expand CILK2C_PUSH_FRAME() macro */;
+    ((Cilk_cilk2c_push_frame)((_cilk_ws), (&(((_cilk_frame)->header)))));
+    ((result1) = ((putCilk)((_cilk_ws), (x), 3, 0)));
+    ((((_cilk_frame)->scope67).result1) = (result1));
     {
-      signed int _cilk_tmp = 1;
+      /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
+      signed int __tmp89;
+      if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
+      {
+        ((__tmp89) = (result1));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp89)), (sizeof((__tmp89))))))
+        {
+          ((Cilk_cilk2c_pop)((_cilk_ws)));
+          return ;
+        } else {
+          ;
+        }
+      } else {
+        ;
+      }
+    }
+    /* TODO: restore only live variables */;
+    ((result1) = (((_cilk_frame)->scope67).result1));
+    ((result2) = (((_cilk_frame)->scope67).result2));
+    ((y) = (((_cilk_frame)->scope66).y));
+    ;
+    ;
+    ((t) = (((_cilk_frame)->scope65).t));
+    ((x) = (((_cilk_frame)->scope65).x));
+    /* expand CILK2C_AFTER_SPAWN_SLOW() macro */;
+    ((Cilk_cilk2c_after_spawn_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+    /* TODO: save only live, dirty variables */;
+    ((((_cilk_frame)->scope67).result1) = (result1));
+    ((((_cilk_frame)->scope67).result2) = (result2));
+    ((((_cilk_frame)->scope66).y) = (y));
+    ;
+    ;
+    ((((_cilk_frame)->scope65).t) = (t));
+    ((((_cilk_frame)->scope65).x) = (x));
+    if (0)
+    {
+      _cilk_sync2:;
+      /* TODO: restore only live variables */;
+      ((result1) = (((_cilk_frame)->scope67).result1));
+      ((result2) = (((_cilk_frame)->scope67).result2));
+      ((y) = (((_cilk_frame)->scope66).y));
+      ;
+      ;
+      ((t) = (((_cilk_frame)->scope65).t));
+      ((x) = (((_cilk_frame)->scope65).x));
+    } else {
+      ;
+    }
+    /* expand CILK2C_AT_THREAD_BOUNDARY_SLOW() macro */;
+    ((Cilk_cilk2c_at_thread_boundary_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+    ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
+    ((((_cilk_frame)->header).entry) = 3);
+    /* TODO: save only live, dirty variables */;
+    ((((_cilk_frame)->scope67).result1) = (result1));
+    ((((_cilk_frame)->scope67).result2) = (result2));
+    ((((_cilk_frame)->scope66).y) = (y));
+    ;
+    ;
+    ((((_cilk_frame)->scope65).t) = (t));
+    ((((_cilk_frame)->scope65).x) = (x));
+    /* expand CILK2C_BEFORE_SPAWN_SLOW() macro */;
+    ((Cilk_cilk2c_before_spawn_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+    /* expand CILK2C_PUSH_FRAME() macro */;
+    ((Cilk_cilk2c_push_frame)((_cilk_ws), (&(((_cilk_frame)->header)))));
+    ((result2) = ((putCilk)((_cilk_ws), (x), 7, 0)));
+    ((((_cilk_frame)->scope67).result2) = (result2));
+    {
+      /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
+      signed int __tmp90;
+      if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
+      {
+        ((__tmp90) = (result2));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp90)), (sizeof((__tmp90))))))
+        {
+          ((Cilk_cilk2c_pop)((_cilk_ws)));
+          return ;
+        } else {
+          ;
+        }
+      } else {
+        ;
+      }
+    }
+    /* TODO: restore only live variables */;
+    ((result1) = (((_cilk_frame)->scope67).result1));
+    ((result2) = (((_cilk_frame)->scope67).result2));
+    ((y) = (((_cilk_frame)->scope66).y));
+    ;
+    ;
+    ((t) = (((_cilk_frame)->scope65).t));
+    ((x) = (((_cilk_frame)->scope65).x));
+    /* expand CILK2C_AFTER_SPAWN_SLOW() macro */;
+    ((Cilk_cilk2c_after_spawn_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+    /* TODO: save only live, dirty variables */;
+    ((((_cilk_frame)->scope67).result1) = (result1));
+    ((((_cilk_frame)->scope67).result2) = (result2));
+    ((((_cilk_frame)->scope66).y) = (y));
+    ;
+    ;
+    ((((_cilk_frame)->scope65).t) = (t));
+    ((((_cilk_frame)->scope65).x) = (x));
+    if (0)
+    {
+      _cilk_sync3:;
+      /* TODO: restore only live variables */;
+      ((result1) = (((_cilk_frame)->scope67).result1));
+      ((result2) = (((_cilk_frame)->scope67).result2));
+      ((y) = (((_cilk_frame)->scope66).y));
+      ;
+      ;
+      ((t) = (((_cilk_frame)->scope65).t));
+      ((x) = (((_cilk_frame)->scope65).x));
+    } else {
+      ;
+    }
+    /* expand CILK2C_AT_THREAD_BOUNDARY_SLOW() macro */;
+    ((Cilk_cilk2c_at_thread_boundary_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+    ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
+    /* expand CILK2C_BEFORE_SYNC_SLOW() macro */;
+    ((Cilk_cilk2c_before_sync_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+    ((((_cilk_frame)->header).entry) = 4);
+    /* TODO: save only live, dirty variables */;
+    ((((_cilk_frame)->scope67).result1) = (result1));
+    ((((_cilk_frame)->scope67).result2) = (result2));
+    ((((_cilk_frame)->scope66).y) = (y));
+    ;
+    ;
+    ((((_cilk_frame)->scope65).t) = (t));
+    ((((_cilk_frame)->scope65).x) = (x));
+    if (((Cilk_sync)((_cilk_ws))))
+    {
+      return ;
+      _cilk_sync4:;
+    } else {
+      ;
+    }
+    /* TODO: restore only live variables */;
+    ((result1) = (((_cilk_frame)->scope67).result1));
+    ((result2) = (((_cilk_frame)->scope67).result2));
+    ((y) = (((_cilk_frame)->scope66).y));
+    ;
+    ;
+    ((t) = (((_cilk_frame)->scope65).t));
+    ((x) = (((_cilk_frame)->scope65).x));
+    /* expand CILK2C_AFTER_SYNC_SLOW() macro */;
+    ((Cilk_cilk2c_after_sync_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+    /* expand CILK2C_AT_THREAD_BOUNDARY_SLOW() macro */;
+    ((Cilk_cilk2c_at_thread_boundary_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+    ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
+    {
+      struct _template__ActivationSet__builtin_signed_int_  *__tmp91 = (y);
+      ((Cilk_set_result)((_cilk_ws), (&(__tmp91)), (sizeof((__tmp91)))));
+      /* expand CILK2C_BEFORE_RETURN_SLOW macro */;
+      ((Cilk_cilk2c_before_return_slow_cp)((_cilk_ws), (&((_cilk_frame)->header))));
+      ((Cilk_cilk2c_before_return_slow)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
+      return ;
+    }
+  }
+  /* expand CILK2C_BEFORE_SYNC_SLOW() macro */;
+  ((Cilk_cilk2c_before_sync_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+  ((((_cilk_frame)->header).entry) = 5);
+  /* TODO: save only live, dirty variables */;
+  ;
+  ;
+  ((((_cilk_frame)->scope65).t) = (t));
+  ((((_cilk_frame)->scope65).x) = (x));
+  if (((Cilk_sync)((_cilk_ws))))
+  {
+    return ;
+    _cilk_sync5:;
+  } else {
+    ;
+  }
+  /* TODO: restore only live variables */;
+  ;
+  ;
+  ((t) = (((_cilk_frame)->scope65).t));
+  ((x) = (((_cilk_frame)->scope65).x));
+  /* expand CILK2C_AFTER_SYNC_SLOW() macro */;
+  ((Cilk_cilk2c_after_sync_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+  /* expand CILK2C_AT_THREAD_BOUNDARY_SLOW() macro */;
+  ((Cilk_cilk2c_at_thread_boundary_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+  ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
+}
+
+#undef CILK_WHERE_AM_I
+#define CILK_WHERE_AM_I IN_C_CODE
+
+static CilkProcInfo _cilk_putGetEx_sig[] = {{(sizeof(struct _template__ActivationSet__builtin_signed_int_)), (sizeof(struct _cilk_putGetEx_frame)), (_cilk_putGetEx_slow), 0, 0}, {(sizeof(struct _template__ActivationSet__builtin_signed_int_ *)), ((size_t)(((char *)(&((((struct _cilk_putGetEx_frame *)0)->scope66).y))) - ((char *)((struct _cilk_putGetEx_frame *)0)))), 0, 0, 0}, {(sizeof(signed int)), ((size_t)(((char *)(&((((struct _cilk_putGetEx_frame *)0)->scope67).result1))) - ((char *)((struct _cilk_putGetEx_frame *)0)))), 0, 0, 0}, {(sizeof(signed int)), ((size_t)(((char *)(&((((struct _cilk_putGetEx_frame *)0)->scope67).result2))) - ((char *)((struct _cilk_putGetEx_frame *)0)))), 0, 0, 0}, {0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}};
+
+#undef CILK_WHERE_AM_I
+#define CILK_WHERE_AM_I IN_FAST_PROCEDURE
+
+struct _template__ActivationSet__builtin_signed_int_  *putGetEx(CilkWorkerState  *const  _cilk_ws, struct _template__Lvar__builtin_signed_int_  * x, struct _template__ThresholdSet__builtin_signed_int_  * t)
+{
+
+  
+  /* declare _cilk_frame and expand CILK2C_INIT_FRAME() macro */;
+  struct _cilk_putGetEx_frame  *_cilk_frame = ((Cilk_cilk2c_init_frame)((_cilk_ws), (sizeof(struct _cilk_putGetEx_frame)), (_cilk_putGetEx_sig)));
+  /* expand CILK2C_START_THREAD_FAST() macro */;
+  ((Cilk_cilk2c_start_thread_fast_cp)((_cilk_ws), (&((_cilk_frame)->header))));
+  ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
+  {
+    struct _template__ActivationSet__builtin_signed_int_  *y;
+    signed int result1, result2;
+    ((((_cilk_frame)->header).entry) = 1);
+    /* TODO: save only live, dirty variables */;
+    ((((_cilk_frame)->scope67).result1) = (result1));
+    ((((_cilk_frame)->scope67).result2) = (result2));
+    ((((_cilk_frame)->scope66).y) = (y));
+    ;
+    ;
+    ((((_cilk_frame)->scope65).t) = (t));
+    ((((_cilk_frame)->scope65).x) = (x));
+    /* expand CILK2C_BEFORE_SPAWN_FAST() macro */;
+    ((Cilk_cilk2c_before_spawn_fast_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+    /* expand CILK2C_PUSH_FRAME() macro */;
+    ((Cilk_cilk2c_push_frame)((_cilk_ws), (&(((_cilk_frame)->header)))));
+    ((y) = ((getCilk)((_cilk_ws), (x), (t), 0)));
+    {
+      /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
+      struct _template__ActivationSet__builtin_signed_int_  *__tmp95;
+      if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
+      {
+        ((__tmp95) = (y));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp95)), (sizeof((__tmp95))))))
+        {
+          ((Cilk_cilk2c_pop)((_cilk_ws)));
+          return 0;
+        } else {
+          ;
+        }
+      } else {
+        ;
+      }
+    }
+    /* expand CILK2C_AFTER_SPAWN_FAST() macro */;
+    ((Cilk_cilk2c_after_spawn_fast_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+    ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
+    ((((_cilk_frame)->header).entry) = 2);
+    /* TODO: save only live, dirty variables */;
+    ((((_cilk_frame)->scope67).result1) = (result1));
+    ((((_cilk_frame)->scope67).result2) = (result2));
+    ((((_cilk_frame)->scope66).y) = (y));
+    ;
+    ;
+    ((((_cilk_frame)->scope65).t) = (t));
+    ((((_cilk_frame)->scope65).x) = (x));
+    /* expand CILK2C_BEFORE_SPAWN_FAST() macro */;
+    ((Cilk_cilk2c_before_spawn_fast_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+    /* expand CILK2C_PUSH_FRAME() macro */;
+    ((Cilk_cilk2c_push_frame)((_cilk_ws), (&(((_cilk_frame)->header)))));
+    ((result1) = ((putCilk)((_cilk_ws), (x), 3, 0)));
+    {
+      /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
+      signed int __tmp96;
+      if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
+      {
+        ((__tmp96) = (result1));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp96)), (sizeof((__tmp96))))))
+        {
+          ((Cilk_cilk2c_pop)((_cilk_ws)));
+          return 0;
+        } else {
+          ;
+        }
+      } else {
+        ;
+      }
+    }
+    /* expand CILK2C_AFTER_SPAWN_FAST() macro */;
+    ((Cilk_cilk2c_after_spawn_fast_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+    ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
+    ((((_cilk_frame)->header).entry) = 3);
+    /* TODO: save only live, dirty variables */;
+    ((((_cilk_frame)->scope67).result1) = (result1));
+    ((((_cilk_frame)->scope67).result2) = (result2));
+    ((((_cilk_frame)->scope66).y) = (y));
+    ;
+    ;
+    ((((_cilk_frame)->scope65).t) = (t));
+    ((((_cilk_frame)->scope65).x) = (x));
+    /* expand CILK2C_BEFORE_SPAWN_FAST() macro */;
+    ((Cilk_cilk2c_before_spawn_fast_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+    /* expand CILK2C_PUSH_FRAME() macro */;
+    ((Cilk_cilk2c_push_frame)((_cilk_ws), (&(((_cilk_frame)->header)))));
+    ((result2) = ((putCilk)((_cilk_ws), (x), 7, 0)));
+    {
+      /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
+      signed int __tmp97;
+      if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
+      {
+        ((__tmp97) = (result2));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp97)), (sizeof((__tmp97))))))
+        {
+          ((Cilk_cilk2c_pop)((_cilk_ws)));
+          return 0;
+        } else {
+          ;
+        }
+      } else {
+        ;
+      }
+    }
+    /* expand CILK2C_AFTER_SPAWN_FAST() macro */;
+    ((Cilk_cilk2c_after_spawn_fast_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+    ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
+    /* expand CILK2C_AT_SYNC_FAST() macro */;
+    ((Cilk_cilk2c_at_sync_fast_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+    ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
+    {
+      struct _template__ActivationSet__builtin_signed_int_  *_cilk_tmp = (y);
       /* expand CILK2C_BEFORE_RETURN_FAST() macro */;
       ((Cilk_cilk2c_before_return_fast_cp)((_cilk_ws), (&((_cilk_frame)->header))));
       ((Cilk_cilk2c_before_return_fast)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
@@ -2579,27 +3095,26 @@ signed int putOnes(CilkWorkerState  *const  _cilk_ws, struct _template__Lvar__po
 #undef CILK_WHERE_AM_I
 #define CILK_WHERE_AM_I IN_C_CODE
 
-static void _cilk_putOnes_import(CilkWorkerState  *const  _cilk_ws, void  * _cilk_procargs_v)
+static void _cilk_putGetEx_import(CilkWorkerState  *const  _cilk_ws, void  * _cilk_procargs_v)
 {
 
   ((void)(_cilk_ws));
   ((void)(_cilk_procargs_v));
-  ((((struct _cilk_putOnes_args *)(_cilk_procargs_v))->_cilk_proc_result) = ((putOnes)((_cilk_ws), (((struct _cilk_putOnes_args *)(_cilk_procargs_v))->x), (((struct _cilk_putOnes_args *)(_cilk_procargs_v))->index), (((struct _cilk_putOnes_args *)(_cilk_procargs_v))->t))));
+  ((((struct _cilk_putGetEx_args *)(_cilk_procargs_v))->_cilk_proc_result) = ((putGetEx)((_cilk_ws), (((struct _cilk_putGetEx_args *)(_cilk_procargs_v))->x), (((struct _cilk_putGetEx_args *)(_cilk_procargs_v))->t))));
 }
 
 #undef CILK_WHERE_AM_I
 #define CILK_WHERE_AM_I IN_C_CODE
 
-signed int mt_putOnes(CilkContext  *const  context, struct _template__Lvar__pointer__builtin_signed_int__  * x, signed int  index, struct _template__ThresholdSet__pointer__builtin_signed_int__  * t)
+struct _template__ActivationSet__builtin_signed_int_  *mt_putGetEx(CilkContext  *const  context, struct _template__Lvar__builtin_signed_int_  * x, struct _template__ThresholdSet__builtin_signed_int_  * t)
 {
 
-  struct _cilk_putOnes_args  *_cilk_procargs = ((struct _cilk_putOnes_args *)((Cilk_malloc_fixed)((sizeof(struct _cilk_putOnes_args)))));
+  struct _cilk_putGetEx_args  *_cilk_procargs = ((struct _cilk_putGetEx_args *)((Cilk_malloc_fixed)((sizeof(struct _cilk_putGetEx_args)))));
   (((_cilk_procargs)->x) = (x));
-  (((_cilk_procargs)->index) = (index));
   (((_cilk_procargs)->t) = (t));
   ;
-  ((Cilk_start)((context), (_cilk_putOnes_import), (_cilk_procargs), (sizeof(signed int))));
-  signed int _cilk_proc_result = ((_cilk_procargs)->_cilk_proc_result);
+  ((Cilk_start)((context), (_cilk_putGetEx_import), (_cilk_procargs), (sizeof(struct _template__ActivationSet__builtin_signed_int_))));
+  struct _template__ActivationSet__builtin_signed_int_  *_cilk_proc_result = ((_cilk_procargs)->_cilk_proc_result);
   ((Cilk_free)((_cilk_procargs)));
   return (_cilk_proc_result);
 }
@@ -2609,47 +3124,27 @@ struct _cilk_cilk_main_frame {
     char  * *argv;
     signed int argc;
     
-  } scope95;
+  } scope75;
   struct  {
-    signed int  *bottom;
+    struct _template__Lattice__builtin_signed_int_  *D;
     
-  } scope96;
+  } scope76;
   struct  {
-    signed int i;
+    struct _template__Lvar__builtin_signed_int_  *x;
     
-  } scope97;
+  } scope77;
   struct  {
-    signed int  *top;
+    struct _template__ActivationSet__builtin_signed_int_  *a1;
     
-  } scope101;
+  } scope79;
   struct  {
-    struct _template__Lattice__pointer__builtin_signed_int__  *D;
+    struct _template__ThresholdSet__builtin_signed_int_  *t;
     
-  } scope104;
+  } scope80;
   struct  {
-    struct _template__Lvar__pointer__builtin_signed_int__  *x;
+    struct _template__ActivationSet__builtin_signed_int_  *result;
     
-  } scope105;
-  struct  {
-    signed int  *act1;
-    
-  } scope107;
-  struct  {
-    signed int i;
-    
-  } scope108;
-  struct  {
-    struct _template__ActivationSet__pointer__builtin_signed_int__  *a1;
-    
-  } scope112;
-  struct  {
-    struct _template__ThresholdSet__pointer__builtin_signed_int__  *t;
-    
-  } scope113;
-  struct  {
-    signed int result;
-    
-  } scope115;
+  } scope81;
   
 };
 struct _cilk_cilk_main_args {
@@ -2662,12 +3157,12 @@ struct _cilk_cilk_main_args {
 #undef CILK_WHERE_AM_I
 #define CILK_WHERE_AM_I IN_SLOW_PROCEDURE
 
-typedef signed int  *_template_param_unused_396;
-static struct _template__Lattice__pointer__builtin_signed_int__  *_template__newLattice__pointer__builtin_signed_int__(signed int  * least, signed int  * greatest, signed int ( * leq)(), signed int  *( * lub)(), signed int ( * eq)(), struct _string_s ( * showMethod)())
+typedef signed int _template_param_unused_416;
+static struct _template__Lattice__builtin_signed_int_  *_template__newLattice__builtin_signed_int_(signed int  least, signed int  greatest, signed int ( * leq)(), signed int ( * lub)(), signed int ( * eq)(), struct _string_s ( * showMethod)())
 {
 
   {
-    struct _template__Lattice__pointer__builtin_signed_int__  *l = ((malloc)((sizeof(struct _template__Lattice__pointer__builtin_signed_int__))));
+    struct _template__Lattice__builtin_signed_int_  *l = ((malloc)((sizeof(struct _template__Lattice__builtin_signed_int_))));
     (((l)->_bottom) = (least));
     (((l)->_top) = (greatest));
     (((l)->_leq) = (leq));
@@ -2677,25 +3172,25 @@ static struct _template__Lattice__pointer__builtin_signed_int__  *_template__new
     return (l);
   }
 }
-typedef signed int  *_template_param_unused_400;
-static struct _template__Lvar__pointer__builtin_signed_int__  *_template__new__pointer__builtin_signed_int__(struct _template__Lattice__pointer__builtin_signed_int__  * l)
+typedef signed int _template_param_unused_420;
+static struct _template__Lvar__builtin_signed_int_  *_template__new__builtin_signed_int_(struct _template__Lattice__builtin_signed_int_  * l)
 {
 
   {
-    struct _template__Lvar__pointer__builtin_signed_int__  *lvarNew = ((malloc)((sizeof(struct _template__Lvar__pointer__builtin_signed_int__))));
+    struct _template__Lvar__builtin_signed_int_  *lvarNew = ((malloc)((sizeof(struct _template__Lvar__builtin_signed_int_))));
     (((lvarNew)->_value) = ((l)->_bottom));
     (((lvarNew)->_lattice) = (l));
     (((lvarNew)->_frozen) = 0);
     return (lvarNew);
   }
 }
-typedef signed int  *_template_param_unused_420;
-typedef signed int  *_template_param_unused_424;
-static signed int _template__resizeActSet__pointer__builtin_signed_int__(struct _template__ActivationSet__pointer__builtin_signed_int__  * act, signed int  newSize)
+typedef signed int _template_param_unused_440;
+typedef signed int _template_param_unused_444;
+static signed int _template__resizeActSet__builtin_signed_int_(struct _template__ActivationSet__builtin_signed_int_  * act, signed int  newSize)
 {
 
   {
-    signed int  * *newSet = ((malloc)(((sizeof(signed int * *)) * (newSize))));
+    signed int  *newSet = ((malloc)(((sizeof(signed int *)) * (newSize))));
     for (signed int i = 0; ((i) < ((act)->_size)); ((i)++))
     {
       {
@@ -2708,14 +3203,14 @@ static signed int _template__resizeActSet__pointer__builtin_signed_int__(struct 
     return 1;
   }
 }
-static struct _template__ActivationSet__pointer__builtin_signed_int__  *_template__addAct__pointer__builtin_signed_int__(struct _template__ActivationSet__pointer__builtin_signed_int__  * act, signed int  * element)
+static struct _template__ActivationSet__builtin_signed_int_  *_template__addAct__builtin_signed_int_(struct _template__ActivationSet__builtin_signed_int_  * act, signed int  element)
 {
 
   {
     if ((((act)->_index) >= ((act)->_size)))
     {
       {
-        ((_template__resizeActSet__pointer__builtin_signed_int__)((act), ((2 * ((act)->_size)) + 1)));
+        ((_template__resizeActSet__builtin_signed_int_)((act), ((2 * ((act)->_size)) + 1)));
       }
     } else {
       ;
@@ -2725,8 +3220,8 @@ static struct _template__ActivationSet__pointer__builtin_signed_int__  *_templat
     return (act);
   }
 }
-typedef signed int  *_template_param_unused_428;
-static struct _template__ActivationSet__pointer__builtin_signed_int__  *_template__newActivationSet__pointer__builtin_signed_int__(struct _template__Lattice__pointer__builtin_signed_int__  * l, signed int  size)
+typedef signed int _template_param_unused_448;
+static struct _template__ActivationSet__builtin_signed_int_  *_template__newActivationSet__builtin_signed_int_(struct _template__Lattice__builtin_signed_int_  * l, signed int  size)
 {
 
   {
@@ -2739,17 +3234,17 @@ static struct _template__ActivationSet__pointer__builtin_signed_int__  *_templat
     } else {
       ;
     }
-    struct _template__ActivationSet__pointer__builtin_signed_int__  *act = ((malloc)((sizeof(struct _template__ActivationSet__pointer__builtin_signed_int__))));
+    struct _template__ActivationSet__builtin_signed_int_  *act = ((malloc)((sizeof(struct _template__ActivationSet__builtin_signed_int_))));
     (((act)->_size) = (size));
-    (((act)->_set) = ((malloc)(((sizeof(signed int *)) * (size)))));
+    (((act)->_set) = ((malloc)(((sizeof(signed int)) * (size)))));
     (((act)->_index) = 0);
     (((act)->_lattice) = (l));
     return (act);
   }
 }
-typedef signed int  *_template_param_unused_616;
-typedef signed int  *_template_param_unused_638;
-static struct _string_s _template__showActivation__pointer__builtin_signed_int__(struct _template__ActivationSet__pointer__builtin_signed_int__  * act)
+typedef signed int _template_param_unused_636;
+typedef signed int _template_param_unused_658;
+static struct _string_s _template__showActivation__builtin_signed_int_(struct _template__ActivationSet__builtin_signed_int_  * act)
 {
 
   {
@@ -2759,8 +3254,8 @@ static struct _string_s _template__showActivation__pointer__builtin_signed_int__
     {
       {
         ({
-          struct _string_s  *_tmp639 = (&(result));
-          ((*(_tmp639)) = ((_append_string)((*(_tmp639)), ((_append_string)(((((act)->_lattice)->_show)((((act)->_set)[(i)]))), ((strCharPointer)(", "))))))); })
+          struct _string_s  *_tmp659 = (&(result));
+          ((*(_tmp659)) = ((_append_string)((*(_tmp659)), ((_append_string)(((((act)->_lattice)->_show)((((act)->_set)[(i)]))), ((strCharPointer)(", "))))))); })
         ;
       }
     }
@@ -2768,16 +3263,16 @@ static struct _string_s _template__showActivation__pointer__builtin_signed_int__
     {
       {
         ({
-          struct _string_s  *_tmp640 = (&(result));
-          ((*(_tmp640)) = ((_append_string)((*(_tmp640)), ((((act)->_lattice)->_show)((((act)->_set)[(i)])))))); })
+          struct _string_s  *_tmp660 = (&(result));
+          ((*(_tmp660)) = ((_append_string)((*(_tmp660)), ((((act)->_lattice)->_show)((((act)->_set)[(i)])))))); })
         ;
       }
     }
     return ((_append_string)((result), ((strCharPointer)("}"))));
   }
 }
-typedef signed int  *_template_param_unused_662;
-static struct _string_s _template__showThreshold__pointer__builtin_signed_int__(struct _template__ThresholdSet__pointer__builtin_signed_int__  * t)
+typedef signed int _template_param_unused_682;
+static struct _string_s _template__showThreshold__builtin_signed_int_(struct _template__ThresholdSet__builtin_signed_int_  * t)
 {
 
   {
@@ -2787,8 +3282,8 @@ static struct _string_s _template__showThreshold__pointer__builtin_signed_int__(
     {
       {
         ({
-          struct _string_s  *_tmp663 = (&(result));
-          ((*(_tmp663)) = ((_append_string)((*(_tmp663)), ((_append_string)(((_template__showActivation__pointer__builtin_signed_int__)((((t)->_a_sets)[(i)]))), ((strCharPointer)(", "))))))); })
+          struct _string_s  *_tmp683 = (&(result));
+          ((*(_tmp683)) = ((_append_string)((*(_tmp683)), ((_append_string)(((_template__showActivation__builtin_signed_int_)((((t)->_a_sets)[(i)]))), ((strCharPointer)(", "))))))); })
         ;
       }
     }
@@ -2796,20 +3291,20 @@ static struct _string_s _template__showThreshold__pointer__builtin_signed_int__(
     {
       {
         ({
-          struct _string_s  *_tmp664 = (&(result));
-          ((*(_tmp664)) = ((_append_string)((*(_tmp664)), ((_template__showActivation__pointer__builtin_signed_int__)((((t)->_a_sets)[(i)])))))); })
+          struct _string_s  *_tmp684 = (&(result));
+          ((*(_tmp684)) = ((_append_string)((*(_tmp684)), ((_template__showActivation__builtin_signed_int_)((((t)->_a_sets)[(i)])))))); })
         ;
       }
     }
     return ((_append_string)((result), ((strCharPointer)("}"))));
   }
 }
-typedef signed int  *_template_param_unused_668;
-static signed int _template__resizeThresholdSet__pointer__builtin_signed_int__(struct _template__ThresholdSet__pointer__builtin_signed_int__  * t, signed int  newSize)
+typedef signed int _template_param_unused_688;
+static signed int _template__resizeThresholdSet__builtin_signed_int_(struct _template__ThresholdSet__builtin_signed_int_  * t, signed int  newSize)
 {
 
   {
-    struct _template__ActivationSet__pointer__builtin_signed_int__  * *newSet = ((malloc)(((sizeof(struct _template__ActivationSet__pointer__builtin_signed_int__ *)) * (newSize))));
+    struct _template__ActivationSet__builtin_signed_int_  * *newSet = ((malloc)(((sizeof(struct _template__ActivationSet__builtin_signed_int_ *)) * (newSize))));
     for (signed int i = 0; ((i) < ((t)->_index)); ((i)++))
     {
       {
@@ -2822,15 +3317,15 @@ static signed int _template__resizeThresholdSet__pointer__builtin_signed_int__(s
     return 1;
   }
 }
-typedef signed int  *_template_param_unused_676;
-static signed int _template__incompat__pointer__builtin_signed_int__(struct _template__Lattice__pointer__builtin_signed_int__  * l, struct _template__ActivationSet__pointer__builtin_signed_int__  * Q, struct _template__ActivationSet__pointer__builtin_signed_int__  * R)
+typedef signed int _template_param_unused_696;
+static signed int _template__incompat__builtin_signed_int_(struct _template__Lattice__builtin_signed_int_  * l, struct _template__ActivationSet__builtin_signed_int_  * Q, struct _template__ActivationSet__builtin_signed_int_  * R)
 {
 
   {
     if (((((Q)->_lattice) != (l)) || (((R)->_lattice) != (l))))
     {
       {
-        ((printf)("Error: The activation sets %s and %s don't belong to the same lattice!\n", (((_template__showActivation__pointer__builtin_signed_int__)((Q))).text), (((_template__showActivation__pointer__builtin_signed_int__)((R))).text)));
+        ((printf)("Error: The activation sets %s and %s don't belong to the same lattice!\n", (((_template__showActivation__builtin_signed_int_)((Q))).text), (((_template__showActivation__builtin_signed_int_)((R))).text)));
         ((exit)(0));
       }
     } else {
@@ -2850,8 +3345,8 @@ static signed int _template__incompat__pointer__builtin_signed_int__(struct _tem
         for (signed int j = 0; ((j) < ((R)->_index)); ((j)++))
         {
           {
-            signed int  *q = (((Q)->_set)[(i)]);
-            signed int  *r = (((R)->_set)[(j)]);
+            signed int q = (((Q)->_set)[(i)]);
+            signed int r = (((R)->_set)[(j)]);
             if ((!((((l)->_eq)((((l)->_lub)((q), (r))), ((l)->_top))))))
             {
               {
@@ -2869,14 +3364,14 @@ static signed int _template__incompat__pointer__builtin_signed_int__(struct _tem
     return 1;
   }
 }
-static struct _template__ThresholdSet__pointer__builtin_signed_int__  *_template__addThreshold__pointer__builtin_signed_int__(struct _template__ThresholdSet__pointer__builtin_signed_int__  * t, struct _template__ActivationSet__pointer__builtin_signed_int__  * act)
+static struct _template__ThresholdSet__builtin_signed_int_  *_template__addThreshold__builtin_signed_int_(struct _template__ThresholdSet__builtin_signed_int_  * t, struct _template__ActivationSet__builtin_signed_int_  * act)
 {
 
   {
     if ((((t)->_lattice) != ((act)->_lattice)))
     {
       {
-        ((printf)("Error: activation set %s and threshold set %s do not have the same lattice. \n", (((_template__showActivation__pointer__builtin_signed_int__)((act))).text), (((_template__showThreshold__pointer__builtin_signed_int__)((t))).text)));
+        ((printf)("Error: activation set %s and threshold set %s do not have the same lattice. \n", (((_template__showActivation__builtin_signed_int_)((act))).text), (((_template__showThreshold__builtin_signed_int_)((t))).text)));
         ((exit)(0));
       }
     } else {
@@ -2885,7 +3380,7 @@ static struct _template__ThresholdSet__pointer__builtin_signed_int__  *_template
     if ((((t)->_index) >= ((t)->_size)))
     {
       {
-        ((_template__resizeThresholdSet__pointer__builtin_signed_int__)((t), ((2 * ((t)->_size)) + 1)));
+        ((_template__resizeThresholdSet__builtin_signed_int_)((t), ((2 * ((t)->_size)) + 1)));
       }
     } else {
       ;
@@ -2893,7 +3388,7 @@ static struct _template__ThresholdSet__pointer__builtin_signed_int__  *_template
     for (signed int i = 0; ((i) < ((t)->_index)); ((i)++))
     {
       {
-        if ((!((_template__incompat__pointer__builtin_signed_int__)(((t)->_lattice), (((t)->_a_sets)[(i)]), (act)))))
+        if ((!((_template__incompat__builtin_signed_int_)(((t)->_lattice), (((t)->_a_sets)[(i)]), (act)))))
         {
           {
             return (t);
@@ -2908,8 +3403,8 @@ static struct _template__ThresholdSet__pointer__builtin_signed_int__  *_template
     return (t);
   }
 }
-typedef signed int  *_template_param_unused_680;
-static struct _template__ThresholdSet__pointer__builtin_signed_int__  *_template__newThresholdSet__pointer__builtin_signed_int__(struct _template__Lattice__pointer__builtin_signed_int__  * l, signed int  size)
+typedef signed int _template_param_unused_700;
+static struct _template__ThresholdSet__builtin_signed_int_  *_template__newThresholdSet__builtin_signed_int_(struct _template__Lattice__builtin_signed_int_  * l, signed int  size)
 {
 
   {
@@ -2922,16 +3417,16 @@ static struct _template__ThresholdSet__pointer__builtin_signed_int__  *_template
     } else {
       ;
     }
-    struct _template__ThresholdSet__pointer__builtin_signed_int__  *t = ((malloc)((sizeof(struct _template__ThresholdSet__pointer__builtin_signed_int__))));
+    struct _template__ThresholdSet__builtin_signed_int_  *t = ((malloc)((sizeof(struct _template__ThresholdSet__builtin_signed_int_))));
     (((t)->_lattice) = (l));
     (((t)->_size) = (size));
     (((t)->_index) = 0);
-    (((t)->_a_sets) = ((malloc)(((sizeof(struct _template__ActivationSet__pointer__builtin_signed_int__ *)) * (size)))));
+    (((t)->_a_sets) = ((malloc)(((sizeof(struct _template__ActivationSet__builtin_signed_int_ *)) * (size)))));
     return (t);
   }
 }
-typedef signed int  *_template_param_unused_685;
-static signed int  *_template__freeze__pointer__builtin_signed_int__(struct _template__Lvar__pointer__builtin_signed_int__  * l)
+typedef signed int _template_param_unused_705;
+static signed int _template__freeze__builtin_signed_int_(struct _template__Lvar__builtin_signed_int_  * l)
 {
 
   {
@@ -2939,8 +3434,8 @@ static signed int  *_template__freeze__pointer__builtin_signed_int__(struct _tem
     return ((l)->_value);
   }
 }
-typedef signed int  *_template_param_unused_693;
-static struct _string_s _template__showLvar__pointer__builtin_signed_int__(struct _template__Lvar__pointer__builtin_signed_int__  * l)
+typedef signed int _template_param_unused_713;
+static struct _string_s _template__showLvar__builtin_signed_int_(struct _template__Lvar__builtin_signed_int_  * l)
 {
 
   {
@@ -2957,8 +3452,8 @@ static struct _string_s _template__showLvar__pointer__builtin_signed_int__(struc
     return ((strCharPointer)("<Lvar Value Unavailable>"));
   }
 }
-typedef signed int  *_template_param_unused_697;
-static signed int _template__freeActivation__pointer__builtin_signed_int__(struct _template__ActivationSet__pointer__builtin_signed_int__  * act)
+typedef signed int _template_param_unused_717;
+static signed int _template__freeActivation__builtin_signed_int_(struct _template__ActivationSet__builtin_signed_int_  * act)
 {
 
   {
@@ -2967,8 +3462,8 @@ static signed int _template__freeActivation__pointer__builtin_signed_int__(struc
     return 1;
   }
 }
-typedef signed int  *_template_param_unused_701;
-static signed int _template__freeThreshold__pointer__builtin_signed_int__(struct _template__ThresholdSet__pointer__builtin_signed_int__  * t)
+typedef signed int _template_param_unused_721;
+static signed int _template__freeThreshold__builtin_signed_int_(struct _template__ThresholdSet__builtin_signed_int_  * t)
 {
 
   {
@@ -2992,54 +3487,35 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
   ;
   ;
   {
-    signed int  *bottom = ((GC_malloc)(((sizeof(signed int)) * (ARRSIZE))));
-    for (signed int i = 0; ((i) < (ARRSIZE)); ((i)++))
-    {
-      {
-        (((bottom)[(i)]) = 0);
-      }
-    }
-    signed int  *top = ((GC_malloc)(((sizeof(signed int)) * (ARRSIZE))));
-    ((top) = (((void *)0)));
-    struct _template__Lattice__pointer__builtin_signed_int__  *D = ((_template__newLattice__pointer__builtin_signed_int__)((bottom), (top), (leqArr), (lubArr), (eqArr), (showArr)));
-    struct _template__Lvar__pointer__builtin_signed_int__  *x = ((_template__new__pointer__builtin_signed_int__)((D)));
-    signed int  *act1 = ((GC_malloc)(((ARRSIZE) * (sizeof(signed int)))));
-    for (signed int i = 0; ((i) < (ARRSIZE)); ((i)++))
-    {
-      {
-        (((act1)[(i)]) = 1);
-      }
-    }
-    struct _template__ActivationSet__pointer__builtin_signed_int__  *a1 = ((_template__addAct__pointer__builtin_signed_int__)(((_template__newActivationSet__pointer__builtin_signed_int__)((D), 20)), (act1)));
-    struct _template__ThresholdSet__pointer__builtin_signed_int__  *t = ((_template__addThreshold__pointer__builtin_signed_int__)(((_template__newThresholdSet__pointer__builtin_signed_int__)((D), 20)), (a1)));
-    signed int result;
+    struct _template__Lattice__builtin_signed_int_  *D = ((_template__newLattice__builtin_signed_int_)(0, 100, (leqInt), (lubInt), (eqInt), (showInteger)));
+    struct _template__Lvar__builtin_signed_int_  *x = ((_template__new__builtin_signed_int_)((D)));
+    struct _template__ActivationSet__builtin_signed_int_  *a1 = ((_template__addAct__builtin_signed_int_)(((_template__newActivationSet__builtin_signed_int_)((D), 20)), 6));
+    struct _template__ThresholdSet__builtin_signed_int_  *t = ((_template__addThreshold__builtin_signed_int_)(((_template__newThresholdSet__builtin_signed_int_)((D), 20)), (a1)));
+    struct _template__ActivationSet__builtin_signed_int_  *result;
     ((((_cilk_frame)->header).entry) = 1);
     /* TODO: save only live, dirty variables */;
-    ((((_cilk_frame)->scope104).D) = (D));
-    ((((_cilk_frame)->scope112).a1) = (a1));
-    ((((_cilk_frame)->scope107).act1) = (act1));
-    ((((_cilk_frame)->scope96).bottom) = (bottom));
-    ((((_cilk_frame)->scope115).result) = (result));
-    ((((_cilk_frame)->scope113).t) = (t));
-    ((((_cilk_frame)->scope101).top) = (top));
-    ((((_cilk_frame)->scope105).x) = (x));
+    ((((_cilk_frame)->scope76).D) = (D));
+    ((((_cilk_frame)->scope79).a1) = (a1));
+    ((((_cilk_frame)->scope81).result) = (result));
+    ((((_cilk_frame)->scope80).t) = (t));
+    ((((_cilk_frame)->scope77).x) = (x));
     ;
     ;
-    ((((_cilk_frame)->scope95).argc) = (argc));
-    ((((_cilk_frame)->scope95).argv) = (argv));
+    ((((_cilk_frame)->scope75).argc) = (argc));
+    ((((_cilk_frame)->scope75).argv) = (argv));
     /* expand CILK2C_BEFORE_SPAWN_SLOW() macro */;
     ((Cilk_cilk2c_before_spawn_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
     /* expand CILK2C_PUSH_FRAME() macro */;
     ((Cilk_cilk2c_push_frame)((_cilk_ws), (&(((_cilk_frame)->header)))));
-    ((result) = ((putOnes)((_cilk_ws), (x), ((ARRSIZE) - 1), (t))));
-    ((((_cilk_frame)->scope115).result) = (result));
+    ((result) = ((putGetEx)((_cilk_ws), (x), (t))));
+    ((((_cilk_frame)->scope81).result) = (result));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      signed int __tmp681;
+      struct _template__ActivationSet__builtin_signed_int_  *__tmp701;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp681) = (result));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp681)), (sizeof((__tmp681))))))
+        ((__tmp701) = (result));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp701)), (sizeof((__tmp701))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return ;
@@ -3051,49 +3527,40 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
       }
     }
     /* TODO: restore only live variables */;
-    ((D) = (((_cilk_frame)->scope104).D));
-    ((a1) = (((_cilk_frame)->scope112).a1));
-    ((act1) = (((_cilk_frame)->scope107).act1));
-    ((bottom) = (((_cilk_frame)->scope96).bottom));
-    ((result) = (((_cilk_frame)->scope115).result));
-    ((t) = (((_cilk_frame)->scope113).t));
-    ((top) = (((_cilk_frame)->scope101).top));
-    ((x) = (((_cilk_frame)->scope105).x));
+    ((D) = (((_cilk_frame)->scope76).D));
+    ((a1) = (((_cilk_frame)->scope79).a1));
+    ((result) = (((_cilk_frame)->scope81).result));
+    ((t) = (((_cilk_frame)->scope80).t));
+    ((x) = (((_cilk_frame)->scope77).x));
     ;
     ;
-    ((argc) = (((_cilk_frame)->scope95).argc));
-    ((argv) = (((_cilk_frame)->scope95).argv));
+    ((argc) = (((_cilk_frame)->scope75).argc));
+    ((argv) = (((_cilk_frame)->scope75).argv));
     /* expand CILK2C_AFTER_SPAWN_SLOW() macro */;
     ((Cilk_cilk2c_after_spawn_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
     /* TODO: save only live, dirty variables */;
-    ((((_cilk_frame)->scope104).D) = (D));
-    ((((_cilk_frame)->scope112).a1) = (a1));
-    ((((_cilk_frame)->scope107).act1) = (act1));
-    ((((_cilk_frame)->scope96).bottom) = (bottom));
-    ((((_cilk_frame)->scope115).result) = (result));
-    ((((_cilk_frame)->scope113).t) = (t));
-    ((((_cilk_frame)->scope101).top) = (top));
-    ((((_cilk_frame)->scope105).x) = (x));
+    ((((_cilk_frame)->scope76).D) = (D));
+    ((((_cilk_frame)->scope79).a1) = (a1));
+    ((((_cilk_frame)->scope81).result) = (result));
+    ((((_cilk_frame)->scope80).t) = (t));
+    ((((_cilk_frame)->scope77).x) = (x));
     ;
     ;
-    ((((_cilk_frame)->scope95).argc) = (argc));
-    ((((_cilk_frame)->scope95).argv) = (argv));
+    ((((_cilk_frame)->scope75).argc) = (argc));
+    ((((_cilk_frame)->scope75).argv) = (argv));
     if (0)
     {
       _cilk_sync1:;
       /* TODO: restore only live variables */;
-      ((D) = (((_cilk_frame)->scope104).D));
-      ((a1) = (((_cilk_frame)->scope112).a1));
-      ((act1) = (((_cilk_frame)->scope107).act1));
-      ((bottom) = (((_cilk_frame)->scope96).bottom));
-      ((result) = (((_cilk_frame)->scope115).result));
-      ((t) = (((_cilk_frame)->scope113).t));
-      ((top) = (((_cilk_frame)->scope101).top));
-      ((x) = (((_cilk_frame)->scope105).x));
+      ((D) = (((_cilk_frame)->scope76).D));
+      ((a1) = (((_cilk_frame)->scope79).a1));
+      ((result) = (((_cilk_frame)->scope81).result));
+      ((t) = (((_cilk_frame)->scope80).t));
+      ((x) = (((_cilk_frame)->scope77).x));
       ;
       ;
-      ((argc) = (((_cilk_frame)->scope95).argc));
-      ((argv) = (((_cilk_frame)->scope95).argv));
+      ((argc) = (((_cilk_frame)->scope75).argc));
+      ((argv) = (((_cilk_frame)->scope75).argv));
     } else {
       ;
     }
@@ -3104,18 +3571,15 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
     ((Cilk_cilk2c_before_sync_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
     ((((_cilk_frame)->header).entry) = 2);
     /* TODO: save only live, dirty variables */;
-    ((((_cilk_frame)->scope104).D) = (D));
-    ((((_cilk_frame)->scope112).a1) = (a1));
-    ((((_cilk_frame)->scope107).act1) = (act1));
-    ((((_cilk_frame)->scope96).bottom) = (bottom));
-    ((((_cilk_frame)->scope115).result) = (result));
-    ((((_cilk_frame)->scope113).t) = (t));
-    ((((_cilk_frame)->scope101).top) = (top));
-    ((((_cilk_frame)->scope105).x) = (x));
+    ((((_cilk_frame)->scope76).D) = (D));
+    ((((_cilk_frame)->scope79).a1) = (a1));
+    ((((_cilk_frame)->scope81).result) = (result));
+    ((((_cilk_frame)->scope80).t) = (t));
+    ((((_cilk_frame)->scope77).x) = (x));
     ;
     ;
-    ((((_cilk_frame)->scope95).argc) = (argc));
-    ((((_cilk_frame)->scope95).argv) = (argv));
+    ((((_cilk_frame)->scope75).argc) = (argc));
+    ((((_cilk_frame)->scope75).argv) = (argv));
     if (((Cilk_sync)((_cilk_ws))))
     {
       return ;
@@ -3124,41 +3588,39 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
       ;
     }
     /* TODO: restore only live variables */;
-    ((D) = (((_cilk_frame)->scope104).D));
-    ((a1) = (((_cilk_frame)->scope112).a1));
-    ((act1) = (((_cilk_frame)->scope107).act1));
-    ((bottom) = (((_cilk_frame)->scope96).bottom));
-    ((result) = (((_cilk_frame)->scope115).result));
-    ((t) = (((_cilk_frame)->scope113).t));
-    ((top) = (((_cilk_frame)->scope101).top));
-    ((x) = (((_cilk_frame)->scope105).x));
+    ((D) = (((_cilk_frame)->scope76).D));
+    ((a1) = (((_cilk_frame)->scope79).a1));
+    ((result) = (((_cilk_frame)->scope81).result));
+    ((t) = (((_cilk_frame)->scope80).t));
+    ((x) = (((_cilk_frame)->scope77).x));
     ;
     ;
-    ((argc) = (((_cilk_frame)->scope95).argc));
-    ((argv) = (((_cilk_frame)->scope95).argv));
+    ((argc) = (((_cilk_frame)->scope75).argc));
+    ((argv) = (((_cilk_frame)->scope75).argv));
     /* expand CILK2C_AFTER_SYNC_SLOW() macro */;
     ((Cilk_cilk2c_after_sync_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
     /* expand CILK2C_AT_THREAD_BOUNDARY_SLOW() macro */;
     ((Cilk_cilk2c_at_thread_boundary_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
     ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
-    if ((((_template__get__pointer__builtin_signed_int__)((x), (t))) != (((void *)0))))
+    ((_template__freeze__builtin_signed_int_)((x)));
+    ((printf)("Value of x: %s\n", (((_template__showLvar__builtin_signed_int_)((x))).text)));
+    if (((result) != (((void *)0))))
     {
       {
-        ((_template__freeze__pointer__builtin_signed_int__)((x)));
-        ((printf)("Result is: %s, act set matched: %s\n", (((_template__showLvar__pointer__builtin_signed_int__)((x))).text), (((_template__showActivation__pointer__builtin_signed_int__)(((_template__get__pointer__builtin_signed_int__)((x), (t))))).text)));
+        ((printf)("Result of get(): %s\n", (((_template__showActivation__builtin_signed_int_)((result))).text)));
       }
     } else {
       {
-        ((printf)("Result is NULL\n"));
+        ((printf)("Result of get(): NULL\n"));
       }
     }
     ((free)((D)));
     ((free)((x)));
-    ((_template__freeActivation__pointer__builtin_signed_int__)((a1)));
-    ((_template__freeThreshold__pointer__builtin_signed_int__)((t)));
+    ((_template__freeActivation__builtin_signed_int_)((a1)));
+    ((_template__freeThreshold__builtin_signed_int_)((t)));
     {
-      signed int __tmp702 = 1;
-      ((Cilk_set_result)((_cilk_ws), (&(__tmp702)), (sizeof((__tmp702)))));
+      signed int __tmp722 = 1;
+      ((Cilk_set_result)((_cilk_ws), (&(__tmp722)), (sizeof((__tmp722)))));
       /* expand CILK2C_BEFORE_RETURN_SLOW macro */;
       ((Cilk_cilk2c_before_return_slow_cp)((_cilk_ws), (&((_cilk_frame)->header))));
       ((Cilk_cilk2c_before_return_slow)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
@@ -3171,8 +3633,8 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
   /* TODO: save only live, dirty variables */;
   ;
   ;
-  ((((_cilk_frame)->scope95).argc) = (argc));
-  ((((_cilk_frame)->scope95).argv) = (argv));
+  ((((_cilk_frame)->scope75).argc) = (argc));
+  ((((_cilk_frame)->scope75).argv) = (argv));
   if (((Cilk_sync)((_cilk_ws))))
   {
     return ;
@@ -3183,8 +3645,8 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
   /* TODO: restore only live variables */;
   ;
   ;
-  ((argc) = (((_cilk_frame)->scope95).argc));
-  ((argv) = (((_cilk_frame)->scope95).argv));
+  ((argc) = (((_cilk_frame)->scope75).argc));
+  ((argv) = (((_cilk_frame)->scope75).argv));
   /* expand CILK2C_AFTER_SYNC_SLOW() macro */;
   ((Cilk_cilk2c_after_sync_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
   /* expand CILK2C_AT_THREAD_BOUNDARY_SLOW() macro */;
@@ -3195,7 +3657,7 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
 #undef CILK_WHERE_AM_I
 #define CILK_WHERE_AM_I IN_C_CODE
 
-static CilkProcInfo _cilk_cilk_main_sig[] = {{(sizeof(signed int)), (sizeof(struct _cilk_cilk_main_frame)), (_cilk_cilk_main_slow), 0, 0}, {(sizeof(signed int)), ((size_t)(((char *)(&((((struct _cilk_cilk_main_frame *)0)->scope115).result))) - ((char *)((struct _cilk_cilk_main_frame *)0)))), 0, 0, 0}, {0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}};
+static CilkProcInfo _cilk_cilk_main_sig[] = {{(sizeof(signed int)), (sizeof(struct _cilk_cilk_main_frame)), (_cilk_cilk_main_slow), 0, 0}, {(sizeof(struct _template__ActivationSet__builtin_signed_int_ *)), ((size_t)(((char *)(&((((struct _cilk_cilk_main_frame *)0)->scope81).result))) - ((char *)((struct _cilk_cilk_main_frame *)0)))), 0, 0, 0}, {0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}};
 
 #undef CILK_WHERE_AM_I
 #define CILK_WHERE_AM_I IN_FAST_PROCEDURE
@@ -3210,53 +3672,34 @@ signed int cilk_main(CilkWorkerState  *const  _cilk_ws, signed int  argc, char  
   ((Cilk_cilk2c_start_thread_fast_cp)((_cilk_ws), (&((_cilk_frame)->header))));
   ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
   {
-    signed int  *bottom = ((GC_malloc)(((sizeof(signed int)) * (ARRSIZE))));
-    for (signed int i = 0; ((i) < (ARRSIZE)); ((i)++))
-    {
-      {
-        (((bottom)[(i)]) = 0);
-      }
-    }
-    signed int  *top = ((GC_malloc)(((sizeof(signed int)) * (ARRSIZE))));
-    ((top) = (((void *)0)));
-    struct _template__Lattice__pointer__builtin_signed_int__  *D = ((_template__newLattice__pointer__builtin_signed_int__)((bottom), (top), (leqArr), (lubArr), (eqArr), (showArr)));
-    struct _template__Lvar__pointer__builtin_signed_int__  *x = ((_template__new__pointer__builtin_signed_int__)((D)));
-    signed int  *act1 = ((GC_malloc)(((ARRSIZE) * (sizeof(signed int)))));
-    for (signed int i = 0; ((i) < (ARRSIZE)); ((i)++))
-    {
-      {
-        (((act1)[(i)]) = 1);
-      }
-    }
-    struct _template__ActivationSet__pointer__builtin_signed_int__  *a1 = ((_template__addAct__pointer__builtin_signed_int__)(((_template__newActivationSet__pointer__builtin_signed_int__)((D), 20)), (act1)));
-    struct _template__ThresholdSet__pointer__builtin_signed_int__  *t = ((_template__addThreshold__pointer__builtin_signed_int__)(((_template__newThresholdSet__pointer__builtin_signed_int__)((D), 20)), (a1)));
-    signed int result;
+    struct _template__Lattice__builtin_signed_int_  *D = ((_template__newLattice__builtin_signed_int_)(0, 100, (leqInt), (lubInt), (eqInt), (showInteger)));
+    struct _template__Lvar__builtin_signed_int_  *x = ((_template__new__builtin_signed_int_)((D)));
+    struct _template__ActivationSet__builtin_signed_int_  *a1 = ((_template__addAct__builtin_signed_int_)(((_template__newActivationSet__builtin_signed_int_)((D), 20)), 6));
+    struct _template__ThresholdSet__builtin_signed_int_  *t = ((_template__addThreshold__builtin_signed_int_)(((_template__newThresholdSet__builtin_signed_int_)((D), 20)), (a1)));
+    struct _template__ActivationSet__builtin_signed_int_  *result;
     ((((_cilk_frame)->header).entry) = 1);
     /* TODO: save only live, dirty variables */;
-    ((((_cilk_frame)->scope104).D) = (D));
-    ((((_cilk_frame)->scope112).a1) = (a1));
-    ((((_cilk_frame)->scope107).act1) = (act1));
-    ((((_cilk_frame)->scope96).bottom) = (bottom));
-    ((((_cilk_frame)->scope115).result) = (result));
-    ((((_cilk_frame)->scope113).t) = (t));
-    ((((_cilk_frame)->scope101).top) = (top));
-    ((((_cilk_frame)->scope105).x) = (x));
+    ((((_cilk_frame)->scope76).D) = (D));
+    ((((_cilk_frame)->scope79).a1) = (a1));
+    ((((_cilk_frame)->scope81).result) = (result));
+    ((((_cilk_frame)->scope80).t) = (t));
+    ((((_cilk_frame)->scope77).x) = (x));
     ;
     ;
-    ((((_cilk_frame)->scope95).argc) = (argc));
-    ((((_cilk_frame)->scope95).argv) = (argv));
+    ((((_cilk_frame)->scope75).argc) = (argc));
+    ((((_cilk_frame)->scope75).argv) = (argv));
     /* expand CILK2C_BEFORE_SPAWN_FAST() macro */;
     ((Cilk_cilk2c_before_spawn_fast_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
     /* expand CILK2C_PUSH_FRAME() macro */;
     ((Cilk_cilk2c_push_frame)((_cilk_ws), (&(((_cilk_frame)->header)))));
-    ((result) = ((putOnes)((_cilk_ws), (x), ((ARRSIZE) - 1), (t))));
+    ((result) = ((putGetEx)((_cilk_ws), (x), (t))));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      signed int __tmp1012;
+      struct _template__ActivationSet__builtin_signed_int_  *__tmp1032;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp1012) = (result));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp1012)), (sizeof((__tmp1012))))))
+        ((__tmp1032) = (result));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp1032)), (sizeof((__tmp1032))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return 0;
@@ -3273,21 +3716,22 @@ signed int cilk_main(CilkWorkerState  *const  _cilk_ws, signed int  argc, char  
     /* expand CILK2C_AT_SYNC_FAST() macro */;
     ((Cilk_cilk2c_at_sync_fast_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
     ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
-    if ((((_template__get__pointer__builtin_signed_int__)((x), (t))) != (((void *)0))))
+    ((_template__freeze__builtin_signed_int_)((x)));
+    ((printf)("Value of x: %s\n", (((_template__showLvar__builtin_signed_int_)((x))).text)));
+    if (((result) != (((void *)0))))
     {
       {
-        ((_template__freeze__pointer__builtin_signed_int__)((x)));
-        ((printf)("Result is: %s, act set matched: %s\n", (((_template__showLvar__pointer__builtin_signed_int__)((x))).text), (((_template__showActivation__pointer__builtin_signed_int__)(((_template__get__pointer__builtin_signed_int__)((x), (t))))).text)));
+        ((printf)("Result of get(): %s\n", (((_template__showActivation__builtin_signed_int_)((result))).text)));
       }
     } else {
       {
-        ((printf)("Result is NULL\n"));
+        ((printf)("Result of get(): NULL\n"));
       }
     }
     ((free)((D)));
     ((free)((x)));
-    ((_template__freeActivation__pointer__builtin_signed_int__)((a1)));
-    ((_template__freeThreshold__pointer__builtin_signed_int__)((t)));
+    ((_template__freeActivation__builtin_signed_int_)((a1)));
+    ((_template__freeThreshold__builtin_signed_int_)((t)));
     {
       signed int _cilk_tmp = 1;
       /* expand CILK2C_BEFORE_RETURN_FAST() macro */;

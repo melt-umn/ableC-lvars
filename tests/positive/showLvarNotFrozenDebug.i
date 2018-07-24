@@ -2018,6 +2018,7 @@ template<a> struct _Lattice {
   a (* _lub)();
   int (*_eq)();
   string (*_show)();
+
 };
 
 
@@ -2032,11 +2033,12 @@ static Lattice<a>* _newLattice(a least, a greatest, int (*leq)(),
   l-> _lub = lub;
   l->_eq = eq;
   l->_show = showMethod;
+
+
+
   return l;
 }
-
-
-
+# 71 "../../../extensions/ableC-lvars/include/lvars.xh"
 template<a> struct _Lvar {
   Lattice<a> * _lattice;
   a _value;
@@ -2077,7 +2079,7 @@ static ActivationSet<a>* _newActivationSet(Lattice<a>* l, int size) {
       printf("Can't create an activation set of negative size!\n");
       exit(0);
     }
-# 101 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 119 "../../../extensions/ableC-lvars/include/lvars.xh"
   ActivationSet<a> * act = malloc(sizeof(ActivationSet<a>));
   act->_size = size;
   act->_set = malloc(sizeof(a) * size);
@@ -2155,7 +2157,7 @@ static ThresholdSet<a>* _newThresholdSet(Lattice<a> * l, int size) {
       printf("Error: Can't create a threshold set of negative size!\n");
       exit(0);
     }
-# 186 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 204 "../../../extensions/ableC-lvars/include/lvars.xh"
   ThresholdSet<a> * t = malloc(sizeof(ThresholdSet<a>));
   t ->_lattice = l;
   t->_size = size;
@@ -2209,7 +2211,7 @@ static ThresholdSet<a>* _addThreshold(ThresholdSet<a>* t, ActivationSet<a>* act)
              show(act).text, show(t).text);
       exit(0);
     }
-# 247 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 265 "../../../extensions/ableC-lvars/include/lvars.xh"
   if (t->_index >= t->_size) {
      inst _resizeThresholdSet<a>(t, 2 * t->_size + 1);
   }

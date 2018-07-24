@@ -1,9 +1,10 @@
-# 1 "translate_error/addMismatchActToThresh.xc"
+# 1 "intBad.xc"
 # 1 "<built-in>"
 # 1 "<command-line>"
 # 1 "/usr/include/stdc-predef.h" 1 3 4
 # 1 "<command-line>" 2
-# 1 "translate_error/addMismatchActToThresh.xc"
+# 1 "intBad.xc"
+
 # 1 "../../../extensions/ableC-lvars/include/lvars.xh" 1
 # 1 "../../../extensions/ableC-string/include/string.xh" 1
 # 1 "/usr/include/string.h" 1 3 4
@@ -2052,8 +2053,8 @@ static string _showLvar(Lvar<a>* l) {
   }
 
 
-
-
+    printf("Error: Can't show a lvar before it is frozen!\n");
+    exit(0);
 
 
   return str("<Lvar Value Unavailable>");
@@ -2072,6 +2073,12 @@ template<a> struct _ActivationSet {
 
 template<a>
 static ActivationSet<a>* _newActivationSet(Lattice<a>* l, int size) {
+
+
+    if (size < 0) {
+      printf("Can't create an activation set of negative size!\n");
+      exit(0);
+    }
 # 119 "../../../extensions/ableC-lvars/include/lvars.xh"
   ActivationSet<a> * act = malloc(sizeof(ActivationSet<a>));
   act->_size = size;
@@ -2145,6 +2152,11 @@ template<a> struct _ThresholdSet {
 
 template<a>
 static ThresholdSet<a>* _newThresholdSet(Lattice<a> * l, int size) {
+
+    if (size < 0) {
+      printf("Error: Can't create a threshold set of negative size!\n");
+      exit(0);
+    }
 # 204 "../../../extensions/ableC-lvars/include/lvars.xh"
   ThresholdSet<a> * t = malloc(sizeof(ThresholdSet<a>));
   t ->_lattice = l;
@@ -2158,7 +2170,14 @@ static ThresholdSet<a>* _newThresholdSet(Lattice<a> * l, int size) {
 
 template<a>
 static int _incompat(Lattice<a> * l, ActivationSet<a> *Q, ActivationSet<a> *R) {
-# 224 "../../../extensions/ableC-lvars/include/lvars.xh"
+
+    if (Q -> _lattice != l || R -> _lattice != l) {
+      printf("Error: The activation sets %s and %s don't belong to the same lattice!\n",
+              show(Q).text, show(R).text);
+      exit(0);
+    }
+
+
   if (Q -> _lattice != l || R -> _lattice != l) {
     return 0;
   }
@@ -2169,9 +2188,9 @@ static int _incompat(Lattice<a> * l, ActivationSet<a> *Q, ActivationSet<a> *R) {
       a r = R->_set[j];
       if (!(l->_eq(l->_lub(q, r), l->_top))) {
 
-
-
-
+          printf("Error: %s and %s are compatible, with lub %s!\n",
+                 l->_show(q).text, l->_show(r).text, l->_show(l->_lub(q, r)).text);
+          exit(0);
 
         return 0;
       }
@@ -2186,11 +2205,25 @@ static int _incompat(Lattice<a> * l, ActivationSet<a> *Q, ActivationSet<a> *R) {
 
 template<a>
 static ThresholdSet<a>* _addThreshold(ThresholdSet<a>* t, ActivationSet<a>* act) {
+
+    if (t->_lattice != act->_lattice) {
+      printf("Error: activation set %s and threshold set %s do not have the same lattice. \n",
+             show(act).text, show(t).text);
+      exit(0);
+    }
 # 265 "../../../extensions/ableC-lvars/include/lvars.xh"
   if (t->_index >= t->_size) {
      inst _resizeThresholdSet<a>(t, 2 * t->_size + 1);
   }
-# 277 "../../../extensions/ableC-lvars/include/lvars.xh"
+
+
+    for (int i = 0; i < t->_index; i++) {
+      if (!inst _incompat<a>(t ->_lattice, t->_a_sets[i], act)) {
+        return t;
+      }
+    }
+
+
   t->_a_sets[t->_index] = act;
   t->_index++;
   return t;
@@ -2258,8 +2291,8 @@ template<a>
 static int _put(Lvar<a>* l, a newState) {
   if (l->_frozen) {
 
-
-
+        printf("Error: can't write to a frozen lvar.\n");
+        exit(0);
 
     return 0;
   }
@@ -2267,8 +2300,8 @@ static int _put(Lvar<a>* l, a newState) {
   a newValue = l-> _lattice-> _lub(oldState, newState);
   if (l-> _lattice->_eq(l->_lattice->_top, newValue)){
 
-
-
+        printf("Error: invalid put of %s\n", l->_lattice->_show(newState).text);
+        exit(0);
 
       return 0;
   }
@@ -2282,7 +2315,18 @@ static int _put(Lvar<a>* l, a newState) {
 
 template<a>
 static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
-# 380 "../../../extensions/ableC-lvars/include/lvars.xh"
+
+    if (l->_lattice != t->_lattice) {
+      printf("Error: can't get() when Lvar doesn't have same lattice as threshold set.\n");
+      exit(0);
+    }
+
+
+
+
+
+
+
   for (int i = 0; i < t->_index; i++) {
     for (int j = 0; j < t->_a_sets[i]->_index; j++) {
       if (l-> _lattice->_leq(t->_a_sets[i]->_set[j], l->_value)) {
@@ -2301,293 +2345,1818 @@ static a _freeze(Lvar<a>* l) {
   l->_frozen = 1;
   return l->_value;
 }
-# 2 "translate_error/addMismatchActToThresh.xc" 2
-# 1 "../../../extensions/ableC-lvars/include/natural.xh" 1
-# 1 "../../../extensions/ableC-lvars/include/lvars.xh" 1
-# 1 "../../../extensions/ableC-string/include/string.xh" 1
+# 3 "intBad.xc" 2
+# 1 "../../../extensions/ableC-cilk/include/cilk.xh" 1
+
+
+
+# 1 "/usr/local/include/cilk/cilk.h" 1
+# 35 "/usr/local/include/cilk/cilk.h"
+# 1 "/usr/include/x86_64-linux-gnu/sys/types.h" 1 3 4
+# 27 "/usr/include/x86_64-linux-gnu/sys/types.h" 3 4
+
+# 44 "/usr/include/x86_64-linux-gnu/sys/types.h" 3 4
+typedef __loff_t loff_t;
+
+
+
+typedef __ino_t ino_t;
+# 60 "/usr/include/x86_64-linux-gnu/sys/types.h" 3 4
+typedef __dev_t dev_t;
 
 
 
 
-# 1 "/soft/gcc/4.9.2/ubuntuamd2010/lib/gcc/x86_64-linux-gnu/4.9.2/include-fixed/limits.h" 1 3 4
-# 6 "../../../extensions/ableC-string/include/string.xh" 2
-# 2 "../../../extensions/ableC-lvars/include/lvars.xh" 2
-# 2 "../../../extensions/ableC-lvars/include/natural.xh" 2
+typedef __gid_t gid_t;
 
 
 
 
-typedef datatype Nat Nat;
-datatype Nat {
-  TopNat ();
-  BotNat ();
-  Int (int);
+typedef __mode_t mode_t;
+
+
+
+
+typedef __nlink_t nlink_t;
+
+
+
+
+typedef __uid_t uid_t;
+
+
+
+
+
+typedef __off_t off_t;
+# 98 "/usr/include/x86_64-linux-gnu/sys/types.h" 3 4
+typedef __pid_t pid_t;
+# 109 "/usr/include/x86_64-linux-gnu/sys/types.h" 3 4
+typedef __ssize_t ssize_t;
+# 132 "/usr/include/x86_64-linux-gnu/sys/types.h" 3 4
+# 1 "/usr/include/time.h" 1 3 4
+# 73 "/usr/include/time.h" 3 4
+
+
+typedef __time_t time_t;
+
+
+
+# 91 "/usr/include/time.h" 3 4
+typedef __clockid_t clockid_t;
+# 103 "/usr/include/time.h" 3 4
+typedef __timer_t timer_t;
+# 133 "/usr/include/x86_64-linux-gnu/sys/types.h" 2 3 4
+# 146 "/usr/include/x86_64-linux-gnu/sys/types.h" 3 4
+# 1 "/soft/gcc/4.9.2/ubuntuamd2010/lib/gcc/x86_64-linux-gnu/4.9.2/include/stddef.h" 1 3 4
+# 147 "/usr/include/x86_64-linux-gnu/sys/types.h" 2 3 4
+# 194 "/usr/include/x86_64-linux-gnu/sys/types.h" 3 4
+typedef int int8_t __attribute__ ((__mode__ (__QI__)));
+typedef int int16_t __attribute__ ((__mode__ (__HI__)));
+typedef int int32_t __attribute__ ((__mode__ (__SI__)));
+typedef int int64_t __attribute__ ((__mode__ (__DI__)));
+
+
+typedef unsigned int u_int8_t __attribute__ ((__mode__ (__QI__)));
+typedef unsigned int u_int16_t __attribute__ ((__mode__ (__HI__)));
+typedef unsigned int u_int32_t __attribute__ ((__mode__ (__SI__)));
+typedef unsigned int u_int64_t __attribute__ ((__mode__ (__DI__)));
+
+typedef int register_t __attribute__ ((__mode__ (__word__)));
+# 235 "/usr/include/x86_64-linux-gnu/sys/types.h" 3 4
+typedef __blkcnt_t blkcnt_t;
+
+
+
+typedef __fsblkcnt_t fsblkcnt_t;
+
+
+
+typedef __fsfilcnt_t fsfilcnt_t;
+# 273 "/usr/include/x86_64-linux-gnu/sys/types.h" 3 4
+
+# 36 "/usr/local/include/cilk/cilk.h" 2
+
+
+
+
+# 1 "/soft/gcc/4.9.2/ubuntuamd2010/lib/gcc/x86_64-linux-gnu/4.9.2/include/stddef.h" 1 3 4
+# 41 "/usr/local/include/cilk/cilk.h" 2
+
+# 1 "/usr/local/include/cilk/cilk-sysdep.h" 1
+# 146 "/usr/local/include/cilk/cilk-sysdep.h"
+static const char *ident_cilk_sysdep_h __attribute__((__unused__)) = "$HeadURL: https://bradley.csail.mit.edu/svn/repos/cilk/5.4.3/runtime/cilk-sysdep.h.in $ $LastChangedBy: bradley $ $Rev: 2311 $ $Date: 2005-07-13 17:38:21 -0400 (Wed, 13 Jul 2005) $"
+                                                                                                                                                                                              ;
+# 295 "/usr/local/include/cilk/cilk-sysdep.h"
+   static inline void CILK_MB(void) {
+     __asm__ volatile ("mfence":::"memory");
+   }
+
+
+
+
+   static inline int Cilk_xchg(volatile int *ptr, int x)
+   {
+ __asm__("xchgl %0,%1" :"=r" (x) :"m" (*(ptr)), "0" (x) :"memory");
+ return x;
+   }
+# 516 "/usr/local/include/cilk/cilk-sysdep.h"
+# 1 "/usr/include/x86_64-linux-gnu/sys/time.h" 1 3 4
+# 25 "/usr/include/x86_64-linux-gnu/sys/time.h" 3 4
+# 1 "/usr/include/time.h" 1 3 4
+# 26 "/usr/include/x86_64-linux-gnu/sys/time.h" 2 3 4
+
+# 1 "/usr/include/x86_64-linux-gnu/bits/time.h" 1 3 4
+# 30 "/usr/include/x86_64-linux-gnu/bits/time.h" 3 4
+struct timeval
+  {
+    __time_t tv_sec;
+    __suseconds_t tv_usec;
+  };
+# 28 "/usr/include/x86_64-linux-gnu/sys/time.h" 2 3 4
+
+# 1 "/usr/include/x86_64-linux-gnu/sys/select.h" 1 3 4
+# 30 "/usr/include/x86_64-linux-gnu/sys/select.h" 3 4
+# 1 "/usr/include/x86_64-linux-gnu/bits/select.h" 1 3 4
+# 22 "/usr/include/x86_64-linux-gnu/bits/select.h" 3 4
+# 1 "/usr/include/x86_64-linux-gnu/bits/wordsize.h" 1 3 4
+# 23 "/usr/include/x86_64-linux-gnu/bits/select.h" 2 3 4
+# 31 "/usr/include/x86_64-linux-gnu/sys/select.h" 2 3 4
+
+
+# 1 "/usr/include/x86_64-linux-gnu/bits/sigset.h" 1 3 4
+# 22 "/usr/include/x86_64-linux-gnu/bits/sigset.h" 3 4
+typedef int __sig_atomic_t;
+
+
+
+
+typedef struct
+  {
+    unsigned long int __val[(1024 / (8 * sizeof (unsigned long int)))];
+  } __sigset_t;
+# 34 "/usr/include/x86_64-linux-gnu/sys/select.h" 2 3 4
+
+
+
+typedef __sigset_t sigset_t;
+
+
+
+
+
+# 1 "/usr/include/time.h" 1 3 4
+# 120 "/usr/include/time.h" 3 4
+struct timespec
+  {
+    __time_t tv_sec;
+    __syscall_slong_t tv_nsec;
+  };
+# 44 "/usr/include/x86_64-linux-gnu/sys/select.h" 2 3 4
+
+# 1 "/usr/include/x86_64-linux-gnu/bits/time.h" 1 3 4
+# 46 "/usr/include/x86_64-linux-gnu/sys/select.h" 2 3 4
+
+
+typedef __suseconds_t suseconds_t;
+
+
+
+
+
+typedef long int __fd_mask;
+# 64 "/usr/include/x86_64-linux-gnu/sys/select.h" 3 4
+typedef struct
+  {
+
+
+
+
+
+
+    __fd_mask __fds_bits[1024 / (8 * (int) sizeof (__fd_mask))];
+
+
+  } fd_set;
+# 96 "/usr/include/x86_64-linux-gnu/sys/select.h" 3 4
+
+# 106 "/usr/include/x86_64-linux-gnu/sys/select.h" 3 4
+extern int select (int __nfds, fd_set *__restrict __readfds,
+     fd_set *__restrict __writefds,
+     fd_set *__restrict __exceptfds,
+     struct timeval *__restrict __timeout);
+# 131 "/usr/include/x86_64-linux-gnu/sys/select.h" 3 4
+
+# 30 "/usr/include/x86_64-linux-gnu/sys/time.h" 2 3 4
+
+
+
+
+
+
+
+
+# 63 "/usr/include/x86_64-linux-gnu/sys/time.h" 3 4
+typedef void *__restrict __timezone_ptr_t;
+
+
+
+
+
+
+
+extern int gettimeofday (struct timeval *__restrict __tv,
+    __timezone_ptr_t __tz) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+# 91 "/usr/include/x86_64-linux-gnu/sys/time.h" 3 4
+enum __itimer_which
+  {
+
+    ITIMER_REAL = 0,
+
+
+    ITIMER_VIRTUAL = 1,
+
+
+
+    ITIMER_PROF = 2
+
+  };
+
+
+
+struct itimerval
+  {
+
+    struct timeval it_interval;
+
+    struct timeval it_value;
+  };
+
+
+
+
+
+
+typedef int __itimer_which_t;
+
+
+
+
+extern int getitimer (__itimer_which_t __which,
+        struct itimerval *__value) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+extern int setitimer (__itimer_which_t __which,
+        const struct itimerval *__restrict __new,
+        struct itimerval *__restrict __old) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+extern int utimes (const char *__file, const struct timeval __tvp[2])
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+# 189 "/usr/include/x86_64-linux-gnu/sys/time.h" 3 4
+
+# 517 "/usr/local/include/cilk/cilk-sysdep.h" 2
+
+
+# 1 "/usr/include/unistd.h" 1 3 4
+# 27 "/usr/include/unistd.h" 3 4
+
+# 205 "/usr/include/unistd.h" 3 4
+# 1 "/usr/include/x86_64-linux-gnu/bits/posix_opt.h" 1 3 4
+# 206 "/usr/include/unistd.h" 2 3 4
+# 229 "/usr/include/unistd.h" 3 4
+# 1 "/soft/gcc/4.9.2/ubuntuamd2010/lib/gcc/x86_64-linux-gnu/4.9.2/include/stddef.h" 1 3 4
+# 230 "/usr/include/unistd.h" 2 3 4
+# 290 "/usr/include/unistd.h" 3 4
+extern int access (const char *__name, int __type) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+# 337 "/usr/include/unistd.h" 3 4
+extern __off_t lseek (int __fd, __off_t __offset, int __whence) __attribute__ ((__nothrow__ , __leaf__));
+# 356 "/usr/include/unistd.h" 3 4
+extern int close (int __fd);
+
+
+
+
+
+
+extern ssize_t read (int __fd, void *__buf, size_t __nbytes) ;
+
+
+
+
+
+extern ssize_t write (int __fd, const void *__buf, size_t __n) ;
+# 420 "/usr/include/unistd.h" 3 4
+extern int pipe (int __pipedes[2]) __attribute__ ((__nothrow__ , __leaf__)) ;
+# 435 "/usr/include/unistd.h" 3 4
+extern unsigned int alarm (unsigned int __seconds) __attribute__ ((__nothrow__ , __leaf__));
+# 447 "/usr/include/unistd.h" 3 4
+extern unsigned int sleep (unsigned int __seconds);
+# 472 "/usr/include/unistd.h" 3 4
+extern int pause (void);
+
+
+
+extern int chown (const char *__file, __uid_t __owner, __gid_t __group)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1))) ;
+# 500 "/usr/include/unistd.h" 3 4
+extern int chdir (const char *__path) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1))) ;
+# 514 "/usr/include/unistd.h" 3 4
+extern char *getcwd (char *__buf, size_t __size) __attribute__ ((__nothrow__ , __leaf__)) ;
+# 534 "/usr/include/unistd.h" 3 4
+extern int dup (int __fd) __attribute__ ((__nothrow__ , __leaf__)) ;
+
+
+extern int dup2 (int __fd, int __fd2) __attribute__ ((__nothrow__ , __leaf__));
+# 546 "/usr/include/unistd.h" 3 4
+extern char **__environ;
+
+
+
+
+
+
+
+extern int execve (const char *__path, char *const __argv[],
+     char *const __envp[]) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
+# 566 "/usr/include/unistd.h" 3 4
+extern int execv (const char *__path, char *const __argv[])
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+
+extern int execle (const char *__path, const char *__arg, ...)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+
+extern int execl (const char *__path, const char *__arg, ...)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+
+extern int execvp (const char *__file, char *const __argv[])
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+
+
+extern int execlp (const char *__file, const char *__arg, ...)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
+# 606 "/usr/include/unistd.h" 3 4
+extern void _exit (int __status) __attribute__ ((__noreturn__));
+
+
+
+
+
+# 1 "/usr/include/x86_64-linux-gnu/bits/confname.h" 1 3 4
+# 24 "/usr/include/x86_64-linux-gnu/bits/confname.h" 3 4
+enum
+  {
+    _PC_LINK_MAX,
+
+    _PC_MAX_CANON,
+
+    _PC_MAX_INPUT,
+
+    _PC_NAME_MAX,
+
+    _PC_PATH_MAX,
+
+    _PC_PIPE_BUF,
+
+    _PC_CHOWN_RESTRICTED,
+
+    _PC_NO_TRUNC,
+
+    _PC_VDISABLE,
+
+    _PC_SYNC_IO,
+
+    _PC_ASYNC_IO,
+
+    _PC_PRIO_IO,
+
+    _PC_SOCK_MAXBUF,
+
+    _PC_FILESIZEBITS,
+
+    _PC_REC_INCR_XFER_SIZE,
+
+    _PC_REC_MAX_XFER_SIZE,
+
+    _PC_REC_MIN_XFER_SIZE,
+
+    _PC_REC_XFER_ALIGN,
+
+    _PC_ALLOC_SIZE_MIN,
+
+    _PC_SYMLINK_MAX,
+
+    _PC_2_SYMLINKS
+
+  };
+
+
+enum
+  {
+    _SC_ARG_MAX,
+
+    _SC_CHILD_MAX,
+
+    _SC_CLK_TCK,
+
+    _SC_NGROUPS_MAX,
+
+    _SC_OPEN_MAX,
+
+    _SC_STREAM_MAX,
+
+    _SC_TZNAME_MAX,
+
+    _SC_JOB_CONTROL,
+
+    _SC_SAVED_IDS,
+
+    _SC_REALTIME_SIGNALS,
+
+    _SC_PRIORITY_SCHEDULING,
+
+    _SC_TIMERS,
+
+    _SC_ASYNCHRONOUS_IO,
+
+    _SC_PRIORITIZED_IO,
+
+    _SC_SYNCHRONIZED_IO,
+
+    _SC_FSYNC,
+
+    _SC_MAPPED_FILES,
+
+    _SC_MEMLOCK,
+
+    _SC_MEMLOCK_RANGE,
+
+    _SC_MEMORY_PROTECTION,
+
+    _SC_MESSAGE_PASSING,
+
+    _SC_SEMAPHORES,
+
+    _SC_SHARED_MEMORY_OBJECTS,
+
+    _SC_AIO_LISTIO_MAX,
+
+    _SC_AIO_MAX,
+
+    _SC_AIO_PRIO_DELTA_MAX,
+
+    _SC_DELAYTIMER_MAX,
+
+    _SC_MQ_OPEN_MAX,
+
+    _SC_MQ_PRIO_MAX,
+
+    _SC_VERSION,
+
+    _SC_PAGESIZE,
+
+
+    _SC_RTSIG_MAX,
+
+    _SC_SEM_NSEMS_MAX,
+
+    _SC_SEM_VALUE_MAX,
+
+    _SC_SIGQUEUE_MAX,
+
+    _SC_TIMER_MAX,
+
+
+
+
+    _SC_BC_BASE_MAX,
+
+    _SC_BC_DIM_MAX,
+
+    _SC_BC_SCALE_MAX,
+
+    _SC_BC_STRING_MAX,
+
+    _SC_COLL_WEIGHTS_MAX,
+
+    _SC_EQUIV_CLASS_MAX,
+
+    _SC_EXPR_NEST_MAX,
+
+    _SC_LINE_MAX,
+
+    _SC_RE_DUP_MAX,
+
+    _SC_CHARCLASS_NAME_MAX,
+
+
+    _SC_2_VERSION,
+
+    _SC_2_C_BIND,
+
+    _SC_2_C_DEV,
+
+    _SC_2_FORT_DEV,
+
+    _SC_2_FORT_RUN,
+
+    _SC_2_SW_DEV,
+
+    _SC_2_LOCALEDEF,
+
+
+    _SC_PII,
+
+    _SC_PII_XTI,
+
+    _SC_PII_SOCKET,
+
+    _SC_PII_INTERNET,
+
+    _SC_PII_OSI,
+
+    _SC_POLL,
+
+    _SC_SELECT,
+
+    _SC_UIO_MAXIOV,
+
+    _SC_IOV_MAX = _SC_UIO_MAXIOV,
+
+    _SC_PII_INTERNET_STREAM,
+
+    _SC_PII_INTERNET_DGRAM,
+
+    _SC_PII_OSI_COTS,
+
+    _SC_PII_OSI_CLTS,
+
+    _SC_PII_OSI_M,
+
+    _SC_T_IOV_MAX,
+
+
+
+    _SC_THREADS,
+
+    _SC_THREAD_SAFE_FUNCTIONS,
+
+    _SC_GETGR_R_SIZE_MAX,
+
+    _SC_GETPW_R_SIZE_MAX,
+
+    _SC_LOGIN_NAME_MAX,
+
+    _SC_TTY_NAME_MAX,
+
+    _SC_THREAD_DESTRUCTOR_ITERATIONS,
+
+    _SC_THREAD_KEYS_MAX,
+
+    _SC_THREAD_STACK_MIN,
+
+    _SC_THREAD_THREADS_MAX,
+
+    _SC_THREAD_ATTR_STACKADDR,
+
+    _SC_THREAD_ATTR_STACKSIZE,
+
+    _SC_THREAD_PRIORITY_SCHEDULING,
+
+    _SC_THREAD_PRIO_INHERIT,
+
+    _SC_THREAD_PRIO_PROTECT,
+
+    _SC_THREAD_PROCESS_SHARED,
+
+
+    _SC_NPROCESSORS_CONF,
+
+    _SC_NPROCESSORS_ONLN,
+
+    _SC_PHYS_PAGES,
+
+    _SC_AVPHYS_PAGES,
+
+    _SC_ATEXIT_MAX,
+
+    _SC_PASS_MAX,
+
+
+    _SC_XOPEN_VERSION,
+
+    _SC_XOPEN_XCU_VERSION,
+
+    _SC_XOPEN_UNIX,
+
+    _SC_XOPEN_CRYPT,
+
+    _SC_XOPEN_ENH_I18N,
+
+    _SC_XOPEN_SHM,
+
+
+    _SC_2_CHAR_TERM,
+
+    _SC_2_C_VERSION,
+
+    _SC_2_UPE,
+
+
+    _SC_XOPEN_XPG2,
+
+    _SC_XOPEN_XPG3,
+
+    _SC_XOPEN_XPG4,
+
+
+    _SC_CHAR_BIT,
+
+    _SC_CHAR_MAX,
+
+    _SC_CHAR_MIN,
+
+    _SC_INT_MAX,
+
+    _SC_INT_MIN,
+
+    _SC_LONG_BIT,
+
+    _SC_WORD_BIT,
+
+    _SC_MB_LEN_MAX,
+
+    _SC_NZERO,
+
+    _SC_SSIZE_MAX,
+
+    _SC_SCHAR_MAX,
+
+    _SC_SCHAR_MIN,
+
+    _SC_SHRT_MAX,
+
+    _SC_SHRT_MIN,
+
+    _SC_UCHAR_MAX,
+
+    _SC_UINT_MAX,
+
+    _SC_ULONG_MAX,
+
+    _SC_USHRT_MAX,
+
+
+    _SC_NL_ARGMAX,
+
+    _SC_NL_LANGMAX,
+
+    _SC_NL_MSGMAX,
+
+    _SC_NL_NMAX,
+
+    _SC_NL_SETMAX,
+
+    _SC_NL_TEXTMAX,
+
+
+    _SC_XBS5_ILP32_OFF32,
+
+    _SC_XBS5_ILP32_OFFBIG,
+
+    _SC_XBS5_LP64_OFF64,
+
+    _SC_XBS5_LPBIG_OFFBIG,
+
+
+    _SC_XOPEN_LEGACY,
+
+    _SC_XOPEN_REALTIME,
+
+    _SC_XOPEN_REALTIME_THREADS,
+
+
+    _SC_ADVISORY_INFO,
+
+    _SC_BARRIERS,
+
+    _SC_BASE,
+
+    _SC_C_LANG_SUPPORT,
+
+    _SC_C_LANG_SUPPORT_R,
+
+    _SC_CLOCK_SELECTION,
+
+    _SC_CPUTIME,
+
+    _SC_THREAD_CPUTIME,
+
+    _SC_DEVICE_IO,
+
+    _SC_DEVICE_SPECIFIC,
+
+    _SC_DEVICE_SPECIFIC_R,
+
+    _SC_FD_MGMT,
+
+    _SC_FIFO,
+
+    _SC_PIPE,
+
+    _SC_FILE_ATTRIBUTES,
+
+    _SC_FILE_LOCKING,
+
+    _SC_FILE_SYSTEM,
+
+    _SC_MONOTONIC_CLOCK,
+
+    _SC_MULTI_PROCESS,
+
+    _SC_SINGLE_PROCESS,
+
+    _SC_NETWORKING,
+
+    _SC_READER_WRITER_LOCKS,
+
+    _SC_SPIN_LOCKS,
+
+    _SC_REGEXP,
+
+    _SC_REGEX_VERSION,
+
+    _SC_SHELL,
+
+    _SC_SIGNALS,
+
+    _SC_SPAWN,
+
+    _SC_SPORADIC_SERVER,
+
+    _SC_THREAD_SPORADIC_SERVER,
+
+    _SC_SYSTEM_DATABASE,
+
+    _SC_SYSTEM_DATABASE_R,
+
+    _SC_TIMEOUTS,
+
+    _SC_TYPED_MEMORY_OBJECTS,
+
+    _SC_USER_GROUPS,
+
+    _SC_USER_GROUPS_R,
+
+    _SC_2_PBS,
+
+    _SC_2_PBS_ACCOUNTING,
+
+    _SC_2_PBS_LOCATE,
+
+    _SC_2_PBS_MESSAGE,
+
+    _SC_2_PBS_TRACK,
+
+    _SC_SYMLOOP_MAX,
+
+    _SC_STREAMS,
+
+    _SC_2_PBS_CHECKPOINT,
+
+
+    _SC_V6_ILP32_OFF32,
+
+    _SC_V6_ILP32_OFFBIG,
+
+    _SC_V6_LP64_OFF64,
+
+    _SC_V6_LPBIG_OFFBIG,
+
+
+    _SC_HOST_NAME_MAX,
+
+    _SC_TRACE,
+
+    _SC_TRACE_EVENT_FILTER,
+
+    _SC_TRACE_INHERIT,
+
+    _SC_TRACE_LOG,
+
+
+    _SC_LEVEL1_ICACHE_SIZE,
+
+    _SC_LEVEL1_ICACHE_ASSOC,
+
+    _SC_LEVEL1_ICACHE_LINESIZE,
+
+    _SC_LEVEL1_DCACHE_SIZE,
+
+    _SC_LEVEL1_DCACHE_ASSOC,
+
+    _SC_LEVEL1_DCACHE_LINESIZE,
+
+    _SC_LEVEL2_CACHE_SIZE,
+
+    _SC_LEVEL2_CACHE_ASSOC,
+
+    _SC_LEVEL2_CACHE_LINESIZE,
+
+    _SC_LEVEL3_CACHE_SIZE,
+
+    _SC_LEVEL3_CACHE_ASSOC,
+
+    _SC_LEVEL3_CACHE_LINESIZE,
+
+    _SC_LEVEL4_CACHE_SIZE,
+
+    _SC_LEVEL4_CACHE_ASSOC,
+
+    _SC_LEVEL4_CACHE_LINESIZE,
+
+
+
+    _SC_IPV6 = _SC_LEVEL1_ICACHE_SIZE + 50,
+
+    _SC_RAW_SOCKETS,
+
+
+    _SC_V7_ILP32_OFF32,
+
+    _SC_V7_ILP32_OFFBIG,
+
+    _SC_V7_LP64_OFF64,
+
+    _SC_V7_LPBIG_OFFBIG,
+
+
+    _SC_SS_REPL_MAX,
+
+
+    _SC_TRACE_EVENT_NAME_MAX,
+
+    _SC_TRACE_NAME_MAX,
+
+    _SC_TRACE_SYS_MAX,
+
+    _SC_TRACE_USER_EVENT_MAX,
+
+
+    _SC_XOPEN_STREAMS,
+
+
+    _SC_THREAD_ROBUST_PRIO_INHERIT,
+
+    _SC_THREAD_ROBUST_PRIO_PROTECT
+
+  };
+
+
+enum
+  {
+    _CS_PATH,
+
+
+    _CS_V6_WIDTH_RESTRICTED_ENVS,
+
+
+
+    _CS_GNU_LIBC_VERSION,
+
+    _CS_GNU_LIBPTHREAD_VERSION,
+
+
+    _CS_V5_WIDTH_RESTRICTED_ENVS,
+
+
+
+    _CS_V7_WIDTH_RESTRICTED_ENVS,
+
+
+
+    _CS_LFS_CFLAGS = 1000,
+
+    _CS_LFS_LDFLAGS,
+
+    _CS_LFS_LIBS,
+
+    _CS_LFS_LINTFLAGS,
+
+    _CS_LFS64_CFLAGS,
+
+    _CS_LFS64_LDFLAGS,
+
+    _CS_LFS64_LIBS,
+
+    _CS_LFS64_LINTFLAGS,
+
+
+    _CS_XBS5_ILP32_OFF32_CFLAGS = 1100,
+
+    _CS_XBS5_ILP32_OFF32_LDFLAGS,
+
+    _CS_XBS5_ILP32_OFF32_LIBS,
+
+    _CS_XBS5_ILP32_OFF32_LINTFLAGS,
+
+    _CS_XBS5_ILP32_OFFBIG_CFLAGS,
+
+    _CS_XBS5_ILP32_OFFBIG_LDFLAGS,
+
+    _CS_XBS5_ILP32_OFFBIG_LIBS,
+
+    _CS_XBS5_ILP32_OFFBIG_LINTFLAGS,
+
+    _CS_XBS5_LP64_OFF64_CFLAGS,
+
+    _CS_XBS5_LP64_OFF64_LDFLAGS,
+
+    _CS_XBS5_LP64_OFF64_LIBS,
+
+    _CS_XBS5_LP64_OFF64_LINTFLAGS,
+
+    _CS_XBS5_LPBIG_OFFBIG_CFLAGS,
+
+    _CS_XBS5_LPBIG_OFFBIG_LDFLAGS,
+
+    _CS_XBS5_LPBIG_OFFBIG_LIBS,
+
+    _CS_XBS5_LPBIG_OFFBIG_LINTFLAGS,
+
+
+    _CS_POSIX_V6_ILP32_OFF32_CFLAGS,
+
+    _CS_POSIX_V6_ILP32_OFF32_LDFLAGS,
+
+    _CS_POSIX_V6_ILP32_OFF32_LIBS,
+
+    _CS_POSIX_V6_ILP32_OFF32_LINTFLAGS,
+
+    _CS_POSIX_V6_ILP32_OFFBIG_CFLAGS,
+
+    _CS_POSIX_V6_ILP32_OFFBIG_LDFLAGS,
+
+    _CS_POSIX_V6_ILP32_OFFBIG_LIBS,
+
+    _CS_POSIX_V6_ILP32_OFFBIG_LINTFLAGS,
+
+    _CS_POSIX_V6_LP64_OFF64_CFLAGS,
+
+    _CS_POSIX_V6_LP64_OFF64_LDFLAGS,
+
+    _CS_POSIX_V6_LP64_OFF64_LIBS,
+
+    _CS_POSIX_V6_LP64_OFF64_LINTFLAGS,
+
+    _CS_POSIX_V6_LPBIG_OFFBIG_CFLAGS,
+
+    _CS_POSIX_V6_LPBIG_OFFBIG_LDFLAGS,
+
+    _CS_POSIX_V6_LPBIG_OFFBIG_LIBS,
+
+    _CS_POSIX_V6_LPBIG_OFFBIG_LINTFLAGS,
+
+
+    _CS_POSIX_V7_ILP32_OFF32_CFLAGS,
+
+    _CS_POSIX_V7_ILP32_OFF32_LDFLAGS,
+
+    _CS_POSIX_V7_ILP32_OFF32_LIBS,
+
+    _CS_POSIX_V7_ILP32_OFF32_LINTFLAGS,
+
+    _CS_POSIX_V7_ILP32_OFFBIG_CFLAGS,
+
+    _CS_POSIX_V7_ILP32_OFFBIG_LDFLAGS,
+
+    _CS_POSIX_V7_ILP32_OFFBIG_LIBS,
+
+    _CS_POSIX_V7_ILP32_OFFBIG_LINTFLAGS,
+
+    _CS_POSIX_V7_LP64_OFF64_CFLAGS,
+
+    _CS_POSIX_V7_LP64_OFF64_LDFLAGS,
+
+    _CS_POSIX_V7_LP64_OFF64_LIBS,
+
+    _CS_POSIX_V7_LP64_OFF64_LINTFLAGS,
+
+    _CS_POSIX_V7_LPBIG_OFFBIG_CFLAGS,
+
+    _CS_POSIX_V7_LPBIG_OFFBIG_LDFLAGS,
+
+    _CS_POSIX_V7_LPBIG_OFFBIG_LIBS,
+
+    _CS_POSIX_V7_LPBIG_OFFBIG_LINTFLAGS,
+
+
+    _CS_V6_ENV,
+
+    _CS_V7_ENV
+
+  };
+# 613 "/usr/include/unistd.h" 2 3 4
+
+
+extern long int pathconf (const char *__path, int __name)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+
+
+extern long int fpathconf (int __fd, int __name) __attribute__ ((__nothrow__ , __leaf__));
+
+
+extern long int sysconf (int __name) __attribute__ ((__nothrow__ , __leaf__));
+# 631 "/usr/include/unistd.h" 3 4
+extern __pid_t getpid (void) __attribute__ ((__nothrow__ , __leaf__));
+
+
+extern __pid_t getppid (void) __attribute__ ((__nothrow__ , __leaf__));
+
+
+extern __pid_t getpgrp (void) __attribute__ ((__nothrow__ , __leaf__));
+
+
+extern __pid_t __getpgid (__pid_t __pid) __attribute__ ((__nothrow__ , __leaf__));
+# 649 "/usr/include/unistd.h" 3 4
+extern int setpgid (__pid_t __pid, __pid_t __pgid) __attribute__ ((__nothrow__ , __leaf__));
+# 670 "/usr/include/unistd.h" 3 4
+extern __pid_t setsid (void) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+
+
+
+extern __uid_t getuid (void) __attribute__ ((__nothrow__ , __leaf__));
+
+
+extern __uid_t geteuid (void) __attribute__ ((__nothrow__ , __leaf__));
+
+
+extern __gid_t getgid (void) __attribute__ ((__nothrow__ , __leaf__));
+
+
+extern __gid_t getegid (void) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+extern int getgroups (int __size, __gid_t __list[]) __attribute__ ((__nothrow__ , __leaf__)) ;
+# 703 "/usr/include/unistd.h" 3 4
+extern int setuid (__uid_t __uid) __attribute__ ((__nothrow__ , __leaf__)) ;
+# 720 "/usr/include/unistd.h" 3 4
+extern int setgid (__gid_t __gid) __attribute__ ((__nothrow__ , __leaf__)) ;
+# 759 "/usr/include/unistd.h" 3 4
+extern __pid_t fork (void) __attribute__ ((__nothrow__));
+# 773 "/usr/include/unistd.h" 3 4
+extern char *ttyname (int __fd) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+extern int ttyname_r (int __fd, char *__buf, size_t __buflen)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (2))) ;
+
+
+
+extern int isatty (int __fd) __attribute__ ((__nothrow__ , __leaf__));
+# 793 "/usr/include/unistd.h" 3 4
+extern int link (const char *__from, const char *__to)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2))) ;
+# 829 "/usr/include/unistd.h" 3 4
+extern int unlink (const char *__name) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+# 838 "/usr/include/unistd.h" 3 4
+extern int rmdir (const char *__path) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+extern __pid_t tcgetpgrp (int __fd) __attribute__ ((__nothrow__ , __leaf__));
+
+
+extern int tcsetpgrp (int __fd, __pid_t __pgrp_id) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+
+
+extern char *getlogin (void);
+# 959 "/usr/include/unistd.h" 3 4
+extern int fsync (int __fd);
+# 1154 "/usr/include/unistd.h" 3 4
+
+# 520 "/usr/local/include/cilk/cilk-sysdep.h" 2
+
+
+typedef long long Cilk_time;
+
+static inline Cilk_time Cilk_get_time(void)
+{
+     struct timeval tv;
+     gettimeofday(&tv, 0);
+
+     return ((Cilk_time)tv.tv_sec * 1000000LL + (Cilk_time)tv.tv_usec);
+}
+
+static inline double Cilk_time_to_sec(Cilk_time t)
+{
+     return (double) t * 1.0E-6;
+}
+
+static inline Cilk_time Cilk_get_wall_time(void)
+{
+     return Cilk_get_time();
+}
+
+static inline double Cilk_wall_time_to_sec(Cilk_time t)
+{
+     return Cilk_time_to_sec(t);
+}
+# 43 "/usr/local/include/cilk/cilk.h" 2
+
+static const char *cilk_h_ident __attribute__((__unused__)) = "$HeadURL: https://bradley.csail.mit.edu/svn/repos/cilk/5.4.3/runtime/cilk.h $ $LastChangedBy: bradley $ $Rev: 2672 $ $Date: 2005-12-20 13:30:02 -0500 (Tue, 20 Dec 2005) $"
+                                                                                                                                                                                    ;
+# 55 "/usr/local/include/cilk/cilk.h"
+# 1 "/usr/local/include/cilk/cilk-conf.h" 1
+# 27 "/usr/local/include/cilk/cilk-conf.h"
+static const char *ident_cilk_conf_h __attribute__((__unused__)) = "$HeadURL: https://bradley.csail.mit.edu/svn/repos/cilk/5.4.3/runtime/cilk-conf.h $ $LastChangedBy: bradley $ $Rev: 1465 $ $Date: 2004-08-02 06:31:06 -0400 (Mon, 02 Aug 2004) $"
+                                                                                                                                                                                         ;
+# 56 "/usr/local/include/cilk/cilk.h" 2
+# 78 "/usr/local/include/cilk/cilk.h"
+typedef struct {
+     int size;
+     ptrdiff_t index;
+     void (*inlet) ();
+     int argsize;
+     ptrdiff_t argindex;
+} CilkProcInfo;
+
+
+
+
+struct cilk_alloca_header {
+     struct cilk_alloca_header *next;
+     size_t size;
 };
 
-int leqNat(Nat* n1, Nat* n2) {
-  int result;
-  match (n1) {
-    TopNat() -> {result = 0;}
-    BotNat() -> {result = 1;}
-    Int(i1) -> {
-      match (n2) {
-        TopNat() -> {result = 1;}
-        BotNat() -> {result = 0;}
-        Int(i2) -> {result = i1 == i2;}
-      }
-    }
-  }
-  return result;
-}
-
-Nat* lubNat(Nat* n1, Nat* n2) {
-  Nat* result;
-  match (n1) {
-    TopNat() -> {result = TopNat();}
-    BotNat() -> {result = n2;}
-    Int(i1) -> {
-      match (n2) {
-        TopNat() -> {result = TopNat();}
-        BotNat() -> {result = n1;}
-        Int(i2) -> {
-          if (i1 == i2) {
-            result = n1;
-          }
-          else {
-           result = TopNat();
-          }
-        }
-      }
-    }
-  }
-  return result;
-}
 
 
-int eqNat(Nat* n1, Nat* n2) {
-  match (n1) {
-    TopNat() -> {
-      match (n2) {
-        TopNat() -> {return 1;}
-        other -> {return 0;}
-      }
-    }
-    BotNat() -> {
-      match (n2) {
-        BotNat() -> {return 1;}
-        other -> {return 0;}
-      }
-    }
-    Int(i1) -> {
-      match (n2) {
-        Int(i2) -> {return i1 == i2;}
-        other -> {return 0;}
-      }
-    }
-  }
-  return 0;
-}
 
-string showNat(Nat* n) {
-  string result;
-  match (n) {
-    TopNat() -> {result = str("TopNat()");}
-    BotNat() -> {result = str("BotNat()");}
-    Int(i) -> {result = "Int(" + show(i) + ")";}
-  }
-  return result;
-}
+typedef void (*HookT)(void);
 
-Lattice<Nat*> * natLattice() {
-  return lattice(BotNat(), TopNat(), leqNat, lubNat, eqNat, showNat);
-}
-# 3 "translate_error/addMismatchActToThresh.xc" 2
-# 12 "translate_error/addMismatchActToThresh.xc"
-typedef datatype Bl Bl;
-datatype Bl {
-  T ();
-  F ();
-  Bot ();
-};
+typedef struct hook {
+     HookT fn;
+     struct hook *next;
+} HookList;
 
-typedef datatype State State;
-datatype State {
-  Top ();
-  Pair (Bl*, Bl*);
+extern void Cilk_add_hook(HookList **listp, HookT fn);
+extern void Cilk_run_hooks(HookList *list);
+
+
+
+
+
+
+
+extern HookList *Cilk_init_global_hooks;
+extern HookList *Cilk_init_per_worker_hooks;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+typedef struct {
+     int entry;
+     void *receiver;
+
+     CilkProcInfo *sig;
+     struct cilk_alloca_header *alloca_h;
+    
+    
+    
+    
+    
+    
+    
+    
+} CilkStackFrame;
+
+
+
+
+typedef CilkStackFrame **CilkStack;
+# 166 "/usr/local/include/cilk/cilk.h"
+typedef struct {
+     volatile CilkStackFrame **head, **tail;
+
+     volatile CilkStackFrame **exception;
+     CilkStack stack;
+     char __dummy[64];
+} CilkClosureCache;
+
+
+struct Cilk_im_descriptor {
+     void *free_list;
+     int length;
+
+
+
+
+     int count;
 };
 
 
+struct Cilk_im_stats {
+     int used;
+     int nmalloc;
+     int in_free_lists;
 
-int eqBool(Bl* b1, Bl* b2) {
-  match (b1) {
-    T() -> {
-      match (b2) {
-        T() -> {return 1;}
-        other -> {return 0;}
-      }
-    }
-    F() -> {
-      match (b2) {
-        F() -> {return 1;}
-        other -> {return 0;}
-      }
-    }
-    Bot() -> {
-      match (b2) {
-        Bot() -> {return 1;}
-        other -> {return 0;}
-      }
-    }
+
+     int length[9];
+     char __dummy[64];
+};
+
+
+typedef struct Closure_s Closure;
+typedef struct Cilk_options_s Cilk_options;
+
+
+
+
+
+typedef struct {
+
+
+
+
+
+
+   struct Cilk_im_stats *im_info;
+
+
+ Cilk_options *options;
+
+
+
+
+
+ const char *assertion_failed_msg;
+ const char *stack_overflow_msg;
+
+
+ int active_size;
+        int pthread_stacksize;
+
+
+
+
+
+
+ void *infofile;
+# 248 "/usr/local/include/cilk/cilk.h"
+ unsigned int num_threads;
+ unsigned int num_steals;
+
+
+
+
+
+ struct ReadyDeque *deques;
+
+ Cilk_time start_time;
+
+ Closure *invoke_main;
+
+
+ HookList *Cilk_init_global_hooks;
+ HookList *Cilk_init_per_worker_hooks;
+
+} CilkReadOnlyParams;
+
+
+typedef struct CilkGlobalState_s CilkGlobalState;
+
+typedef struct {
+
+        CilkReadOnlyParams *Cilk_RO_params;
+
+
+
+
+ CilkGlobalState *Cilk_global_state;
+
+} CilkContext;
+
+
+
+typedef struct {
+     CilkClosureCache cache;
+     int self;
+     struct Cilk_im_descriptor im_descriptor [9];
+     size_t stackdepth;
+     Cilk_time last_cp_time;
+     Cilk_time cp_hack;
+     Cilk_time work_hack;
+     Cilk_time user_work;
+     Cilk_time user_critical_path;
+     unsigned int rand_next;
+     int abort_flag;
+     int barrier_direction;
+     char __dummy[64];
+     CilkContext *context;
+
+
+
+} CilkWorkerState;
+
+typedef struct{
+
+ CilkContext *context;
+ int id;
+
+} CilkChildParams;
+
+
+
+
+
+extern void Cilk_dprintf(CilkWorkerState *const ws, const char *fmt,...);
+extern void Cilk_die_internal(CilkContext *const context, CilkWorkerState *const ws, const char *fmt,...);
+extern void Cilk_unalloca_internal(CilkWorkerState *const ws,
+       CilkStackFrame *f);
+
+
+
+
+extern void *Cilk_internal_malloc(CilkWorkerState *const ws, size_t);
+extern void Cilk_internal_free(CilkWorkerState *const ws, void *p, size_t size);
+# 335 "/usr/local/include/cilk/cilk.h"
+extern CilkContext *Cilk_init(int* argc,char** argv);
+extern void Cilk_terminate(CilkContext *const context);
+
+
+
+
+
+static inline Cilk_time Cilk_get_elapsed_time(CilkWorkerState *const ws)
+{
+     Cilk_time then = ws->last_cp_time;
+     Cilk_time now = Cilk_get_time();
+
+     ;
+
+     ws->last_cp_time = now;
+     return now - then;
+}
+# 362 "/usr/local/include/cilk/cilk.h"
+static inline int Cilk_internal_malloc_canonicalize(size_t size)
+{
+     if (size <= 16 && 16 >= 64) return 16;;
+     if (size <= 32 && 32 >= 64) return 32;;
+     if (size <= 64 && 64 >= 64) return 64;;
+     if (size <= 128 && 128 >= 64) return 128;;
+     if (size <= 256 && 256 >= 64) return 256;;
+     if (size <= 512 && 512 >= 64) return 512;;
+     if (size <= 1024 && 1024 >= 64) return 1024;;
+     if (size <= 2048 && 2048 >= 64) return 2048;;
+     if (size <= 4096 && 4096 >= 64) return 4096;;
+     return -1;
+}
+
+
+
+
+static inline int Cilk_internal_malloc_size_to_bucket(size_t size)
+{
+     if (size <= 16 && 16 >= 64) return 0;;
+     if (size <= 32 && 32 >= 64) return 1;;
+     if (size <= 64 && 64 >= 64) return 2;;
+     if (size <= 128 && 128 >= 64) return 3;;
+     if (size <= 256 && 256 >= 64) return 4;;
+     if (size <= 512 && 512 >= 64) return 5;;
+     if (size <= 1024 && 1024 >= 64) return 6;;
+     if (size <= 2048 && 2048 >= 64) return 7;;
+     if (size <= 4096 && 4096 >= 64) return 8;;
+     return -1;
+}
+
+
+
+
+static inline int Cilk_internal_malloc_bucket_to_size(int b)
+{
+     if (0 == b) return 16;;
+     if (1 == b) return 32;;
+     if (2 == b) return 64;;
+     if (3 == b) return 128;;
+     if (4 == b) return 256;;
+     if (5 == b) return 512;;
+     if (6 == b) return 1024;;
+     if (7 == b) return 2048;;
+     if (8 == b) return 4096;;
+     return -1;
+}
+# 417 "/usr/local/include/cilk/cilk.h"
+static inline void Cilk_fence(void)
+{
+     CILK_MB();
+}
+
+
+
+
+
+static inline void Cilk_membar_StoreStore(void)
+{
+     __asm__ __volatile__ ("": : :"memory");
+}
+
+
+
+
+
+static inline void Cilk_membar_StoreLoad(void)
+{
+     CILK_MB();
+}
+
+
+
+
+
+extern int Cilk_sync(CilkWorkerState *const ws);
+extern int Cilk_exception_handler(CilkWorkerState *const ws, void *, int);
+extern void Cilk_set_result(CilkWorkerState *const ws,
+       void *resultp, int size);
+extern void Cilk_after_sync_slow_cp(CilkWorkerState *const ws,
+        Cilk_time *work, Cilk_time *cp);
+extern void Cilk_abort_standalone(CilkWorkerState *const ws);
+extern void Cilk_abort_slow(CilkWorkerState *const ws);
+extern void Cilk_event_new_thread(CilkWorkerState *const ws);
+extern void Cilk_destroy_frame(CilkWorkerState *const ws,
+          CilkStackFrame *f, size_t size);
+# 502 "/usr/local/include/cilk/cilk.h"
+extern int Cilk_flags_are_wrong_NODEBUG_NOTIMING_NOSTATS_please_recompile;
+static int *Cilk_check_flags_at_link_time = &Cilk_flags_are_wrong_NODEBUG_NOTIMING_NOSTATS_please_recompile;
+
+static int Cilk_check_flags_at_link_time_hack(void) __attribute__((__unused__));
+static int Cilk_check_flags_at_link_time_hack(void) {
+     return *Cilk_check_flags_at_link_time;
+}
+
+void Cilk_start(CilkContext *const context,
+  void (*main)(CilkWorkerState *const ws, void *args),
+  void *args,
+  int return_size );
+void Cilk_free(void *);
+void *Cilk_malloc_fixed(size_t);
+# 5 "../../../extensions/ableC-cilk/include/cilk.xh" 2
+# 1 "/usr/local/include/cilk/cilk-cilk2c-pre.h" 1
+
+static const char *ident_cilk_cilk2c_pre __attribute__((__unused__)) = "$HeadURL: https://bradley.csail.mit.edu/svn/repos/cilk/5.4.3/runtime/cilk-cilk2c-pre.h $ $LastChangedBy: bradley $ $Rev: 1465 $ $Date: 2004-08-02 06:31:06 -0400 (Mon, 02 Aug 2004) $"
+                                                                                                                                                                                               ;
+# 31 "/usr/local/include/cilk/cilk-cilk2c-pre.h"
+static inline void *Cilk_internal_malloc_fast(CilkWorkerState *const ws,
+        size_t size)
+{
+     int bucket;
+     void *mem;
+     struct Cilk_im_descriptor *d;
+
+     ;
+
+     if (size > 4096)
+   return Cilk_internal_malloc(ws, size);
+
+     bucket = Cilk_internal_malloc_size_to_bucket(size);
+     d = ws->im_descriptor + bucket;
+
+
+     if ((mem = d->free_list)) {
+   d->free_list = ((void **) mem)[0];
+   d->count++;
+  
+
+
+
+
+     } else {
+   mem = Cilk_internal_malloc(ws, size);
+     }
+
+     return mem;
+}
+
+static inline void Cilk_internal_free_fast(CilkWorkerState *const ws,
+            void *p, size_t size)
+{
+     int bucket;
+     struct Cilk_im_descriptor *d;
+
+     if (size > 4096) {
+   Cilk_internal_free(ws, p, size);
+   return;
+     }
+
+     bucket = Cilk_internal_malloc_size_to_bucket(size);
+     d = ws->im_descriptor + bucket;
+
+     if (d->count <= 0)
+   Cilk_internal_free(ws, p, size);
+     else {
+   ((void **) p)[0] = d->free_list;
+   d->free_list = p;
+   d->count--;
+
+  
+
+
+     ;
+     }
+}
+
+static inline void Cilk_destroy_frame_fast(CilkWorkerState *const ws,
+            CilkStackFrame *f, size_t size)
+{
+     { if (f->alloca_h) Cilk_unalloca_internal(ws, f); }
+
+
+
+       ;
+
+     Cilk_internal_free_fast(ws, f, size);
+}
+
+static inline void *Cilk_create_frame(CilkWorkerState *const ws,
+       size_t size, CilkProcInfo *sig)
+{
+     CilkStackFrame *f = Cilk_internal_malloc_fast(ws, size);
+     f->sig = sig;
+     f->alloca_h = (struct cilk_alloca_header *) 0;
+     ;
+
+     return (void *) f;
+}
+
+static inline void Cilk_cilk2c_push_frame(CilkWorkerState *const ws __attribute__((__unused__)),
+           CilkStackFrame *frame __attribute__((__unused__)))
+{
+     ; ;
+     ;
+     Cilk_membar_StoreStore();
+}
+
+static inline void *Cilk_cilk2c_init_frame(CilkWorkerState *const ws,
+            size_t s, CilkProcInfo *signat)
+{
+     volatile CilkStackFrame **t;
+     void *f;
+
+     f = Cilk_create_frame(ws, s, signat);
+     t = ws->cache.tail;
+    
+                                                          ;
+     *t = (CilkStackFrame *) f;
+     Cilk_membar_StoreStore();
+     ws->cache.tail = t + 1;
+     return f;
+}
+
+
+
+
+static inline int Cilk_cilk2c_pop_check(CilkWorkerState *const ws)
+{
+     volatile CilkStackFrame **t;
+     t = ws->cache.tail;
+     Cilk_membar_StoreLoad();
+     return (ws->cache.exception >= t);
+}
+
+static inline void Cilk_cilk2c_pop(CilkWorkerState *const ws)
+{
+     --ws->cache.tail;
+}
+
+static inline void
+Cilk_cilk2c_event_new_thread_maybe(CilkWorkerState *const ws __attribute__((__unused__)))
+{
+     ;
+     ;
+}
+
+static inline void Cilk_cilk2c_start_thread_slow(CilkWorkerState *const ws __attribute__((__unused__)),
+           CilkStackFrame *frame __attribute__((__unused__)))
+{
+     ;
+     ;
+     ;
+}
+
+static inline void Cilk_cilk2c_before_return_fast(CilkWorkerState *const ws,
+        CilkStackFrame *frame,
+            size_t size)
+{
+     ;
+     ;
+     Cilk_destroy_frame_fast(ws, (CilkStackFrame *) frame, size);
+     --ws->cache.tail;
+}
+
+static inline void Cilk_cilk2c_before_return_slow(CilkWorkerState *const ws,
+        CilkStackFrame *frame,
+            size_t size)
+{
+     Cilk_cilk2c_before_return_fast(ws, frame, size);
+}
+# 345 "/usr/local/include/cilk/cilk-cilk2c-pre.h"
+static inline void Cilk_cilk2c_start_thread_fast_cp(
+     CilkWorkerState *const ws __attribute__((__unused__)), CilkStackFrame *frame __attribute__((__unused__)))
+{
+    ;
+    ;
+}
+static inline void Cilk_cilk2c_start_thread_slow_cp(
+     CilkWorkerState *const ws __attribute__((__unused__)), CilkStackFrame *frame __attribute__((__unused__)))
+{
+    ;
+    ;
+}
+static inline void Cilk_cilk2c_at_thread_boundary_slow_cp(
+     CilkWorkerState *const ws __attribute__((__unused__)), CilkStackFrame *frame __attribute__((__unused__)))
+{
+    ;
+    ;
+}
+static inline void Cilk_cilk2c_before_spawn_fast_cp(
+     CilkWorkerState *const ws __attribute__((__unused__)), CilkStackFrame *frame __attribute__((__unused__)))
+{
+    ;
+    ;
+}
+static inline void Cilk_cilk2c_before_spawn_slow_cp(
+     CilkWorkerState *const ws __attribute__((__unused__)), CilkStackFrame *frame __attribute__((__unused__)))
+{
+    ;
+    ;
+}
+static inline void Cilk_cilk2c_after_spawn_fast_cp(
+     CilkWorkerState *const ws __attribute__((__unused__)), CilkStackFrame *frame __attribute__((__unused__)))
+{
+    ;
+    ;
+}
+static inline void Cilk_cilk2c_after_spawn_slow_cp(
+     CilkWorkerState *const ws __attribute__((__unused__)), CilkStackFrame *frame __attribute__((__unused__)))
+{
+    ;
+    ;
+}
+static inline void Cilk_cilk2c_at_sync_fast_cp(
+     CilkWorkerState *const ws __attribute__((__unused__)), CilkStackFrame *frame __attribute__((__unused__)))
+{
+    ;
+    ;
+}
+static inline void Cilk_cilk2c_before_sync_slow_cp(
+     CilkWorkerState *const ws __attribute__((__unused__)), CilkStackFrame *frame __attribute__((__unused__)))
+{
+    ;
+    ;
+}
+static inline void Cilk_cilk2c_after_sync_slow_cp(
+     CilkWorkerState *const ws __attribute__((__unused__)), CilkStackFrame *frame __attribute__((__unused__)))
+{
+    ;
+    ;
+}
+static inline void Cilk_cilk2c_before_return_fast_cp(
+     CilkWorkerState *const ws __attribute__((__unused__)), CilkStackFrame *frame __attribute__((__unused__)))
+{
+    ;
+    ;
+}
+static inline void Cilk_cilk2c_before_return_slow_cp(
+     CilkWorkerState *const ws __attribute__((__unused__)), CilkStackFrame *frame __attribute__((__unused__)))
+{
+    ;
+    ;
+}
+# 6 "../../../extensions/ableC-cilk/include/cilk.xh" 2
+# 4 "intBad.xc" 2
+
+
+
+int eqInt(int n1, int n2) {
+  if (n1 > 100 || n2 > 100 || n1 < 0 || n2 < 0) {
+    exit(0);
+  }
+  return n1 == n2;
+}
+
+
+
+int leqInt(int n1, int n2) {
+  if (n1 > 100 || n2 > 100 || n1 < 0 || n2 < 0) {
+    exit(0);
+  }
+  return n1 <= n2;
+}
+
+
+
+int lubInt(int n1, int n2) {
+  if (n1 > 100 || n2 > 100 || n1 < 0 || n2 < 0) {
+    exit(0);
+  }
+  if (n1 >= n2) {
+    return n1;
+  }
+  return n2;
+}
+
+
+
+string showInteger(int n) {
+  return show(n);
+}
+
+cilk int putCilk(Lvar<int>* x, int val, int count);
+cilk int putCilk(Lvar<int>* x, int val, int count) {
+  if (count < 1000) {
+    int result;
+    spawn result = putCilk(x, val, count+1);
+    sync;
+    cilk return result;
+  }
+  cilk return put(x, val);
+}
+
+cilk ActivationSet<int> * getCilk(Lvar<int>* x, ThresholdSet<int>* t, int count);
+cilk ActivationSet<int> * getCilk(Lvar<int>* x, ThresholdSet<int>* t, int count) {
+  if (count < 1000) {
+    ActivationSet<int> * result;
+    spawn result = getCilk(x, t, count+1);
+    sync;
+    cilk return result;
+  }
+  else {
+    cilk return get(x, t);
   }
 }
 
-int eq(State* s1, State* s2) {
-  match (s1) {
-    Top() -> {
-      match (s2) {
-        Top() -> {return 1;}
-        other -> {return 0;}
-      }
-    }
-    Pair(b1, b2) -> {
-      match (s2) {
-        Pair(b3, b4) -> {return eqBool(b1, b3) && eqBool(b2, b4);}
-        other -> {return 0;}
-      }
-    }
-  }
+cilk ActivationSet<int> * putGetEx(Lvar<int> *x, ThresholdSet<int>* t) {
+  ActivationSet<int> * y;
+  int result1, result2;
+  spawn y = getCilk(x, t, 0);
+  spawn result1 = putCilk(x, 3, 0);
+  spawn result2 = putCilk(x, 7, 0);
+  sync;
+  cilk return y;
 }
 
+cilk int main(int argc, char **argv) {
+  Lattice<int> * D = lattice(0, 100, leqInt, lubInt, eqInt, showInteger);
+  Lvar<int> *x = newLvar(D);
 
-
-int leq(State* s1, State* s2) {
-  match (s1) {
-    Top() -> {return 0;}
-    Pair(Bot(), Bot()) -> {return 1;}
-    Pair(b1, Bot()) -> {
-      match (s2) {
-        Pair(b2, other) -> {return eqBool(b1, b2);}
-        Top() -> {return 1;}
-      }
-    }
-    Pair(Bot(), b1) -> {
-      match (s2) {
-        Pair(other, b2) -> {return eqBool(b1, b2);}
-        Top() -> {return 1;}
-      }
-    }
-    Pair(b1, b2) -> {
-      match (s2) {
-        Top() -> {return 1;}
-        Pair(other1, other2) -> {
-          return eqBool(b1, other1) && eqBool(b2, other2);
-        }
-      }
-    }
+  ActivationSet<int> * a1 = activationSet(D){6};
+  ThresholdSet<int> * t = thresholdSet(D){a1};
+  ActivationSet<int> * result;
+  spawn result = putGetEx(x, t);
+  sync;
+  freeze(x);
+  printf("Value of x: %s\n", show(x).text);
+  if (result != ((void *)0)) {
+    printf("Result of get(): %s\n", show(result).text);
   }
-  return 0;
-}
-
-
-
-State* lub (State* s1, State* s2) {
-  match (s1) {
-    Top() -> {return Top();}
-    Pair(Bot(), Bot()) -> {return s2;}
-    Pair(x1, y1) -> {
-      match (s2) {
-        Top() -> {return Top();}
-        Pair(Bot(), Bot()) -> {return s1;}
-        Pair(x2, y2) -> {
-          Bl* x;
-          Bl* y;
-          match (x1) {
-            Bot() -> {x = x2;}
-            other1 -> {
-              match (x2) {
-                Bot() -> {x = x1;}
-                other2 -> {
-                  if (eqBool(x1, x2)) {
-                    x = x1;
-                  }
-                  else {
-                    return Top();
-                  }
-                }
-              }
-            }
-          }
-          match (y1) {
-            Bot() -> {y = y2;}
-            other1 -> {
-              match (y2) {
-                Bot() -> {y = y1;}
-                other2 -> {
-                  if (eqBool(y1, y2)) {
-                    y = y1;
-                  }
-                  else {
-                    return Top();
-                  }
-                }
-              }
-            }
-          }
-          return Pair(x, y);
-        }
-      }
-    }
+  else {
+    printf("Result of get(): NULL\n");
   }
-  return ((void *)0);
-}
-
-
-
-string showState(State* s) {
-  string result;
-  match (s) {
-    Top() -> {result = str("Top()");}
-    Pair(b1, b2) -> {
-      result = str("Pair(");
-      match (b1) {
-        T() -> {result += "T(), ";}
-        F() -> {result += "F(), ";}
-        Bot() -> {result += "Bot(), ";}
-      }
-      match (b2) {
-        T() -> {result += "T())";}
-        F() -> {result += "F())";}
-        Bot() -> {result += "Bot())";}
-      }
-    }
-  }
-  return result;
-}
-
-
-int main (int argc, char **argv) {
-
-  Lattice<State*>* l = lattice(Pair(Bot(), Bot()), Top(), leq,
-                              lub, eq, showState);
-
-  Lattice<Nat*>* natLat = natLattice();
-  ActivationSet<Nat*>* natAct = activationSet(natLat){Int(8)};
-  ThresholdSet<Nat*>* natSet = thresholdSet(natLat){activationSet(natLat){Int(7)}, natAct};
-  Lvar<Nat*>* natLvar = newLvar(natLat);
-
-  ActivationSet<State*>* fSet = activationSet(l){Pair(F(), F()), Pair(F(), T()),
-                                             Pair(T(), F()), Pair(F(), Bot()),
-                                             Pair(Bot(), F())};
-  printf("fSet: %s\n", show(fSet).text);
-
-  ActivationSet<State*>* tSet = activationSet(l, 1);
-  printf("tSet (before adding): %s\n", show(tSet).text);
-
-  add(tSet, Pair(T(), T()));
-  printf("tSet: %s\n", show(tSet).text);
-
-  ThresholdSet<State*>* thresh = thresholdSet(l, 2){fSet};
-  printf("thresh (before adding): %s\n", show(thresh).text);
-  add(thresh, natAct);
-  return 0;
+  free(D);
+  free(x);
+  freeSet(a1);
+  freeSet(t);
+  cilk return 1;
 }

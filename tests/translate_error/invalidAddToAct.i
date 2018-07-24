@@ -2017,6 +2017,7 @@ template<a> struct _Lattice {
   a (* _lub)();
   int (*_eq)();
   string (*_show)();
+
 };
 
 
@@ -2031,11 +2032,12 @@ static Lattice<a>* _newLattice(a least, a greatest, int (*leq)(),
   l-> _lub = lub;
   l->_eq = eq;
   l->_show = showMethod;
+
+
+
   return l;
 }
-
-
-
+# 71 "../../../extensions/ableC-lvars/include/lvars.xh"
 template<a> struct _Lvar {
   Lattice<a> * _lattice;
   a _value;
@@ -2070,7 +2072,7 @@ template<a> struct _ActivationSet {
 
 template<a>
 static ActivationSet<a>* _newActivationSet(Lattice<a>* l, int size) {
-# 101 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 119 "../../../extensions/ableC-lvars/include/lvars.xh"
   ActivationSet<a> * act = malloc(sizeof(ActivationSet<a>));
   act->_size = size;
   act->_set = malloc(sizeof(a) * size);
@@ -2143,7 +2145,7 @@ template<a> struct _ThresholdSet {
 
 template<a>
 static ThresholdSet<a>* _newThresholdSet(Lattice<a> * l, int size) {
-# 186 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 204 "../../../extensions/ableC-lvars/include/lvars.xh"
   ThresholdSet<a> * t = malloc(sizeof(ThresholdSet<a>));
   t ->_lattice = l;
   t->_size = size;
@@ -2156,7 +2158,7 @@ static ThresholdSet<a>* _newThresholdSet(Lattice<a> * l, int size) {
 
 template<a>
 static int _incompat(Lattice<a> * l, ActivationSet<a> *Q, ActivationSet<a> *R) {
-# 206 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 224 "../../../extensions/ableC-lvars/include/lvars.xh"
   if (Q -> _lattice != l || R -> _lattice != l) {
     return 0;
   }
@@ -2184,11 +2186,11 @@ static int _incompat(Lattice<a> * l, ActivationSet<a> *Q, ActivationSet<a> *R) {
 
 template<a>
 static ThresholdSet<a>* _addThreshold(ThresholdSet<a>* t, ActivationSet<a>* act) {
-# 247 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 265 "../../../extensions/ableC-lvars/include/lvars.xh"
   if (t->_index >= t->_size) {
      inst _resizeThresholdSet<a>(t, 2 * t->_size + 1);
   }
-# 259 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 277 "../../../extensions/ableC-lvars/include/lvars.xh"
   t->_a_sets[t->_index] = act;
   t->_index++;
   return t;
@@ -2280,7 +2282,7 @@ static int _put(Lvar<a>* l, a newState) {
 
 template<a>
 static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
-# 362 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 380 "../../../extensions/ableC-lvars/include/lvars.xh"
   for (int i = 0; i < t->_index; i++) {
     for (int j = 0; j < t->_a_sets[i]->_index; j++) {
       if (l-> _lattice->_leq(t->_a_sets[i]->_set[j], l->_value)) {

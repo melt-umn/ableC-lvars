@@ -1,9 +1,8 @@
 #define DEBUG
-#define GC_THREADS
 #include "lvars.xh"
 #include <cilk.xh>
 
-int ARRSIZE = 10;
+int ARRSIZE = 15;
 
 int eqArr(int* arr1, int* arr2) {
   if (arr1 == NULL && arr2 == NULL) {
@@ -62,20 +61,31 @@ int* lubArr(int* arr1, int* arr2) {
 
 cilk int putOnes(Lvar<int*>* x, int index, ThresholdSet<int*>* t);
 cilk int putOnes(Lvar<int*>* x, int index, ThresholdSet<int*>* t) {
+  printf("a\n");
   if (index < 0 || index >= ARRSIZE) {
     cilk return 0;
   }
+  printf("b\n");
   if (get(x, t) == NULL) {
+    printf("c\n");
     int* newArr = GC_MALLOC(sizeof(int)* ARRSIZE);
+    printf("d\n");
     for (int i = 0; i < ARRSIZE; i++) {
       newArr[i] = 0;
     }
+    printf("e\n");
     newArr[index] = 1;
+    printf("f\n");
     put(x, newArr);
+    printf("g\n");
     int result1, result2;
+    printf("h\n");
     spawn result1 = putOnes(x, index - 2, t);
+    printf("i\n");
     spawn result2 = putOnes(x, index - 1, t);
+    printf("j\n");
     sync;
+    printf("k\n");
     cilk return result1 && result2;
   }
   cilk return 1;

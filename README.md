@@ -4,12 +4,23 @@
 
 ### Urgent:
 
++ Marking terminal, short example in extension syntax, like explaining to someone who knows about ableC but not extension
++ Think about big example
 + Write up a page about extension
 + Think about determinism (esp. when invalid put doesn't error out)
 + Implement better cilk examples (Read from different files? Sum random numbers until they reach a certain point? A better set example?) Bitwise or? Check out Cilk paper
 + Look over and tidy up examples and header file
 + Fix top <= top in examples and tests
 + Set of words in a doc, and/or in a single variable
++ Serious Problem: if get happened to be scheduled before a put, might get an error, while would get a result if put was scheduled before the get. Also getting error about writing to a frozen lvar, even when freeze occurs after the sync.
+
+Ex. Possible results achieved so far from intBad.xc, depending on scheduling:
+
+Value of x: 7
+Result of get(): NULL
+
+Value of x: 7
+Result of get(): {6}
 
 ### Less urgent:
 

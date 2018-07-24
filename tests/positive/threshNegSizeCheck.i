@@ -2018,6 +2018,7 @@ template<a> struct _Lattice {
   a (* _lub)();
   int (*_eq)();
   string (*_show)();
+
 };
 
 
@@ -2032,11 +2033,12 @@ static Lattice<a>* _newLattice(a least, a greatest, int (*leq)(),
   l-> _lub = lub;
   l->_eq = eq;
   l->_show = showMethod;
+
+
+
   return l;
 }
-
-
-
+# 71 "../../../extensions/ableC-lvars/include/lvars.xh"
 template<a> struct _Lvar {
   Lattice<a> * _lattice;
   a _value;
@@ -2071,7 +2073,7 @@ template<a> struct _ActivationSet {
 
 template<a>
 static ActivationSet<a>* _newActivationSet(Lattice<a>* l, int size) {
-# 96 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 114 "../../../extensions/ableC-lvars/include/lvars.xh"
     if (size < 0) {
       size = 0;
     }
@@ -2149,7 +2151,7 @@ template<a> struct _ThresholdSet {
 
 template<a>
 static ThresholdSet<a>* _newThresholdSet(Lattice<a> * l, int size) {
-# 181 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 199 "../../../extensions/ableC-lvars/include/lvars.xh"
     if (size < 0) {
       size = 0;
     }
@@ -2167,7 +2169,7 @@ static ThresholdSet<a>* _newThresholdSet(Lattice<a> * l, int size) {
 
 template<a>
 static int _incompat(Lattice<a> * l, ActivationSet<a> *Q, ActivationSet<a> *R) {
-# 206 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 224 "../../../extensions/ableC-lvars/include/lvars.xh"
   if (Q -> _lattice != l || R -> _lattice != l) {
     return 0;
   }
@@ -2195,7 +2197,7 @@ static int _incompat(Lattice<a> * l, ActivationSet<a> *Q, ActivationSet<a> *R) {
 
 template<a>
 static ThresholdSet<a>* _addThreshold(ThresholdSet<a>* t, ActivationSet<a>* act) {
-# 242 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 260 "../../../extensions/ableC-lvars/include/lvars.xh"
     if (t->_lattice != act->_lattice) {
       return t;
     }
@@ -2304,7 +2306,7 @@ static int _put(Lvar<a>* l, a newState) {
 
 template<a>
 static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
-# 358 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 376 "../../../extensions/ableC-lvars/include/lvars.xh"
     if (l->_lattice != t->_lattice) {
       return ((void *)0);
     }
