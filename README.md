@@ -22,6 +22,8 @@ Result of get(): NULL
 Value of x: 7
 Result of get(): {6}
 
++ Can't really fix with concrete syntax-- would it work to copy previous get lines after each put? Maybe not, since could still be scheduled in wrong order. Somehow keep track of all local gets within a function, and repeat them after each put?
+
 ### Less urgent:
 
 + Add freezing examples
