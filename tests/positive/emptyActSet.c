@@ -2733,8 +2733,8 @@ static signed int _template__put__pointer__tag_struct_State_37__(struct _templat
     if (((((l)->_lattice)->_eq)((((l)->_lattice)->_top), (newValue))))
     {
       {
-        ((pthread_mutex_unlock)((&(((l)->_mutex)))));
-        return 0;
+        ((printf)("Error: invalid put of %s\n", (((((l)->_lattice)->_show)((newState))).text)));
+        ((exit)(0));
       }
     } else {
       ;

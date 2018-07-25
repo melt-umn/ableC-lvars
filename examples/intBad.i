@@ -2006,7 +2006,796 @@ static inline string _showPointer(const char *baseTypeName, void *ptr) {
   return (string){strlen(result), result};
 }
 # 2 "../../../extensions/ableC-lvars/include/lvars.xh" 2
-# 23 "../../../extensions/ableC-lvars/include/lvars.xh"
+
+
+
+# 1 "/usr/include/pthread.h" 1 3 4
+# 22 "/usr/include/pthread.h" 3 4
+# 1 "/usr/include/endian.h" 1 3 4
+# 36 "/usr/include/endian.h" 3 4
+# 1 "/usr/include/x86_64-linux-gnu/bits/endian.h" 1 3 4
+# 37 "/usr/include/endian.h" 2 3 4
+# 23 "/usr/include/pthread.h" 2 3 4
+# 1 "/usr/include/sched.h" 1 3 4
+# 28 "/usr/include/sched.h" 3 4
+# 1 "/soft/gcc/4.9.2/ubuntuamd2010/lib/gcc/x86_64-linux-gnu/4.9.2/include/stddef.h" 1 3 4
+# 29 "/usr/include/sched.h" 2 3 4
+
+
+
+
+
+# 1 "/usr/include/time.h" 1 3 4
+# 29 "/usr/include/time.h" 3 4
+
+
+
+
+
+
+
+
+# 1 "/soft/gcc/4.9.2/ubuntuamd2010/lib/gcc/x86_64-linux-gnu/4.9.2/include/stddef.h" 1 3 4
+# 38 "/usr/include/time.h" 2 3 4
+
+
+
+# 1 "/usr/include/x86_64-linux-gnu/bits/time.h" 1 3 4
+# 55 "/usr/include/x86_64-linux-gnu/bits/time.h" 3 4
+extern long int __sysconf (int);
+# 42 "/usr/include/time.h" 2 3 4
+# 57 "/usr/include/time.h" 3 4
+
+
+typedef __clock_t clock_t;
+
+
+
+# 73 "/usr/include/time.h" 3 4
+
+
+typedef __time_t time_t;
+
+
+
+# 120 "/usr/include/time.h" 3 4
+struct timespec
+  {
+    __time_t tv_sec;
+    __syscall_slong_t tv_nsec;
+  };
+
+
+
+
+
+
+
+
+struct tm
+{
+  int tm_sec;
+  int tm_min;
+  int tm_hour;
+  int tm_mday;
+  int tm_mon;
+  int tm_year;
+  int tm_wday;
+  int tm_yday;
+  int tm_isdst;
+
+
+
+
+
+  long int __tm_gmtoff;
+  const char *__tm_zone;
+
+};
+
+
+
+# 186 "/usr/include/time.h" 3 4
+
+
+
+extern clock_t clock (void) __attribute__ ((__nothrow__ , __leaf__));
+
+
+extern time_t time (time_t *__timer) __attribute__ ((__nothrow__ , __leaf__));
+
+
+extern double difftime (time_t __time1, time_t __time0)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
+
+
+extern time_t mktime (struct tm *__tp) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+
+extern size_t strftime (char *__restrict __s, size_t __maxsize,
+   const char *__restrict __format,
+   const struct tm *__restrict __tp) __attribute__ ((__nothrow__ , __leaf__));
+
+# 236 "/usr/include/time.h" 3 4
+
+
+
+extern struct tm *gmtime (const time_t *__timer) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+extern struct tm *localtime (const time_t *__timer) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+
+extern struct tm *gmtime_r (const time_t *__restrict __timer,
+       struct tm *__restrict __tp) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+extern struct tm *localtime_r (const time_t *__restrict __timer,
+          struct tm *__restrict __tp) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+
+extern char *asctime (const struct tm *__tp) __attribute__ ((__nothrow__ , __leaf__));
+
+
+extern char *ctime (const time_t *__timer) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+
+
+
+extern char *asctime_r (const struct tm *__restrict __tp,
+   char *__restrict __buf) __attribute__ ((__nothrow__ , __leaf__));
+
+
+extern char *ctime_r (const time_t *__restrict __timer,
+        char *__restrict __buf) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+extern char *__tzname[2];
+extern int __daylight;
+extern long int __timezone;
+
+
+
+
+extern char *tzname[2];
+
+
+
+extern void tzset (void) __attribute__ ((__nothrow__ , __leaf__));
+# 386 "/usr/include/time.h" 3 4
+extern int timespec_get (struct timespec *__ts, int __base)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+# 430 "/usr/include/time.h" 3 4
+
+# 35 "/usr/include/sched.h" 2 3 4
+
+
+typedef __pid_t pid_t;
+
+
+
+
+
+# 1 "/usr/include/x86_64-linux-gnu/bits/sched.h" 1 3 4
+# 72 "/usr/include/x86_64-linux-gnu/bits/sched.h" 3 4
+struct sched_param
+  {
+    int __sched_priority;
+  };
+
+
+# 95 "/usr/include/x86_64-linux-gnu/bits/sched.h" 3 4
+
+
+
+
+
+
+
+
+struct __sched_param
+  {
+    int __sched_priority;
+  };
+# 118 "/usr/include/x86_64-linux-gnu/bits/sched.h" 3 4
+typedef unsigned long int __cpu_mask;
+
+
+
+
+
+
+typedef struct
+{
+  __cpu_mask __bits[1024 / (8 * sizeof (__cpu_mask))];
+} cpu_set_t;
+# 201 "/usr/include/x86_64-linux-gnu/bits/sched.h" 3 4
+
+
+extern int __sched_cpucount (size_t __setsize, const cpu_set_t *__setp)
+  __attribute__ ((__nothrow__ , __leaf__));
+extern cpu_set_t *__sched_cpualloc (size_t __count) __attribute__ ((__nothrow__ , __leaf__)) ;
+extern void __sched_cpufree (cpu_set_t *__set) __attribute__ ((__nothrow__ , __leaf__));
+
+
+# 44 "/usr/include/sched.h" 2 3 4
+
+
+
+
+
+
+
+extern int sched_setparam (__pid_t __pid, const struct sched_param *__param)
+     __attribute__ ((__nothrow__ , __leaf__));
+
+
+extern int sched_getparam (__pid_t __pid, struct sched_param *__param) __attribute__ ((__nothrow__ , __leaf__));
+
+
+extern int sched_setscheduler (__pid_t __pid, int __policy,
+          const struct sched_param *__param) __attribute__ ((__nothrow__ , __leaf__));
+
+
+extern int sched_getscheduler (__pid_t __pid) __attribute__ ((__nothrow__ , __leaf__));
+
+
+extern int sched_yield (void) __attribute__ ((__nothrow__ , __leaf__));
+
+
+extern int sched_get_priority_max (int __algorithm) __attribute__ ((__nothrow__ , __leaf__));
+
+
+extern int sched_get_priority_min (int __algorithm) __attribute__ ((__nothrow__ , __leaf__));
+
+
+extern int sched_rr_get_interval (__pid_t __pid, struct timespec *__t) __attribute__ ((__nothrow__ , __leaf__));
+# 126 "/usr/include/sched.h" 3 4
+
+# 24 "/usr/include/pthread.h" 2 3 4
+
+
+# 1 "/usr/include/x86_64-linux-gnu/bits/pthreadtypes.h" 1 3 4
+# 21 "/usr/include/x86_64-linux-gnu/bits/pthreadtypes.h" 3 4
+# 1 "/usr/include/x86_64-linux-gnu/bits/wordsize.h" 1 3 4
+# 22 "/usr/include/x86_64-linux-gnu/bits/pthreadtypes.h" 2 3 4
+# 60 "/usr/include/x86_64-linux-gnu/bits/pthreadtypes.h" 3 4
+typedef unsigned long int pthread_t;
+
+
+union pthread_attr_t
+{
+  char __size[56];
+  long int __align;
+};
+
+typedef union pthread_attr_t pthread_attr_t;
+
+
+
+
+
+typedef struct __pthread_internal_list
+{
+  struct __pthread_internal_list *__prev;
+  struct __pthread_internal_list *__next;
+} __pthread_list_t;
+# 90 "/usr/include/x86_64-linux-gnu/bits/pthreadtypes.h" 3 4
+typedef union
+{
+  struct __pthread_mutex_s
+  {
+    int __lock;
+    unsigned int __count;
+    int __owner;
+
+    unsigned int __nusers;
+
+
+
+    int __kind;
+
+    short __spins;
+    short __elision;
+    __pthread_list_t __list;
+# 125 "/usr/include/x86_64-linux-gnu/bits/pthreadtypes.h" 3 4
+  } __data;
+  char __size[40];
+  long int __align;
+} pthread_mutex_t;
+
+typedef union
+{
+  char __size[4];
+  int __align;
+} pthread_mutexattr_t;
+
+
+
+
+typedef union
+{
+  struct
+  {
+    int __lock;
+    unsigned int __futex;
+    __extension__ unsigned long long int __total_seq;
+    __extension__ unsigned long long int __wakeup_seq;
+    __extension__ unsigned long long int __woken_seq;
+    void *__mutex;
+    unsigned int __nwaiters;
+    unsigned int __broadcast_seq;
+  } __data;
+  char __size[48];
+  __extension__ long long int __align;
+} pthread_cond_t;
+
+typedef union
+{
+  char __size[4];
+  int __align;
+} pthread_condattr_t;
+
+
+
+typedef unsigned int pthread_key_t;
+
+
+
+typedef int pthread_once_t;
+# 27 "/usr/include/pthread.h" 2 3 4
+# 1 "/usr/include/x86_64-linux-gnu/bits/setjmp.h" 1 3 4
+# 26 "/usr/include/x86_64-linux-gnu/bits/setjmp.h" 3 4
+# 1 "/usr/include/x86_64-linux-gnu/bits/wordsize.h" 1 3 4
+# 27 "/usr/include/x86_64-linux-gnu/bits/setjmp.h" 2 3 4
+
+
+
+
+typedef long int __jmp_buf[8];
+# 28 "/usr/include/pthread.h" 2 3 4
+# 1 "/usr/include/x86_64-linux-gnu/bits/wordsize.h" 1 3 4
+# 29 "/usr/include/pthread.h" 2 3 4
+
+
+
+enum
+{
+  PTHREAD_CREATE_JOINABLE,
+
+  PTHREAD_CREATE_DETACHED
+
+};
+
+
+
+enum
+{
+  PTHREAD_MUTEX_TIMED_NP,
+  PTHREAD_MUTEX_RECURSIVE_NP,
+  PTHREAD_MUTEX_ERRORCHECK_NP,
+  PTHREAD_MUTEX_ADAPTIVE_NP
+# 59 "/usr/include/pthread.h" 3 4
+};
+# 155 "/usr/include/pthread.h" 3 4
+enum
+{
+  PTHREAD_INHERIT_SCHED,
+
+  PTHREAD_EXPLICIT_SCHED
+
+};
+
+
+
+enum
+{
+  PTHREAD_SCOPE_SYSTEM,
+
+  PTHREAD_SCOPE_PROCESS
+
+};
+
+
+
+enum
+{
+  PTHREAD_PROCESS_PRIVATE,
+
+  PTHREAD_PROCESS_SHARED
+
+};
+# 190 "/usr/include/pthread.h" 3 4
+struct _pthread_cleanup_buffer
+{
+  void (*__routine) (void *);
+  void *__arg;
+  int __canceltype;
+  struct _pthread_cleanup_buffer *__prev;
+};
+
+
+enum
+{
+  PTHREAD_CANCEL_ENABLE,
+
+  PTHREAD_CANCEL_DISABLE
+
+};
+enum
+{
+  PTHREAD_CANCEL_DEFERRED,
+
+  PTHREAD_CANCEL_ASYNCHRONOUS
+
+};
+# 228 "/usr/include/pthread.h" 3 4
+
+
+
+
+
+extern int pthread_create (pthread_t *__restrict __newthread,
+      const pthread_attr_t *__restrict __attr,
+      void *(*__start_routine) (void *),
+      void *__restrict __arg) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 3)));
+
+
+
+
+
+extern void pthread_exit (void *__retval) __attribute__ ((__noreturn__));
+
+
+
+
+
+
+
+extern int pthread_join (pthread_t __th, void **__thread_return);
+# 271 "/usr/include/pthread.h" 3 4
+extern int pthread_detach (pthread_t __th) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+extern pthread_t pthread_self (void) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
+
+
+extern int pthread_equal (pthread_t __thread1, pthread_t __thread2)
+  __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
+
+
+
+
+
+
+
+extern int pthread_attr_init (pthread_attr_t *__attr) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+
+
+extern int pthread_attr_destroy (pthread_attr_t *__attr)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+
+
+extern int pthread_attr_getdetachstate (const pthread_attr_t *__attr,
+     int *__detachstate)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+extern int pthread_attr_setdetachstate (pthread_attr_t *__attr,
+     int __detachstate)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+extern int pthread_attr_getguardsize (const pthread_attr_t *__attr,
+          size_t *__guardsize)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+extern int pthread_attr_setguardsize (pthread_attr_t *__attr,
+          size_t __guardsize)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+extern int pthread_attr_getschedparam (const pthread_attr_t *__restrict __attr,
+           struct sched_param *__restrict __param)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+extern int pthread_attr_setschedparam (pthread_attr_t *__restrict __attr,
+           const struct sched_param *__restrict
+           __param) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+extern int pthread_attr_getschedpolicy (const pthread_attr_t *__restrict
+     __attr, int *__restrict __policy)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+extern int pthread_attr_setschedpolicy (pthread_attr_t *__attr, int __policy)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+
+
+extern int pthread_attr_getinheritsched (const pthread_attr_t *__restrict
+      __attr, int *__restrict __inherit)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+extern int pthread_attr_setinheritsched (pthread_attr_t *__attr,
+      int __inherit)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+extern int pthread_attr_getscope (const pthread_attr_t *__restrict __attr,
+      int *__restrict __scope)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+extern int pthread_attr_setscope (pthread_attr_t *__attr, int __scope)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+
+
+extern int pthread_attr_getstackaddr (const pthread_attr_t *__restrict
+          __attr, void **__restrict __stackaddr)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2))) __attribute__ ((__deprecated__));
+
+
+
+
+
+extern int pthread_attr_setstackaddr (pthread_attr_t *__attr,
+          void *__stackaddr)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1))) __attribute__ ((__deprecated__));
+
+
+extern int pthread_attr_getstacksize (const pthread_attr_t *__restrict
+          __attr, size_t *__restrict __stacksize)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+
+
+extern int pthread_attr_setstacksize (pthread_attr_t *__attr,
+          size_t __stacksize)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+# 429 "/usr/include/pthread.h" 3 4
+extern int pthread_setschedparam (pthread_t __target_thread, int __policy,
+      const struct sched_param *__param)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (3)));
+
+
+extern int pthread_getschedparam (pthread_t __target_thread,
+      int *__restrict __policy,
+      struct sched_param *__restrict __param)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (2, 3)));
+
+
+extern int pthread_setschedprio (pthread_t __target_thread, int __prio)
+     __attribute__ ((__nothrow__ , __leaf__));
+# 494 "/usr/include/pthread.h" 3 4
+extern int pthread_once (pthread_once_t *__once_control,
+    void (*__init_routine) (void)) __attribute__ ((__nonnull__ (1, 2)));
+# 506 "/usr/include/pthread.h" 3 4
+extern int pthread_setcancelstate (int __state, int *__oldstate);
+
+
+
+extern int pthread_setcanceltype (int __type, int *__oldtype);
+
+
+extern int pthread_cancel (pthread_t __th);
+
+
+
+
+extern void pthread_testcancel (void);
+
+
+
+
+typedef struct
+{
+  struct
+  {
+    __jmp_buf __cancel_jmp_buf;
+    int __mask_was_saved;
+  } __cancel_jmp_buf[1];
+  void *__pad[4];
+} __pthread_unwind_buf_t __attribute__ ((__aligned__));
+# 540 "/usr/include/pthread.h" 3 4
+struct __pthread_cleanup_frame
+{
+  void (*__cancel_routine) (void *);
+  void *__cancel_arg;
+  int __do_it;
+  int __cancel_type;
+};
+# 680 "/usr/include/pthread.h" 3 4
+extern void __pthread_register_cancel (__pthread_unwind_buf_t *__buf)
+     ;
+# 692 "/usr/include/pthread.h" 3 4
+extern void __pthread_unregister_cancel (__pthread_unwind_buf_t *__buf)
+  ;
+# 733 "/usr/include/pthread.h" 3 4
+extern void __pthread_unwind_next (__pthread_unwind_buf_t *__buf)
+     __attribute__ ((__noreturn__))
+
+     __attribute__ ((__weak__))
+
+     ;
+
+
+
+struct __jmp_buf_tag;
+extern int __sigsetjmp (struct __jmp_buf_tag *__env, int __savemask) __attribute__ ((__nothrow__));
+
+
+
+
+
+extern int pthread_mutex_init (pthread_mutex_t *__mutex,
+          const pthread_mutexattr_t *__mutexattr)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+
+
+extern int pthread_mutex_destroy (pthread_mutex_t *__mutex)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+
+
+extern int pthread_mutex_trylock (pthread_mutex_t *__mutex)
+     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
+extern int pthread_mutex_lock (pthread_mutex_t *__mutex)
+     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+# 773 "/usr/include/pthread.h" 3 4
+extern int pthread_mutex_unlock (pthread_mutex_t *__mutex)
+     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+extern int pthread_mutex_getprioceiling (const pthread_mutex_t *
+      __restrict __mutex,
+      int *__restrict __prioceiling)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+
+extern int pthread_mutex_setprioceiling (pthread_mutex_t *__restrict __mutex,
+      int __prioceiling,
+      int *__restrict __old_ceiling)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 3)));
+# 806 "/usr/include/pthread.h" 3 4
+extern int pthread_mutexattr_init (pthread_mutexattr_t *__attr)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+
+
+extern int pthread_mutexattr_destroy (pthread_mutexattr_t *__attr)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+
+
+extern int pthread_mutexattr_getpshared (const pthread_mutexattr_t *
+      __restrict __attr,
+      int *__restrict __pshared)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+extern int pthread_mutexattr_setpshared (pthread_mutexattr_t *__attr,
+      int __pshared)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+# 838 "/usr/include/pthread.h" 3 4
+extern int pthread_mutexattr_getprotocol (const pthread_mutexattr_t *
+       __restrict __attr,
+       int *__restrict __protocol)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+
+extern int pthread_mutexattr_setprotocol (pthread_mutexattr_t *__attr,
+       int __protocol)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+
+
+extern int pthread_mutexattr_getprioceiling (const pthread_mutexattr_t *
+          __restrict __attr,
+          int *__restrict __prioceiling)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+extern int pthread_mutexattr_setprioceiling (pthread_mutexattr_t *__attr,
+          int __prioceiling)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+# 968 "/usr/include/pthread.h" 3 4
+extern int pthread_cond_init (pthread_cond_t *__restrict __cond,
+         const pthread_condattr_t *__restrict __cond_attr)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+
+
+extern int pthread_cond_destroy (pthread_cond_t *__cond)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+
+
+extern int pthread_cond_signal (pthread_cond_t *__cond)
+     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
+extern int pthread_cond_broadcast (pthread_cond_t *__cond)
+     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
+
+extern int pthread_cond_wait (pthread_cond_t *__restrict __cond,
+         pthread_mutex_t *__restrict __mutex)
+     __attribute__ ((__nonnull__ (1, 2)));
+# 1000 "/usr/include/pthread.h" 3 4
+extern int pthread_cond_timedwait (pthread_cond_t *__restrict __cond,
+       pthread_mutex_t *__restrict __mutex,
+       const struct timespec *__restrict __abstime)
+     __attribute__ ((__nonnull__ (1, 2, 3)));
+
+
+
+
+extern int pthread_condattr_init (pthread_condattr_t *__attr)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+
+
+extern int pthread_condattr_destroy (pthread_condattr_t *__attr)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+
+
+extern int pthread_condattr_getpshared (const pthread_condattr_t *
+     __restrict __attr,
+     int *__restrict __pshared)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+extern int pthread_condattr_setpshared (pthread_condattr_t *__attr,
+     int __pshared) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+# 1111 "/usr/include/pthread.h" 3 4
+extern int pthread_key_create (pthread_key_t *__key,
+          void (*__destr_function) (void *))
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+
+
+extern int pthread_key_delete (pthread_key_t __key) __attribute__ ((__nothrow__ , __leaf__));
+
+
+extern void *pthread_getspecific (pthread_key_t __key) __attribute__ ((__nothrow__ , __leaf__));
+
+
+extern int pthread_setspecific (pthread_key_t __key,
+    const void *__pointer) __attribute__ ((__nothrow__ , __leaf__)) ;
+# 1145 "/usr/include/pthread.h" 3 4
+extern int pthread_atfork (void (*__prepare) (void),
+      void (*__parent) (void),
+      void (*__child) (void)) __attribute__ ((__nothrow__ , __leaf__));
+# 1159 "/usr/include/pthread.h" 3 4
+
+# 6 "../../../extensions/ableC-lvars/include/lvars.xh" 2
+# 24 "../../../extensions/ableC-lvars/include/lvars.xh"
 int _lvarCheckValue = 1;
 
 
@@ -2018,7 +2807,6 @@ template<a> struct _Lattice {
   a (* _lub)();
   int (*_eq)();
   string (*_show)();
-
 };
 
 
@@ -2033,31 +2821,7 @@ static Lattice<a>* _newLattice(a least, a greatest, int (*leq)(),
   l-> _lub = lub;
   l->_eq = eq;
   l->_show = showMethod;
-
-
-
   return l;
-}
-# 71 "../../../extensions/ableC-lvars/include/lvars.xh"
-template<a> struct _Lvar {
-  Lattice<a> * _lattice;
-  a _value;
-  int _frozen;
-};
-
-template<a>
-static string _showLvar(Lvar<a>* l) {
-
-  if (l->_frozen) {
-    return l->_lattice->_show(l->_value);
-  }
-
-
-    printf("Error: Can't show a lvar before it is frozen!\n");
-    exit(0);
-
-
-  return str("<Lvar Value Unavailable>");
 }
 
 
@@ -2079,7 +2843,7 @@ static ActivationSet<a>* _newActivationSet(Lattice<a>* l, int size) {
       printf("Can't create an activation set of negative size!\n");
       exit(0);
     }
-# 119 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 79 "../../../extensions/ableC-lvars/include/lvars.xh"
   ActivationSet<a> * act = malloc(sizeof(ActivationSet<a>));
   act->_size = size;
   act->_set = malloc(sizeof(a) * size);
@@ -2157,7 +2921,7 @@ static ThresholdSet<a>* _newThresholdSet(Lattice<a> * l, int size) {
       printf("Error: Can't create a threshold set of negative size!\n");
       exit(0);
     }
-# 204 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 164 "../../../extensions/ableC-lvars/include/lvars.xh"
   ThresholdSet<a> * t = malloc(sizeof(ThresholdSet<a>));
   t ->_lattice = l;
   t->_size = size;
@@ -2211,7 +2975,7 @@ static ThresholdSet<a>* _addThreshold(ThresholdSet<a>* t, ActivationSet<a>* act)
              show(act).text, show(t).text);
       exit(0);
     }
-# 265 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 225 "../../../extensions/ableC-lvars/include/lvars.xh"
   if (t->_index >= t->_size) {
      inst _resizeThresholdSet<a>(t, 2 * t->_size + 1);
   }
@@ -2270,6 +3034,30 @@ static string _showThreshold(ThresholdSet<a>* t){
 
 
 
+template<a> struct _Lvar {
+  Lattice<a> * _lattice;
+  a _value;
+  int _frozen;
+  ThresholdSet<a> * _threshold;
+  pthread_mutex_t _mutex;
+  pthread_cond_t _cond;
+};
+
+template<a>
+static string _showLvar(Lvar<a>* l) {
+
+  if (l->_frozen) {
+    return l->_lattice->_show(l->_value);
+  }
+
+
+    printf("Error: Can't show a lvar before it is frozen!\n");
+    exit(0);
+
+
+  return str("<Lvar Value Unavailable>");
+}
+
 
 
 
@@ -2280,7 +3068,32 @@ static Lvar<a>* _new(Lattice<a>* l) {
   lvarNew->_value = l-> _bottom;
   lvarNew-> _lattice = l;
   lvarNew-> _frozen = 0;
+  lvarNew->_cond = (pthread_cond_t) { { 0, 0, 0, 0, 0, (void *) 0, 0, 0 } };
+  lvarNew->_mutex = (pthread_mutex_t) { { 0, 0, 0, 0, 0, 0, 0, { 0, 0 } } };
   return lvarNew;
+}
+
+
+
+template<a>
+struct _putStruct {
+  Lvar<a>* _lvar;
+  a _val;
+};
+
+template<a>
+void * _putVoid(void* valStruct) {
+  inst _putStruct<a> * p = (inst _putStruct<a>*) valStruct;
+  put(p->_lvar, p->_val);
+}
+
+template<a>
+static int _declarePut(Lvar<a>* l, a value) {
+  pthread_t child;
+  inst _putStruct<a> * p = GC_malloc(sizeof(inst _putStruct<a>));
+  p->_lvar = l;
+  p->_val = value;
+  pthread_create(&child, ((void *)0), inst _putVoid<a>, (void*) p);
 }
 
 
@@ -2289,6 +3102,7 @@ static Lvar<a>* _new(Lattice<a>* l) {
 
 template<a>
 static int _put(Lvar<a>* l, a newState) {
+
   if (l->_frozen) {
 
         printf("Error: can't write to a frozen lvar.\n");
@@ -2296,16 +3110,20 @@ static int _put(Lvar<a>* l, a newState) {
 
     return 0;
   }
+
+  pthread_mutex_lock(&(l->_mutex));
+
   a oldState = l->_value;
   a newValue = l-> _lattice-> _lub(oldState, newState);
+
   if (l-> _lattice->_eq(l->_lattice->_top, newValue)){
-
-        printf("Error: invalid put of %s\n", l->_lattice->_show(newState).text);
-        exit(0);
-
-      return 0;
+      printf("Error: invalid put of %s\n", l->_lattice->_show(newState).text);
+      exit(0);
   }
   l->_value = newValue;
+
+  pthread_cond_broadcast(&(l->_cond));
+  pthread_mutex_unlock(&(l->_mutex));
   return 1;
 }
 
@@ -2314,19 +3132,7 @@ static int _put(Lvar<a>* l, a newState) {
 
 
 template<a>
-static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
-
-    if (l->_lattice != t->_lattice) {
-      printf("Error: can't get() when Lvar doesn't have same lattice as threshold set.\n");
-      exit(0);
-    }
-
-
-
-
-
-
-
+static ActivationSet<a>* _thresholdReached(Lvar<a>* l, ThresholdSet<a> * t) {
   for (int i = 0; i < t->_index; i++) {
     for (int j = 0; j < t->_a_sets[i]->_index; j++) {
       if (l-> _lattice->_leq(t->_a_sets[i]->_set[j], l->_value)) {
@@ -2335,6 +3141,24 @@ static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
     }
   }
   return ((void *)0);
+}
+
+template<a>
+static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
+
+    if (l->_lattice != t->_lattice) {
+      printf("Error: can't get() when Lvar doesn't have same lattice as threshold set.\n");
+      exit(0);
+    }
+# 407 "../../../extensions/ableC-lvars/include/lvars.xh"
+  pthread_mutex_lock(&(l->_mutex));
+  ActivationSet<a>* actReached = inst _thresholdReached<a>(l, t);
+  while (actReached == ((void *)0)) {
+    actReached = inst _thresholdReached<a>(l, t);
+    pthread_cond_wait(&(l->_cond), &(l->_mutex));
+  }
+  pthread_mutex_unlock(&(l->_mutex));
+  return actReached;
 }
 
 
@@ -2389,24 +3213,8 @@ typedef __uid_t uid_t;
 
 
 typedef __off_t off_t;
-# 98 "/usr/include/x86_64-linux-gnu/sys/types.h" 3 4
-typedef __pid_t pid_t;
 # 109 "/usr/include/x86_64-linux-gnu/sys/types.h" 3 4
 typedef __ssize_t ssize_t;
-# 132 "/usr/include/x86_64-linux-gnu/sys/types.h" 3 4
-# 1 "/usr/include/time.h" 1 3 4
-# 73 "/usr/include/time.h" 3 4
-
-
-typedef __time_t time_t;
-
-
-
-# 91 "/usr/include/time.h" 3 4
-typedef __clockid_t clockid_t;
-# 103 "/usr/include/time.h" 3 4
-typedef __timer_t timer_t;
-# 133 "/usr/include/x86_64-linux-gnu/sys/types.h" 2 3 4
 # 146 "/usr/include/x86_64-linux-gnu/sys/types.h" 3 4
 # 1 "/soft/gcc/4.9.2/ubuntuamd2010/lib/gcc/x86_64-linux-gnu/4.9.2/include/stddef.h" 1 3 4
 # 147 "/usr/include/x86_64-linux-gnu/sys/types.h" 2 3 4
@@ -2462,10 +3270,7 @@ static const char *ident_cilk_sysdep_h __attribute__((__unused__)) = "$HeadURL: 
    }
 # 516 "/usr/local/include/cilk/cilk-sysdep.h"
 # 1 "/usr/include/x86_64-linux-gnu/sys/time.h" 1 3 4
-# 25 "/usr/include/x86_64-linux-gnu/sys/time.h" 3 4
-# 1 "/usr/include/time.h" 1 3 4
-# 26 "/usr/include/x86_64-linux-gnu/sys/time.h" 2 3 4
-
+# 27 "/usr/include/x86_64-linux-gnu/sys/time.h" 3 4
 # 1 "/usr/include/x86_64-linux-gnu/bits/time.h" 1 3 4
 # 30 "/usr/include/x86_64-linux-gnu/bits/time.h" 3 4
 struct timeval
@@ -2505,14 +3310,7 @@ typedef __sigset_t sigset_t;
 
 
 
-# 1 "/usr/include/time.h" 1 3 4
-# 120 "/usr/include/time.h" 3 4
-struct timespec
-  {
-    __time_t tv_sec;
-    __syscall_slong_t tv_nsec;
-  };
-# 44 "/usr/include/x86_64-linux-gnu/sys/select.h" 2 3 4
+
 
 # 1 "/usr/include/x86_64-linux-gnu/bits/time.h" 1 3 4
 # 46 "/usr/include/x86_64-linux-gnu/sys/select.h" 2 3 4
@@ -4103,6 +4901,16 @@ string showInteger(int n) {
   return show(n);
 }
 
+struct putStruct {
+  Lvar<int>* x;
+  int val;
+};
+
+void * putVoid(void* valStruct) {
+  struct putStruct * p = (struct putStruct*) valStruct;
+  put(p->x, p->val);
+}
+
 cilk int putCilk(Lvar<int>* x, int val, int count);
 cilk int putCilk(Lvar<int>* x, int val, int count) {
   if (count < 1000) {
@@ -4111,6 +4919,7 @@ cilk int putCilk(Lvar<int>* x, int val, int count) {
     sync;
     cilk return result;
   }
+  printf("put\n");
   cilk return put(x, val);
 }
 
@@ -4123,10 +4932,10 @@ cilk ActivationSet<int> * getCilk(Lvar<int>* x, ThresholdSet<int>* t, int count)
     cilk return result;
   }
   else {
+    printf("get\n");
     cilk return get(x, t);
   }
 }
-
 cilk ActivationSet<int> * putGetEx(Lvar<int> *x, ThresholdSet<int>* t) {
   ActivationSet<int> * y;
   int result1, result2;
@@ -4138,8 +4947,12 @@ cilk ActivationSet<int> * putGetEx(Lvar<int> *x, ThresholdSet<int>* t) {
 }
 
 cilk int main(int argc, char **argv) {
+
   Lattice<int> * D = lattice(0, 100, leqInt, lubInt, eqInt, showInteger);
   Lvar<int> *x = newLvar(D);
+
+  inst _declarePut<int>(x, 3);
+  inst _declarePut<int>(x, 7);
 
   ActivationSet<int> * a1 = activationSet(D){6};
   ThresholdSet<int> * t = thresholdSet(D){a1};

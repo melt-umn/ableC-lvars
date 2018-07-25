@@ -3039,8 +3039,8 @@ template<a> struct _Lvar {
   a _value;
   int _frozen;
   ThresholdSet<a> * _threshold;
-  pthread_mutex_t mutex;
-  pthread_cond_t cond;
+  pthread_mutex_t _mutex;
+  pthread_cond_t _cond;
 };
 
 template<a>
@@ -3075,6 +3075,7 @@ static Lvar<a>* _new(Lattice<a>* l) {
 # 329 "../../../extensions/ableC-lvars/include/lvars.xh"
 template<a>
 static int _put(Lvar<a>* l, a newState) {
+
   if (l->_frozen) {
 
         printf("Error: can't write to a frozen lvar.\n");
@@ -3082,16 +3083,24 @@ static int _put(Lvar<a>* l, a newState) {
 
     return 0;
   }
+
+  pthread_mutex_lock(&(l->_mutex));
+
   a oldState = l->_value;
   a newValue = l-> _lattice-> _lub(oldState, newState);
+
   if (l-> _lattice->_eq(l->_lattice->_top, newValue)){
 
         printf("Error: invalid put of %s\n", l->_lattice->_show(newState).text);
         exit(0);
 
+      pthread_mutex_unlock(&(l->_mutex));
       return 0;
   }
   l->_value = newValue;
+
+  pthread_cond_broadcast(&(l->_cond));
+  pthread_mutex_unlock(&(l->_mutex));
   return 1;
 }
 
@@ -3118,22 +3127,14 @@ static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
       printf("Error: can't get() when Lvar doesn't have same lattice as threshold set.\n");
       exit(0);
     }
-
-
-
-
-
-
-
-  ActivationSet<a>* actReached = ((void *)0);
-
-  pthread_mutex_lock(l->_mutex);
+# 391 "../../../extensions/ableC-lvars/include/lvars.xh"
+  pthread_mutex_lock(&(l->_mutex));
+  ActivationSet<a>* actReached = inst _thresholdReached<a>(l, t);
   while (actReached == ((void *)0)) {
     actReached = inst _thresholdReached<a>(l, t);
-    pthread_cond_wait(l->_cond, l->_mutex);
+    pthread_cond_wait(&(l->_cond), &(l->_mutex));
   }
-  pthread_mutex_unlock(l->_mutex);
-
+  pthread_mutex_unlock(&(l->_mutex));
   return actReached;
 }
 

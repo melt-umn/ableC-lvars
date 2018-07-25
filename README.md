@@ -4,27 +4,20 @@
 
 ### Urgent:
 
-+ Marking terminal, short example in extension syntax, like explaining to someone who knows about ableC but not extension
++ Address revisions to lvars section of paper in Travis email
+
+Your first paragraph asks the question "citation to back up claim?". Better than a citation, I think a motivating example would help a lot to make the problem clearer and drive the rest of the section. If we don't use LVars and instead naively implement code that runs concurrently without giving any consideration to determinism, why is that a problem? Is it possible to illustrate that in a figure containing only a few lines of code? I think it would make a compelling case for your solution if you explicitly spell out 1) here's a problem and 2) the LVars example solves this problem.
+
+It's hard for me, at least, to see why determinism with sets of integers is important. If you think an example with ADTs is better, go ahead and put it in; we can figure out how to make it look nice later. You can elide code that isn't critical like "... // check that n1/n2 are within acceptable bounds" or something. Even if you have to break it into two figures, that's fine for now.
+
+
 + Think about big example-- maybe reading data from large files into a database-type structure, with Cilk?
-+ Write up a page about extension
 + Think about determinism (esp. when invalid put doesn't error out)
 + Implement better cilk examples (Read from different files? Sum random numbers until they reach a certain point? A better set example?) Bitwise or? Check out Cilk paper
 + Look over and tidy up examples and header file
 + Fix top <= top in examples and tests
-+ Set of words in a doc, and/or in a single variable
 + Serious Problem: if get happened to be scheduled before a put, might get an error, while would get a result if put was scheduled before the get.
-
-Ex. Possible results achieved so far from intBad.xc, depending on scheduling:
-
-Value of x: 7
-Result of get(): NULL
-
-Value of x: 7
-Result of get(): {6}
-
-+ Can't really fix with concrete syntax-- would it work to copy previous get lines after each put? Maybe not, since could still be scheduled in wrong order. Somehow keep track of all local gets within a function, and repeat them after each put? Or only allow gets into global variables, and have user provide a function that executes all possible gets (kind of gross)? Maybe for now should error out in case of invalid get, to preserve quasi-determinism?
-
-+ Lvar needs to know its threshold, so that both puts and gets can access the information
++ Can fix with condition variables, but have to create pthreads at point where already know the values to put in-- but impractical to declare all possible calls to put before any get occurs...
 
 ### Less urgent:
 

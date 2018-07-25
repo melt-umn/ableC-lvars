@@ -3072,7 +3072,34 @@ static Lvar<a>* _new(Lattice<a>* l) {
   lvarNew->_mutex = (pthread_mutex_t) { { 0, 0, 0, 0, 0, 0, 0, { 0, 0 } } };
   return lvarNew;
 }
-# 329 "../../../extensions/ableC-lvars/include/lvars.xh"
+
+
+
+template<a>
+struct _putStruct {
+  Lvar<a>* _lvar;
+  a _val;
+};
+
+template<a>
+void * _putVoid(void* valStruct) {
+  inst _putStruct<a> * p = (inst _putStruct<a>*) valStruct;
+  put(p->_lvar, p->_val);
+}
+
+template<a>
+static int _declarePut(Lvar<a>* l, a value) {
+  pthread_t child;
+  inst _putStruct<a> * p = GC_malloc(sizeof(inst _putStruct<a>));
+  p->_lvar = l;
+  p->_val = value;
+  pthread_create(&child, ((void *)0), inst _putVoid<a>, (void*) p);
+}
+
+
+
+
+
 template<a>
 static int _put(Lvar<a>* l, a newState) {
 
@@ -3090,12 +3117,8 @@ static int _put(Lvar<a>* l, a newState) {
   a newValue = l-> _lattice-> _lub(oldState, newState);
 
   if (l-> _lattice->_eq(l->_lattice->_top, newValue)){
-
-        printf("Error: invalid put of %s\n", l->_lattice->_show(newState).text);
-        exit(0);
-
-      pthread_mutex_unlock(&(l->_mutex));
-      return 0;
+      printf("Error: invalid put of %s\n", l->_lattice->_show(newState).text);
+      exit(0);
   }
   l->_value = newValue;
 
@@ -3127,7 +3150,7 @@ static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
       printf("Error: can't get() when Lvar doesn't have same lattice as threshold set.\n");
       exit(0);
     }
-# 391 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 407 "../../../extensions/ableC-lvars/include/lvars.xh"
   pthread_mutex_lock(&(l->_mutex));
   ActivationSet<a>* actReached = inst _thresholdReached<a>(l, t);
   while (actReached == ((void *)0)) {

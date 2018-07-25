@@ -321,6 +321,26 @@ static Lvar<a>* _new(Lattice<a>* l) {
 
 //*********************** put and get methods ***************************
 
+template<a>
+struct _putStruct {
+  Lvar<a>* _lvar;
+  a _val;
+};
+
+template<a>
+void * _putVoid(void* valStruct) {
+  inst _putStruct<a> * p = (inst _putStruct<a>*) valStruct;
+  put(p->_lvar, p->_val);
+}
+
+template<a>
+static int _declarePut(Lvar<a>* l, a value) {
+  pthread_t child;
+  inst _putStruct<a> * p = GC_MALLOC(sizeof(inst _putStruct<a>));
+  p->_lvar = l;
+  p->_val = value;
+  pthread_create(&child, NULL, inst _putVoid<a>, (void*) p);
+}
 
 // takes an lvar and a new value for that lvar, and updates the lvar's value to
 // the lub of the old value and the new value
@@ -343,12 +363,8 @@ static int _put(Lvar<a>* l, a newState) {
   a newValue = l-> _lattice-> _lub(oldState, newState);
 
   if (l-> _lattice->_eq(l->_lattice->_top, newValue)){
-      #ifdef DEBUG 
-        printf("Error: invalid put of %s\n", l->_lattice->_show(newState).text);
-        exit(0);
-      #endif
-      pthread_mutex_unlock(&(l->_mutex));
-      return 0;
+      printf("Error: invalid put of %s\n", l->_lattice->_show(newState).text);
+      exit(0);
   }
   l->_value = newValue;
 

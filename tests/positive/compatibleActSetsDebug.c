@@ -2824,8 +2824,6 @@ static signed int _template__put__pointer__tag_struct_State_37__(struct _templat
       {
         ((printf)("Error: invalid put of %s\n", (((((l)->_lattice)->_show)((newState))).text)));
         ((exit)(0));
-        ((pthread_mutex_unlock)((&(((l)->_mutex)))));
-        return 0;
       }
     } else {
       ;

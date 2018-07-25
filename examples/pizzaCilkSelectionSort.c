@@ -779,6 +779,249 @@ static inline struct _string_s _showPointer(const char  * baseTypeName, void  * 
     return ((struct _string_s){((strlen)((result))), (result)});
   }
 }
+extern signed long __sysconf(signed int  );
+typedef __clock_t clock_t;
+typedef __time_t time_t;
+struct timespec {
+  __time_t tv_sec;
+  __syscall_slong_t tv_nsec;
+  
+};
+struct tm {
+  signed int tm_sec;
+  signed int tm_min;
+  signed int tm_hour;
+  signed int tm_mday;
+  signed int tm_mon;
+  signed int tm_year;
+  signed int tm_wday;
+  signed int tm_yday;
+  signed int tm_isdst;
+  signed long __tm_gmtoff;
+  const char  *__tm_zone;
+  
+};
+extern clock_t clock(void) __attribute__((__nothrow__, __leaf__));
+extern time_t time(time_t  * __timer) __attribute__((__nothrow__, __leaf__));
+extern double difftime(time_t  __time1, time_t  __time0) __attribute__((__nothrow__, __leaf__)) __attribute__((__const__));
+extern time_t mktime(struct tm  * __tp) __attribute__((__nothrow__, __leaf__));
+extern size_t strftime(char  *__restrict  __s, size_t  __maxsize, const char  *__restrict  __format, const struct tm  *__restrict  __tp) __attribute__((__nothrow__, __leaf__));
+extern struct tm  *gmtime(const time_t  * __timer) __attribute__((__nothrow__, __leaf__));
+extern struct tm  *localtime(const time_t  * __timer) __attribute__((__nothrow__, __leaf__));
+extern struct tm  *gmtime_r(const time_t  *__restrict  __timer, struct tm  *__restrict  __tp) __attribute__((__nothrow__, __leaf__));
+extern struct tm  *localtime_r(const time_t  *__restrict  __timer, struct tm  *__restrict  __tp) __attribute__((__nothrow__, __leaf__));
+extern char  *asctime(const struct tm  * __tp) __attribute__((__nothrow__, __leaf__));
+extern char  *ctime(const time_t  * __timer) __attribute__((__nothrow__, __leaf__));
+extern char  *asctime_r(const struct tm  *__restrict  __tp, char  *__restrict  __buf) __attribute__((__nothrow__, __leaf__));
+extern char  *ctime_r(const time_t  *__restrict  __timer, char  *__restrict  __buf) __attribute__((__nothrow__, __leaf__));
+extern char  *__tzname[2];
+extern signed int __daylight;
+extern signed long __timezone;
+extern char  *tzname[2];
+extern void tzset(void) __attribute__((__nothrow__, __leaf__));
+extern signed int timespec_get(struct timespec  * __ts, signed int  __base) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+typedef __pid_t pid_t;
+struct sched_param {
+  signed int __sched_priority;
+  
+};
+struct __sched_param {
+  signed int __sched_priority;
+  
+};
+typedef unsigned long __cpu_mask;
+typedef struct  {
+  __cpu_mask __bits[(1024 / ((8 * (sizeof(__cpu_mask)))))];
+  
+} cpu_set_t;
+extern signed int __sched_cpucount(size_t  __setsize, const cpu_set_t  * __setp) __attribute__((__nothrow__, __leaf__));
+extern cpu_set_t  *__sched_cpualloc(size_t  __count) __attribute__((__nothrow__, __leaf__));
+extern void __sched_cpufree(cpu_set_t  * __set) __attribute__((__nothrow__, __leaf__));
+extern signed int sched_setparam(__pid_t  __pid, const struct sched_param  * __param) __attribute__((__nothrow__, __leaf__));
+extern signed int sched_getparam(__pid_t  __pid, struct sched_param  * __param) __attribute__((__nothrow__, __leaf__));
+extern signed int sched_setscheduler(__pid_t  __pid, signed int  __policy, const struct sched_param  * __param) __attribute__((__nothrow__, __leaf__));
+extern signed int sched_getscheduler(__pid_t  __pid) __attribute__((__nothrow__, __leaf__));
+extern signed int sched_yield(void) __attribute__((__nothrow__, __leaf__));
+extern signed int sched_get_priority_max(signed int  __algorithm) __attribute__((__nothrow__, __leaf__));
+extern signed int sched_get_priority_min(signed int  __algorithm) __attribute__((__nothrow__, __leaf__));
+extern signed int sched_rr_get_interval(__pid_t  __pid, struct timespec  * __t) __attribute__((__nothrow__, __leaf__));
+typedef unsigned long pthread_t;
+union pthread_attr_t {
+  char __size[56];
+  signed long __align;
+  
+};
+typedef union pthread_attr_t pthread_attr_t;
+typedef struct __pthread_internal_list {
+  struct __pthread_internal_list  *__prev;
+  struct __pthread_internal_list  *__next;
+  
+} __pthread_list_t;
+typedef union  {
+  struct __pthread_mutex_s {
+    signed int __lock;
+    unsigned int __count;
+    signed int __owner;
+    unsigned int __nusers;
+    signed int __kind;
+    signed short __spins;
+    signed short __elision;
+    __pthread_list_t __list;
+    
+  } __data;
+  char __size[40];
+  signed long __align;
+  
+} pthread_mutex_t;
+typedef union  {
+  char __size[4];
+  signed int __align;
+  
+} pthread_mutexattr_t;
+typedef union  {
+  struct  {
+    signed int __lock;
+    unsigned int __futex;
+    unsigned long long __total_seq;
+    unsigned long long __wakeup_seq;
+    unsigned long long __woken_seq;
+    void  *__mutex;
+    unsigned int __nwaiters;
+    unsigned int __broadcast_seq;
+    
+  } __data;
+  char __size[48];
+  signed long long __align;
+  
+} pthread_cond_t;
+typedef union  {
+  char __size[4];
+  signed int __align;
+  
+} pthread_condattr_t;
+typedef unsigned int pthread_key_t;
+typedef signed int pthread_once_t;
+typedef signed long __jmp_buf[8];
+enum  {
+  PTHREAD_CREATE_JOINABLE,
+  PTHREAD_CREATE_DETACHED
+};
+enum  {
+  PTHREAD_MUTEX_TIMED_NP,
+  PTHREAD_MUTEX_RECURSIVE_NP,
+  PTHREAD_MUTEX_ERRORCHECK_NP,
+  PTHREAD_MUTEX_ADAPTIVE_NP
+};
+enum  {
+  PTHREAD_INHERIT_SCHED,
+  PTHREAD_EXPLICIT_SCHED
+};
+enum  {
+  PTHREAD_SCOPE_SYSTEM,
+  PTHREAD_SCOPE_PROCESS
+};
+enum  {
+  PTHREAD_PROCESS_PRIVATE,
+  PTHREAD_PROCESS_SHARED
+};
+struct _pthread_cleanup_buffer {
+  void ( *__routine)(void  * );
+  void  *__arg;
+  signed int __canceltype;
+  struct _pthread_cleanup_buffer  *__prev;
+  
+};
+enum  {
+  PTHREAD_CANCEL_ENABLE,
+  PTHREAD_CANCEL_DISABLE
+};
+enum  {
+  PTHREAD_CANCEL_DEFERRED,
+  PTHREAD_CANCEL_ASYNCHRONOUS
+};
+extern signed int pthread_create(pthread_t  *__restrict  __newthread, const pthread_attr_t  *__restrict  __attr, void  *( * __start_routine)(void  * ), void  *__restrict  __arg) __attribute__((__nothrow__)) __attribute__((__nonnull__(1, 3)));
+extern void pthread_exit(void  * __retval) __attribute__((__noreturn__));
+extern signed int pthread_join(pthread_t  __th, void  * * __thread_return);
+extern signed int pthread_detach(pthread_t  __th) __attribute__((__nothrow__, __leaf__));
+extern pthread_t pthread_self(void) __attribute__((__nothrow__, __leaf__)) __attribute__((__const__));
+extern signed int pthread_equal(pthread_t  __thread1, pthread_t  __thread2) __attribute__((__nothrow__, __leaf__)) __attribute__((__const__));
+extern signed int pthread_attr_init(pthread_attr_t  * __attr) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_attr_destroy(pthread_attr_t  * __attr) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_attr_getdetachstate(const pthread_attr_t  * __attr, signed int  * __detachstate) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1, 2)));
+extern signed int pthread_attr_setdetachstate(pthread_attr_t  * __attr, signed int  __detachstate) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_attr_getguardsize(const pthread_attr_t  * __attr, size_t  * __guardsize) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1, 2)));
+extern signed int pthread_attr_setguardsize(pthread_attr_t  * __attr, size_t  __guardsize) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_attr_getschedparam(const pthread_attr_t  *__restrict  __attr, struct sched_param  *__restrict  __param) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1, 2)));
+extern signed int pthread_attr_setschedparam(pthread_attr_t  *__restrict  __attr, const struct sched_param  *__restrict  __param) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1, 2)));
+extern signed int pthread_attr_getschedpolicy(const pthread_attr_t  *__restrict  __attr, signed int  *__restrict  __policy) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1, 2)));
+extern signed int pthread_attr_setschedpolicy(pthread_attr_t  * __attr, signed int  __policy) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_attr_getinheritsched(const pthread_attr_t  *__restrict  __attr, signed int  *__restrict  __inherit) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1, 2)));
+extern signed int pthread_attr_setinheritsched(pthread_attr_t  * __attr, signed int  __inherit) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_attr_getscope(const pthread_attr_t  *__restrict  __attr, signed int  *__restrict  __scope) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1, 2)));
+extern signed int pthread_attr_setscope(pthread_attr_t  * __attr, signed int  __scope) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_attr_getstackaddr(const pthread_attr_t  *__restrict  __attr, void  * *__restrict  __stackaddr) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1, 2))) __attribute__((__deprecated__));
+extern signed int pthread_attr_setstackaddr(pthread_attr_t  * __attr, void  * __stackaddr) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1))) __attribute__((__deprecated__));
+extern signed int pthread_attr_getstacksize(const pthread_attr_t  *__restrict  __attr, size_t  *__restrict  __stacksize) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1, 2)));
+extern signed int pthread_attr_setstacksize(pthread_attr_t  * __attr, size_t  __stacksize) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_setschedparam(pthread_t  __target_thread, signed int  __policy, const struct sched_param  * __param) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(3)));
+extern signed int pthread_getschedparam(pthread_t  __target_thread, signed int  *__restrict  __policy, struct sched_param  *__restrict  __param) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(2, 3)));
+extern signed int pthread_setschedprio(pthread_t  __target_thread, signed int  __prio) __attribute__((__nothrow__, __leaf__));
+extern signed int pthread_once(pthread_once_t  * __once_control, void ( * __init_routine)(void)) __attribute__((__nonnull__(1, 2)));
+extern signed int pthread_setcancelstate(signed int  __state, signed int  * __oldstate);
+extern signed int pthread_setcanceltype(signed int  __type, signed int  * __oldtype);
+extern signed int pthread_cancel(pthread_t  __th);
+extern void pthread_testcancel(void);
+typedef struct  {
+  struct  {
+    __jmp_buf __cancel_jmp_buf;
+    signed int __mask_was_saved;
+    
+  } __cancel_jmp_buf[1];
+  void  *__pad[4];
+  
+} __pthread_unwind_buf_t __attribute__((__aligned__));
+struct __pthread_cleanup_frame {
+  void ( *__cancel_routine)(void  * );
+  void  *__cancel_arg;
+  signed int __do_it;
+  signed int __cancel_type;
+  
+};
+extern void __pthread_register_cancel(__pthread_unwind_buf_t  * __buf);
+extern void __pthread_unregister_cancel(__pthread_unwind_buf_t  * __buf);
+extern void __pthread_unwind_next(__pthread_unwind_buf_t  * __buf) __attribute__((__noreturn__)) __attribute__((__weak__));
+struct __jmp_buf_tag;
+extern signed int __sigsetjmp(struct __jmp_buf_tag  * __env, signed int  __savemask) __attribute__((__nothrow__));
+extern signed int pthread_mutex_init(pthread_mutex_t  * __mutex, const pthread_mutexattr_t  * __mutexattr) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_mutex_destroy(pthread_mutex_t  * __mutex) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_mutex_trylock(pthread_mutex_t  * __mutex) __attribute__((__nothrow__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_mutex_lock(pthread_mutex_t  * __mutex) __attribute__((__nothrow__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_mutex_unlock(pthread_mutex_t  * __mutex) __attribute__((__nothrow__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_mutex_getprioceiling(const pthread_mutex_t  *__restrict  __mutex, signed int  *__restrict  __prioceiling) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1, 2)));
+extern signed int pthread_mutex_setprioceiling(pthread_mutex_t  *__restrict  __mutex, signed int  __prioceiling, signed int  *__restrict  __old_ceiling) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1, 3)));
+extern signed int pthread_mutexattr_init(pthread_mutexattr_t  * __attr) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_mutexattr_destroy(pthread_mutexattr_t  * __attr) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_mutexattr_getpshared(const pthread_mutexattr_t  *__restrict  __attr, signed int  *__restrict  __pshared) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1, 2)));
+extern signed int pthread_mutexattr_setpshared(pthread_mutexattr_t  * __attr, signed int  __pshared) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_mutexattr_getprotocol(const pthread_mutexattr_t  *__restrict  __attr, signed int  *__restrict  __protocol) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1, 2)));
+extern signed int pthread_mutexattr_setprotocol(pthread_mutexattr_t  * __attr, signed int  __protocol) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_mutexattr_getprioceiling(const pthread_mutexattr_t  *__restrict  __attr, signed int  *__restrict  __prioceiling) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1, 2)));
+extern signed int pthread_mutexattr_setprioceiling(pthread_mutexattr_t  * __attr, signed int  __prioceiling) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_cond_init(pthread_cond_t  *__restrict  __cond, const pthread_condattr_t  *__restrict  __cond_attr) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_cond_destroy(pthread_cond_t  * __cond) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_cond_signal(pthread_cond_t  * __cond) __attribute__((__nothrow__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_cond_broadcast(pthread_cond_t  * __cond) __attribute__((__nothrow__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_cond_wait(pthread_cond_t  *__restrict  __cond, pthread_mutex_t  *__restrict  __mutex) __attribute__((__nonnull__(1, 2)));
+extern signed int pthread_cond_timedwait(pthread_cond_t  *__restrict  __cond, pthread_mutex_t  *__restrict  __mutex, const struct timespec  *__restrict  __abstime) __attribute__((__nonnull__(1, 2, 3)));
+extern signed int pthread_condattr_init(pthread_condattr_t  * __attr) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_condattr_destroy(pthread_condattr_t  * __attr) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_condattr_getpshared(const pthread_condattr_t  *__restrict  __attr, signed int  *__restrict  __pshared) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1, 2)));
+extern signed int pthread_condattr_setpshared(pthread_condattr_t  * __attr, signed int  __pshared) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_key_create(pthread_key_t  * __key, void ( * __destr_function)(void  * )) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_key_delete(pthread_key_t  __key) __attribute__((__nothrow__, __leaf__));
+extern void  *pthread_getspecific(pthread_key_t  __key) __attribute__((__nothrow__, __leaf__));
+extern signed int pthread_setspecific(pthread_key_t  __key, const void  * __pointer) __attribute__((__nothrow__, __leaf__));
+extern signed int pthread_atfork(void ( * __prepare)(void), void ( * __parent)(void), void ( * __child)(void)) __attribute__((__nothrow__, __leaf__));
 signed int _lvarCheckValue = 1;
 typedef __loff_t loff_t;
 typedef __ino_t ino_t;
@@ -788,11 +1031,7 @@ typedef __mode_t mode_t;
 typedef __nlink_t nlink_t;
 typedef __uid_t uid_t;
 typedef __off_t off_t;
-typedef __pid_t pid_t;
 typedef __ssize_t ssize_t;
-typedef __time_t time_t;
-typedef __clockid_t clockid_t;
-typedef __timer_t timer_t;
 typedef signed int int8_t __attribute__((__mode__(__QI__)));
 typedef signed int int16_t __attribute__((__mode__(__HI__)));
 typedef signed int int32_t __attribute__((__mode__(__SI__)));
@@ -832,11 +1071,6 @@ typedef struct  {
   
 } __sigset_t;
 typedef __sigset_t sigset_t;
-struct timespec {
-  __time_t tv_sec;
-  __syscall_slong_t tv_nsec;
-  
-};
 typedef __suseconds_t suseconds_t;
 typedef signed long __fd_mask;
 typedef struct  {
@@ -1913,7 +2147,7 @@ static inline YN  *Yes(void)
     ((YN *)((malloc)((sizeof(YN))))); })
   );
   (((temp)->tag) = (YN_Yes));
-  (((temp)->refId) = 29);
+  (((temp)->refId) = 45);
   ;
   ;
   return (temp);
@@ -1927,7 +2161,7 @@ static inline YN  *No(void)
     ((YN *)((malloc)((sizeof(YN))))); })
   );
   (((temp)->tag) = (YN_No));
-  (((temp)->refId) = 29);
+  (((temp)->refId) = 45);
   ;
   ;
   return (temp);
@@ -1941,7 +2175,7 @@ static inline YN  *Undecided(void)
     ((YN *)((malloc)((sizeof(YN))))); })
   );
   (((temp)->tag) = (YN_Undecided));
-  (((temp)->refId) = 29);
+  (((temp)->refId) = 45);
   ;
   ;
   return (temp);
@@ -1980,7 +2214,7 @@ static inline Vote  *Horace(YN  * f0)
     ((Vote *)((malloc)((sizeof(Vote))))); })
   );
   (((temp)->tag) = (Vote_Horace));
-  (((temp)->refId) = 36);
+  (((temp)->refId) = 52);
   ;
   (((((temp)->contents).Horace).f0) = (f0));
   ;
@@ -1995,7 +2229,7 @@ static inline Vote  *Franz(YN  * f0)
     ((Vote *)((malloc)((sizeof(Vote))))); })
   );
   (((temp)->tag) = (Vote_Franz));
-  (((temp)->refId) = 36);
+  (((temp)->refId) = 52);
   ;
   (((((temp)->contents).Franz).f0) = (f0));
   ;
@@ -2010,7 +2244,7 @@ static inline Vote  *Kat(YN  * f0)
     ((Vote *)((malloc)((sizeof(Vote))))); })
   );
   (((temp)->tag) = (Vote_Kat));
-  (((temp)->refId) = 36);
+  (((temp)->refId) = 52);
   ;
   (((((temp)->contents).Kat).f0) = (f0));
   ;
@@ -2049,7 +2283,7 @@ static inline VoteSet  *Empty(void)
     ((VoteSet *)((malloc)((sizeof(VoteSet))))); })
   );
   (((temp)->tag) = (VoteSet_Empty));
-  (((temp)->refId) = 42);
+  (((temp)->refId) = 58);
   ;
   ;
   return (temp);
@@ -2063,7 +2297,7 @@ static inline VoteSet  *Set(Vote  * f0, VoteSet  * f1)
     ((VoteSet *)((malloc)((sizeof(VoteSet))))); })
   );
   (((temp)->tag) = (VoteSet_Set));
-  (((temp)->refId) = 42);
+  (((temp)->refId) = 58);
   ;
   (((((temp)->contents).Set).f0) = (f0));
   (((((temp)->contents).Set).f1) = (f1));
@@ -2079,7 +2313,7 @@ static inline VoteSet  *Top(void)
     ((VoteSet *)((malloc)((sizeof(VoteSet))))); })
   );
   (((temp)->tag) = (VoteSet_Top));
-  (((temp)->refId) = 42);
+  (((temp)->refId) = 58);
   ;
   ;
   return (temp);
@@ -2329,8 +2563,8 @@ struct _string_s showInner(VoteSet  * v)
               )
               {
                 ({
-                  struct _string_s  *_tmp51 = (&(result));
-                  ((*(_tmp51)) = ((_append_string)((*(_tmp51)), ((_append_string)(((strCharPointer)(", ")), ((showInner)((tl)))))))); })
+                  struct _string_s  *_tmp67 = (&(result));
+                  ((*(_tmp67)) = ((_append_string)((*(_tmp67)), ((_append_string)(((strCharPointer)(", ")), ((showInner)((tl)))))))); })
                 ;
               } else {
                 /* no match, do nothing. */;
@@ -4066,8 +4300,8 @@ static void _cilk_c_selection_sort_slow(CilkWorkerState  *const  _cilk_ws, struc
     {
       {
         {
-          signed int  *__tmp62 = ((copyArr)((arr), 0, (length)));
-          ((Cilk_set_result)((_cilk_ws), (&(__tmp62)), (sizeof((__tmp62)))));
+          signed int  *__tmp78 = ((copyArr)((arr), 0, (length)));
+          ((Cilk_set_result)((_cilk_ws), (&(__tmp78)), (sizeof((__tmp78)))));
           /* expand CILK2C_BEFORE_RETURN_SLOW macro */;
           ((Cilk_cilk2c_before_return_slow_cp)((_cilk_ws), (&((_cilk_frame)->header))));
           ((Cilk_cilk2c_before_return_slow)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
@@ -4101,11 +4335,11 @@ static void _cilk_c_selection_sort_slow(CilkWorkerState  *const  _cilk_ws, struc
     ((((_cilk_frame)->scope366).partial) = (partial));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      signed int  *__tmp63;
+      signed int  *__tmp79;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp63) = (partial));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp63)), (sizeof((__tmp63))))))
+        ((__tmp79) = (partial));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp79)), (sizeof((__tmp79))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return ;
@@ -4201,8 +4435,8 @@ static void _cilk_c_selection_sort_slow(CilkWorkerState  *const  _cilk_ws, struc
     ((free)((total)));
     ((free)((newOne)));
     {
-      signed int  *__tmp64 = (result);
-      ((Cilk_set_result)((_cilk_ws), (&(__tmp64)), (sizeof((__tmp64)))));
+      signed int  *__tmp80 = (result);
+      ((Cilk_set_result)((_cilk_ws), (&(__tmp80)), (sizeof((__tmp80)))));
       /* expand CILK2C_BEFORE_RETURN_SLOW macro */;
       ((Cilk_cilk2c_before_return_slow_cp)((_cilk_ws), (&((_cilk_frame)->header))));
       ((Cilk_cilk2c_before_return_slow)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
@@ -4291,11 +4525,11 @@ signed int  *c_selection_sort(CilkWorkerState  *const  _cilk_ws, signed int  * a
     ((partial) = ((c_selection_sort)((_cilk_ws), (total), ((length) - 1))));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      signed int  *__tmp66;
+      signed int  *__tmp82;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp66) = (partial));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp66)), (sizeof((__tmp66))))))
+        ((__tmp82) = (partial));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp82)), (sizeof((__tmp82))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return 0;
@@ -4437,11 +4671,11 @@ static void _cilk_getVoteSearchCilk_slow(CilkWorkerState  *const  _cilk_ws, stru
     ((((_cilk_frame)->scope398).sorted) = (sorted));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      signed int  *__tmp72;
+      signed int  *__tmp88;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp72) = (sorted));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp72)), (sizeof((__tmp72))))))
+        ((__tmp88) = (sorted));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp88)), (sizeof((__tmp88))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return ;
@@ -4514,8 +4748,8 @@ static void _cilk_getVoteSearchCilk_slow(CilkWorkerState  *const  _cilk_ws, stru
       {
         ((free)((sorted)));
         {
-          YN  *__tmp73 = ((Yes)());
-          ((Cilk_set_result)((_cilk_ws), (&(__tmp73)), (sizeof((__tmp73)))));
+          YN  *__tmp89 = ((Yes)());
+          ((Cilk_set_result)((_cilk_ws), (&(__tmp89)), (sizeof((__tmp89)))));
           /* expand CILK2C_BEFORE_RETURN_SLOW macro */;
           ((Cilk_cilk2c_before_return_slow_cp)((_cilk_ws), (&((_cilk_frame)->header))));
           ((Cilk_cilk2c_before_return_slow)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
@@ -4527,8 +4761,8 @@ static void _cilk_getVoteSearchCilk_slow(CilkWorkerState  *const  _cilk_ws, stru
     }
     ((free)((sorted)));
     {
-      YN  *__tmp74 = ((No)());
-      ((Cilk_set_result)((_cilk_ws), (&(__tmp74)), (sizeof((__tmp74)))));
+      YN  *__tmp90 = ((No)());
+      ((Cilk_set_result)((_cilk_ws), (&(__tmp90)), (sizeof((__tmp90)))));
       /* expand CILK2C_BEFORE_RETURN_SLOW macro */;
       ((Cilk_cilk2c_before_return_slow_cp)((_cilk_ws), (&((_cilk_frame)->header))));
       ((Cilk_cilk2c_before_return_slow)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
@@ -4595,11 +4829,11 @@ YN  *getVoteSearchCilk(CilkWorkerState  *const  _cilk_ws, signed int  * arr, sig
     ((sorted) = ((c_selection_sort)((_cilk_ws), (arr), (size))));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      signed int  *__tmp76;
+      signed int  *__tmp92;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp76) = (sorted));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp76)), (sizeof((__tmp76))))))
+        ((__tmp92) = (sorted));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp92)), (sizeof((__tmp92))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return 0;
@@ -4672,9 +4906,9 @@ YN  *mt_getVoteSearchCilk(CilkContext  *const  context, signed int  * arr, signe
   ((Cilk_free)((_cilk_procargs)));
   return (_cilk_proc_result);
 }
-typedef VoteSet  *_template_param_unused_77;
-typedef __attribute__(()) struct _template__Lattice__pointer__tag_struct_VoteSet_42__ _template__Lattice__pointer__tag_struct_VoteSet_42__;
-struct _template__Lattice__pointer__tag_struct_VoteSet_42__ {
+typedef VoteSet  *_template_param_unused_93;
+typedef __attribute__(()) struct _template__Lattice__pointer__tag_struct_VoteSet_58__ _template__Lattice__pointer__tag_struct_VoteSet_58__;
+struct _template__Lattice__pointer__tag_struct_VoteSet_58__ {
   VoteSet  *_bottom;
   VoteSet  *_top;
   signed int ( *_leq)();
@@ -4683,12 +4917,12 @@ struct _template__Lattice__pointer__tag_struct_VoteSet_42__ {
   struct _string_s ( *_show)();
   
 };
-typedef VoteSet  *_template_param_unused_81;
-static struct _template__Lattice__pointer__tag_struct_VoteSet_42__  *_template__newLattice__pointer__tag_struct_VoteSet_42__(VoteSet  * least, VoteSet  * greatest, signed int ( * leq)(), VoteSet  *( * lub)(), signed int ( * eq)(), struct _string_s ( * showMethod)())
+typedef VoteSet  *_template_param_unused_97;
+static struct _template__Lattice__pointer__tag_struct_VoteSet_58__  *_template__newLattice__pointer__tag_struct_VoteSet_58__(VoteSet  * least, VoteSet  * greatest, signed int ( * leq)(), VoteSet  *( * lub)(), signed int ( * eq)(), struct _string_s ( * showMethod)())
 {
 
   {
-    struct _template__Lattice__pointer__tag_struct_VoteSet_42__  *l = ((malloc)((sizeof(struct _template__Lattice__pointer__tag_struct_VoteSet_42__))));
+    struct _template__Lattice__pointer__tag_struct_VoteSet_58__  *l = ((malloc)((sizeof(struct _template__Lattice__pointer__tag_struct_VoteSet_58__))));
     (((l)->_bottom) = (least));
     (((l)->_top) = (greatest));
     (((l)->_leq) = (leq));
@@ -4698,41 +4932,55 @@ static struct _template__Lattice__pointer__tag_struct_VoteSet_42__  *_template__
     return (l);
   }
 }
-typedef VoteSet  *_template_param_unused_82;
-typedef __attribute__(()) struct _template__Lvar__pointer__tag_struct_VoteSet_42__ _template__Lvar__pointer__tag_struct_VoteSet_42__;
-struct _template__Lvar__pointer__tag_struct_VoteSet_42__ {
-  struct _template__Lattice__pointer__tag_struct_VoteSet_42__  *_lattice;
-  VoteSet  *_value;
-  signed int _frozen;
-  
-};
-typedef VoteSet  *_template_param_unused_86;
-static struct _template__Lvar__pointer__tag_struct_VoteSet_42__  *_template__new__pointer__tag_struct_VoteSet_42__(struct _template__Lattice__pointer__tag_struct_VoteSet_42__  * l)
-{
-
-  {
-    struct _template__Lvar__pointer__tag_struct_VoteSet_42__  *lvarNew = ((malloc)((sizeof(struct _template__Lvar__pointer__tag_struct_VoteSet_42__))));
-    (((lvarNew)->_value) = ((l)->_bottom));
-    (((lvarNew)->_lattice) = (l));
-    (((lvarNew)->_frozen) = 0);
-    return (lvarNew);
-  }
-}
-typedef VoteSet  *_template_param_unused_87;
-typedef __attribute__(()) struct _template__ActivationSet__pointer__tag_struct_VoteSet_42__ _template__ActivationSet__pointer__tag_struct_VoteSet_42__;
-struct _template__ActivationSet__pointer__tag_struct_VoteSet_42__ {
+typedef VoteSet  *_template_param_unused_98;
+typedef __attribute__(()) struct _template__Lvar__pointer__tag_struct_VoteSet_58__ _template__Lvar__pointer__tag_struct_VoteSet_58__;
+typedef VoteSet  *_template_param_unused_99;
+typedef __attribute__(()) struct _template__ThresholdSet__pointer__tag_struct_VoteSet_58__ _template__ThresholdSet__pointer__tag_struct_VoteSet_58__;
+typedef VoteSet  *_template_param_unused_100;
+typedef __attribute__(()) struct _template__ActivationSet__pointer__tag_struct_VoteSet_58__ _template__ActivationSet__pointer__tag_struct_VoteSet_58__;
+struct _template__ActivationSet__pointer__tag_struct_VoteSet_58__ {
   signed int _size;
   VoteSet  * *_set;
   signed int _index;
-  struct _template__Lattice__pointer__tag_struct_VoteSet_42__  *_lattice;
+  struct _template__Lattice__pointer__tag_struct_VoteSet_58__  *_lattice;
   
 };
-typedef VoteSet  *_template_param_unused_91;
-static struct _template__ActivationSet__pointer__tag_struct_VoteSet_42__  *_template__newActivationSet__pointer__tag_struct_VoteSet_42__(struct _template__Lattice__pointer__tag_struct_VoteSet_42__  * l, signed int  size)
+struct _template__ThresholdSet__pointer__tag_struct_VoteSet_58__ {
+  struct _template__Lattice__pointer__tag_struct_VoteSet_58__  *_lattice;
+  signed int _size;
+  signed int _index;
+  struct _template__ActivationSet__pointer__tag_struct_VoteSet_58__  * *_a_sets;
+  
+};
+struct _template__Lvar__pointer__tag_struct_VoteSet_58__ {
+  struct _template__Lattice__pointer__tag_struct_VoteSet_58__  *_lattice;
+  VoteSet  *_value;
+  signed int _frozen;
+  struct _template__ThresholdSet__pointer__tag_struct_VoteSet_58__  *_threshold;
+  pthread_mutex_t _mutex;
+  pthread_cond_t _cond;
+  
+};
+typedef VoteSet  *_template_param_unused_104;
+static struct _template__Lvar__pointer__tag_struct_VoteSet_58__  *_template__new__pointer__tag_struct_VoteSet_58__(struct _template__Lattice__pointer__tag_struct_VoteSet_58__  * l)
 {
 
   {
-    struct _template__ActivationSet__pointer__tag_struct_VoteSet_42__  *act = ((malloc)((sizeof(struct _template__ActivationSet__pointer__tag_struct_VoteSet_42__))));
+    struct _template__Lvar__pointer__tag_struct_VoteSet_58__  *lvarNew = ((malloc)((sizeof(struct _template__Lvar__pointer__tag_struct_VoteSet_58__))));
+    (((lvarNew)->_value) = ((l)->_bottom));
+    (((lvarNew)->_lattice) = (l));
+    (((lvarNew)->_frozen) = 0);
+    (((lvarNew)->_cond) = ((pthread_cond_t){{0, 0, 0, 0, 0, ((void *)0), 0, 0}}));
+    (((lvarNew)->_mutex) = ((pthread_mutex_t){{0, 0, 0, 0, 0, 0, 0, {0, 0}}}));
+    return (lvarNew);
+  }
+}
+typedef VoteSet  *_template_param_unused_108;
+static struct _template__ActivationSet__pointer__tag_struct_VoteSet_58__  *_template__newActivationSet__pointer__tag_struct_VoteSet_58__(struct _template__Lattice__pointer__tag_struct_VoteSet_58__  * l, signed int  size)
+{
+
+  {
+    struct _template__ActivationSet__pointer__tag_struct_VoteSet_58__  *act = ((malloc)((sizeof(struct _template__ActivationSet__pointer__tag_struct_VoteSet_58__))));
     (((act)->_size) = (size));
     (((act)->_set) = ((malloc)(((sizeof(VoteSet *)) * (size)))));
     (((act)->_index) = 0);
@@ -4740,9 +4988,9 @@ static struct _template__ActivationSet__pointer__tag_struct_VoteSet_42__  *_temp
     return (act);
   }
 }
-typedef VoteSet  *_template_param_unused_107;
-typedef VoteSet  *_template_param_unused_111;
-static signed int _template__resizeActSet__pointer__tag_struct_VoteSet_42__(struct _template__ActivationSet__pointer__tag_struct_VoteSet_42__  * act, signed int  newSize)
+typedef VoteSet  *_template_param_unused_124;
+typedef VoteSet  *_template_param_unused_128;
+static signed int _template__resizeActSet__pointer__tag_struct_VoteSet_58__(struct _template__ActivationSet__pointer__tag_struct_VoteSet_58__  * act, signed int  newSize)
 {
 
   {
@@ -4759,14 +5007,14 @@ static signed int _template__resizeActSet__pointer__tag_struct_VoteSet_42__(stru
     return 1;
   }
 }
-static struct _template__ActivationSet__pointer__tag_struct_VoteSet_42__  *_template__addAct__pointer__tag_struct_VoteSet_42__(struct _template__ActivationSet__pointer__tag_struct_VoteSet_42__  * act, VoteSet  * element)
+static struct _template__ActivationSet__pointer__tag_struct_VoteSet_58__  *_template__addAct__pointer__tag_struct_VoteSet_58__(struct _template__ActivationSet__pointer__tag_struct_VoteSet_58__  * act, VoteSet  * element)
 {
 
   {
     if ((((act)->_index) >= ((act)->_size)))
     {
       {
-        ((_template__resizeActSet__pointer__tag_struct_VoteSet_42__)((act), ((2 * ((act)->_size)) + 1)));
+        ((_template__resizeActSet__pointer__tag_struct_VoteSet_58__)((act), ((2 * ((act)->_size)) + 1)));
       }
     } else {
       ;
@@ -4776,22 +5024,13 @@ static struct _template__ActivationSet__pointer__tag_struct_VoteSet_42__  *_temp
     return (act);
   }
 }
-typedef VoteSet  *_template_param_unused_112;
-typedef __attribute__(()) struct _template__ThresholdSet__pointer__tag_struct_VoteSet_42__ _template__ThresholdSet__pointer__tag_struct_VoteSet_42__;
-struct _template__ThresholdSet__pointer__tag_struct_VoteSet_42__ {
-  struct _template__Lattice__pointer__tag_struct_VoteSet_42__  *_lattice;
-  signed int _size;
-  signed int _index;
-  struct _template__ActivationSet__pointer__tag_struct_VoteSet_42__  * *_a_sets;
-  
-};
-typedef VoteSet  *_template_param_unused_156;
-typedef VoteSet  *_template_param_unused_160;
-static signed int _template__resizeThresholdSet__pointer__tag_struct_VoteSet_42__(struct _template__ThresholdSet__pointer__tag_struct_VoteSet_42__  * t, signed int  newSize)
+typedef VoteSet  *_template_param_unused_172;
+typedef VoteSet  *_template_param_unused_176;
+static signed int _template__resizeThresholdSet__pointer__tag_struct_VoteSet_58__(struct _template__ThresholdSet__pointer__tag_struct_VoteSet_58__  * t, signed int  newSize)
 {
 
   {
-    struct _template__ActivationSet__pointer__tag_struct_VoteSet_42__  * *newSet = ((malloc)(((sizeof(struct _template__ActivationSet__pointer__tag_struct_VoteSet_42__ *)) * (newSize))));
+    struct _template__ActivationSet__pointer__tag_struct_VoteSet_58__  * *newSet = ((malloc)(((sizeof(struct _template__ActivationSet__pointer__tag_struct_VoteSet_58__ *)) * (newSize))));
     for (signed int i = 0; ((i) < ((t)->_index)); ((i)++))
     {
       {
@@ -4804,14 +5043,14 @@ static signed int _template__resizeThresholdSet__pointer__tag_struct_VoteSet_42_
     return 1;
   }
 }
-static struct _template__ThresholdSet__pointer__tag_struct_VoteSet_42__  *_template__addThreshold__pointer__tag_struct_VoteSet_42__(struct _template__ThresholdSet__pointer__tag_struct_VoteSet_42__  * t, struct _template__ActivationSet__pointer__tag_struct_VoteSet_42__  * act)
+static struct _template__ThresholdSet__pointer__tag_struct_VoteSet_58__  *_template__addThreshold__pointer__tag_struct_VoteSet_58__(struct _template__ThresholdSet__pointer__tag_struct_VoteSet_58__  * t, struct _template__ActivationSet__pointer__tag_struct_VoteSet_58__  * act)
 {
 
   {
     if ((((t)->_index) >= ((t)->_size)))
     {
       {
-        ((_template__resizeThresholdSet__pointer__tag_struct_VoteSet_42__)((t), ((2 * ((t)->_size)) + 1)));
+        ((_template__resizeThresholdSet__pointer__tag_struct_VoteSet_58__)((t), ((2 * ((t)->_size)) + 1)));
       }
     } else {
       ;
@@ -4821,21 +5060,21 @@ static struct _template__ThresholdSet__pointer__tag_struct_VoteSet_42__  *_templ
     return (t);
   }
 }
-typedef VoteSet  *_template_param_unused_168;
-static struct _template__ThresholdSet__pointer__tag_struct_VoteSet_42__  *_template__newThresholdSet__pointer__tag_struct_VoteSet_42__(struct _template__Lattice__pointer__tag_struct_VoteSet_42__  * l, signed int  size)
+typedef VoteSet  *_template_param_unused_184;
+static struct _template__ThresholdSet__pointer__tag_struct_VoteSet_58__  *_template__newThresholdSet__pointer__tag_struct_VoteSet_58__(struct _template__Lattice__pointer__tag_struct_VoteSet_58__  * l, signed int  size)
 {
 
   {
-    struct _template__ThresholdSet__pointer__tag_struct_VoteSet_42__  *t = ((malloc)((sizeof(struct _template__ThresholdSet__pointer__tag_struct_VoteSet_42__))));
+    struct _template__ThresholdSet__pointer__tag_struct_VoteSet_58__  *t = ((malloc)((sizeof(struct _template__ThresholdSet__pointer__tag_struct_VoteSet_58__))));
     (((t)->_lattice) = (l));
     (((t)->_size) = (size));
     (((t)->_index) = 0);
-    (((t)->_a_sets) = ((malloc)(((sizeof(struct _template__ActivationSet__pointer__tag_struct_VoteSet_42__ *)) * (size)))));
+    (((t)->_a_sets) = ((malloc)(((sizeof(struct _template__ActivationSet__pointer__tag_struct_VoteSet_58__ *)) * (size)))));
     return (t);
   }
 }
-typedef VoteSet  *_template_param_unused_172;
-static signed int _template__put__pointer__tag_struct_VoteSet_42__(struct _template__Lvar__pointer__tag_struct_VoteSet_42__  * l, VoteSet  * newState)
+typedef VoteSet  *_template_param_unused_188;
+static signed int _template__put__pointer__tag_struct_VoteSet_58__(struct _template__Lvar__pointer__tag_struct_VoteSet_58__  * l, VoteSet  * newState)
 {
 
   {
@@ -4847,22 +5086,27 @@ static signed int _template__put__pointer__tag_struct_VoteSet_42__(struct _templ
     } else {
       ;
     }
+    ((pthread_mutex_lock)((&(((l)->_mutex)))));
     VoteSet  *oldState = ((l)->_value);
     VoteSet  *newValue = ((((l)->_lattice)->_lub)((oldState), (newState)));
     if (((((l)->_lattice)->_eq)((((l)->_lattice)->_top), (newValue))))
     {
       {
+        ((pthread_mutex_unlock)((&(((l)->_mutex)))));
         return 0;
       }
     } else {
       ;
     }
     (((l)->_value) = (newValue));
+    ((pthread_cond_broadcast)((&(((l)->_cond)))));
+    ((pthread_mutex_unlock)((&(((l)->_mutex)))));
     return 1;
   }
 }
-typedef VoteSet  *_template_param_unused_176;
-static struct _template__ActivationSet__pointer__tag_struct_VoteSet_42__  *_template__get__pointer__tag_struct_VoteSet_42__(struct _template__Lvar__pointer__tag_struct_VoteSet_42__  * l, struct _template__ThresholdSet__pointer__tag_struct_VoteSet_42__  * t)
+typedef VoteSet  *_template_param_unused_204;
+typedef VoteSet  *_template_param_unused_208;
+static struct _template__ActivationSet__pointer__tag_struct_VoteSet_58__  *_template__thresholdReached__pointer__tag_struct_VoteSet_58__(struct _template__Lvar__pointer__tag_struct_VoteSet_58__  * l, struct _template__ThresholdSet__pointer__tag_struct_VoteSet_58__  * t)
 {
 
   {
@@ -4887,29 +5131,46 @@ static struct _template__ActivationSet__pointer__tag_struct_VoteSet_42__  *_temp
     return (((void *)0));
   }
 }
+static struct _template__ActivationSet__pointer__tag_struct_VoteSet_58__  *_template__get__pointer__tag_struct_VoteSet_58__(struct _template__Lvar__pointer__tag_struct_VoteSet_58__  * l, struct _template__ThresholdSet__pointer__tag_struct_VoteSet_58__  * t)
+{
+
+  {
+    ((pthread_mutex_lock)((&(((l)->_mutex)))));
+    struct _template__ActivationSet__pointer__tag_struct_VoteSet_58__  *actReached = ((_template__thresholdReached__pointer__tag_struct_VoteSet_58__)((l), (t)));
+    while (((actReached) == (((void *)0))))
+    {
+      {
+        ((actReached) = ((_template__thresholdReached__pointer__tag_struct_VoteSet_58__)((l), (t))));
+        ((pthread_cond_wait)((&(((l)->_cond))), (&(((l)->_mutex)))));
+      }
+    }
+    ((pthread_mutex_unlock)((&(((l)->_mutex)))));
+    return (actReached);
+  }
+}
 signed int nonCilk(signed int  * arr, signed int  size)
 {
 
   {
-    struct _template__Lattice__pointer__tag_struct_VoteSet_42__  *D = ((_template__newLattice__pointer__tag_struct_VoteSet_42__)(((Empty)()), ((Top)()), (leq), (lub), (eq), (showVoteSet)));
-    struct _template__Lvar__pointer__tag_struct_VoteSet_42__  *votes = ((_template__new__pointer__tag_struct_VoteSet_42__)((D)));
-    struct _template__ActivationSet__pointer__tag_struct_VoteSet_42__  *noPizza = ((_template__newActivationSet__pointer__tag_struct_VoteSet_42__)((D), 1));
-    ((_template__addAct__pointer__tag_struct_VoteSet_42__)((noPizza), ((Set)(((Horace)(((No)()))), ((Set)(((Kat)(((No)()))), ((Set)(((Franz)(((No)()))), ((Empty)())))))))));
-    struct _template__ActivationSet__pointer__tag_struct_VoteSet_42__  *yesPizza = ((_template__newActivationSet__pointer__tag_struct_VoteSet_42__)((D), 20));
-    ((_template__addAct__pointer__tag_struct_VoteSet_42__)((yesPizza), ((Set)(((Horace)(((Yes)()))), ((Empty)())))));
-    ((_template__addAct__pointer__tag_struct_VoteSet_42__)((yesPizza), ((Set)(((Kat)(((Yes)()))), ((Empty)())))));
-    ((_template__addAct__pointer__tag_struct_VoteSet_42__)((yesPizza), ((Set)(((Franz)(((Yes)()))), ((Empty)())))));
-    struct _template__ThresholdSet__pointer__tag_struct_VoteSet_42__  *t = ((_template__addThreshold__pointer__tag_struct_VoteSet_42__)(((_template__addThreshold__pointer__tag_struct_VoteSet_42__)(((_template__newThresholdSet__pointer__tag_struct_VoteSet_42__)((D), 2)), (yesPizza))), (noPizza)));
+    struct _template__Lattice__pointer__tag_struct_VoteSet_58__  *D = ((_template__newLattice__pointer__tag_struct_VoteSet_58__)(((Empty)()), ((Top)()), (leq), (lub), (eq), (showVoteSet)));
+    struct _template__Lvar__pointer__tag_struct_VoteSet_58__  *votes = ((_template__new__pointer__tag_struct_VoteSet_58__)((D)));
+    struct _template__ActivationSet__pointer__tag_struct_VoteSet_58__  *noPizza = ((_template__newActivationSet__pointer__tag_struct_VoteSet_58__)((D), 1));
+    ((_template__addAct__pointer__tag_struct_VoteSet_58__)((noPizza), ((Set)(((Horace)(((No)()))), ((Set)(((Kat)(((No)()))), ((Set)(((Franz)(((No)()))), ((Empty)())))))))));
+    struct _template__ActivationSet__pointer__tag_struct_VoteSet_58__  *yesPizza = ((_template__newActivationSet__pointer__tag_struct_VoteSet_58__)((D), 20));
+    ((_template__addAct__pointer__tag_struct_VoteSet_58__)((yesPizza), ((Set)(((Horace)(((Yes)()))), ((Empty)())))));
+    ((_template__addAct__pointer__tag_struct_VoteSet_58__)((yesPizza), ((Set)(((Kat)(((Yes)()))), ((Empty)())))));
+    ((_template__addAct__pointer__tag_struct_VoteSet_58__)((yesPizza), ((Set)(((Franz)(((Yes)()))), ((Empty)())))));
+    struct _template__ThresholdSet__pointer__tag_struct_VoteSet_58__  *t = ((_template__addThreshold__pointer__tag_struct_VoteSet_58__)(((_template__addThreshold__pointer__tag_struct_VoteSet_58__)(((_template__newThresholdSet__pointer__tag_struct_VoteSet_58__)((D), 2)), (yesPizza))), (noPizza)));
     YN  *kresult;
     YN  *hresult;
     YN  *fresult;
     ((kresult) = ((getVoteSearch)((arr), (size))));
-    ((_template__put__pointer__tag_struct_VoteSet_42__)((votes), ((Set)(((Kat)((kresult))), ((Empty)())))));
+    ((_template__put__pointer__tag_struct_VoteSet_58__)((votes), ((Set)(((Kat)((kresult))), ((Empty)())))));
     ((hresult) = ((getVoteSearch)((arr), (size))));
-    ((_template__put__pointer__tag_struct_VoteSet_42__)((votes), ((Set)(((Horace)((hresult))), ((Empty)())))));
+    ((_template__put__pointer__tag_struct_VoteSet_58__)((votes), ((Set)(((Horace)((hresult))), ((Empty)())))));
     ((fresult) = ((getVoteSearch)((arr), (size))));
-    ((_template__put__pointer__tag_struct_VoteSet_42__)((votes), ((Set)(((Franz)((fresult))), ((Empty)())))));
-    struct _template__ActivationSet__pointer__tag_struct_VoteSet_42__  *getPiz = ((_template__get__pointer__tag_struct_VoteSet_42__)((votes), (t)));
+    ((_template__put__pointer__tag_struct_VoteSet_58__)((votes), ((Set)(((Franz)((fresult))), ((Empty)())))));
+    struct _template__ActivationSet__pointer__tag_struct_VoteSet_58__  *getPiz = ((_template__get__pointer__tag_struct_VoteSet_58__)((votes), (t)));
     if (((getPiz) == (yesPizza)))
     {
       {
@@ -4940,23 +5201,23 @@ struct _cilk_withCilk_frame {
     
   } scope447;
   struct  {
-    struct _template__Lattice__pointer__tag_struct_VoteSet_42__  *D;
+    struct _template__Lattice__pointer__tag_struct_VoteSet_58__  *D;
     
   } scope449;
   struct  {
-    struct _template__Lvar__pointer__tag_struct_VoteSet_42__  *votes;
+    struct _template__Lvar__pointer__tag_struct_VoteSet_58__  *votes;
     
   } scope450;
   struct  {
-    struct _template__ActivationSet__pointer__tag_struct_VoteSet_42__  *noPizza;
+    struct _template__ActivationSet__pointer__tag_struct_VoteSet_58__  *noPizza;
     
   } scope452;
   struct  {
-    struct _template__ActivationSet__pointer__tag_struct_VoteSet_42__  *yesPizza;
+    struct _template__ActivationSet__pointer__tag_struct_VoteSet_58__  *yesPizza;
     
   } scope454;
   struct  {
-    struct _template__ThresholdSet__pointer__tag_struct_VoteSet_42__  *t;
+    struct _template__ThresholdSet__pointer__tag_struct_VoteSet_58__  *t;
     
   } scope458;
   struct  {
@@ -4972,7 +5233,7 @@ struct _cilk_withCilk_frame {
     
   } scope462;
   struct  {
-    struct _template__ActivationSet__pointer__tag_struct_VoteSet_42__  *getPiz;
+    struct _template__ActivationSet__pointer__tag_struct_VoteSet_58__  *getPiz;
     
   } scope470;
   
@@ -5002,15 +5263,15 @@ static void _cilk_withCilk_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_
   ;
   ;
   {
-    struct _template__Lattice__pointer__tag_struct_VoteSet_42__  *D = ((_template__newLattice__pointer__tag_struct_VoteSet_42__)(((Empty)()), ((Top)()), (leq), (lub), (eq), (showVoteSet)));
-    struct _template__Lvar__pointer__tag_struct_VoteSet_42__  *votes = ((_template__new__pointer__tag_struct_VoteSet_42__)((D)));
-    struct _template__ActivationSet__pointer__tag_struct_VoteSet_42__  *noPizza = ((_template__newActivationSet__pointer__tag_struct_VoteSet_42__)((D), 1));
-    ((_template__addAct__pointer__tag_struct_VoteSet_42__)((noPizza), ((Set)(((Horace)(((No)()))), ((Set)(((Kat)(((No)()))), ((Set)(((Franz)(((No)()))), ((Empty)())))))))));
-    struct _template__ActivationSet__pointer__tag_struct_VoteSet_42__  *yesPizza = ((_template__newActivationSet__pointer__tag_struct_VoteSet_42__)((D), 20));
-    ((_template__addAct__pointer__tag_struct_VoteSet_42__)((yesPizza), ((Set)(((Horace)(((Yes)()))), ((Empty)())))));
-    ((_template__addAct__pointer__tag_struct_VoteSet_42__)((yesPizza), ((Set)(((Kat)(((Yes)()))), ((Empty)())))));
-    ((_template__addAct__pointer__tag_struct_VoteSet_42__)((yesPizza), ((Set)(((Franz)(((Yes)()))), ((Empty)())))));
-    struct _template__ThresholdSet__pointer__tag_struct_VoteSet_42__  *t = ((_template__addThreshold__pointer__tag_struct_VoteSet_42__)(((_template__addThreshold__pointer__tag_struct_VoteSet_42__)(((_template__newThresholdSet__pointer__tag_struct_VoteSet_42__)((D), 2)), (yesPizza))), (noPizza)));
+    struct _template__Lattice__pointer__tag_struct_VoteSet_58__  *D = ((_template__newLattice__pointer__tag_struct_VoteSet_58__)(((Empty)()), ((Top)()), (leq), (lub), (eq), (showVoteSet)));
+    struct _template__Lvar__pointer__tag_struct_VoteSet_58__  *votes = ((_template__new__pointer__tag_struct_VoteSet_58__)((D)));
+    struct _template__ActivationSet__pointer__tag_struct_VoteSet_58__  *noPizza = ((_template__newActivationSet__pointer__tag_struct_VoteSet_58__)((D), 1));
+    ((_template__addAct__pointer__tag_struct_VoteSet_58__)((noPizza), ((Set)(((Horace)(((No)()))), ((Set)(((Kat)(((No)()))), ((Set)(((Franz)(((No)()))), ((Empty)())))))))));
+    struct _template__ActivationSet__pointer__tag_struct_VoteSet_58__  *yesPizza = ((_template__newActivationSet__pointer__tag_struct_VoteSet_58__)((D), 20));
+    ((_template__addAct__pointer__tag_struct_VoteSet_58__)((yesPizza), ((Set)(((Horace)(((Yes)()))), ((Empty)())))));
+    ((_template__addAct__pointer__tag_struct_VoteSet_58__)((yesPizza), ((Set)(((Kat)(((Yes)()))), ((Empty)())))));
+    ((_template__addAct__pointer__tag_struct_VoteSet_58__)((yesPizza), ((Set)(((Franz)(((Yes)()))), ((Empty)())))));
+    struct _template__ThresholdSet__pointer__tag_struct_VoteSet_58__  *t = ((_template__addThreshold__pointer__tag_struct_VoteSet_58__)(((_template__addThreshold__pointer__tag_struct_VoteSet_58__)(((_template__newThresholdSet__pointer__tag_struct_VoteSet_58__)((D), 2)), (yesPizza))), (noPizza)));
     YN  *kresult;
     YN  *hresult;
     YN  *fresult;
@@ -5036,11 +5297,11 @@ static void _cilk_withCilk_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_
     ((((_cilk_frame)->scope460).kresult) = (kresult));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      YN  *__tmp189;
+      YN  *__tmp221;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp189) = (kresult));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp189)), (sizeof((__tmp189))))))
+        ((__tmp221) = (kresult));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp221)), (sizeof((__tmp221))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return ;
@@ -5123,11 +5384,11 @@ static void _cilk_withCilk_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_
     ((((_cilk_frame)->scope461).hresult) = (hresult));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      YN  *__tmp190;
+      YN  *__tmp222;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp190) = (hresult));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp190)), (sizeof((__tmp190))))))
+        ((__tmp222) = (hresult));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp222)), (sizeof((__tmp222))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return ;
@@ -5210,11 +5471,11 @@ static void _cilk_withCilk_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_
     ((((_cilk_frame)->scope462).fresult) = (fresult));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      YN  *__tmp191;
+      YN  *__tmp223;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp191) = (fresult));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp191)), (sizeof((__tmp191))))))
+        ((__tmp223) = (fresult));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp223)), (sizeof((__tmp223))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return ;
@@ -5316,17 +5577,17 @@ static void _cilk_withCilk_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_
     /* expand CILK2C_AT_THREAD_BOUNDARY_SLOW() macro */;
     ((Cilk_cilk2c_at_thread_boundary_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
     ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
-    ((_template__put__pointer__tag_struct_VoteSet_42__)((votes), ((Set)(((Kat)((kresult))), ((Empty)())))));
-    ((_template__put__pointer__tag_struct_VoteSet_42__)((votes), ((Set)(((Horace)((hresult))), ((Empty)())))));
-    ((_template__put__pointer__tag_struct_VoteSet_42__)((votes), ((Set)(((Franz)((fresult))), ((Empty)())))));
-    struct _template__ActivationSet__pointer__tag_struct_VoteSet_42__  *getPiz = ((_template__get__pointer__tag_struct_VoteSet_42__)((votes), (t)));
+    ((_template__put__pointer__tag_struct_VoteSet_58__)((votes), ((Set)(((Kat)((kresult))), ((Empty)())))));
+    ((_template__put__pointer__tag_struct_VoteSet_58__)((votes), ((Set)(((Horace)((hresult))), ((Empty)())))));
+    ((_template__put__pointer__tag_struct_VoteSet_58__)((votes), ((Set)(((Franz)((fresult))), ((Empty)())))));
+    struct _template__ActivationSet__pointer__tag_struct_VoteSet_58__  *getPiz = ((_template__get__pointer__tag_struct_VoteSet_58__)((votes), (t)));
     if (((getPiz) == (yesPizza)))
     {
       {
         ((printf)("Get pizza! At least one person will eat some.\n"));
         {
-          signed int __tmp192 = 1;
-          ((Cilk_set_result)((_cilk_ws), (&(__tmp192)), (sizeof((__tmp192)))));
+          signed int __tmp224 = 1;
+          ((Cilk_set_result)((_cilk_ws), (&(__tmp224)), (sizeof((__tmp224)))));
           /* expand CILK2C_BEFORE_RETURN_SLOW macro */;
           ((Cilk_cilk2c_before_return_slow_cp)((_cilk_ws), (&((_cilk_frame)->header))));
           ((Cilk_cilk2c_before_return_slow)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
@@ -5341,8 +5602,8 @@ static void _cilk_withCilk_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_
       {
         ((printf)("Don't get pizza. Nobody will eat any.\n"));
         {
-          signed int __tmp193 = 0;
-          ((Cilk_set_result)((_cilk_ws), (&(__tmp193)), (sizeof((__tmp193)))));
+          signed int __tmp225 = 0;
+          ((Cilk_set_result)((_cilk_ws), (&(__tmp225)), (sizeof((__tmp225)))));
           /* expand CILK2C_BEFORE_RETURN_SLOW macro */;
           ((Cilk_cilk2c_before_return_slow_cp)((_cilk_ws), (&((_cilk_frame)->header))));
           ((Cilk_cilk2c_before_return_slow)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
@@ -5354,8 +5615,8 @@ static void _cilk_withCilk_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_
     }
     ((printf)("Not enough information to get pizza or not!\n"));
     {
-      signed int __tmp194 = (-1);
-      ((Cilk_set_result)((_cilk_ws), (&(__tmp194)), (sizeof((__tmp194)))));
+      signed int __tmp226 = (-1);
+      ((Cilk_set_result)((_cilk_ws), (&(__tmp226)), (sizeof((__tmp226)))));
       /* expand CILK2C_BEFORE_RETURN_SLOW macro */;
       ((Cilk_cilk2c_before_return_slow_cp)((_cilk_ws), (&((_cilk_frame)->header))));
       ((Cilk_cilk2c_before_return_slow)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
@@ -5407,15 +5668,15 @@ signed int withCilk(CilkWorkerState  *const  _cilk_ws, signed int  * arr, signed
   ((Cilk_cilk2c_start_thread_fast_cp)((_cilk_ws), (&((_cilk_frame)->header))));
   ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
   {
-    struct _template__Lattice__pointer__tag_struct_VoteSet_42__  *D = ((_template__newLattice__pointer__tag_struct_VoteSet_42__)(((Empty)()), ((Top)()), (leq), (lub), (eq), (showVoteSet)));
-    struct _template__Lvar__pointer__tag_struct_VoteSet_42__  *votes = ((_template__new__pointer__tag_struct_VoteSet_42__)((D)));
-    struct _template__ActivationSet__pointer__tag_struct_VoteSet_42__  *noPizza = ((_template__newActivationSet__pointer__tag_struct_VoteSet_42__)((D), 1));
-    ((_template__addAct__pointer__tag_struct_VoteSet_42__)((noPizza), ((Set)(((Horace)(((No)()))), ((Set)(((Kat)(((No)()))), ((Set)(((Franz)(((No)()))), ((Empty)())))))))));
-    struct _template__ActivationSet__pointer__tag_struct_VoteSet_42__  *yesPizza = ((_template__newActivationSet__pointer__tag_struct_VoteSet_42__)((D), 20));
-    ((_template__addAct__pointer__tag_struct_VoteSet_42__)((yesPizza), ((Set)(((Horace)(((Yes)()))), ((Empty)())))));
-    ((_template__addAct__pointer__tag_struct_VoteSet_42__)((yesPizza), ((Set)(((Kat)(((Yes)()))), ((Empty)())))));
-    ((_template__addAct__pointer__tag_struct_VoteSet_42__)((yesPizza), ((Set)(((Franz)(((Yes)()))), ((Empty)())))));
-    struct _template__ThresholdSet__pointer__tag_struct_VoteSet_42__  *t = ((_template__addThreshold__pointer__tag_struct_VoteSet_42__)(((_template__addThreshold__pointer__tag_struct_VoteSet_42__)(((_template__newThresholdSet__pointer__tag_struct_VoteSet_42__)((D), 2)), (yesPizza))), (noPizza)));
+    struct _template__Lattice__pointer__tag_struct_VoteSet_58__  *D = ((_template__newLattice__pointer__tag_struct_VoteSet_58__)(((Empty)()), ((Top)()), (leq), (lub), (eq), (showVoteSet)));
+    struct _template__Lvar__pointer__tag_struct_VoteSet_58__  *votes = ((_template__new__pointer__tag_struct_VoteSet_58__)((D)));
+    struct _template__ActivationSet__pointer__tag_struct_VoteSet_58__  *noPizza = ((_template__newActivationSet__pointer__tag_struct_VoteSet_58__)((D), 1));
+    ((_template__addAct__pointer__tag_struct_VoteSet_58__)((noPizza), ((Set)(((Horace)(((No)()))), ((Set)(((Kat)(((No)()))), ((Set)(((Franz)(((No)()))), ((Empty)())))))))));
+    struct _template__ActivationSet__pointer__tag_struct_VoteSet_58__  *yesPizza = ((_template__newActivationSet__pointer__tag_struct_VoteSet_58__)((D), 20));
+    ((_template__addAct__pointer__tag_struct_VoteSet_58__)((yesPizza), ((Set)(((Horace)(((Yes)()))), ((Empty)())))));
+    ((_template__addAct__pointer__tag_struct_VoteSet_58__)((yesPizza), ((Set)(((Kat)(((Yes)()))), ((Empty)())))));
+    ((_template__addAct__pointer__tag_struct_VoteSet_58__)((yesPizza), ((Set)(((Franz)(((Yes)()))), ((Empty)())))));
+    struct _template__ThresholdSet__pointer__tag_struct_VoteSet_58__  *t = ((_template__addThreshold__pointer__tag_struct_VoteSet_58__)(((_template__addThreshold__pointer__tag_struct_VoteSet_58__)(((_template__newThresholdSet__pointer__tag_struct_VoteSet_58__)((D), 2)), (yesPizza))), (noPizza)));
     YN  *kresult;
     YN  *hresult;
     YN  *fresult;
@@ -5440,11 +5701,11 @@ signed int withCilk(CilkWorkerState  *const  _cilk_ws, signed int  * arr, signed
     ((kresult) = ((getVoteSearchCilk)((_cilk_ws), (arr), (size))));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      YN  *__tmp198;
+      YN  *__tmp230;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp198) = (kresult));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp198)), (sizeof((__tmp198))))))
+        ((__tmp230) = (kresult));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp230)), (sizeof((__tmp230))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return 0;
@@ -5479,11 +5740,11 @@ signed int withCilk(CilkWorkerState  *const  _cilk_ws, signed int  * arr, signed
     ((hresult) = ((getVoteSearchCilk)((_cilk_ws), (arr), (size))));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      YN  *__tmp199;
+      YN  *__tmp231;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp199) = (hresult));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp199)), (sizeof((__tmp199))))))
+        ((__tmp231) = (hresult));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp231)), (sizeof((__tmp231))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return 0;
@@ -5518,11 +5779,11 @@ signed int withCilk(CilkWorkerState  *const  _cilk_ws, signed int  * arr, signed
     ((fresult) = ((getVoteSearchCilk)((_cilk_ws), (arr), (size))));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      YN  *__tmp200;
+      YN  *__tmp232;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp200) = (fresult));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp200)), (sizeof((__tmp200))))))
+        ((__tmp232) = (fresult));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp232)), (sizeof((__tmp232))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return 0;
@@ -5539,10 +5800,10 @@ signed int withCilk(CilkWorkerState  *const  _cilk_ws, signed int  * arr, signed
     /* expand CILK2C_AT_SYNC_FAST() macro */;
     ((Cilk_cilk2c_at_sync_fast_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
     ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
-    ((_template__put__pointer__tag_struct_VoteSet_42__)((votes), ((Set)(((Kat)((kresult))), ((Empty)())))));
-    ((_template__put__pointer__tag_struct_VoteSet_42__)((votes), ((Set)(((Horace)((hresult))), ((Empty)())))));
-    ((_template__put__pointer__tag_struct_VoteSet_42__)((votes), ((Set)(((Franz)((fresult))), ((Empty)())))));
-    struct _template__ActivationSet__pointer__tag_struct_VoteSet_42__  *getPiz = ((_template__get__pointer__tag_struct_VoteSet_42__)((votes), (t)));
+    ((_template__put__pointer__tag_struct_VoteSet_58__)((votes), ((Set)(((Kat)((kresult))), ((Empty)())))));
+    ((_template__put__pointer__tag_struct_VoteSet_58__)((votes), ((Set)(((Horace)((hresult))), ((Empty)())))));
+    ((_template__put__pointer__tag_struct_VoteSet_58__)((votes), ((Set)(((Franz)((fresult))), ((Empty)())))));
+    struct _template__ActivationSet__pointer__tag_struct_VoteSet_58__  *getPiz = ((_template__get__pointer__tag_struct_VoteSet_58__)((votes), (t)));
     if (((getPiz) == (yesPizza)))
     {
       {
@@ -5680,11 +5941,11 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
     ((((_cilk_frame)->scope487).result) = (result));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      signed int __tmp207;
+      signed int __tmp239;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp207) = (result));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp207)), (sizeof((__tmp207))))))
+        ((__tmp239) = (result));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp239)), (sizeof((__tmp239))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return ;
@@ -5763,8 +6024,8 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
     ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
     ((free)((arr)));
     {
-      signed int __tmp208 = 1;
-      ((Cilk_set_result)((_cilk_ws), (&(__tmp208)), (sizeof((__tmp208)))));
+      signed int __tmp240 = 1;
+      ((Cilk_set_result)((_cilk_ws), (&(__tmp240)), (sizeof((__tmp240)))));
       /* expand CILK2C_BEFORE_RETURN_SLOW macro */;
       ((Cilk_cilk2c_before_return_slow_cp)((_cilk_ws), (&((_cilk_frame)->header))));
       ((Cilk_cilk2c_before_return_slow)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
@@ -5836,11 +6097,11 @@ signed int cilk_main(CilkWorkerState  *const  _cilk_ws, signed int  argc, char  
     ((result) = ((withCilk)((_cilk_ws), (arr), (size))));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      signed int __tmp210;
+      signed int __tmp242;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp210) = (result));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp210)), (sizeof((__tmp210))))))
+        ((__tmp242) = (result));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp242)), (sizeof((__tmp242))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return 0;

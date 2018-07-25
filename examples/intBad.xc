@@ -38,14 +38,25 @@ string showInteger(int n) {
   return show(n);
 }
 
+struct putStruct {
+  Lvar<int>* x;
+  int val;
+};
+
+void * putVoid(void* valStruct) {
+  struct putStruct * p = (struct putStruct*) valStruct;
+  put(p->x, p->val);
+}
+
 cilk int putCilk(Lvar<int>* x, int val, int count);
-cilk int putCilk(Lvar<int>* x, int val, int count) {
+cilk int putCilk(Lvar<int>* x, int val, int count) { 
   if (count < 1000) {
     int result;
     spawn result = putCilk(x, val, count+1);
     sync;
     cilk return result;
   }
+  printf("put\n");
   cilk return put(x, val);
 }
 
@@ -58,10 +69,10 @@ cilk ActivationSet<int> * getCilk(Lvar<int>* x, ThresholdSet<int>* t, int count)
     cilk return result;
   }
   else {
+    printf("get\n");
     cilk return get(x, t);
   }
 }
-
 cilk ActivationSet<int> * putGetEx(Lvar<int> *x, ThresholdSet<int>* t) {
   ActivationSet<int> * y;
   int result1, result2;
@@ -73,8 +84,12 @@ cilk ActivationSet<int> * putGetEx(Lvar<int> *x, ThresholdSet<int>* t) {
 }
 
 cilk int main(int argc, char **argv) {
+
   Lattice<int> * D = lattice(0, 100, leqInt, lubInt, eqInt, showInteger);
   Lvar<int> *x = newLvar(D);
+
+  inst _declarePut<int>(x, 3);
+  inst _declarePut<int>(x, 7);
 
   ActivationSet<int> * a1 = activationSet(D){6};
   ThresholdSet<int> * t = thresholdSet(D){a1};
