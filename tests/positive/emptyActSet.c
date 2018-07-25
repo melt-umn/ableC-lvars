@@ -2838,36 +2838,10 @@ signed int main(signed int  argc, char  * * argv)
         ((printf)("result1: NULL\n"));
       }
     }
-    struct _template__Lvar__pointer__tag_struct_State_37__  *boolPair2 = ((_template__new__pointer__tag_struct_State_37__)((l)));
-    ((_template__put__pointer__tag_struct_State_37__)((boolPair2), ((Pair)(((T)()), ((Bot)())))));
-    ((_template__put__pointer__tag_struct_State_37__)((boolPair2), ((Pair)(((Bot)()), ((F)())))));
-    struct _template__ActivationSet__pointer__tag_struct_State_37__  *result2 = ((_template__get__pointer__tag_struct_State_37__)((boolPair2), (thresh)));
-    if (((result2) != (((void *)0))))
-    {
-      {
-        ((printf)("result2: %s\n", (((_template__showActivation__pointer__tag_struct_State_37__)((result2))).text)));
-      }
-    } else {
-      {
-        ((printf)("result2: NULL\n"));
-      }
-    }
-    signed int mainRes;
-    if ((((result1) == (tSet)) && ((result2) == (fSet))))
-    {
-      {
-        ((mainRes) = 1);
-      }
-    } else {
-      {
-        ((mainRes) = 0);
-      }
-    }
     ((free)((l)));
     ((_template__freeActivation__pointer__tag_struct_State_37__)((fSet)));
     ((_template__freeActivation__pointer__tag_struct_State_37__)((tSet)));
     ((_template__freeThreshold__pointer__tag_struct_State_37__)((thresh)));
     ((free)((boolPair1)));
-    ((free)((boolPair2)));
   }
 }

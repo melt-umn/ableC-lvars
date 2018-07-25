@@ -30,7 +30,7 @@ XC_INCLUDE_DIRS=$(wildcard $(EXTS_BASE)/*/include)
 override XCFLAGS+=$(addprefix -I,$(XC_INCLUDE_DIRS)) -I/usr/local/include/cilk
 
 # Flags passed to the C compiler, e.g. to enable various compiler extensions
-override CFLAGS+= -g -Og
+override CFLAGS+= -g -O2
 #-fdump-tree-optimized 
 
 # All directories contining extension libraries that may be linked

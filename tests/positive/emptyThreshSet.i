@@ -3280,32 +3280,6 @@ int main (int argc, char **argv) {
   ThresholdSet<State*>* thresh = thresholdSet(l);
   printf("thresh: %s\n", show(thresh).text);
 
-  Lvar<State*>* boolPair1 = newLvar(l);
-  put(boolPair1, Pair(T(), Bot()));
-  put(boolPair1, Pair(Bot(), T()));
-  ActivationSet<State*>* result1 = get(boolPair1, thresh);
-
-  if (result1 != ((void *)0)) {
-    printf("result1: %s\n", show(result1).text);
-  }
-  else {
-    printf("result1: NULL\n");
-  }
-
-  Lvar<State*>* boolPair2 = newLvar(l);
-  put(boolPair2, Pair(T(), Bot()));
-  put(boolPair2, Pair(Bot(), F()));
-  ActivationSet<State*>* result2 = get(boolPair2, thresh);
-
-  if (result2 != ((void *)0)) {
-    printf("result2: %s\n", show(result2).text);
-  }
-  else {
-    printf("result2: NULL\n");
-  }
-
   free(l);
   freeSet(thresh);
-  free(boolPair1);
-  free(boolPair2);
 }

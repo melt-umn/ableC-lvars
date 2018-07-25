@@ -2604,107 +2604,7 @@ static struct _string_s _template__showThreshold__pointer__tag_struct_State_37__
     return ((_append_string)((result), ((strCharPointer)("}"))));
   }
 }
-typedef State  *_template_param_unused_2501;
-typedef __attribute__(()) struct _template__Lvar__pointer__tag_struct_State_37__ _template__Lvar__pointer__tag_struct_State_37__;
-struct _template__Lvar__pointer__tag_struct_State_37__ {
-  struct _template__Lattice__pointer__tag_struct_State_37__  *_lattice;
-  State  *_value;
-  signed int _frozen;
-  struct _template__ThresholdSet__pointer__tag_struct_State_37__  *_threshold;
-  pthread_mutex_t _mutex;
-  pthread_cond_t _cond;
-  
-};
-typedef State  *_template_param_unused_2505;
-static struct _template__Lvar__pointer__tag_struct_State_37__  *_template__new__pointer__tag_struct_State_37__(struct _template__Lattice__pointer__tag_struct_State_37__  * l)
-{
-
-  {
-    struct _template__Lvar__pointer__tag_struct_State_37__  *lvarNew = ((malloc)((sizeof(struct _template__Lvar__pointer__tag_struct_State_37__))));
-    (((lvarNew)->_value) = ((l)->_bottom));
-    (((lvarNew)->_lattice) = (l));
-    (((lvarNew)->_frozen) = 0);
-    (((lvarNew)->_cond) = ((pthread_cond_t){{0, 0, 0, 0, 0, ((void *)0), 0, 0}}));
-    (((lvarNew)->_mutex) = ((pthread_mutex_t){{0, 0, 0, 0, 0, 0, 0, {0, 0}}}));
-    return (lvarNew);
-  }
-}
-typedef State  *_template_param_unused_2509;
-static signed int _template__put__pointer__tag_struct_State_37__(struct _template__Lvar__pointer__tag_struct_State_37__  * l, State  * newState)
-{
-
-  {
-    if (((l)->_frozen))
-    {
-      {
-        return 0;
-      }
-    } else {
-      ;
-    }
-    ((pthread_mutex_lock)((&(((l)->_mutex)))));
-    State  *oldState = ((l)->_value);
-    State  *newValue = ((((l)->_lattice)->_lub)((oldState), (newState)));
-    if (((((l)->_lattice)->_eq)((((l)->_lattice)->_top), (newValue))))
-    {
-      {
-        ((pthread_mutex_unlock)((&(((l)->_mutex)))));
-        return 0;
-      }
-    } else {
-      ;
-    }
-    (((l)->_value) = (newValue));
-    ((pthread_cond_broadcast)((&(((l)->_cond)))));
-    ((pthread_mutex_unlock)((&(((l)->_mutex)))));
-    return 1;
-  }
-}
-typedef State  *_template_param_unused_2525;
-typedef State  *_template_param_unused_2529;
-static struct _template__ActivationSet__pointer__tag_struct_State_37__  *_template__thresholdReached__pointer__tag_struct_State_37__(struct _template__Lvar__pointer__tag_struct_State_37__  * l, struct _template__ThresholdSet__pointer__tag_struct_State_37__  * t)
-{
-
-  {
-    for (signed int i = 0; ((i) < ((t)->_index)); ((i)++))
-    {
-      {
-        for (signed int j = 0; ((j) < ((((t)->_a_sets)[(i)])->_index)); ((j)++))
-        {
-          {
-            if (((((l)->_lattice)->_leq)((((((t)->_a_sets)[(i)])->_set)[(j)]), ((l)->_value))))
-            {
-              {
-                return (((t)->_a_sets)[(i)]);
-              }
-            } else {
-              ;
-            }
-          }
-        }
-      }
-    }
-    return (((void *)0));
-  }
-}
-static struct _template__ActivationSet__pointer__tag_struct_State_37__  *_template__get__pointer__tag_struct_State_37__(struct _template__Lvar__pointer__tag_struct_State_37__  * l, struct _template__ThresholdSet__pointer__tag_struct_State_37__  * t)
-{
-
-  {
-    ((pthread_mutex_lock)((&(((l)->_mutex)))));
-    struct _template__ActivationSet__pointer__tag_struct_State_37__  *actReached = ((_template__thresholdReached__pointer__tag_struct_State_37__)((l), (t)));
-    while (((actReached) == (((void *)0))))
-    {
-      {
-        ((actReached) = ((_template__thresholdReached__pointer__tag_struct_State_37__)((l), (t))));
-        ((pthread_cond_wait)((&(((l)->_cond))), (&(((l)->_mutex)))));
-      }
-    }
-    ((pthread_mutex_unlock)((&(((l)->_mutex)))));
-    return (actReached);
-  }
-}
-typedef State  *_template_param_unused_2533;
+typedef State  *_template_param_unused_2504;
 static signed int _template__freeThreshold__pointer__tag_struct_State_37__(struct _template__ThresholdSet__pointer__tag_struct_State_37__  * t)
 {
 
@@ -2721,37 +2621,7 @@ signed int main(signed int  argc, char  * * argv)
     struct _template__Lattice__pointer__tag_struct_State_37__  *l = ((_template__newLattice__pointer__tag_struct_State_37__)(((Pair)(((Bot)()), ((Bot)()))), ((Top)()), (leq), (lub), (eq), (showState)));
     struct _template__ThresholdSet__pointer__tag_struct_State_37__  *thresh = ((_template__newThresholdSet__pointer__tag_struct_State_37__)((l), 20));
     ((printf)("thresh: %s\n", (((_template__showThreshold__pointer__tag_struct_State_37__)((thresh))).text)));
-    struct _template__Lvar__pointer__tag_struct_State_37__  *boolPair1 = ((_template__new__pointer__tag_struct_State_37__)((l)));
-    ((_template__put__pointer__tag_struct_State_37__)((boolPair1), ((Pair)(((T)()), ((Bot)())))));
-    ((_template__put__pointer__tag_struct_State_37__)((boolPair1), ((Pair)(((Bot)()), ((T)())))));
-    struct _template__ActivationSet__pointer__tag_struct_State_37__  *result1 = ((_template__get__pointer__tag_struct_State_37__)((boolPair1), (thresh)));
-    if (((result1) != (((void *)0))))
-    {
-      {
-        ((printf)("result1: %s\n", (((_template__showActivation__pointer__tag_struct_State_37__)((result1))).text)));
-      }
-    } else {
-      {
-        ((printf)("result1: NULL\n"));
-      }
-    }
-    struct _template__Lvar__pointer__tag_struct_State_37__  *boolPair2 = ((_template__new__pointer__tag_struct_State_37__)((l)));
-    ((_template__put__pointer__tag_struct_State_37__)((boolPair2), ((Pair)(((T)()), ((Bot)())))));
-    ((_template__put__pointer__tag_struct_State_37__)((boolPair2), ((Pair)(((Bot)()), ((F)())))));
-    struct _template__ActivationSet__pointer__tag_struct_State_37__  *result2 = ((_template__get__pointer__tag_struct_State_37__)((boolPair2), (thresh)));
-    if (((result2) != (((void *)0))))
-    {
-      {
-        ((printf)("result2: %s\n", (((_template__showActivation__pointer__tag_struct_State_37__)((result2))).text)));
-      }
-    } else {
-      {
-        ((printf)("result2: NULL\n"));
-      }
-    }
     ((free)((l)));
     ((_template__freeThreshold__pointer__tag_struct_State_37__)((thresh)));
-    ((free)((boolPair1)));
-    ((free)((boolPair2)));
   }
 }

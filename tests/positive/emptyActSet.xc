@@ -202,30 +202,9 @@ int main (int argc, char **argv) {
     printf("result1: NULL\n");
   }
 
-  Lvar<State*>* boolPair2 = newLvar(l);
-  put(boolPair2, Pair(T(), Bot()));
-  put(boolPair2, Pair(Bot(), F()));
-  ActivationSet<State*>* result2 = get(boolPair2, thresh);
-
-  if (result2 != NULL) {
-    printf("result2: %s\n", show(result2).text);
-  }
-  else {
-    printf("result2: NULL\n");
-  }
-
-  int mainRes;
-  if (result1 == tSet && result2 == fSet) {
-    mainRes = 1;
-  }
-  else {
-    mainRes = 0;
-  }
-
   free(l); 
   freeSet(fSet);
   freeSet(tSet);
   freeSet(thresh);
   free(boolPair1);
-  free(boolPair2);
 }

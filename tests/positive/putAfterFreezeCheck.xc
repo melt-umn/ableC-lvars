@@ -196,33 +196,10 @@ int main (int argc, char **argv) {
   put(boolPair1, Pair(T(), Bot()));
   freeze(boolPair1);
   put(boolPair1, Pair(Bot(), T()));
-  ActivationSet<State*>* result1 = get(boolPair1, thresh);
-
-  if (result1 != NULL) {
-    printf("result1: %s\n", show(result1).text);
-  }
-  else {
-    printf("result1: NULL\n");
-  }
-
-  Lvar<State*>* boolPair2 = newLvar(l);
-  put(boolPair2, Pair(T(), Bot()));
-  put(boolPair2, Pair(Bot(), F()));
-  ActivationSet<State*>* result2 = get(boolPair2, thresh);
-  printf("result2: %s\n", show(result2).text);
-
-  int mainRes;
-  if (result1 == tSet && result2 == fSet) {
-    mainRes = 1;
-  }
-  else {
-    mainRes = 0;
-  }
-
+ 
   free(l); 
   freeSet(fSet);
   freeSet(tSet);
   freeSet(thresh);
   free(boolPair1);
-  free(boolPair2);
 }
