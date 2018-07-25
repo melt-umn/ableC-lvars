@@ -779,6 +779,249 @@ static inline struct _string_s _showPointer(const char  * baseTypeName, void  * 
     return ((struct _string_s){((strlen)((result))), (result)});
   }
 }
+extern signed long __sysconf(signed int  );
+typedef __clock_t clock_t;
+typedef __time_t time_t;
+struct timespec {
+  __time_t tv_sec;
+  __syscall_slong_t tv_nsec;
+  
+};
+struct tm {
+  signed int tm_sec;
+  signed int tm_min;
+  signed int tm_hour;
+  signed int tm_mday;
+  signed int tm_mon;
+  signed int tm_year;
+  signed int tm_wday;
+  signed int tm_yday;
+  signed int tm_isdst;
+  signed long __tm_gmtoff;
+  const char  *__tm_zone;
+  
+};
+extern clock_t clock(void) __attribute__((__nothrow__, __leaf__));
+extern time_t time(time_t  * __timer) __attribute__((__nothrow__, __leaf__));
+extern double difftime(time_t  __time1, time_t  __time0) __attribute__((__nothrow__, __leaf__)) __attribute__((__const__));
+extern time_t mktime(struct tm  * __tp) __attribute__((__nothrow__, __leaf__));
+extern size_t strftime(char  *__restrict  __s, size_t  __maxsize, const char  *__restrict  __format, const struct tm  *__restrict  __tp) __attribute__((__nothrow__, __leaf__));
+extern struct tm  *gmtime(const time_t  * __timer) __attribute__((__nothrow__, __leaf__));
+extern struct tm  *localtime(const time_t  * __timer) __attribute__((__nothrow__, __leaf__));
+extern struct tm  *gmtime_r(const time_t  *__restrict  __timer, struct tm  *__restrict  __tp) __attribute__((__nothrow__, __leaf__));
+extern struct tm  *localtime_r(const time_t  *__restrict  __timer, struct tm  *__restrict  __tp) __attribute__((__nothrow__, __leaf__));
+extern char  *asctime(const struct tm  * __tp) __attribute__((__nothrow__, __leaf__));
+extern char  *ctime(const time_t  * __timer) __attribute__((__nothrow__, __leaf__));
+extern char  *asctime_r(const struct tm  *__restrict  __tp, char  *__restrict  __buf) __attribute__((__nothrow__, __leaf__));
+extern char  *ctime_r(const time_t  *__restrict  __timer, char  *__restrict  __buf) __attribute__((__nothrow__, __leaf__));
+extern char  *__tzname[2];
+extern signed int __daylight;
+extern signed long __timezone;
+extern char  *tzname[2];
+extern void tzset(void) __attribute__((__nothrow__, __leaf__));
+extern signed int timespec_get(struct timespec  * __ts, signed int  __base) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+typedef __pid_t pid_t;
+struct sched_param {
+  signed int __sched_priority;
+  
+};
+struct __sched_param {
+  signed int __sched_priority;
+  
+};
+typedef unsigned long __cpu_mask;
+typedef struct  {
+  __cpu_mask __bits[(1024 / ((8 * (sizeof(__cpu_mask)))))];
+  
+} cpu_set_t;
+extern signed int __sched_cpucount(size_t  __setsize, const cpu_set_t  * __setp) __attribute__((__nothrow__, __leaf__));
+extern cpu_set_t  *__sched_cpualloc(size_t  __count) __attribute__((__nothrow__, __leaf__));
+extern void __sched_cpufree(cpu_set_t  * __set) __attribute__((__nothrow__, __leaf__));
+extern signed int sched_setparam(__pid_t  __pid, const struct sched_param  * __param) __attribute__((__nothrow__, __leaf__));
+extern signed int sched_getparam(__pid_t  __pid, struct sched_param  * __param) __attribute__((__nothrow__, __leaf__));
+extern signed int sched_setscheduler(__pid_t  __pid, signed int  __policy, const struct sched_param  * __param) __attribute__((__nothrow__, __leaf__));
+extern signed int sched_getscheduler(__pid_t  __pid) __attribute__((__nothrow__, __leaf__));
+extern signed int sched_yield(void) __attribute__((__nothrow__, __leaf__));
+extern signed int sched_get_priority_max(signed int  __algorithm) __attribute__((__nothrow__, __leaf__));
+extern signed int sched_get_priority_min(signed int  __algorithm) __attribute__((__nothrow__, __leaf__));
+extern signed int sched_rr_get_interval(__pid_t  __pid, struct timespec  * __t) __attribute__((__nothrow__, __leaf__));
+typedef unsigned long pthread_t;
+union pthread_attr_t {
+  char __size[56];
+  signed long __align;
+  
+};
+typedef union pthread_attr_t pthread_attr_t;
+typedef struct __pthread_internal_list {
+  struct __pthread_internal_list  *__prev;
+  struct __pthread_internal_list  *__next;
+  
+} __pthread_list_t;
+typedef union  {
+  struct __pthread_mutex_s {
+    signed int __lock;
+    unsigned int __count;
+    signed int __owner;
+    unsigned int __nusers;
+    signed int __kind;
+    signed short __spins;
+    signed short __elision;
+    __pthread_list_t __list;
+    
+  } __data;
+  char __size[40];
+  signed long __align;
+  
+} pthread_mutex_t;
+typedef union  {
+  char __size[4];
+  signed int __align;
+  
+} pthread_mutexattr_t;
+typedef union  {
+  struct  {
+    signed int __lock;
+    unsigned int __futex;
+    unsigned long long __total_seq;
+    unsigned long long __wakeup_seq;
+    unsigned long long __woken_seq;
+    void  *__mutex;
+    unsigned int __nwaiters;
+    unsigned int __broadcast_seq;
+    
+  } __data;
+  char __size[48];
+  signed long long __align;
+  
+} pthread_cond_t;
+typedef union  {
+  char __size[4];
+  signed int __align;
+  
+} pthread_condattr_t;
+typedef unsigned int pthread_key_t;
+typedef signed int pthread_once_t;
+typedef signed long __jmp_buf[8];
+enum  {
+  PTHREAD_CREATE_JOINABLE,
+  PTHREAD_CREATE_DETACHED
+};
+enum  {
+  PTHREAD_MUTEX_TIMED_NP,
+  PTHREAD_MUTEX_RECURSIVE_NP,
+  PTHREAD_MUTEX_ERRORCHECK_NP,
+  PTHREAD_MUTEX_ADAPTIVE_NP
+};
+enum  {
+  PTHREAD_INHERIT_SCHED,
+  PTHREAD_EXPLICIT_SCHED
+};
+enum  {
+  PTHREAD_SCOPE_SYSTEM,
+  PTHREAD_SCOPE_PROCESS
+};
+enum  {
+  PTHREAD_PROCESS_PRIVATE,
+  PTHREAD_PROCESS_SHARED
+};
+struct _pthread_cleanup_buffer {
+  void ( *__routine)(void  * );
+  void  *__arg;
+  signed int __canceltype;
+  struct _pthread_cleanup_buffer  *__prev;
+  
+};
+enum  {
+  PTHREAD_CANCEL_ENABLE,
+  PTHREAD_CANCEL_DISABLE
+};
+enum  {
+  PTHREAD_CANCEL_DEFERRED,
+  PTHREAD_CANCEL_ASYNCHRONOUS
+};
+extern signed int pthread_create(pthread_t  *__restrict  __newthread, const pthread_attr_t  *__restrict  __attr, void  *( * __start_routine)(void  * ), void  *__restrict  __arg) __attribute__((__nothrow__)) __attribute__((__nonnull__(1, 3)));
+extern void pthread_exit(void  * __retval) __attribute__((__noreturn__));
+extern signed int pthread_join(pthread_t  __th, void  * * __thread_return);
+extern signed int pthread_detach(pthread_t  __th) __attribute__((__nothrow__, __leaf__));
+extern pthread_t pthread_self(void) __attribute__((__nothrow__, __leaf__)) __attribute__((__const__));
+extern signed int pthread_equal(pthread_t  __thread1, pthread_t  __thread2) __attribute__((__nothrow__, __leaf__)) __attribute__((__const__));
+extern signed int pthread_attr_init(pthread_attr_t  * __attr) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_attr_destroy(pthread_attr_t  * __attr) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_attr_getdetachstate(const pthread_attr_t  * __attr, signed int  * __detachstate) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1, 2)));
+extern signed int pthread_attr_setdetachstate(pthread_attr_t  * __attr, signed int  __detachstate) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_attr_getguardsize(const pthread_attr_t  * __attr, size_t  * __guardsize) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1, 2)));
+extern signed int pthread_attr_setguardsize(pthread_attr_t  * __attr, size_t  __guardsize) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_attr_getschedparam(const pthread_attr_t  *__restrict  __attr, struct sched_param  *__restrict  __param) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1, 2)));
+extern signed int pthread_attr_setschedparam(pthread_attr_t  *__restrict  __attr, const struct sched_param  *__restrict  __param) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1, 2)));
+extern signed int pthread_attr_getschedpolicy(const pthread_attr_t  *__restrict  __attr, signed int  *__restrict  __policy) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1, 2)));
+extern signed int pthread_attr_setschedpolicy(pthread_attr_t  * __attr, signed int  __policy) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_attr_getinheritsched(const pthread_attr_t  *__restrict  __attr, signed int  *__restrict  __inherit) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1, 2)));
+extern signed int pthread_attr_setinheritsched(pthread_attr_t  * __attr, signed int  __inherit) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_attr_getscope(const pthread_attr_t  *__restrict  __attr, signed int  *__restrict  __scope) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1, 2)));
+extern signed int pthread_attr_setscope(pthread_attr_t  * __attr, signed int  __scope) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_attr_getstackaddr(const pthread_attr_t  *__restrict  __attr, void  * *__restrict  __stackaddr) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1, 2))) __attribute__((__deprecated__));
+extern signed int pthread_attr_setstackaddr(pthread_attr_t  * __attr, void  * __stackaddr) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1))) __attribute__((__deprecated__));
+extern signed int pthread_attr_getstacksize(const pthread_attr_t  *__restrict  __attr, size_t  *__restrict  __stacksize) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1, 2)));
+extern signed int pthread_attr_setstacksize(pthread_attr_t  * __attr, size_t  __stacksize) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_setschedparam(pthread_t  __target_thread, signed int  __policy, const struct sched_param  * __param) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(3)));
+extern signed int pthread_getschedparam(pthread_t  __target_thread, signed int  *__restrict  __policy, struct sched_param  *__restrict  __param) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(2, 3)));
+extern signed int pthread_setschedprio(pthread_t  __target_thread, signed int  __prio) __attribute__((__nothrow__, __leaf__));
+extern signed int pthread_once(pthread_once_t  * __once_control, void ( * __init_routine)(void)) __attribute__((__nonnull__(1, 2)));
+extern signed int pthread_setcancelstate(signed int  __state, signed int  * __oldstate);
+extern signed int pthread_setcanceltype(signed int  __type, signed int  * __oldtype);
+extern signed int pthread_cancel(pthread_t  __th);
+extern void pthread_testcancel(void);
+typedef struct  {
+  struct  {
+    __jmp_buf __cancel_jmp_buf;
+    signed int __mask_was_saved;
+    
+  } __cancel_jmp_buf[1];
+  void  *__pad[4];
+  
+} __pthread_unwind_buf_t __attribute__((__aligned__));
+struct __pthread_cleanup_frame {
+  void ( *__cancel_routine)(void  * );
+  void  *__cancel_arg;
+  signed int __do_it;
+  signed int __cancel_type;
+  
+};
+extern void __pthread_register_cancel(__pthread_unwind_buf_t  * __buf);
+extern void __pthread_unregister_cancel(__pthread_unwind_buf_t  * __buf);
+extern void __pthread_unwind_next(__pthread_unwind_buf_t  * __buf) __attribute__((__noreturn__)) __attribute__((__weak__));
+struct __jmp_buf_tag;
+extern signed int __sigsetjmp(struct __jmp_buf_tag  * __env, signed int  __savemask) __attribute__((__nothrow__));
+extern signed int pthread_mutex_init(pthread_mutex_t  * __mutex, const pthread_mutexattr_t  * __mutexattr) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_mutex_destroy(pthread_mutex_t  * __mutex) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_mutex_trylock(pthread_mutex_t  * __mutex) __attribute__((__nothrow__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_mutex_lock(pthread_mutex_t  * __mutex) __attribute__((__nothrow__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_mutex_unlock(pthread_mutex_t  * __mutex) __attribute__((__nothrow__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_mutex_getprioceiling(const pthread_mutex_t  *__restrict  __mutex, signed int  *__restrict  __prioceiling) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1, 2)));
+extern signed int pthread_mutex_setprioceiling(pthread_mutex_t  *__restrict  __mutex, signed int  __prioceiling, signed int  *__restrict  __old_ceiling) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1, 3)));
+extern signed int pthread_mutexattr_init(pthread_mutexattr_t  * __attr) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_mutexattr_destroy(pthread_mutexattr_t  * __attr) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_mutexattr_getpshared(const pthread_mutexattr_t  *__restrict  __attr, signed int  *__restrict  __pshared) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1, 2)));
+extern signed int pthread_mutexattr_setpshared(pthread_mutexattr_t  * __attr, signed int  __pshared) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_mutexattr_getprotocol(const pthread_mutexattr_t  *__restrict  __attr, signed int  *__restrict  __protocol) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1, 2)));
+extern signed int pthread_mutexattr_setprotocol(pthread_mutexattr_t  * __attr, signed int  __protocol) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_mutexattr_getprioceiling(const pthread_mutexattr_t  *__restrict  __attr, signed int  *__restrict  __prioceiling) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1, 2)));
+extern signed int pthread_mutexattr_setprioceiling(pthread_mutexattr_t  * __attr, signed int  __prioceiling) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_cond_init(pthread_cond_t  *__restrict  __cond, const pthread_condattr_t  *__restrict  __cond_attr) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_cond_destroy(pthread_cond_t  * __cond) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_cond_signal(pthread_cond_t  * __cond) __attribute__((__nothrow__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_cond_broadcast(pthread_cond_t  * __cond) __attribute__((__nothrow__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_cond_wait(pthread_cond_t  *__restrict  __cond, pthread_mutex_t  *__restrict  __mutex) __attribute__((__nonnull__(1, 2)));
+extern signed int pthread_cond_timedwait(pthread_cond_t  *__restrict  __cond, pthread_mutex_t  *__restrict  __mutex, const struct timespec  *__restrict  __abstime) __attribute__((__nonnull__(1, 2, 3)));
+extern signed int pthread_condattr_init(pthread_condattr_t  * __attr) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_condattr_destroy(pthread_condattr_t  * __attr) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_condattr_getpshared(const pthread_condattr_t  *__restrict  __attr, signed int  *__restrict  __pshared) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1, 2)));
+extern signed int pthread_condattr_setpshared(pthread_condattr_t  * __attr, signed int  __pshared) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_key_create(pthread_key_t  * __key, void ( * __destr_function)(void  * )) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+extern signed int pthread_key_delete(pthread_key_t  __key) __attribute__((__nothrow__, __leaf__));
+extern void  *pthread_getspecific(pthread_key_t  __key) __attribute__((__nothrow__, __leaf__));
+extern signed int pthread_setspecific(pthread_key_t  __key, const void  * __pointer) __attribute__((__nothrow__, __leaf__));
+extern signed int pthread_atfork(void ( * __prepare)(void), void ( * __parent)(void), void ( * __child)(void)) __attribute__((__nothrow__, __leaf__));
 signed int _lvarCheckValue = 1;
 signed int eqInt(signed int  n1, signed int  n2)
 {
@@ -851,7 +1094,7 @@ struct _template__Lattice__builtin_signed_int_ {
   struct _string_s ( *_show)();
   
 };
-typedef signed int _template_param_unused_17;
+typedef signed int _template_param_unused_34;
 static struct _template__Lattice__builtin_signed_int_  *_template__newLattice__builtin_signed_int_(signed int  least, signed int  greatest, signed int ( * leq)(), signed int ( * lub)(), signed int ( * eq)(), struct _string_s ( * showMethod)())
 {
 
@@ -866,27 +1109,11 @@ static struct _template__Lattice__builtin_signed_int_  *_template__newLattice__b
     return (l);
   }
 }
-typedef signed int _template_param_unused_18;
+typedef signed int _template_param_unused_35;
 typedef __attribute__(()) struct _template__Lvar__builtin_signed_int_ _template__Lvar__builtin_signed_int_;
-struct _template__Lvar__builtin_signed_int_ {
-  struct _template__Lattice__builtin_signed_int_  *_lattice;
-  signed int _value;
-  signed int _frozen;
-  
-};
-typedef signed int _template_param_unused_22;
-static struct _template__Lvar__builtin_signed_int_  *_template__new__builtin_signed_int_(struct _template__Lattice__builtin_signed_int_  * l)
-{
-
-  {
-    struct _template__Lvar__builtin_signed_int_  *lvarNew = ((malloc)((sizeof(struct _template__Lvar__builtin_signed_int_))));
-    (((lvarNew)->_value) = ((l)->_bottom));
-    (((lvarNew)->_lattice) = (l));
-    (((lvarNew)->_frozen) = 0);
-    return (lvarNew);
-  }
-}
-typedef signed int _template_param_unused_23;
+typedef signed int _template_param_unused_36;
+typedef __attribute__(()) struct _template__ThresholdSet__builtin_signed_int_ _template__ThresholdSet__builtin_signed_int_;
+typedef signed int _template_param_unused_37;
 typedef __attribute__(()) struct _template__ActivationSet__builtin_signed_int_ _template__ActivationSet__builtin_signed_int_;
 struct _template__ActivationSet__builtin_signed_int_ {
   signed int _size;
@@ -895,8 +1122,38 @@ struct _template__ActivationSet__builtin_signed_int_ {
   struct _template__Lattice__builtin_signed_int_  *_lattice;
   
 };
-typedef signed int _template_param_unused_43;
-typedef signed int _template_param_unused_47;
+struct _template__ThresholdSet__builtin_signed_int_ {
+  struct _template__Lattice__builtin_signed_int_  *_lattice;
+  signed int _size;
+  signed int _index;
+  struct _template__ActivationSet__builtin_signed_int_  * *_a_sets;
+  
+};
+struct _template__Lvar__builtin_signed_int_ {
+  struct _template__Lattice__builtin_signed_int_  *_lattice;
+  signed int _value;
+  signed int _frozen;
+  struct _template__ThresholdSet__builtin_signed_int_  *_threshold;
+  pthread_mutex_t _mutex;
+  pthread_cond_t _cond;
+  
+};
+typedef signed int _template_param_unused_41;
+static struct _template__Lvar__builtin_signed_int_  *_template__new__builtin_signed_int_(struct _template__Lattice__builtin_signed_int_  * l)
+{
+
+  {
+    struct _template__Lvar__builtin_signed_int_  *lvarNew = ((malloc)((sizeof(struct _template__Lvar__builtin_signed_int_))));
+    (((lvarNew)->_value) = ((l)->_bottom));
+    (((lvarNew)->_lattice) = (l));
+    (((lvarNew)->_frozen) = 0);
+    (((lvarNew)->_cond) = ((pthread_cond_t){{0, 0, 0, 0, 0, ((void *)0), 0, 0}}));
+    (((lvarNew)->_mutex) = ((pthread_mutex_t){{0, 0, 0, 0, 0, 0, 0, {0, 0}}}));
+    return (lvarNew);
+  }
+}
+typedef signed int _template_param_unused_61;
+typedef signed int _template_param_unused_65;
 static signed int _template__resizeActSet__builtin_signed_int_(struct _template__ActivationSet__builtin_signed_int_  * act, signed int  newSize)
 {
 
@@ -931,20 +1188,11 @@ static struct _template__ActivationSet__builtin_signed_int_  *_template__addAct_
     return (act);
   }
 }
-typedef signed int _template_param_unused_51;
+typedef signed int _template_param_unused_69;
 static struct _template__ActivationSet__builtin_signed_int_  *_template__newActivationSet__builtin_signed_int_(struct _template__Lattice__builtin_signed_int_  * l, signed int  size)
 {
 
   {
-    if (((size) < 0))
-    {
-      {
-        ((printf)("Can't create an activation set of negative size!\n"));
-        ((exit)(0));
-      }
-    } else {
-      ;
-    }
     struct _template__ActivationSet__builtin_signed_int_  *act = ((malloc)((sizeof(struct _template__ActivationSet__builtin_signed_int_))));
     (((act)->_size) = (size));
     (((act)->_set) = ((malloc)(((sizeof(signed int)) * (size)))));
@@ -953,73 +1201,8 @@ static struct _template__ActivationSet__builtin_signed_int_  *_template__newActi
     return (act);
   }
 }
-typedef signed int _template_param_unused_52;
-typedef __attribute__(()) struct _template__ThresholdSet__builtin_signed_int_ _template__ThresholdSet__builtin_signed_int_;
-struct _template__ThresholdSet__builtin_signed_int_ {
-  struct _template__Lattice__builtin_signed_int_  *_lattice;
-  signed int _size;
-  signed int _index;
-  struct _template__ActivationSet__builtin_signed_int_  * *_a_sets;
-  
-};
-typedef signed int _template_param_unused_240;
-typedef signed int _template_param_unused_262;
-static struct _string_s _template__showActivation__builtin_signed_int_(struct _template__ActivationSet__builtin_signed_int_  * act)
-{
-
-  {
-    struct _string_s result = ((strCharPointer)("{"));
-    signed int i = 0;
-    for(; ((i) < (((act)->_index) - 1)); ((i)++))
-    {
-      {
-        ({
-          struct _string_s  *_tmp263 = (&(result));
-          ((*(_tmp263)) = ((_append_string)((*(_tmp263)), ((_append_string)(((((act)->_lattice)->_show)((((act)->_set)[(i)]))), ((strCharPointer)(", "))))))); })
-        ;
-      }
-    }
-    for(; ((i) < ((act)->_index)); ((i)++))
-    {
-      {
-        ({
-          struct _string_s  *_tmp264 = (&(result));
-          ((*(_tmp264)) = ((_append_string)((*(_tmp264)), ((((act)->_lattice)->_show)((((act)->_set)[(i)])))))); })
-        ;
-      }
-    }
-    return ((_append_string)((result), ((strCharPointer)("}"))));
-  }
-}
-typedef signed int _template_param_unused_286;
-static struct _string_s _template__showThreshold__builtin_signed_int_(struct _template__ThresholdSet__builtin_signed_int_  * t)
-{
-
-  {
-    struct _string_s result = ((strCharPointer)("{"));
-    signed int i = 0;
-    for(; ((i) < (((t)->_index) - 1)); ((i)++))
-    {
-      {
-        ({
-          struct _string_s  *_tmp287 = (&(result));
-          ((*(_tmp287)) = ((_append_string)((*(_tmp287)), ((_append_string)(((_template__showActivation__builtin_signed_int_)((((t)->_a_sets)[(i)]))), ((strCharPointer)(", "))))))); })
-        ;
-      }
-    }
-    for(; ((i) < ((t)->_index)); ((i)++))
-    {
-      {
-        ({
-          struct _string_s  *_tmp288 = (&(result));
-          ((*(_tmp288)) = ((_append_string)((*(_tmp288)), ((_template__showActivation__builtin_signed_int_)((((t)->_a_sets)[(i)])))))); })
-        ;
-      }
-    }
-    return ((_append_string)((result), ((strCharPointer)("}"))));
-  }
-}
-typedef signed int _template_param_unused_292;
+typedef signed int _template_param_unused_89;
+typedef signed int _template_param_unused_93;
 static signed int _template__resizeThresholdSet__builtin_signed_int_(struct _template__ThresholdSet__builtin_signed_int_  * t, signed int  newSize)
 {
 
@@ -1037,66 +1220,10 @@ static signed int _template__resizeThresholdSet__builtin_signed_int_(struct _tem
     return 1;
   }
 }
-typedef signed int _template_param_unused_300;
-static signed int _template__incompat__builtin_signed_int_(struct _template__Lattice__builtin_signed_int_  * l, struct _template__ActivationSet__builtin_signed_int_  * Q, struct _template__ActivationSet__builtin_signed_int_  * R)
-{
-
-  {
-    if (((((Q)->_lattice) != (l)) || (((R)->_lattice) != (l))))
-    {
-      {
-        ((printf)("Error: The activation sets %s and %s don't belong to the same lattice!\n", (((_template__showActivation__builtin_signed_int_)((Q))).text), (((_template__showActivation__builtin_signed_int_)((R))).text)));
-        ((exit)(0));
-      }
-    } else {
-      ;
-    }
-    if (((((Q)->_lattice) != (l)) || (((R)->_lattice) != (l))))
-    {
-      {
-        return 0;
-      }
-    } else {
-      ;
-    }
-    for (signed int i = 0; ((i) < ((Q)->_index)); ((i)++))
-    {
-      {
-        for (signed int j = 0; ((j) < ((R)->_index)); ((j)++))
-        {
-          {
-            signed int q = (((Q)->_set)[(i)]);
-            signed int r = (((R)->_set)[(j)]);
-            if ((!((((l)->_eq)((((l)->_lub)((q), (r))), ((l)->_top))))))
-            {
-              {
-                ((printf)("Error: %s and %s are compatible, with lub %s!\n", ((((l)->_show)((q))).text), ((((l)->_show)((r))).text), ((((l)->_show)((((l)->_lub)((q), (r))))).text)));
-                ((exit)(0));
-                return 0;
-              }
-            } else {
-              ;
-            }
-          }
-        }
-      }
-    }
-    return 1;
-  }
-}
 static struct _template__ThresholdSet__builtin_signed_int_  *_template__addThreshold__builtin_signed_int_(struct _template__ThresholdSet__builtin_signed_int_  * t, struct _template__ActivationSet__builtin_signed_int_  * act)
 {
 
   {
-    if ((((t)->_lattice) != ((act)->_lattice)))
-    {
-      {
-        ((printf)("Error: activation set %s and threshold set %s do not have the same lattice. \n", (((_template__showActivation__builtin_signed_int_)((act))).text), (((_template__showThreshold__builtin_signed_int_)((t))).text)));
-        ((exit)(0));
-      }
-    } else {
-      ;
-    }
     if ((((t)->_index) >= ((t)->_size)))
     {
       {
@@ -1105,38 +1232,16 @@ static struct _template__ThresholdSet__builtin_signed_int_  *_template__addThres
     } else {
       ;
     }
-    for (signed int i = 0; ((i) < ((t)->_index)); ((i)++))
-    {
-      {
-        if ((!((_template__incompat__builtin_signed_int_)(((t)->_lattice), (((t)->_a_sets)[(i)]), (act)))))
-        {
-          {
-            return (t);
-          }
-        } else {
-          ;
-        }
-      }
-    }
     ((((t)->_a_sets)[((t)->_index)]) = (act));
     (((t)->_index)++);
     return (t);
   }
 }
-typedef signed int _template_param_unused_304;
+typedef signed int _template_param_unused_97;
 static struct _template__ThresholdSet__builtin_signed_int_  *_template__newThresholdSet__builtin_signed_int_(struct _template__Lattice__builtin_signed_int_  * l, signed int  size)
 {
 
   {
-    if (((size) < 0))
-    {
-      {
-        ((printf)("Error: Can't create a threshold set of negative size!\n"));
-        ((exit)(0));
-      }
-    } else {
-      ;
-    }
     struct _template__ThresholdSet__builtin_signed_int_  *t = ((malloc)((sizeof(struct _template__ThresholdSet__builtin_signed_int_))));
     (((t)->_lattice) = (l));
     (((t)->_size) = (size));
@@ -1145,7 +1250,7 @@ static struct _template__ThresholdSet__builtin_signed_int_  *_template__newThres
     return (t);
   }
 }
-typedef signed int _template_param_unused_308;
+typedef signed int _template_param_unused_101;
 static signed int _template__put__builtin_signed_int_(struct _template__Lvar__builtin_signed_int_  * l, signed int  newState)
 {
 
@@ -1153,43 +1258,35 @@ static signed int _template__put__builtin_signed_int_(struct _template__Lvar__bu
     if (((l)->_frozen))
     {
       {
-        ((printf)("Error: can't write to a frozen lvar.\n"));
-        ((exit)(0));
         return 0;
       }
     } else {
       ;
     }
+    ((pthread_mutex_lock)((&(((l)->_mutex)))));
     signed int oldState = ((l)->_value);
     signed int newValue = ((((l)->_lattice)->_lub)((oldState), (newState)));
     if (((((l)->_lattice)->_eq)((((l)->_lattice)->_top), (newValue))))
     {
       {
-        ((printf)("Error: invalid put of %s\n", (((((l)->_lattice)->_show)((newState))).text)));
-        ((exit)(0));
+        ((pthread_mutex_unlock)((&(((l)->_mutex)))));
         return 0;
       }
     } else {
       ;
     }
     (((l)->_value) = (newValue));
+    ((pthread_cond_broadcast)((&(((l)->_cond)))));
+    ((pthread_mutex_unlock)((&(((l)->_mutex)))));
     return 1;
   }
 }
-typedef signed int _template_param_unused_312;
-static struct _template__ActivationSet__builtin_signed_int_  *_template__get__builtin_signed_int_(struct _template__Lvar__builtin_signed_int_  * l, struct _template__ThresholdSet__builtin_signed_int_  * t)
+typedef signed int _template_param_unused_117;
+typedef signed int _template_param_unused_121;
+static struct _template__ActivationSet__builtin_signed_int_  *_template__thresholdReached__builtin_signed_int_(struct _template__Lvar__builtin_signed_int_  * l, struct _template__ThresholdSet__builtin_signed_int_  * t)
 {
 
   {
-    if ((((l)->_lattice) != ((t)->_lattice)))
-    {
-      {
-        ((printf)("Error: can't get() when Lvar doesn't have same lattice as threshold set.\n"));
-        ((exit)(0));
-      }
-    } else {
-      ;
-    }
     for (signed int i = 0; ((i) < ((t)->_index)); ((i)++))
     {
       {
@@ -1211,7 +1308,24 @@ static struct _template__ActivationSet__builtin_signed_int_  *_template__get__bu
     return (((void *)0));
   }
 }
-typedef signed int _template_param_unused_316;
+static struct _template__ActivationSet__builtin_signed_int_  *_template__get__builtin_signed_int_(struct _template__Lvar__builtin_signed_int_  * l, struct _template__ThresholdSet__builtin_signed_int_  * t)
+{
+
+  {
+    ((pthread_mutex_lock)((&(((l)->_mutex)))));
+    struct _template__ActivationSet__builtin_signed_int_  *actReached = ((_template__thresholdReached__builtin_signed_int_)((l), (t)));
+    while (((actReached) == (((void *)0))))
+    {
+      {
+        ((actReached) = ((_template__thresholdReached__builtin_signed_int_)((l), (t))));
+        ((pthread_cond_wait)((&(((l)->_cond))), (&(((l)->_mutex)))));
+      }
+    }
+    ((pthread_mutex_unlock)((&(((l)->_mutex)))));
+    return (actReached);
+  }
+}
+typedef signed int _template_param_unused_125;
 static signed int _template__freeze__builtin_signed_int_(struct _template__Lvar__builtin_signed_int_  * l)
 {
 
@@ -1220,7 +1334,7 @@ static signed int _template__freeze__builtin_signed_int_(struct _template__Lvar_
     return ((l)->_value);
   }
 }
-typedef signed int _template_param_unused_324;
+typedef signed int _template_param_unused_133;
 static struct _string_s _template__showLvar__builtin_signed_int_(struct _template__Lvar__builtin_signed_int_  * l)
 {
 
@@ -1233,12 +1347,38 @@ static struct _string_s _template__showLvar__builtin_signed_int_(struct _templat
     } else {
       ;
     }
-    ((printf)("Error: Can't show a lvar before it is frozen!\n"));
-    ((exit)(0));
     return ((strCharPointer)("<Lvar Value Unavailable>"));
   }
 }
-typedef signed int _template_param_unused_328;
+typedef signed int _template_param_unused_155;
+static struct _string_s _template__showActivation__builtin_signed_int_(struct _template__ActivationSet__builtin_signed_int_  * act)
+{
+
+  {
+    struct _string_s result = ((strCharPointer)("{"));
+    signed int i = 0;
+    for(; ((i) < (((act)->_index) - 1)); ((i)++))
+    {
+      {
+        ({
+          struct _string_s  *_tmp156 = (&(result));
+          ((*(_tmp156)) = ((_append_string)((*(_tmp156)), ((_append_string)(((((act)->_lattice)->_show)((((act)->_set)[(i)]))), ((strCharPointer)(", "))))))); })
+        ;
+      }
+    }
+    for(; ((i) < ((act)->_index)); ((i)++))
+    {
+      {
+        ({
+          struct _string_s  *_tmp157 = (&(result));
+          ((*(_tmp157)) = ((_append_string)((*(_tmp157)), ((((act)->_lattice)->_show)((((act)->_set)[(i)])))))); })
+        ;
+      }
+    }
+    return ((_append_string)((result), ((strCharPointer)("}"))));
+  }
+}
+typedef signed int _template_param_unused_161;
 static signed int _template__freeActivation__builtin_signed_int_(struct _template__ActivationSet__builtin_signed_int_  * act)
 {
 
@@ -1248,7 +1388,7 @@ static signed int _template__freeActivation__builtin_signed_int_(struct _templat
     return 1;
   }
 }
-typedef signed int _template_param_unused_332;
+typedef signed int _template_param_unused_165;
 static signed int _template__freeThreshold__builtin_signed_int_(struct _template__ThresholdSet__builtin_signed_int_  * t)
 {
 
@@ -1273,11 +1413,11 @@ signed int main(signed int  argc, char  * * argv)
     if (((result) != (((void *)0))))
     {
       {
-        ((printf)("Result of get(): %s\n", (((_template__showActivation__builtin_signed_int_)((result))).text)));
+        ((printf)("Result of get: %s\n", (((_template__showActivation__builtin_signed_int_)((result))).text)));
       }
     } else {
       {
-        ((printf)("Result of get(): NULL\n"));
+        ((printf)("Result of get: NULL\n"));
       }
     }
     ((free)((D)));

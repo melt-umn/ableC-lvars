@@ -24,6 +24,8 @@ Result of get(): {6}
 
 + Can't really fix with concrete syntax-- would it work to copy previous get lines after each put? Maybe not, since could still be scheduled in wrong order. Somehow keep track of all local gets within a function, and repeat them after each put? Or only allow gets into global variables, and have user provide a function that executes all possible gets (kind of gross)? Maybe for now should error out in case of invalid get, to preserve quasi-determinism?
 
++ Lvar needs to know its threshold, so that both puts and gets can access the information
+
 ### Less urgent:
 
 + Add freezing examples

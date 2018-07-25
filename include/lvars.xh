@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <gc.h>
+#include <pthread.h>
 
 // Note that many functions are statically checked to see if
 // they are called with NULL arguments, so in many cases
@@ -31,7 +32,6 @@ template<a> struct _Lattice {
   a (* _lub)();
   int (*_eq)(); 
   string (*_show)();
-  //Lvar<a>** _blocked;    
 };
 
 // to create a new lattice with the fields specified by the user
@@ -46,47 +46,7 @@ static Lattice<a>* _newLattice(a least, a greatest, int (*leq)(),
   l-> _lub = lub;
   l->_eq = eq;
   l->_show = showMethod;
-  //l->_blocked = malloc(20 * sizeof(Lvar<a>*));
-  //l->_blockedIndex = 0;
-  //l->_blockedSize = 20;
   return l;
-}
-
-/*
-template<a>
-static int _resizeBlocked(Lattice<a>* lat, int newSize) {
-  Lvar<a>** newSet = malloc(sizeof(Lvar<a>*) * newSize);
-  for (int i = 0; i < lat->_blockedSize; i++) {
-    newSet[i] = lat->_blocked[i];
-  }
-  free(lat->_blocked);
-  lat->_blocked = newSet;
-  lat->_blockedSize = newSize;
-  return 1;
-} 
-*/
-
-//********************************* Lvar **************************************
-
-template<a> struct _Lvar {
-  Lattice<a> * _lattice;
-  a _value;
-  int _frozen; // if 0, lvar is not frozen; if 1, lvar is frozen
-};
-
-template<a>
-static string _showLvar(Lvar<a>* l) {
-
-  if (l->_frozen) {
-    return l->_lattice->_show(l->_value);
-  }
-
-  #ifdef DEBUG
-    printf("Error: Can't show a lvar before it is frozen!\n");
-    exit(0);
-  #endif
-
-  return str("<Lvar Value Unavailable>");
 }
 
 //*************************** Activation set **********************************
@@ -318,7 +278,31 @@ static string _showThreshold(ThresholdSet<a>* t){
   return result + "}";
 }
 
-//*********************** new, put, and get methods ***************************
+//********************************* Lvar **************************************
+
+template<a> struct _Lvar {
+  Lattice<a> * _lattice;
+  a _value;
+  int _frozen; // if 0, lvar is not frozen; if 1, lvar is frozen
+  ThresholdSet<a> * _threshold;
+  pthread_mutex_t _mutex;
+  pthread_cond_t _cond;
+};
+
+template<a>
+static string _showLvar(Lvar<a>* l) {
+
+  if (l->_frozen) {
+    return l->_lattice->_show(l->_value);
+  }
+
+  #ifdef DEBUG
+    printf("Error: Can't show a lvar before it is frozen!\n");
+    exit(0);
+  #endif
+
+  return str("<Lvar Value Unavailable>");
+}
 
 // returns pointer to a new lvar for a given lattice
 // lvar has initial value that is the bottom element of the lattice
@@ -330,8 +314,13 @@ static Lvar<a>* _new(Lattice<a>* l) {
   lvarNew->_value = l-> _bottom;
   lvarNew-> _lattice = l;
   lvarNew-> _frozen = 0;
+  lvarNew->_cond = (pthread_cond_t) PTHREAD_COND_INITIALIZER;
+  lvarNew->_mutex = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
   return lvarNew;
 }
+
+//*********************** put and get methods ***************************
+
 
 // takes an lvar and a new value for that lvar, and updates the lvar's value to
 // the lub of the old value and the new value
@@ -339,6 +328,7 @@ static Lvar<a>* _new(Lattice<a>* l) {
 
 template<a>
 static int _put(Lvar<a>* l, a newState) {
+
   if (l->_frozen) {
      #ifdef DEBUG 
         printf("Error: can't write to a frozen lvar.\n");
@@ -346,22 +336,42 @@ static int _put(Lvar<a>* l, a newState) {
      #endif
     return 0;
   }
+
+  pthread_mutex_lock(&(l->_mutex));
+
   a oldState = l->_value;
   a newValue = l-> _lattice-> _lub(oldState, newState);
+
   if (l-> _lattice->_eq(l->_lattice->_top, newValue)){
       #ifdef DEBUG 
         printf("Error: invalid put of %s\n", l->_lattice->_show(newState).text);
         exit(0);
       #endif
+      pthread_mutex_unlock(&(l->_mutex));
       return 0;
   }
   l->_value = newValue;
+
+  pthread_cond_broadcast(&(l->_cond));
+  pthread_mutex_unlock(&(l->_mutex));
   return 1;
 }
 
 // takes an lvar and a threshold set.
 // if lvar's state is at or above some element in some activation set in the 
 // threshold set, returns the entire activation set in question in T
+
+template<a>
+static ActivationSet<a>* _thresholdReached(Lvar<a>* l, ThresholdSet<a> * t) {
+  for (int i = 0; i < t->_index; i++) {
+    for (int j = 0; j < t->_a_sets[i]->_index; j++) {
+      if (l-> _lattice->_leq(t->_a_sets[i]->_set[j], l->_value)) {
+        return t->_a_sets[i];
+      }
+    }
+  }
+  return NULL;
+}
 
 template<a>
 static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
@@ -377,14 +387,15 @@ static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
       return NULL;
     }
   #endif
-  for (int i = 0; i < t->_index; i++) {
-    for (int j = 0; j < t->_a_sets[i]->_index; j++) {
-      if (l-> _lattice->_leq(t->_a_sets[i]->_set[j], l->_value)) {
-        return t->_a_sets[i];
-      }
-    }
+
+  pthread_mutex_lock(&(l->_mutex));
+  ActivationSet<a>* actReached = inst _thresholdReached<a>(l, t);
+  while (actReached == NULL) {
+    actReached = inst _thresholdReached<a>(l, t);
+    pthread_cond_wait(&(l->_cond), &(l->_mutex));
   }
-  return NULL;
+  pthread_mutex_unlock(&(l->_mutex));
+  return actReached;
 }
 
 // takes an lvar and returns the exact value of the lvar as its result

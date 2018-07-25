@@ -17,7 +17,7 @@ cilk int main(int argc, char **argv) {
     cilk return 0;
   }
   FILE *fp;
-  fp = fopen(filename, "r");
+  fp = fopen(argv[1], "r");
   if (fp) {
     int result;
     spawn result = readFile(fp);

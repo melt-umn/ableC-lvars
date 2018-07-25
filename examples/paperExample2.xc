@@ -41,10 +41,10 @@ int main(int argc, char **argv) {
   freeze(x);
   printf("Value of x: %s\n", show(x).text);
   if (result != NULL) {
-    printf("Result of get(): %s\n", show(result).text);
+    printf("Result of get: %s\n", show(result).text);
   }
   else {
-    printf("Result of get(): NULL\n");
+    printf("Result of get: NULL\n");
   }
   // clean up
   free(D);
