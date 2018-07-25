@@ -5,14 +5,14 @@
 ### Urgent:
 
 + Marking terminal, short example in extension syntax, like explaining to someone who knows about ableC but not extension
-+ Think about big example
++ Think about big example-- maybe reading data from large files into a database-type structure, with Cilk?
 + Write up a page about extension
 + Think about determinism (esp. when invalid put doesn't error out)
 + Implement better cilk examples (Read from different files? Sum random numbers until they reach a certain point? A better set example?) Bitwise or? Check out Cilk paper
 + Look over and tidy up examples and header file
 + Fix top <= top in examples and tests
 + Set of words in a doc, and/or in a single variable
-+ Serious Problem: if get happened to be scheduled before a put, might get an error, while would get a result if put was scheduled before the get. Also getting error about writing to a frozen lvar, even when freeze occurs after the sync.
++ Serious Problem: if get happened to be scheduled before a put, might get an error, while would get a result if put was scheduled before the get.
 
 Ex. Possible results achieved so far from intBad.xc, depending on scheduling:
 
@@ -22,7 +22,7 @@ Result of get(): NULL
 Value of x: 7
 Result of get(): {6}
 
-+ Can't really fix with concrete syntax-- would it work to copy previous get lines after each put? Maybe not, since could still be scheduled in wrong order. Somehow keep track of all local gets within a function, and repeat them after each put?
++ Can't really fix with concrete syntax-- would it work to copy previous get lines after each put? Maybe not, since could still be scheduled in wrong order. Somehow keep track of all local gets within a function, and repeat them after each put? Or only allow gets into global variables, and have user provide a function that executes all possible gets (kind of gross)? Maybe for now should error out in case of invalid get, to preserve quasi-determinism?
 
 ### Less urgent:
 
