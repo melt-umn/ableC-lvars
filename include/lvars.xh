@@ -23,7 +23,7 @@
 
 int _lvarCheckValue = 1;
 
-//******************************** Lattice ************************************
+//******************************** Lattice and Lvar ******************************
 
 template<a> struct _Lattice {
   a _bottom;         // these elements are all specified by the user
@@ -33,6 +33,108 @@ template<a> struct _Lattice {
   int (*_eq)(); 
   string (*_show)();
 };
+
+template<a> struct _Lvar {
+  Lattice<a> * _lattice;
+  a _value;
+  int _frozen; // if 0, lvar is not frozen; if 1, lvar is frozen
+  ThresholdSet<a> * _threshold;
+  pthread_mutex_t _mutex;
+  pthread_cond_t _cond;
+};
+
+template<a>
+static string _showLvar(Lvar<a>* l) {
+
+  if (l->_frozen) {
+    return l->_lattice->_show(l->_value);
+  }
+
+  #ifdef DEBUG
+    printf("Error: Can't show a lvar before it is frozen!\n");
+    exit(0);
+  #endif
+
+  return str("<Lvar Value Unavailable>");
+}
+
+template<a>
+struct _putStruct {
+  Lvar<a>* _lvar;
+  a _val;
+};
+
+// takes an lvar and a new value for that lvar, and updates the lvar's value to
+// the lub of the old value and the new value
+// if update would take state of lvar to top(), returns 0, otherwise 1
+
+template<a>
+static int _doPut(Lvar<a>* l, a newState) {
+
+  if (l == NULL) {
+    return 0;
+  }
+
+  pthread_mutex_lock(&(l->_mutex));
+
+  if (l->_frozen) {
+     #ifdef DEBUG 
+        printf("Error: can't write to a frozen lvar.\n");
+        exit(0);
+     #endif
+    return 0;
+  }
+
+  a oldState = l->_value;
+  a newValue = l-> _lattice-> _lub(oldState, newState);
+
+  if (l-> _lattice->_eq(l->_lattice->_top, newValue)){
+      printf("Error: invalid put of %s\n", l->_lattice->_show(newState).text);
+      exit(0);
+  }
+  l->_value = newValue;
+
+  pthread_cond_broadcast(&(l->_cond));
+  pthread_mutex_unlock(&(l->_mutex));
+  return 1;
+}
+
+template<a>
+void * _putVoid(void* valStruct) {
+  inst _putStruct<a> * p = (inst _putStruct<a>*) valStruct;
+  inst _doPut<a>(p->_lvar, p->_val);
+}
+
+pthread_t* _currentPut;
+
+template<a>
+static int _declarePut(Lvar<a>* l, a value) {
+  //pthread_t child;
+  inst _putStruct<a> * p = GC_MALLOC(sizeof(inst _putStruct<a>));
+  p->_lvar = l;
+  p->_val = value;
+  pthread_create(_currentPut, NULL, inst _putVoid<a>, (void*) p);
+}
+
+template<a>
+static int _put(Lvar<a>* l, a newState) {
+  inst _declarePut<a>(l, newState);
+}
+
+// returns pointer to a new lvar for a given lattice
+// lvar has initial value that is the bottom element of the lattice
+// lvar is initially not frozen
+
+template<a>
+static Lvar<a>* _new(Lattice<a>* l) {
+  Lvar<a>* lvarNew = malloc(sizeof(Lvar<a>));
+  lvarNew->_value = l-> _bottom;
+  lvarNew-> _lattice = l;
+  lvarNew-> _frozen = 0;
+  lvarNew->_cond = (pthread_cond_t) PTHREAD_COND_INITIALIZER;
+  lvarNew->_mutex = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
+  return lvarNew;
+}
 
 // to create a new lattice with the fields specified by the user
 
@@ -46,6 +148,10 @@ static Lattice<a>* _newLattice(a least, a greatest, int (*leq)(),
   l-> _lub = lub;
   l->_eq = eq;
   l->_show = showMethod;
+  _currentPut = malloc(sizeof(pthread_t));
+  inst _Lvar<a>* dummyLvar = NULL;
+  a dummyVal = least;
+  inst _declarePut<a>(dummyLvar, dummyVal);
   return l;
 }
 
@@ -278,100 +384,7 @@ static string _showThreshold(ThresholdSet<a>* t){
   return result + "}";
 }
 
-//********************************* Lvar **************************************
-
-template<a> struct _Lvar {
-  Lattice<a> * _lattice;
-  a _value;
-  int _frozen; // if 0, lvar is not frozen; if 1, lvar is frozen
-  ThresholdSet<a> * _threshold;
-  pthread_mutex_t _mutex;
-  pthread_cond_t _cond;
-};
-
-template<a>
-static string _showLvar(Lvar<a>* l) {
-
-  if (l->_frozen) {
-    return l->_lattice->_show(l->_value);
-  }
-
-  #ifdef DEBUG
-    printf("Error: Can't show a lvar before it is frozen!\n");
-    exit(0);
-  #endif
-
-  return str("<Lvar Value Unavailable>");
-}
-
-// returns pointer to a new lvar for a given lattice
-// lvar has initial value that is the bottom element of the lattice
-// lvar is initially not frozen
-
-template<a>
-static Lvar<a>* _new(Lattice<a>* l) {
-  Lvar<a>* lvarNew = malloc(sizeof(Lvar<a>));
-  lvarNew->_value = l-> _bottom;
-  lvarNew-> _lattice = l;
-  lvarNew-> _frozen = 0;
-  lvarNew->_cond = (pthread_cond_t) PTHREAD_COND_INITIALIZER;
-  lvarNew->_mutex = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
-  return lvarNew;
-}
-
 //*********************** put and get methods ***************************
-
-template<a>
-struct _putStruct {
-  Lvar<a>* _lvar;
-  a _val;
-};
-
-template<a>
-void * _putVoid(void* valStruct) {
-  inst _putStruct<a> * p = (inst _putStruct<a>*) valStruct;
-  put(p->_lvar, p->_val);
-}
-
-template<a>
-static int _declarePut(Lvar<a>* l, a value) {
-  pthread_t child;
-  inst _putStruct<a> * p = GC_MALLOC(sizeof(inst _putStruct<a>));
-  p->_lvar = l;
-  p->_val = value;
-  pthread_create(&child, NULL, inst _putVoid<a>, (void*) p);
-}
-
-// takes an lvar and a new value for that lvar, and updates the lvar's value to
-// the lub of the old value and the new value
-// if update would take state of lvar to top(), returns 0, otherwise 1
-
-template<a>
-static int _put(Lvar<a>* l, a newState) {
-
-  if (l->_frozen) {
-     #ifdef DEBUG 
-        printf("Error: can't write to a frozen lvar.\n");
-        exit(0);
-     #endif
-    return 0;
-  }
-
-  pthread_mutex_lock(&(l->_mutex));
-
-  a oldState = l->_value;
-  a newValue = l-> _lattice-> _lub(oldState, newState);
-
-  if (l-> _lattice->_eq(l->_lattice->_top, newValue)){
-      printf("Error: invalid put of %s\n", l->_lattice->_show(newState).text);
-      exit(0);
-  }
-  l->_value = newValue;
-
-  pthread_cond_broadcast(&(l->_cond));
-  pthread_mutex_unlock(&(l->_mutex));
-  return 1;
-}
 
 // takes an lvar and a threshold set.
 // if lvar's state is at or above some element in some activation set in the 

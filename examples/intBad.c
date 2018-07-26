@@ -1023,6 +1023,7 @@ extern void  *pthread_getspecific(pthread_key_t  __key) __attribute__((__nothrow
 extern signed int pthread_setspecific(pthread_key_t  __key, const void  * __pointer) __attribute__((__nothrow__, __leaf__));
 extern signed int pthread_atfork(void ( * __prepare)(void), void ( * __parent)(void), void ( * __child)(void)) __attribute__((__nothrow__, __leaf__));
 signed int _lvarCheckValue = 1;
+pthread_t  *_currentPut;
 typedef __loff_t loff_t;
 typedef __ino_t ino_t;
 typedef __dev_t dev_t;
@@ -2216,11 +2217,30 @@ struct putStruct {
   signed int val;
   
 };
-typedef signed int _template_param_unused_53;
-static signed int _template__put__builtin_signed_int_(struct _template__Lvar__builtin_signed_int_  * l, signed int  newState)
+typedef signed int _template_param_unused_209;
+typedef signed int _template_param_unused_249;
+typedef signed int _template_param_unused_251;
+typedef __attribute__(()) struct _template__putStruct__builtin_signed_int_ _template__putStruct__builtin_signed_int_;
+struct _template__putStruct__builtin_signed_int_ {
+  struct _template__Lvar__builtin_signed_int_  *_lvar;
+  signed int _val;
+  
+};
+typedef signed int _template_param_unused_257;
+typedef signed int _template_param_unused_261;
+static signed int _template__doPut__builtin_signed_int_(struct _template__Lvar__builtin_signed_int_  * l, signed int  newState)
 {
 
   {
+    if (((l) == (((void *)0))))
+    {
+      {
+        return 0;
+      }
+    } else {
+      ;
+    }
+    ((pthread_mutex_lock)((&(((l)->_mutex)))));
     if (((l)->_frozen))
     {
       {
@@ -2231,7 +2251,6 @@ static signed int _template__put__builtin_signed_int_(struct _template__Lvar__bu
     } else {
       ;
     }
-    ((pthread_mutex_lock)((&(((l)->_mutex)))));
     signed int oldState = ((l)->_value);
     signed int newValue = ((((l)->_lattice)->_lub)((oldState), (newState)));
     if (((((l)->_lattice)->_eq)((((l)->_lattice)->_top), (newValue))))
@@ -2247,6 +2266,31 @@ static signed int _template__put__builtin_signed_int_(struct _template__Lvar__bu
     ((pthread_cond_broadcast)((&(((l)->_cond)))));
     ((pthread_mutex_unlock)((&(((l)->_mutex)))));
     return 1;
+  }
+}
+static void  *_template__putVoid__builtin_signed_int_(void  * valStruct)
+{
+
+  {
+    _template__putStruct__builtin_signed_int_  *p = ((_template__putStruct__builtin_signed_int_ *)(valStruct));
+    ((_template__doPut__builtin_signed_int_)(((p)->_lvar), ((p)->_val)));
+  }
+}
+static signed int _template__declarePut__builtin_signed_int_(struct _template__Lvar__builtin_signed_int_  * l, signed int  value)
+{
+
+  {
+    _template__putStruct__builtin_signed_int_  *p = ((GC_malloc)((sizeof(_template__putStruct__builtin_signed_int_))));
+    (((p)->_lvar) = (l));
+    (((p)->_val) = (value));
+    ((pthread_create)((_currentPut), (((void *)0)), (_template__putVoid__builtin_signed_int_), ((void *)(p))));
+  }
+}
+static signed int _template__put__builtin_signed_int_(struct _template__Lvar__builtin_signed_int_  * l, signed int  newState)
+{
+
+  {
+    ((_template__declarePut__builtin_signed_int_)((l), (newState)));
   }
 }
 void  *putVoid(void  * valStruct)
@@ -2322,11 +2366,11 @@ static void _cilk_putCilk_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_p
         ((((_cilk_frame)->scope54).result) = (result));
         {
           /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-          signed int __tmp58;
+          signed int __tmp266;
           if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
           {
-            ((__tmp58) = (result));
-            if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp58)), (sizeof((__tmp58))))))
+            ((__tmp266) = (result));
+            if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp266)), (sizeof((__tmp266))))))
             {
               ((Cilk_cilk2c_pop)((_cilk_ws)));
               return ;
@@ -2399,8 +2443,8 @@ static void _cilk_putCilk_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_p
         ((Cilk_cilk2c_at_thread_boundary_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
         ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
         {
-          signed int __tmp59 = (result);
-          ((Cilk_set_result)((_cilk_ws), (&(__tmp59)), (sizeof((__tmp59)))));
+          signed int __tmp267 = (result);
+          ((Cilk_set_result)((_cilk_ws), (&(__tmp267)), (sizeof((__tmp267)))));
           /* expand CILK2C_BEFORE_RETURN_SLOW macro */;
           ((Cilk_cilk2c_before_return_slow_cp)((_cilk_ws), (&((_cilk_frame)->header))));
           ((Cilk_cilk2c_before_return_slow)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
@@ -2412,8 +2456,8 @@ static void _cilk_putCilk_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_p
     }
     ((printf)("put\n"));
     {
-      signed int __tmp60 = ((_template__put__builtin_signed_int_)((x), (val)));
-      ((Cilk_set_result)((_cilk_ws), (&(__tmp60)), (sizeof((__tmp60)))));
+      signed int __tmp268 = ((_template__put__builtin_signed_int_)((x), (val)));
+      ((Cilk_set_result)((_cilk_ws), (&(__tmp268)), (sizeof((__tmp268)))));
       /* expand CILK2C_BEFORE_RETURN_SLOW macro */;
       ((Cilk_cilk2c_before_return_slow_cp)((_cilk_ws), (&((_cilk_frame)->header))));
       ((Cilk_cilk2c_before_return_slow)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
@@ -2486,11 +2530,11 @@ signed int putCilk(CilkWorkerState  *const  _cilk_ws, struct _template__Lvar__bu
         ((result) = ((putCilk)((_cilk_ws), (x), (val), ((count) + 1))));
         {
           /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-          signed int __tmp62;
+          signed int __tmp270;
           if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
           {
-            ((__tmp62) = (result));
-            if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp62)), (sizeof((__tmp62))))))
+            ((__tmp270) = (result));
+            if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp270)), (sizeof((__tmp270))))))
             {
               ((Cilk_cilk2c_pop)((_cilk_ws)));
               return 0;
@@ -2588,8 +2632,8 @@ struct _cilk_getCilk_args {
 #undef CILK_WHERE_AM_I
 #define CILK_WHERE_AM_I IN_SLOW_PROCEDURE
 
-typedef signed int _template_param_unused_104;
-typedef signed int _template_param_unused_108;
+typedef signed int _template_param_unused_312;
+typedef signed int _template_param_unused_316;
 static struct _template__ActivationSet__builtin_signed_int_  *_template__thresholdReached__builtin_signed_int_(struct _template__Lvar__builtin_signed_int_  * l, struct _template__ThresholdSet__builtin_signed_int_  * t)
 {
 
@@ -2677,11 +2721,11 @@ static void _cilk_getCilk_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_g
         ((((_cilk_frame)->scope66).result) = (result));
         {
           /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-          struct _template__ActivationSet__builtin_signed_int_  *__tmp67;
+          struct _template__ActivationSet__builtin_signed_int_  *__tmp275;
           if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
           {
-            ((__tmp67) = (result));
-            if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp67)), (sizeof((__tmp67))))))
+            ((__tmp275) = (result));
+            if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp275)), (sizeof((__tmp275))))))
             {
               ((Cilk_cilk2c_pop)((_cilk_ws)));
               return ;
@@ -2754,8 +2798,8 @@ static void _cilk_getCilk_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_g
         ((Cilk_cilk2c_at_thread_boundary_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
         ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
         {
-          struct _template__ActivationSet__builtin_signed_int_  *__tmp68 = (result);
-          ((Cilk_set_result)((_cilk_ws), (&(__tmp68)), (sizeof((__tmp68)))));
+          struct _template__ActivationSet__builtin_signed_int_  *__tmp276 = (result);
+          ((Cilk_set_result)((_cilk_ws), (&(__tmp276)), (sizeof((__tmp276)))));
           /* expand CILK2C_BEFORE_RETURN_SLOW macro */;
           ((Cilk_cilk2c_before_return_slow_cp)((_cilk_ws), (&((_cilk_frame)->header))));
           ((Cilk_cilk2c_before_return_slow)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
@@ -2766,8 +2810,8 @@ static void _cilk_getCilk_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_g
       {
         ((printf)("get\n"));
         {
-          struct _template__ActivationSet__builtin_signed_int_  *__tmp109 = ((_template__get__builtin_signed_int_)((x), (t)));
-          ((Cilk_set_result)((_cilk_ws), (&(__tmp109)), (sizeof((__tmp109)))));
+          struct _template__ActivationSet__builtin_signed_int_  *__tmp317 = ((_template__get__builtin_signed_int_)((x), (t)));
+          ((Cilk_set_result)((_cilk_ws), (&(__tmp317)), (sizeof((__tmp317)))));
           /* expand CILK2C_BEFORE_RETURN_SLOW macro */;
           ((Cilk_cilk2c_before_return_slow_cp)((_cilk_ws), (&((_cilk_frame)->header))));
           ((Cilk_cilk2c_before_return_slow)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
@@ -2842,11 +2886,11 @@ struct _template__ActivationSet__builtin_signed_int_  *getCilk(CilkWorkerState  
         ((result) = ((getCilk)((_cilk_ws), (x), (t), ((count) + 1))));
         {
           /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-          struct _template__ActivationSet__builtin_signed_int_  *__tmp151;
+          struct _template__ActivationSet__builtin_signed_int_  *__tmp359;
           if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
           {
-            ((__tmp151) = (result));
-            if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp151)), (sizeof((__tmp151))))))
+            ((__tmp359) = (result));
+            if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp359)), (sizeof((__tmp359))))))
             {
               ((Cilk_cilk2c_pop)((_cilk_ws)));
               return 0;
@@ -2977,11 +3021,11 @@ static void _cilk_putGetEx_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_
     ((((_cilk_frame)->scope77).y) = (y));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      struct _template__ActivationSet__builtin_signed_int_  *__tmp157;
+      struct _template__ActivationSet__builtin_signed_int_  *__tmp365;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp157) = (y));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp157)), (sizeof((__tmp157))))))
+        ((__tmp365) = (y));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp365)), (sizeof((__tmp365))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return ;
@@ -3044,11 +3088,11 @@ static void _cilk_putGetEx_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_
     ((((_cilk_frame)->scope78).result1) = (result1));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      signed int __tmp158;
+      signed int __tmp366;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp158) = (result1));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp158)), (sizeof((__tmp158))))))
+        ((__tmp366) = (result1));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp366)), (sizeof((__tmp366))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return ;
@@ -3111,11 +3155,11 @@ static void _cilk_putGetEx_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_
     ((((_cilk_frame)->scope78).result2) = (result2));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      signed int __tmp159;
+      signed int __tmp367;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp159) = (result2));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp159)), (sizeof((__tmp159))))))
+        ((__tmp367) = (result2));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp367)), (sizeof((__tmp367))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return ;
@@ -3193,8 +3237,8 @@ static void _cilk_putGetEx_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_
     ((Cilk_cilk2c_at_thread_boundary_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
     ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
     {
-      struct _template__ActivationSet__builtin_signed_int_  *__tmp160 = (y);
-      ((Cilk_set_result)((_cilk_ws), (&(__tmp160)), (sizeof((__tmp160)))));
+      struct _template__ActivationSet__builtin_signed_int_  *__tmp368 = (y);
+      ((Cilk_set_result)((_cilk_ws), (&(__tmp368)), (sizeof((__tmp368)))));
       /* expand CILK2C_BEFORE_RETURN_SLOW macro */;
       ((Cilk_cilk2c_before_return_slow_cp)((_cilk_ws), (&((_cilk_frame)->header))));
       ((Cilk_cilk2c_before_return_slow)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
@@ -3264,11 +3308,11 @@ struct _template__ActivationSet__builtin_signed_int_  *putGetEx(CilkWorkerState 
     ((y) = ((getCilk)((_cilk_ws), (x), (t), 0)));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      struct _template__ActivationSet__builtin_signed_int_  *__tmp164;
+      struct _template__ActivationSet__builtin_signed_int_  *__tmp372;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp164) = (y));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp164)), (sizeof((__tmp164))))))
+        ((__tmp372) = (y));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp372)), (sizeof((__tmp372))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return 0;
@@ -3298,11 +3342,11 @@ struct _template__ActivationSet__builtin_signed_int_  *putGetEx(CilkWorkerState 
     ((result1) = ((putCilk)((_cilk_ws), (x), 3, 0)));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      signed int __tmp165;
+      signed int __tmp373;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp165) = (result1));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp165)), (sizeof((__tmp165))))))
+        ((__tmp373) = (result1));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp373)), (sizeof((__tmp373))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return 0;
@@ -3332,11 +3376,11 @@ struct _template__ActivationSet__builtin_signed_int_  *putGetEx(CilkWorkerState 
     ((result2) = ((putCilk)((_cilk_ws), (x), 7, 0)));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      signed int __tmp166;
+      signed int __tmp374;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp166) = (result2));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp166)), (sizeof((__tmp166))))))
+        ((__tmp374) = (result2));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp374)), (sizeof((__tmp374))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return 0;
@@ -3431,7 +3475,7 @@ struct _cilk_cilk_main_args {
 #undef CILK_WHERE_AM_I
 #define CILK_WHERE_AM_I IN_SLOW_PROCEDURE
 
-typedef signed int _template_param_unused_505;
+typedef signed int _template_param_unused_693;
 static struct _template__Lattice__builtin_signed_int_  *_template__newLattice__builtin_signed_int_(signed int  least, signed int  greatest, signed int ( * leq)(), signed int ( * lub)(), signed int ( * eq)(), struct _string_s ( * showMethod)())
 {
 
@@ -3443,10 +3487,14 @@ static struct _template__Lattice__builtin_signed_int_  *_template__newLattice__b
     (((l)->_lub) = (lub));
     (((l)->_eq) = (eq));
     (((l)->_show) = (showMethod));
+    ((_currentPut) = ((malloc)((sizeof(pthread_t)))));
+    _template__Lvar__builtin_signed_int_  *dummyLvar = (((void *)0));
+    signed int dummyVal = (least);
+    ((_template__declarePut__builtin_signed_int_)((dummyLvar), (dummyVal)));
     return (l);
   }
 }
-typedef signed int _template_param_unused_509;
+typedef signed int _template_param_unused_697;
 static struct _template__Lvar__builtin_signed_int_  *_template__new__builtin_signed_int_(struct _template__Lattice__builtin_signed_int_  * l)
 {
 
@@ -3460,36 +3508,8 @@ static struct _template__Lvar__builtin_signed_int_  *_template__new__builtin_sig
     return (lvarNew);
   }
 }
-typedef signed int _template_param_unused_525;
-typedef signed int _template_param_unused_527;
-typedef __attribute__(()) struct _template__putStruct__builtin_signed_int_ _template__putStruct__builtin_signed_int_;
-struct _template__putStruct__builtin_signed_int_ {
-  struct _template__Lvar__builtin_signed_int_  *_lvar;
-  signed int _val;
-  
-};
-typedef signed int _template_param_unused_529;
-static void  *_template__putVoid__builtin_signed_int_(void  * valStruct)
-{
-
-  {
-    _template__putStruct__builtin_signed_int_  *p = ((_template__putStruct__builtin_signed_int_ *)(valStruct));
-    ((_template__put__builtin_signed_int_)(((p)->_lvar), ((p)->_val)));
-  }
-}
-static signed int _template__declarePut__builtin_signed_int_(struct _template__Lvar__builtin_signed_int_  * l, signed int  value)
-{
-
-  {
-    pthread_t child;
-    _template__putStruct__builtin_signed_int_  *p = ((GC_malloc)((sizeof(_template__putStruct__builtin_signed_int_))));
-    (((p)->_lvar) = (l));
-    (((p)->_val) = (value));
-    ((pthread_create)((&(child)), (((void *)0)), (_template__putVoid__builtin_signed_int_), ((void *)(p))));
-  }
-}
-typedef signed int _template_param_unused_549;
-typedef signed int _template_param_unused_553;
+typedef signed int _template_param_unused_717;
+typedef signed int _template_param_unused_721;
 static signed int _template__resizeActSet__builtin_signed_int_(struct _template__ActivationSet__builtin_signed_int_  * act, signed int  newSize)
 {
 
@@ -3524,7 +3544,7 @@ static struct _template__ActivationSet__builtin_signed_int_  *_template__addAct_
     return (act);
   }
 }
-typedef signed int _template_param_unused_557;
+typedef signed int _template_param_unused_725;
 static struct _template__ActivationSet__builtin_signed_int_  *_template__newActivationSet__builtin_signed_int_(struct _template__Lattice__builtin_signed_int_  * l, signed int  size)
 {
 
@@ -3546,8 +3566,8 @@ static struct _template__ActivationSet__builtin_signed_int_  *_template__newActi
     return (act);
   }
 }
-typedef signed int _template_param_unused_745;
-typedef signed int _template_param_unused_767;
+typedef signed int _template_param_unused_913;
+typedef signed int _template_param_unused_935;
 static struct _string_s _template__showActivation__builtin_signed_int_(struct _template__ActivationSet__builtin_signed_int_  * act)
 {
 
@@ -3558,8 +3578,8 @@ static struct _string_s _template__showActivation__builtin_signed_int_(struct _t
     {
       {
         ({
-          struct _string_s  *_tmp768 = (&(result));
-          ((*(_tmp768)) = ((_append_string)((*(_tmp768)), ((_append_string)(((((act)->_lattice)->_show)((((act)->_set)[(i)]))), ((strCharPointer)(", "))))))); })
+          struct _string_s  *_tmp936 = (&(result));
+          ((*(_tmp936)) = ((_append_string)((*(_tmp936)), ((_append_string)(((((act)->_lattice)->_show)((((act)->_set)[(i)]))), ((strCharPointer)(", "))))))); })
         ;
       }
     }
@@ -3567,15 +3587,15 @@ static struct _string_s _template__showActivation__builtin_signed_int_(struct _t
     {
       {
         ({
-          struct _string_s  *_tmp769 = (&(result));
-          ((*(_tmp769)) = ((_append_string)((*(_tmp769)), ((((act)->_lattice)->_show)((((act)->_set)[(i)])))))); })
+          struct _string_s  *_tmp937 = (&(result));
+          ((*(_tmp937)) = ((_append_string)((*(_tmp937)), ((((act)->_lattice)->_show)((((act)->_set)[(i)])))))); })
         ;
       }
     }
     return ((_append_string)((result), ((strCharPointer)("}"))));
   }
 }
-typedef signed int _template_param_unused_791;
+typedef signed int _template_param_unused_959;
 static struct _string_s _template__showThreshold__builtin_signed_int_(struct _template__ThresholdSet__builtin_signed_int_  * t)
 {
 
@@ -3586,8 +3606,8 @@ static struct _string_s _template__showThreshold__builtin_signed_int_(struct _te
     {
       {
         ({
-          struct _string_s  *_tmp792 = (&(result));
-          ((*(_tmp792)) = ((_append_string)((*(_tmp792)), ((_append_string)(((_template__showActivation__builtin_signed_int_)((((t)->_a_sets)[(i)]))), ((strCharPointer)(", "))))))); })
+          struct _string_s  *_tmp960 = (&(result));
+          ((*(_tmp960)) = ((_append_string)((*(_tmp960)), ((_append_string)(((_template__showActivation__builtin_signed_int_)((((t)->_a_sets)[(i)]))), ((strCharPointer)(", "))))))); })
         ;
       }
     }
@@ -3595,15 +3615,15 @@ static struct _string_s _template__showThreshold__builtin_signed_int_(struct _te
     {
       {
         ({
-          struct _string_s  *_tmp793 = (&(result));
-          ((*(_tmp793)) = ((_append_string)((*(_tmp793)), ((_template__showActivation__builtin_signed_int_)((((t)->_a_sets)[(i)])))))); })
+          struct _string_s  *_tmp961 = (&(result));
+          ((*(_tmp961)) = ((_append_string)((*(_tmp961)), ((_template__showActivation__builtin_signed_int_)((((t)->_a_sets)[(i)])))))); })
         ;
       }
     }
     return ((_append_string)((result), ((strCharPointer)("}"))));
   }
 }
-typedef signed int _template_param_unused_797;
+typedef signed int _template_param_unused_965;
 static signed int _template__resizeThresholdSet__builtin_signed_int_(struct _template__ThresholdSet__builtin_signed_int_  * t, signed int  newSize)
 {
 
@@ -3621,7 +3641,7 @@ static signed int _template__resizeThresholdSet__builtin_signed_int_(struct _tem
     return 1;
   }
 }
-typedef signed int _template_param_unused_805;
+typedef signed int _template_param_unused_973;
 static signed int _template__incompat__builtin_signed_int_(struct _template__Lattice__builtin_signed_int_  * l, struct _template__ActivationSet__builtin_signed_int_  * Q, struct _template__ActivationSet__builtin_signed_int_  * R)
 {
 
@@ -3707,7 +3727,7 @@ static struct _template__ThresholdSet__builtin_signed_int_  *_template__addThres
     return (t);
   }
 }
-typedef signed int _template_param_unused_809;
+typedef signed int _template_param_unused_977;
 static struct _template__ThresholdSet__builtin_signed_int_  *_template__newThresholdSet__builtin_signed_int_(struct _template__Lattice__builtin_signed_int_  * l, signed int  size)
 {
 
@@ -3729,7 +3749,7 @@ static struct _template__ThresholdSet__builtin_signed_int_  *_template__newThres
     return (t);
   }
 }
-typedef signed int _template_param_unused_814;
+typedef signed int _template_param_unused_982;
 static signed int _template__freeze__builtin_signed_int_(struct _template__Lvar__builtin_signed_int_  * l)
 {
 
@@ -3738,7 +3758,7 @@ static signed int _template__freeze__builtin_signed_int_(struct _template__Lvar_
     return ((l)->_value);
   }
 }
-typedef signed int _template_param_unused_822;
+typedef signed int _template_param_unused_990;
 static struct _string_s _template__showLvar__builtin_signed_int_(struct _template__Lvar__builtin_signed_int_  * l)
 {
 
@@ -3756,7 +3776,7 @@ static struct _string_s _template__showLvar__builtin_signed_int_(struct _templat
     return ((strCharPointer)("<Lvar Value Unavailable>"));
   }
 }
-typedef signed int _template_param_unused_826;
+typedef signed int _template_param_unused_994;
 static signed int _template__freeActivation__builtin_signed_int_(struct _template__ActivationSet__builtin_signed_int_  * act)
 {
 
@@ -3766,7 +3786,7 @@ static signed int _template__freeActivation__builtin_signed_int_(struct _templat
     return 1;
   }
 }
-typedef signed int _template_param_unused_830;
+typedef signed int _template_param_unused_998;
 static signed int _template__freeThreshold__builtin_signed_int_(struct _template__ThresholdSet__builtin_signed_int_  * t)
 {
 
@@ -3793,8 +3813,6 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
   {
     struct _template__Lattice__builtin_signed_int_  *D = ((_template__newLattice__builtin_signed_int_)(0, 100, (leqInt), (lubInt), (eqInt), (showInteger)));
     struct _template__Lvar__builtin_signed_int_  *x = ((_template__new__builtin_signed_int_)((D)));
-    ((_template__declarePut__builtin_signed_int_)((x), 3));
-    ((_template__declarePut__builtin_signed_int_)((x), 7));
     struct _template__ActivationSet__builtin_signed_int_  *a1 = ((_template__addAct__builtin_signed_int_)(((_template__newActivationSet__builtin_signed_int_)((D), 20)), 6));
     struct _template__ThresholdSet__builtin_signed_int_  *t = ((_template__addThreshold__builtin_signed_int_)(((_template__newThresholdSet__builtin_signed_int_)((D), 20)), (a1)));
     struct _template__ActivationSet__builtin_signed_int_  *result;
@@ -3817,11 +3835,11 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
     ((((_cilk_frame)->scope96).result) = (result));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      struct _template__ActivationSet__builtin_signed_int_  *__tmp810;
+      struct _template__ActivationSet__builtin_signed_int_  *__tmp978;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp810) = (result));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp810)), (sizeof((__tmp810))))))
+        ((__tmp978) = (result));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp978)), (sizeof((__tmp978))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return ;
@@ -3925,8 +3943,8 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
     ((_template__freeActivation__builtin_signed_int_)((a1)));
     ((_template__freeThreshold__builtin_signed_int_)((t)));
     {
-      signed int __tmp831 = 1;
-      ((Cilk_set_result)((_cilk_ws), (&(__tmp831)), (sizeof((__tmp831)))));
+      signed int __tmp999 = 1;
+      ((Cilk_set_result)((_cilk_ws), (&(__tmp999)), (sizeof((__tmp999)))));
       /* expand CILK2C_BEFORE_RETURN_SLOW macro */;
       ((Cilk_cilk2c_before_return_slow_cp)((_cilk_ws), (&((_cilk_frame)->header))));
       ((Cilk_cilk2c_before_return_slow)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
@@ -3980,8 +3998,6 @@ signed int cilk_main(CilkWorkerState  *const  _cilk_ws, signed int  argc, char  
   {
     struct _template__Lattice__builtin_signed_int_  *D = ((_template__newLattice__builtin_signed_int_)(0, 100, (leqInt), (lubInt), (eqInt), (showInteger)));
     struct _template__Lvar__builtin_signed_int_  *x = ((_template__new__builtin_signed_int_)((D)));
-    ((_template__declarePut__builtin_signed_int_)((x), 3));
-    ((_template__declarePut__builtin_signed_int_)((x), 7));
     struct _template__ActivationSet__builtin_signed_int_  *a1 = ((_template__addAct__builtin_signed_int_)(((_template__newActivationSet__builtin_signed_int_)((D), 20)), 6));
     struct _template__ThresholdSet__builtin_signed_int_  *t = ((_template__addThreshold__builtin_signed_int_)(((_template__newThresholdSet__builtin_signed_int_)((D), 20)), (a1)));
     struct _template__ActivationSet__builtin_signed_int_  *result;
@@ -4003,11 +4019,11 @@ signed int cilk_main(CilkWorkerState  *const  _cilk_ws, signed int  argc, char  
     ((result) = ((putGetEx)((_cilk_ws), (x), (t))));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      struct _template__ActivationSet__builtin_signed_int_  *__tmp1161;
+      struct _template__ActivationSet__builtin_signed_int_  *__tmp1309;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp1161) = (result));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp1161)), (sizeof((__tmp1161))))))
+        ((__tmp1309) = (result));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp1309)), (sizeof((__tmp1309))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return 0;
