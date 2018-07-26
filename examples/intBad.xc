@@ -87,10 +87,6 @@ cilk int main(int argc, char **argv) {
 
   Lattice<int> * D = lattice(0, 100, leqInt, lubInt, eqInt, showInteger);
   Lvar<int> *x = newLvar(D);
-
-  //inst _declarePut<int>(x, 3);
-  //inst _declarePut<int>(x, 7);
-
   ActivationSet<int> * a1 = activationSet(D){6};
   ThresholdSet<int> * t = thresholdSet(D){a1};
   ActivationSet<int> * result;

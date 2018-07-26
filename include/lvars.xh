@@ -391,6 +391,9 @@ static ActivationSet<a>* _thresholdReached(Lvar<a>* l, ThresholdSet<a> * t) {
 
 template<a>
 static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
+
+  inst _declarePut<a>(l, l->_lattice->_bottom);  
+
   #ifdef DEBUG
     if (l->_lattice != t->_lattice) {
       printf("Error: can't get() when Lvar doesn't have same lattice as threshold set.\n");
@@ -419,8 +422,11 @@ static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
 
 template<a>
 static a _freeze(Lvar<a>* l) {
+  pthread_mutex_lock(&(l->_mutex));
   l->_frozen = 1;
-  return l->_value;
+  a result = l->_value;
+  pthread_mutex_unlock(&(l->_mutex));
+  return result;
 }
 
 #endif // LVARS_H_
