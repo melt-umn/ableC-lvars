@@ -2221,17 +2221,18 @@ static signed int _template__put__builtin_signed_int_(struct _template__Lvar__bu
 {
 
   {
+    ((pthread_mutex_lock)((&(((l)->_mutex)))));
     if (((l)->_frozen))
     {
       {
         ((printf)("Error: can't write to a frozen lvar.\n"));
         ((exit)(0));
+        ((pthread_mutex_unlock)((&(((l)->_mutex)))));
         return 0;
       }
     } else {
       ;
     }
-    ((pthread_mutex_lock)((&(((l)->_mutex)))));
     signed int oldState = ((l)->_value);
     signed int newValue = ((((l)->_lattice)->_lub)((oldState), (newState)));
     if (((((l)->_lattice)->_eq)((((l)->_lattice)->_top), (newValue))))
@@ -2244,8 +2245,8 @@ static signed int _template__put__builtin_signed_int_(struct _template__Lvar__bu
       ;
     }
     (((l)->_value) = (newValue));
-    ((pthread_cond_broadcast)((&(((l)->_cond)))));
     ((pthread_mutex_unlock)((&(((l)->_mutex)))));
+    ((pthread_cond_broadcast)((&(((l)->_cond)))));
     return 1;
   }
 }
@@ -2268,11 +2269,11 @@ struct _cilk_putCilk_frame {
     signed int val;
     struct _template__Lvar__builtin_signed_int_  *x;
     
-  } scope52;
+  } scope53;
   struct  {
     signed int result;
     
-  } scope54;
+  } scope55;
   
 };
 struct _cilk_putCilk_args {
@@ -2308,18 +2309,18 @@ static void _cilk_putCilk_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_p
         signed int result;
         ((((_cilk_frame)->header).entry) = 1);
         /* TODO: save only live, dirty variables */;
-        ((((_cilk_frame)->scope54).result) = (result));
+        ((((_cilk_frame)->scope55).result) = (result));
         ;
         ;
-        ((((_cilk_frame)->scope52).count) = (count));
-        ((((_cilk_frame)->scope52).val) = (val));
-        ((((_cilk_frame)->scope52).x) = (x));
+        ((((_cilk_frame)->scope53).count) = (count));
+        ((((_cilk_frame)->scope53).val) = (val));
+        ((((_cilk_frame)->scope53).x) = (x));
         /* expand CILK2C_BEFORE_SPAWN_SLOW() macro */;
         ((Cilk_cilk2c_before_spawn_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
         /* expand CILK2C_PUSH_FRAME() macro */;
         ((Cilk_cilk2c_push_frame)((_cilk_ws), (&(((_cilk_frame)->header)))));
         ((result) = ((putCilk)((_cilk_ws), (x), (val), ((count) + 1))));
-        ((((_cilk_frame)->scope54).result) = (result));
+        ((((_cilk_frame)->scope55).result) = (result));
         {
           /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
           signed int __tmp58;
@@ -2338,31 +2339,31 @@ static void _cilk_putCilk_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_p
           }
         }
         /* TODO: restore only live variables */;
-        ((result) = (((_cilk_frame)->scope54).result));
+        ((result) = (((_cilk_frame)->scope55).result));
         ;
         ;
-        ((count) = (((_cilk_frame)->scope52).count));
-        ((val) = (((_cilk_frame)->scope52).val));
-        ((x) = (((_cilk_frame)->scope52).x));
+        ((count) = (((_cilk_frame)->scope53).count));
+        ((val) = (((_cilk_frame)->scope53).val));
+        ((x) = (((_cilk_frame)->scope53).x));
         /* expand CILK2C_AFTER_SPAWN_SLOW() macro */;
         ((Cilk_cilk2c_after_spawn_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
         /* TODO: save only live, dirty variables */;
-        ((((_cilk_frame)->scope54).result) = (result));
+        ((((_cilk_frame)->scope55).result) = (result));
         ;
         ;
-        ((((_cilk_frame)->scope52).count) = (count));
-        ((((_cilk_frame)->scope52).val) = (val));
-        ((((_cilk_frame)->scope52).x) = (x));
+        ((((_cilk_frame)->scope53).count) = (count));
+        ((((_cilk_frame)->scope53).val) = (val));
+        ((((_cilk_frame)->scope53).x) = (x));
         if (0)
         {
           _cilk_sync1:;
           /* TODO: restore only live variables */;
-          ((result) = (((_cilk_frame)->scope54).result));
+          ((result) = (((_cilk_frame)->scope55).result));
           ;
           ;
-          ((count) = (((_cilk_frame)->scope52).count));
-          ((val) = (((_cilk_frame)->scope52).val));
-          ((x) = (((_cilk_frame)->scope52).x));
+          ((count) = (((_cilk_frame)->scope53).count));
+          ((val) = (((_cilk_frame)->scope53).val));
+          ((x) = (((_cilk_frame)->scope53).x));
         } else {
           ;
         }
@@ -2373,12 +2374,12 @@ static void _cilk_putCilk_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_p
         ((Cilk_cilk2c_before_sync_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
         ((((_cilk_frame)->header).entry) = 2);
         /* TODO: save only live, dirty variables */;
-        ((((_cilk_frame)->scope54).result) = (result));
+        ((((_cilk_frame)->scope55).result) = (result));
         ;
         ;
-        ((((_cilk_frame)->scope52).count) = (count));
-        ((((_cilk_frame)->scope52).val) = (val));
-        ((((_cilk_frame)->scope52).x) = (x));
+        ((((_cilk_frame)->scope53).count) = (count));
+        ((((_cilk_frame)->scope53).val) = (val));
+        ((((_cilk_frame)->scope53).x) = (x));
         if (((Cilk_sync)((_cilk_ws))))
         {
           return ;
@@ -2387,12 +2388,12 @@ static void _cilk_putCilk_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_p
           ;
         }
         /* TODO: restore only live variables */;
-        ((result) = (((_cilk_frame)->scope54).result));
+        ((result) = (((_cilk_frame)->scope55).result));
         ;
         ;
-        ((count) = (((_cilk_frame)->scope52).count));
-        ((val) = (((_cilk_frame)->scope52).val));
-        ((x) = (((_cilk_frame)->scope52).x));
+        ((count) = (((_cilk_frame)->scope53).count));
+        ((val) = (((_cilk_frame)->scope53).val));
+        ((x) = (((_cilk_frame)->scope53).x));
         /* expand CILK2C_AFTER_SYNC_SLOW() macro */;
         ((Cilk_cilk2c_after_sync_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
         /* expand CILK2C_AT_THREAD_BOUNDARY_SLOW() macro */;
@@ -2426,9 +2427,9 @@ static void _cilk_putCilk_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_p
   /* TODO: save only live, dirty variables */;
   ;
   ;
-  ((((_cilk_frame)->scope52).count) = (count));
-  ((((_cilk_frame)->scope52).val) = (val));
-  ((((_cilk_frame)->scope52).x) = (x));
+  ((((_cilk_frame)->scope53).count) = (count));
+  ((((_cilk_frame)->scope53).val) = (val));
+  ((((_cilk_frame)->scope53).x) = (x));
   if (((Cilk_sync)((_cilk_ws))))
   {
     return ;
@@ -2439,9 +2440,9 @@ static void _cilk_putCilk_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_p
   /* TODO: restore only live variables */;
   ;
   ;
-  ((count) = (((_cilk_frame)->scope52).count));
-  ((val) = (((_cilk_frame)->scope52).val));
-  ((x) = (((_cilk_frame)->scope52).x));
+  ((count) = (((_cilk_frame)->scope53).count));
+  ((val) = (((_cilk_frame)->scope53).val));
+  ((x) = (((_cilk_frame)->scope53).x));
   /* expand CILK2C_AFTER_SYNC_SLOW() macro */;
   ((Cilk_cilk2c_after_sync_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
   /* expand CILK2C_AT_THREAD_BOUNDARY_SLOW() macro */;
@@ -2452,7 +2453,7 @@ static void _cilk_putCilk_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_p
 #undef CILK_WHERE_AM_I
 #define CILK_WHERE_AM_I IN_C_CODE
 
-static CilkProcInfo _cilk_putCilk_sig[] = {{(sizeof(signed int)), (sizeof(struct _cilk_putCilk_frame)), (_cilk_putCilk_slow), 0, 0}, {(sizeof(signed int)), ((size_t)(((char *)(&((((struct _cilk_putCilk_frame *)0)->scope54).result))) - ((char *)((struct _cilk_putCilk_frame *)0)))), 0, 0, 0}, {0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}};
+static CilkProcInfo _cilk_putCilk_sig[] = {{(sizeof(signed int)), (sizeof(struct _cilk_putCilk_frame)), (_cilk_putCilk_slow), 0, 0}, {(sizeof(signed int)), ((size_t)(((char *)(&((((struct _cilk_putCilk_frame *)0)->scope55).result))) - ((char *)((struct _cilk_putCilk_frame *)0)))), 0, 0, 0}, {0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}};
 
 #undef CILK_WHERE_AM_I
 #define CILK_WHERE_AM_I IN_FAST_PROCEDURE
@@ -2473,12 +2474,12 @@ signed int putCilk(CilkWorkerState  *const  _cilk_ws, struct _template__Lvar__bu
         signed int result;
         ((((_cilk_frame)->header).entry) = 1);
         /* TODO: save only live, dirty variables */;
-        ((((_cilk_frame)->scope54).result) = (result));
+        ((((_cilk_frame)->scope55).result) = (result));
         ;
         ;
-        ((((_cilk_frame)->scope52).count) = (count));
-        ((((_cilk_frame)->scope52).val) = (val));
-        ((((_cilk_frame)->scope52).x) = (x));
+        ((((_cilk_frame)->scope53).count) = (count));
+        ((((_cilk_frame)->scope53).val) = (val));
+        ((((_cilk_frame)->scope53).x) = (x));
         /* expand CILK2C_BEFORE_SPAWN_FAST() macro */;
         ((Cilk_cilk2c_before_spawn_fast_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
         /* expand CILK2C_PUSH_FRAME() macro */;
@@ -2570,11 +2571,11 @@ struct _cilk_getCilk_frame {
     struct _template__ThresholdSet__builtin_signed_int_  *t;
     struct _template__Lvar__builtin_signed_int_  *x;
     
-  } scope64;
+  } scope65;
   struct  {
     struct _template__ActivationSet__builtin_signed_int_  *result;
     
-  } scope66;
+  } scope67;
   
 };
 struct _cilk_getCilk_args {
@@ -2588,36 +2589,8 @@ struct _cilk_getCilk_args {
 #undef CILK_WHERE_AM_I
 #define CILK_WHERE_AM_I IN_SLOW_PROCEDURE
 
-typedef signed int _template_param_unused_244;
-typedef signed int _template_param_unused_260;
-typedef signed int _template_param_unused_262;
-typedef __attribute__(()) struct _template__putStruct__builtin_signed_int_ _template__putStruct__builtin_signed_int_;
-struct _template__putStruct__builtin_signed_int_ {
-  struct _template__Lvar__builtin_signed_int_  *_lvar;
-  signed int _val;
-  
-};
-typedef signed int _template_param_unused_264;
-static void  *_template__putVoid__builtin_signed_int_(void  * valStruct)
-{
-
-  {
-    _template__putStruct__builtin_signed_int_  *p = ((_template__putStruct__builtin_signed_int_ *)(valStruct));
-    ((_template__put__builtin_signed_int_)(((p)->_lvar), ((p)->_val)));
-  }
-}
-static signed int _template__declarePut__builtin_signed_int_(struct _template__Lvar__builtin_signed_int_  * l, signed int  value)
-{
-
-  {
-    pthread_t child;
-    _template__putStruct__builtin_signed_int_  *p = ((GC_malloc)((sizeof(_template__putStruct__builtin_signed_int_))));
-    (((p)->_lvar) = (l));
-    (((p)->_val) = (value));
-    ((pthread_create)((&(child)), (((void *)0)), (_template__putVoid__builtin_signed_int_), ((void *)(p))));
-  }
-}
-typedef signed int _template_param_unused_268;
+typedef signed int _template_param_unused_104;
+typedef signed int _template_param_unused_108;
 static struct _template__ActivationSet__builtin_signed_int_  *_template__thresholdReached__builtin_signed_int_(struct _template__Lvar__builtin_signed_int_  * l, struct _template__ThresholdSet__builtin_signed_int_  * t)
 {
 
@@ -2647,7 +2620,7 @@ static struct _template__ActivationSet__builtin_signed_int_  *_template__get__bu
 {
 
   {
-    ((_template__declarePut__builtin_signed_int_)((l), (((l)->_lattice)->_bottom)));
+    ((pthread_mutex_lock)((&(((l)->_mutex)))));
     if ((((l)->_lattice) != ((t)->_lattice)))
     {
       {
@@ -2657,13 +2630,12 @@ static struct _template__ActivationSet__builtin_signed_int_  *_template__get__bu
     } else {
       ;
     }
-    ((pthread_mutex_lock)((&(((l)->_mutex)))));
     struct _template__ActivationSet__builtin_signed_int_  *actReached = ((_template__thresholdReached__builtin_signed_int_)((l), (t)));
     while (((actReached) == (((void *)0))))
     {
       {
-        ((actReached) = ((_template__thresholdReached__builtin_signed_int_)((l), (t))));
         ((pthread_cond_wait)((&(((l)->_cond))), (&(((l)->_mutex)))));
+        ((actReached) = ((_template__thresholdReached__builtin_signed_int_)((l), (t))));
       }
     }
     ((pthread_mutex_unlock)((&(((l)->_mutex)))));
@@ -2692,18 +2664,18 @@ static void _cilk_getCilk_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_g
         struct _template__ActivationSet__builtin_signed_int_  *result;
         ((((_cilk_frame)->header).entry) = 1);
         /* TODO: save only live, dirty variables */;
-        ((((_cilk_frame)->scope66).result) = (result));
+        ((((_cilk_frame)->scope67).result) = (result));
         ;
         ;
-        ((((_cilk_frame)->scope64).count) = (count));
-        ((((_cilk_frame)->scope64).t) = (t));
-        ((((_cilk_frame)->scope64).x) = (x));
+        ((((_cilk_frame)->scope65).count) = (count));
+        ((((_cilk_frame)->scope65).t) = (t));
+        ((((_cilk_frame)->scope65).x) = (x));
         /* expand CILK2C_BEFORE_SPAWN_SLOW() macro */;
         ((Cilk_cilk2c_before_spawn_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
         /* expand CILK2C_PUSH_FRAME() macro */;
         ((Cilk_cilk2c_push_frame)((_cilk_ws), (&(((_cilk_frame)->header)))));
         ((result) = ((getCilk)((_cilk_ws), (x), (t), ((count) + 1))));
-        ((((_cilk_frame)->scope66).result) = (result));
+        ((((_cilk_frame)->scope67).result) = (result));
         {
           /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
           struct _template__ActivationSet__builtin_signed_int_  *__tmp67;
@@ -2722,31 +2694,31 @@ static void _cilk_getCilk_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_g
           }
         }
         /* TODO: restore only live variables */;
-        ((result) = (((_cilk_frame)->scope66).result));
+        ((result) = (((_cilk_frame)->scope67).result));
         ;
         ;
-        ((count) = (((_cilk_frame)->scope64).count));
-        ((t) = (((_cilk_frame)->scope64).t));
-        ((x) = (((_cilk_frame)->scope64).x));
+        ((count) = (((_cilk_frame)->scope65).count));
+        ((t) = (((_cilk_frame)->scope65).t));
+        ((x) = (((_cilk_frame)->scope65).x));
         /* expand CILK2C_AFTER_SPAWN_SLOW() macro */;
         ((Cilk_cilk2c_after_spawn_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
         /* TODO: save only live, dirty variables */;
-        ((((_cilk_frame)->scope66).result) = (result));
+        ((((_cilk_frame)->scope67).result) = (result));
         ;
         ;
-        ((((_cilk_frame)->scope64).count) = (count));
-        ((((_cilk_frame)->scope64).t) = (t));
-        ((((_cilk_frame)->scope64).x) = (x));
+        ((((_cilk_frame)->scope65).count) = (count));
+        ((((_cilk_frame)->scope65).t) = (t));
+        ((((_cilk_frame)->scope65).x) = (x));
         if (0)
         {
           _cilk_sync1:;
           /* TODO: restore only live variables */;
-          ((result) = (((_cilk_frame)->scope66).result));
+          ((result) = (((_cilk_frame)->scope67).result));
           ;
           ;
-          ((count) = (((_cilk_frame)->scope64).count));
-          ((t) = (((_cilk_frame)->scope64).t));
-          ((x) = (((_cilk_frame)->scope64).x));
+          ((count) = (((_cilk_frame)->scope65).count));
+          ((t) = (((_cilk_frame)->scope65).t));
+          ((x) = (((_cilk_frame)->scope65).x));
         } else {
           ;
         }
@@ -2757,12 +2729,12 @@ static void _cilk_getCilk_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_g
         ((Cilk_cilk2c_before_sync_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
         ((((_cilk_frame)->header).entry) = 2);
         /* TODO: save only live, dirty variables */;
-        ((((_cilk_frame)->scope66).result) = (result));
+        ((((_cilk_frame)->scope67).result) = (result));
         ;
         ;
-        ((((_cilk_frame)->scope64).count) = (count));
-        ((((_cilk_frame)->scope64).t) = (t));
-        ((((_cilk_frame)->scope64).x) = (x));
+        ((((_cilk_frame)->scope65).count) = (count));
+        ((((_cilk_frame)->scope65).t) = (t));
+        ((((_cilk_frame)->scope65).x) = (x));
         if (((Cilk_sync)((_cilk_ws))))
         {
           return ;
@@ -2771,12 +2743,12 @@ static void _cilk_getCilk_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_g
           ;
         }
         /* TODO: restore only live variables */;
-        ((result) = (((_cilk_frame)->scope66).result));
+        ((result) = (((_cilk_frame)->scope67).result));
         ;
         ;
-        ((count) = (((_cilk_frame)->scope64).count));
-        ((t) = (((_cilk_frame)->scope64).t));
-        ((x) = (((_cilk_frame)->scope64).x));
+        ((count) = (((_cilk_frame)->scope65).count));
+        ((t) = (((_cilk_frame)->scope65).t));
+        ((x) = (((_cilk_frame)->scope65).x));
         /* expand CILK2C_AFTER_SYNC_SLOW() macro */;
         ((Cilk_cilk2c_after_sync_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
         /* expand CILK2C_AT_THREAD_BOUNDARY_SLOW() macro */;
@@ -2795,8 +2767,8 @@ static void _cilk_getCilk_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_g
       {
         ((printf)("get\n"));
         {
-          struct _template__ActivationSet__builtin_signed_int_  *__tmp269 = ((_template__get__builtin_signed_int_)((x), (t)));
-          ((Cilk_set_result)((_cilk_ws), (&(__tmp269)), (sizeof((__tmp269)))));
+          struct _template__ActivationSet__builtin_signed_int_  *__tmp109 = ((_template__get__builtin_signed_int_)((x), (t)));
+          ((Cilk_set_result)((_cilk_ws), (&(__tmp109)), (sizeof((__tmp109)))));
           /* expand CILK2C_BEFORE_RETURN_SLOW macro */;
           ((Cilk_cilk2c_before_return_slow_cp)((_cilk_ws), (&((_cilk_frame)->header))));
           ((Cilk_cilk2c_before_return_slow)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
@@ -2811,9 +2783,9 @@ static void _cilk_getCilk_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_g
   /* TODO: save only live, dirty variables */;
   ;
   ;
-  ((((_cilk_frame)->scope64).count) = (count));
-  ((((_cilk_frame)->scope64).t) = (t));
-  ((((_cilk_frame)->scope64).x) = (x));
+  ((((_cilk_frame)->scope65).count) = (count));
+  ((((_cilk_frame)->scope65).t) = (t));
+  ((((_cilk_frame)->scope65).x) = (x));
   if (((Cilk_sync)((_cilk_ws))))
   {
     return ;
@@ -2824,9 +2796,9 @@ static void _cilk_getCilk_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_g
   /* TODO: restore only live variables */;
   ;
   ;
-  ((count) = (((_cilk_frame)->scope64).count));
-  ((t) = (((_cilk_frame)->scope64).t));
-  ((x) = (((_cilk_frame)->scope64).x));
+  ((count) = (((_cilk_frame)->scope65).count));
+  ((t) = (((_cilk_frame)->scope65).t));
+  ((x) = (((_cilk_frame)->scope65).x));
   /* expand CILK2C_AFTER_SYNC_SLOW() macro */;
   ((Cilk_cilk2c_after_sync_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
   /* expand CILK2C_AT_THREAD_BOUNDARY_SLOW() macro */;
@@ -2837,7 +2809,7 @@ static void _cilk_getCilk_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_g
 #undef CILK_WHERE_AM_I
 #define CILK_WHERE_AM_I IN_C_CODE
 
-static CilkProcInfo _cilk_getCilk_sig[] = {{(sizeof(struct _template__ActivationSet__builtin_signed_int_)), (sizeof(struct _cilk_getCilk_frame)), (_cilk_getCilk_slow), 0, 0}, {(sizeof(struct _template__ActivationSet__builtin_signed_int_ *)), ((size_t)(((char *)(&((((struct _cilk_getCilk_frame *)0)->scope66).result))) - ((char *)((struct _cilk_getCilk_frame *)0)))), 0, 0, 0}, {0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}};
+static CilkProcInfo _cilk_getCilk_sig[] = {{(sizeof(struct _template__ActivationSet__builtin_signed_int_)), (sizeof(struct _cilk_getCilk_frame)), (_cilk_getCilk_slow), 0, 0}, {(sizeof(struct _template__ActivationSet__builtin_signed_int_ *)), ((size_t)(((char *)(&((((struct _cilk_getCilk_frame *)0)->scope67).result))) - ((char *)((struct _cilk_getCilk_frame *)0)))), 0, 0, 0}, {0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}};
 
 #undef CILK_WHERE_AM_I
 #define CILK_WHERE_AM_I IN_FAST_PROCEDURE
@@ -2858,12 +2830,12 @@ struct _template__ActivationSet__builtin_signed_int_  *getCilk(CilkWorkerState  
         struct _template__ActivationSet__builtin_signed_int_  *result;
         ((((_cilk_frame)->header).entry) = 1);
         /* TODO: save only live, dirty variables */;
-        ((((_cilk_frame)->scope66).result) = (result));
+        ((((_cilk_frame)->scope67).result) = (result));
         ;
         ;
-        ((((_cilk_frame)->scope64).count) = (count));
-        ((((_cilk_frame)->scope64).t) = (t));
-        ((((_cilk_frame)->scope64).x) = (x));
+        ((((_cilk_frame)->scope65).count) = (count));
+        ((((_cilk_frame)->scope65).t) = (t));
+        ((((_cilk_frame)->scope65).x) = (x));
         /* expand CILK2C_BEFORE_SPAWN_FAST() macro */;
         ((Cilk_cilk2c_before_spawn_fast_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
         /* expand CILK2C_PUSH_FRAME() macro */;
@@ -2871,11 +2843,11 @@ struct _template__ActivationSet__builtin_signed_int_  *getCilk(CilkWorkerState  
         ((result) = ((getCilk)((_cilk_ws), (x), (t), ((count) + 1))));
         {
           /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-          struct _template__ActivationSet__builtin_signed_int_  *__tmp471;
+          struct _template__ActivationSet__builtin_signed_int_  *__tmp151;
           if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
           {
-            ((__tmp471) = (result));
-            if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp471)), (sizeof((__tmp471))))))
+            ((__tmp151) = (result));
+            if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp151)), (sizeof((__tmp151))))))
             {
               ((Cilk_cilk2c_pop)((_cilk_ws)));
               return 0;
@@ -2951,15 +2923,15 @@ struct _cilk_putGetEx_frame {
     struct _template__ThresholdSet__builtin_signed_int_  *t;
     struct _template__Lvar__builtin_signed_int_  *x;
     
-  } scope76;
+  } scope77;
   struct  {
     struct _template__ActivationSet__builtin_signed_int_  *y;
     
-  } scope77;
+  } scope78;
   struct  {
     signed int result1, result2;
     
-  } scope78;
+  } scope79;
   
 };
 struct _cilk_putGetEx_args {
@@ -2991,26 +2963,26 @@ static void _cilk_putGetEx_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_
     signed int result1, result2;
     ((((_cilk_frame)->header).entry) = 1);
     /* TODO: save only live, dirty variables */;
-    ((((_cilk_frame)->scope78).result1) = (result1));
-    ((((_cilk_frame)->scope78).result2) = (result2));
-    ((((_cilk_frame)->scope77).y) = (y));
+    ((((_cilk_frame)->scope79).result1) = (result1));
+    ((((_cilk_frame)->scope79).result2) = (result2));
+    ((((_cilk_frame)->scope78).y) = (y));
     ;
     ;
-    ((((_cilk_frame)->scope76).t) = (t));
-    ((((_cilk_frame)->scope76).x) = (x));
+    ((((_cilk_frame)->scope77).t) = (t));
+    ((((_cilk_frame)->scope77).x) = (x));
     /* expand CILK2C_BEFORE_SPAWN_SLOW() macro */;
     ((Cilk_cilk2c_before_spawn_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
     /* expand CILK2C_PUSH_FRAME() macro */;
     ((Cilk_cilk2c_push_frame)((_cilk_ws), (&(((_cilk_frame)->header)))));
     ((y) = ((getCilk)((_cilk_ws), (x), (t), 0)));
-    ((((_cilk_frame)->scope77).y) = (y));
+    ((((_cilk_frame)->scope78).y) = (y));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      struct _template__ActivationSet__builtin_signed_int_  *__tmp477;
+      struct _template__ActivationSet__builtin_signed_int_  *__tmp157;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp477) = (y));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp477)), (sizeof((__tmp477))))))
+        ((__tmp157) = (y));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp157)), (sizeof((__tmp157))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return ;
@@ -3022,34 +2994,34 @@ static void _cilk_putGetEx_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_
       }
     }
     /* TODO: restore only live variables */;
-    ((result1) = (((_cilk_frame)->scope78).result1));
-    ((result2) = (((_cilk_frame)->scope78).result2));
-    ((y) = (((_cilk_frame)->scope77).y));
+    ((result1) = (((_cilk_frame)->scope79).result1));
+    ((result2) = (((_cilk_frame)->scope79).result2));
+    ((y) = (((_cilk_frame)->scope78).y));
     ;
     ;
-    ((t) = (((_cilk_frame)->scope76).t));
-    ((x) = (((_cilk_frame)->scope76).x));
+    ((t) = (((_cilk_frame)->scope77).t));
+    ((x) = (((_cilk_frame)->scope77).x));
     /* expand CILK2C_AFTER_SPAWN_SLOW() macro */;
     ((Cilk_cilk2c_after_spawn_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
     /* TODO: save only live, dirty variables */;
-    ((((_cilk_frame)->scope78).result1) = (result1));
-    ((((_cilk_frame)->scope78).result2) = (result2));
-    ((((_cilk_frame)->scope77).y) = (y));
+    ((((_cilk_frame)->scope79).result1) = (result1));
+    ((((_cilk_frame)->scope79).result2) = (result2));
+    ((((_cilk_frame)->scope78).y) = (y));
     ;
     ;
-    ((((_cilk_frame)->scope76).t) = (t));
-    ((((_cilk_frame)->scope76).x) = (x));
+    ((((_cilk_frame)->scope77).t) = (t));
+    ((((_cilk_frame)->scope77).x) = (x));
     if (0)
     {
       _cilk_sync1:;
       /* TODO: restore only live variables */;
-      ((result1) = (((_cilk_frame)->scope78).result1));
-      ((result2) = (((_cilk_frame)->scope78).result2));
-      ((y) = (((_cilk_frame)->scope77).y));
+      ((result1) = (((_cilk_frame)->scope79).result1));
+      ((result2) = (((_cilk_frame)->scope79).result2));
+      ((y) = (((_cilk_frame)->scope78).y));
       ;
       ;
-      ((t) = (((_cilk_frame)->scope76).t));
-      ((x) = (((_cilk_frame)->scope76).x));
+      ((t) = (((_cilk_frame)->scope77).t));
+      ((x) = (((_cilk_frame)->scope77).x));
     } else {
       ;
     }
@@ -3058,26 +3030,26 @@ static void _cilk_putGetEx_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_
     ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
     ((((_cilk_frame)->header).entry) = 2);
     /* TODO: save only live, dirty variables */;
-    ((((_cilk_frame)->scope78).result1) = (result1));
-    ((((_cilk_frame)->scope78).result2) = (result2));
-    ((((_cilk_frame)->scope77).y) = (y));
+    ((((_cilk_frame)->scope79).result1) = (result1));
+    ((((_cilk_frame)->scope79).result2) = (result2));
+    ((((_cilk_frame)->scope78).y) = (y));
     ;
     ;
-    ((((_cilk_frame)->scope76).t) = (t));
-    ((((_cilk_frame)->scope76).x) = (x));
+    ((((_cilk_frame)->scope77).t) = (t));
+    ((((_cilk_frame)->scope77).x) = (x));
     /* expand CILK2C_BEFORE_SPAWN_SLOW() macro */;
     ((Cilk_cilk2c_before_spawn_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
     /* expand CILK2C_PUSH_FRAME() macro */;
     ((Cilk_cilk2c_push_frame)((_cilk_ws), (&(((_cilk_frame)->header)))));
     ((result1) = ((putCilk)((_cilk_ws), (x), 3, 0)));
-    ((((_cilk_frame)->scope78).result1) = (result1));
+    ((((_cilk_frame)->scope79).result1) = (result1));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      signed int __tmp478;
+      signed int __tmp158;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp478) = (result1));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp478)), (sizeof((__tmp478))))))
+        ((__tmp158) = (result1));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp158)), (sizeof((__tmp158))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return ;
@@ -3089,34 +3061,34 @@ static void _cilk_putGetEx_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_
       }
     }
     /* TODO: restore only live variables */;
-    ((result1) = (((_cilk_frame)->scope78).result1));
-    ((result2) = (((_cilk_frame)->scope78).result2));
-    ((y) = (((_cilk_frame)->scope77).y));
+    ((result1) = (((_cilk_frame)->scope79).result1));
+    ((result2) = (((_cilk_frame)->scope79).result2));
+    ((y) = (((_cilk_frame)->scope78).y));
     ;
     ;
-    ((t) = (((_cilk_frame)->scope76).t));
-    ((x) = (((_cilk_frame)->scope76).x));
+    ((t) = (((_cilk_frame)->scope77).t));
+    ((x) = (((_cilk_frame)->scope77).x));
     /* expand CILK2C_AFTER_SPAWN_SLOW() macro */;
     ((Cilk_cilk2c_after_spawn_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
     /* TODO: save only live, dirty variables */;
-    ((((_cilk_frame)->scope78).result1) = (result1));
-    ((((_cilk_frame)->scope78).result2) = (result2));
-    ((((_cilk_frame)->scope77).y) = (y));
+    ((((_cilk_frame)->scope79).result1) = (result1));
+    ((((_cilk_frame)->scope79).result2) = (result2));
+    ((((_cilk_frame)->scope78).y) = (y));
     ;
     ;
-    ((((_cilk_frame)->scope76).t) = (t));
-    ((((_cilk_frame)->scope76).x) = (x));
+    ((((_cilk_frame)->scope77).t) = (t));
+    ((((_cilk_frame)->scope77).x) = (x));
     if (0)
     {
       _cilk_sync2:;
       /* TODO: restore only live variables */;
-      ((result1) = (((_cilk_frame)->scope78).result1));
-      ((result2) = (((_cilk_frame)->scope78).result2));
-      ((y) = (((_cilk_frame)->scope77).y));
+      ((result1) = (((_cilk_frame)->scope79).result1));
+      ((result2) = (((_cilk_frame)->scope79).result2));
+      ((y) = (((_cilk_frame)->scope78).y));
       ;
       ;
-      ((t) = (((_cilk_frame)->scope76).t));
-      ((x) = (((_cilk_frame)->scope76).x));
+      ((t) = (((_cilk_frame)->scope77).t));
+      ((x) = (((_cilk_frame)->scope77).x));
     } else {
       ;
     }
@@ -3125,26 +3097,26 @@ static void _cilk_putGetEx_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_
     ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
     ((((_cilk_frame)->header).entry) = 3);
     /* TODO: save only live, dirty variables */;
-    ((((_cilk_frame)->scope78).result1) = (result1));
-    ((((_cilk_frame)->scope78).result2) = (result2));
-    ((((_cilk_frame)->scope77).y) = (y));
+    ((((_cilk_frame)->scope79).result1) = (result1));
+    ((((_cilk_frame)->scope79).result2) = (result2));
+    ((((_cilk_frame)->scope78).y) = (y));
     ;
     ;
-    ((((_cilk_frame)->scope76).t) = (t));
-    ((((_cilk_frame)->scope76).x) = (x));
+    ((((_cilk_frame)->scope77).t) = (t));
+    ((((_cilk_frame)->scope77).x) = (x));
     /* expand CILK2C_BEFORE_SPAWN_SLOW() macro */;
     ((Cilk_cilk2c_before_spawn_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
     /* expand CILK2C_PUSH_FRAME() macro */;
     ((Cilk_cilk2c_push_frame)((_cilk_ws), (&(((_cilk_frame)->header)))));
     ((result2) = ((putCilk)((_cilk_ws), (x), 7, 0)));
-    ((((_cilk_frame)->scope78).result2) = (result2));
+    ((((_cilk_frame)->scope79).result2) = (result2));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      signed int __tmp479;
+      signed int __tmp159;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp479) = (result2));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp479)), (sizeof((__tmp479))))))
+        ((__tmp159) = (result2));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp159)), (sizeof((__tmp159))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return ;
@@ -3156,34 +3128,34 @@ static void _cilk_putGetEx_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_
       }
     }
     /* TODO: restore only live variables */;
-    ((result1) = (((_cilk_frame)->scope78).result1));
-    ((result2) = (((_cilk_frame)->scope78).result2));
-    ((y) = (((_cilk_frame)->scope77).y));
+    ((result1) = (((_cilk_frame)->scope79).result1));
+    ((result2) = (((_cilk_frame)->scope79).result2));
+    ((y) = (((_cilk_frame)->scope78).y));
     ;
     ;
-    ((t) = (((_cilk_frame)->scope76).t));
-    ((x) = (((_cilk_frame)->scope76).x));
+    ((t) = (((_cilk_frame)->scope77).t));
+    ((x) = (((_cilk_frame)->scope77).x));
     /* expand CILK2C_AFTER_SPAWN_SLOW() macro */;
     ((Cilk_cilk2c_after_spawn_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
     /* TODO: save only live, dirty variables */;
-    ((((_cilk_frame)->scope78).result1) = (result1));
-    ((((_cilk_frame)->scope78).result2) = (result2));
-    ((((_cilk_frame)->scope77).y) = (y));
+    ((((_cilk_frame)->scope79).result1) = (result1));
+    ((((_cilk_frame)->scope79).result2) = (result2));
+    ((((_cilk_frame)->scope78).y) = (y));
     ;
     ;
-    ((((_cilk_frame)->scope76).t) = (t));
-    ((((_cilk_frame)->scope76).x) = (x));
+    ((((_cilk_frame)->scope77).t) = (t));
+    ((((_cilk_frame)->scope77).x) = (x));
     if (0)
     {
       _cilk_sync3:;
       /* TODO: restore only live variables */;
-      ((result1) = (((_cilk_frame)->scope78).result1));
-      ((result2) = (((_cilk_frame)->scope78).result2));
-      ((y) = (((_cilk_frame)->scope77).y));
+      ((result1) = (((_cilk_frame)->scope79).result1));
+      ((result2) = (((_cilk_frame)->scope79).result2));
+      ((y) = (((_cilk_frame)->scope78).y));
       ;
       ;
-      ((t) = (((_cilk_frame)->scope76).t));
-      ((x) = (((_cilk_frame)->scope76).x));
+      ((t) = (((_cilk_frame)->scope77).t));
+      ((x) = (((_cilk_frame)->scope77).x));
     } else {
       ;
     }
@@ -3194,13 +3166,13 @@ static void _cilk_putGetEx_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_
     ((Cilk_cilk2c_before_sync_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
     ((((_cilk_frame)->header).entry) = 4);
     /* TODO: save only live, dirty variables */;
-    ((((_cilk_frame)->scope78).result1) = (result1));
-    ((((_cilk_frame)->scope78).result2) = (result2));
-    ((((_cilk_frame)->scope77).y) = (y));
+    ((((_cilk_frame)->scope79).result1) = (result1));
+    ((((_cilk_frame)->scope79).result2) = (result2));
+    ((((_cilk_frame)->scope78).y) = (y));
     ;
     ;
-    ((((_cilk_frame)->scope76).t) = (t));
-    ((((_cilk_frame)->scope76).x) = (x));
+    ((((_cilk_frame)->scope77).t) = (t));
+    ((((_cilk_frame)->scope77).x) = (x));
     if (((Cilk_sync)((_cilk_ws))))
     {
       return ;
@@ -3209,21 +3181,21 @@ static void _cilk_putGetEx_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_
       ;
     }
     /* TODO: restore only live variables */;
-    ((result1) = (((_cilk_frame)->scope78).result1));
-    ((result2) = (((_cilk_frame)->scope78).result2));
-    ((y) = (((_cilk_frame)->scope77).y));
+    ((result1) = (((_cilk_frame)->scope79).result1));
+    ((result2) = (((_cilk_frame)->scope79).result2));
+    ((y) = (((_cilk_frame)->scope78).y));
     ;
     ;
-    ((t) = (((_cilk_frame)->scope76).t));
-    ((x) = (((_cilk_frame)->scope76).x));
+    ((t) = (((_cilk_frame)->scope77).t));
+    ((x) = (((_cilk_frame)->scope77).x));
     /* expand CILK2C_AFTER_SYNC_SLOW() macro */;
     ((Cilk_cilk2c_after_sync_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
     /* expand CILK2C_AT_THREAD_BOUNDARY_SLOW() macro */;
     ((Cilk_cilk2c_at_thread_boundary_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
     ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
     {
-      struct _template__ActivationSet__builtin_signed_int_  *__tmp480 = (y);
-      ((Cilk_set_result)((_cilk_ws), (&(__tmp480)), (sizeof((__tmp480)))));
+      struct _template__ActivationSet__builtin_signed_int_  *__tmp160 = (y);
+      ((Cilk_set_result)((_cilk_ws), (&(__tmp160)), (sizeof((__tmp160)))));
       /* expand CILK2C_BEFORE_RETURN_SLOW macro */;
       ((Cilk_cilk2c_before_return_slow_cp)((_cilk_ws), (&((_cilk_frame)->header))));
       ((Cilk_cilk2c_before_return_slow)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
@@ -3236,8 +3208,8 @@ static void _cilk_putGetEx_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_
   /* TODO: save only live, dirty variables */;
   ;
   ;
-  ((((_cilk_frame)->scope76).t) = (t));
-  ((((_cilk_frame)->scope76).x) = (x));
+  ((((_cilk_frame)->scope77).t) = (t));
+  ((((_cilk_frame)->scope77).x) = (x));
   if (((Cilk_sync)((_cilk_ws))))
   {
     return ;
@@ -3248,8 +3220,8 @@ static void _cilk_putGetEx_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_
   /* TODO: restore only live variables */;
   ;
   ;
-  ((t) = (((_cilk_frame)->scope76).t));
-  ((x) = (((_cilk_frame)->scope76).x));
+  ((t) = (((_cilk_frame)->scope77).t));
+  ((x) = (((_cilk_frame)->scope77).x));
   /* expand CILK2C_AFTER_SYNC_SLOW() macro */;
   ((Cilk_cilk2c_after_sync_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
   /* expand CILK2C_AT_THREAD_BOUNDARY_SLOW() macro */;
@@ -3260,7 +3232,7 @@ static void _cilk_putGetEx_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_
 #undef CILK_WHERE_AM_I
 #define CILK_WHERE_AM_I IN_C_CODE
 
-static CilkProcInfo _cilk_putGetEx_sig[] = {{(sizeof(struct _template__ActivationSet__builtin_signed_int_)), (sizeof(struct _cilk_putGetEx_frame)), (_cilk_putGetEx_slow), 0, 0}, {(sizeof(struct _template__ActivationSet__builtin_signed_int_ *)), ((size_t)(((char *)(&((((struct _cilk_putGetEx_frame *)0)->scope77).y))) - ((char *)((struct _cilk_putGetEx_frame *)0)))), 0, 0, 0}, {(sizeof(signed int)), ((size_t)(((char *)(&((((struct _cilk_putGetEx_frame *)0)->scope78).result1))) - ((char *)((struct _cilk_putGetEx_frame *)0)))), 0, 0, 0}, {(sizeof(signed int)), ((size_t)(((char *)(&((((struct _cilk_putGetEx_frame *)0)->scope78).result2))) - ((char *)((struct _cilk_putGetEx_frame *)0)))), 0, 0, 0}, {0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}};
+static CilkProcInfo _cilk_putGetEx_sig[] = {{(sizeof(struct _template__ActivationSet__builtin_signed_int_)), (sizeof(struct _cilk_putGetEx_frame)), (_cilk_putGetEx_slow), 0, 0}, {(sizeof(struct _template__ActivationSet__builtin_signed_int_ *)), ((size_t)(((char *)(&((((struct _cilk_putGetEx_frame *)0)->scope78).y))) - ((char *)((struct _cilk_putGetEx_frame *)0)))), 0, 0, 0}, {(sizeof(signed int)), ((size_t)(((char *)(&((((struct _cilk_putGetEx_frame *)0)->scope79).result1))) - ((char *)((struct _cilk_putGetEx_frame *)0)))), 0, 0, 0}, {(sizeof(signed int)), ((size_t)(((char *)(&((((struct _cilk_putGetEx_frame *)0)->scope79).result2))) - ((char *)((struct _cilk_putGetEx_frame *)0)))), 0, 0, 0}, {0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}};
 
 #undef CILK_WHERE_AM_I
 #define CILK_WHERE_AM_I IN_FAST_PROCEDURE
@@ -3279,13 +3251,13 @@ struct _template__ActivationSet__builtin_signed_int_  *putGetEx(CilkWorkerState 
     signed int result1, result2;
     ((((_cilk_frame)->header).entry) = 1);
     /* TODO: save only live, dirty variables */;
-    ((((_cilk_frame)->scope78).result1) = (result1));
-    ((((_cilk_frame)->scope78).result2) = (result2));
-    ((((_cilk_frame)->scope77).y) = (y));
+    ((((_cilk_frame)->scope79).result1) = (result1));
+    ((((_cilk_frame)->scope79).result2) = (result2));
+    ((((_cilk_frame)->scope78).y) = (y));
     ;
     ;
-    ((((_cilk_frame)->scope76).t) = (t));
-    ((((_cilk_frame)->scope76).x) = (x));
+    ((((_cilk_frame)->scope77).t) = (t));
+    ((((_cilk_frame)->scope77).x) = (x));
     /* expand CILK2C_BEFORE_SPAWN_FAST() macro */;
     ((Cilk_cilk2c_before_spawn_fast_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
     /* expand CILK2C_PUSH_FRAME() macro */;
@@ -3293,11 +3265,11 @@ struct _template__ActivationSet__builtin_signed_int_  *putGetEx(CilkWorkerState 
     ((y) = ((getCilk)((_cilk_ws), (x), (t), 0)));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      struct _template__ActivationSet__builtin_signed_int_  *__tmp484;
+      struct _template__ActivationSet__builtin_signed_int_  *__tmp164;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp484) = (y));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp484)), (sizeof((__tmp484))))))
+        ((__tmp164) = (y));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp164)), (sizeof((__tmp164))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return 0;
@@ -3313,13 +3285,13 @@ struct _template__ActivationSet__builtin_signed_int_  *putGetEx(CilkWorkerState 
     ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
     ((((_cilk_frame)->header).entry) = 2);
     /* TODO: save only live, dirty variables */;
-    ((((_cilk_frame)->scope78).result1) = (result1));
-    ((((_cilk_frame)->scope78).result2) = (result2));
-    ((((_cilk_frame)->scope77).y) = (y));
+    ((((_cilk_frame)->scope79).result1) = (result1));
+    ((((_cilk_frame)->scope79).result2) = (result2));
+    ((((_cilk_frame)->scope78).y) = (y));
     ;
     ;
-    ((((_cilk_frame)->scope76).t) = (t));
-    ((((_cilk_frame)->scope76).x) = (x));
+    ((((_cilk_frame)->scope77).t) = (t));
+    ((((_cilk_frame)->scope77).x) = (x));
     /* expand CILK2C_BEFORE_SPAWN_FAST() macro */;
     ((Cilk_cilk2c_before_spawn_fast_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
     /* expand CILK2C_PUSH_FRAME() macro */;
@@ -3327,11 +3299,11 @@ struct _template__ActivationSet__builtin_signed_int_  *putGetEx(CilkWorkerState 
     ((result1) = ((putCilk)((_cilk_ws), (x), 3, 0)));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      signed int __tmp485;
+      signed int __tmp165;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp485) = (result1));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp485)), (sizeof((__tmp485))))))
+        ((__tmp165) = (result1));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp165)), (sizeof((__tmp165))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return 0;
@@ -3347,13 +3319,13 @@ struct _template__ActivationSet__builtin_signed_int_  *putGetEx(CilkWorkerState 
     ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
     ((((_cilk_frame)->header).entry) = 3);
     /* TODO: save only live, dirty variables */;
-    ((((_cilk_frame)->scope78).result1) = (result1));
-    ((((_cilk_frame)->scope78).result2) = (result2));
-    ((((_cilk_frame)->scope77).y) = (y));
+    ((((_cilk_frame)->scope79).result1) = (result1));
+    ((((_cilk_frame)->scope79).result2) = (result2));
+    ((((_cilk_frame)->scope78).y) = (y));
     ;
     ;
-    ((((_cilk_frame)->scope76).t) = (t));
-    ((((_cilk_frame)->scope76).x) = (x));
+    ((((_cilk_frame)->scope77).t) = (t));
+    ((((_cilk_frame)->scope77).x) = (x));
     /* expand CILK2C_BEFORE_SPAWN_FAST() macro */;
     ((Cilk_cilk2c_before_spawn_fast_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
     /* expand CILK2C_PUSH_FRAME() macro */;
@@ -3361,11 +3333,11 @@ struct _template__ActivationSet__builtin_signed_int_  *putGetEx(CilkWorkerState 
     ((result2) = ((putCilk)((_cilk_ws), (x), 7, 0)));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      signed int __tmp486;
+      signed int __tmp166;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp486) = (result2));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp486)), (sizeof((__tmp486))))))
+        ((__tmp166) = (result2));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp166)), (sizeof((__tmp166))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return 0;
@@ -3427,27 +3399,27 @@ struct _cilk_cilk_main_frame {
     char  * *argv;
     signed int argc;
     
-  } scope86;
+  } scope87;
   struct  {
     struct _template__Lattice__builtin_signed_int_  *D;
     
-  } scope88;
+  } scope89;
   struct  {
     struct _template__Lvar__builtin_signed_int_  *x;
     
-  } scope89;
+  } scope90;
   struct  {
     struct _template__ActivationSet__builtin_signed_int_  *a1;
     
-  } scope90;
+  } scope91;
   struct  {
     struct _template__ThresholdSet__builtin_signed_int_  *t;
     
-  } scope91;
+  } scope92;
   struct  {
     struct _template__ActivationSet__builtin_signed_int_  *result;
     
-  } scope92;
+  } scope93;
   
 };
 struct _cilk_cilk_main_args {
@@ -3460,7 +3432,7 @@ struct _cilk_cilk_main_args {
 #undef CILK_WHERE_AM_I
 #define CILK_WHERE_AM_I IN_SLOW_PROCEDURE
 
-typedef signed int _template_param_unused_805;
+typedef signed int _template_param_unused_485;
 static struct _template__Lattice__builtin_signed_int_  *_template__newLattice__builtin_signed_int_(signed int  least, signed int  greatest, signed int ( * leq)(), signed int ( * lub)(), signed int ( * eq)(), struct _string_s ( * showMethod)())
 {
 
@@ -3475,7 +3447,7 @@ static struct _template__Lattice__builtin_signed_int_  *_template__newLattice__b
     return (l);
   }
 }
-typedef signed int _template_param_unused_809;
+typedef signed int _template_param_unused_489;
 static struct _template__Lvar__builtin_signed_int_  *_template__new__builtin_signed_int_(struct _template__Lattice__builtin_signed_int_  * l)
 {
 
@@ -3489,8 +3461,8 @@ static struct _template__Lvar__builtin_signed_int_  *_template__new__builtin_sig
     return (lvarNew);
   }
 }
-typedef signed int _template_param_unused_829;
-typedef signed int _template_param_unused_833;
+typedef signed int _template_param_unused_509;
+typedef signed int _template_param_unused_513;
 static signed int _template__resizeActSet__builtin_signed_int_(struct _template__ActivationSet__builtin_signed_int_  * act, signed int  newSize)
 {
 
@@ -3525,7 +3497,7 @@ static struct _template__ActivationSet__builtin_signed_int_  *_template__addAct_
     return (act);
   }
 }
-typedef signed int _template_param_unused_837;
+typedef signed int _template_param_unused_517;
 static struct _template__ActivationSet__builtin_signed_int_  *_template__newActivationSet__builtin_signed_int_(struct _template__Lattice__builtin_signed_int_  * l, signed int  size)
 {
 
@@ -3547,8 +3519,8 @@ static struct _template__ActivationSet__builtin_signed_int_  *_template__newActi
     return (act);
   }
 }
-typedef signed int _template_param_unused_1025;
-typedef signed int _template_param_unused_1047;
+typedef signed int _template_param_unused_705;
+typedef signed int _template_param_unused_727;
 static struct _string_s _template__showActivation__builtin_signed_int_(struct _template__ActivationSet__builtin_signed_int_  * act)
 {
 
@@ -3559,8 +3531,8 @@ static struct _string_s _template__showActivation__builtin_signed_int_(struct _t
     {
       {
         ({
-          struct _string_s  *_tmp1048 = (&(result));
-          ((*(_tmp1048)) = ((_append_string)((*(_tmp1048)), ((_append_string)(((((act)->_lattice)->_show)((((act)->_set)[(i)]))), ((strCharPointer)(", "))))))); })
+          struct _string_s  *_tmp728 = (&(result));
+          ((*(_tmp728)) = ((_append_string)((*(_tmp728)), ((_append_string)(((((act)->_lattice)->_show)((((act)->_set)[(i)]))), ((strCharPointer)(", "))))))); })
         ;
       }
     }
@@ -3568,15 +3540,15 @@ static struct _string_s _template__showActivation__builtin_signed_int_(struct _t
     {
       {
         ({
-          struct _string_s  *_tmp1049 = (&(result));
-          ((*(_tmp1049)) = ((_append_string)((*(_tmp1049)), ((((act)->_lattice)->_show)((((act)->_set)[(i)])))))); })
+          struct _string_s  *_tmp729 = (&(result));
+          ((*(_tmp729)) = ((_append_string)((*(_tmp729)), ((((act)->_lattice)->_show)((((act)->_set)[(i)])))))); })
         ;
       }
     }
     return ((_append_string)((result), ((strCharPointer)("}"))));
   }
 }
-typedef signed int _template_param_unused_1071;
+typedef signed int _template_param_unused_751;
 static struct _string_s _template__showThreshold__builtin_signed_int_(struct _template__ThresholdSet__builtin_signed_int_  * t)
 {
 
@@ -3587,8 +3559,8 @@ static struct _string_s _template__showThreshold__builtin_signed_int_(struct _te
     {
       {
         ({
-          struct _string_s  *_tmp1072 = (&(result));
-          ((*(_tmp1072)) = ((_append_string)((*(_tmp1072)), ((_append_string)(((_template__showActivation__builtin_signed_int_)((((t)->_a_sets)[(i)]))), ((strCharPointer)(", "))))))); })
+          struct _string_s  *_tmp752 = (&(result));
+          ((*(_tmp752)) = ((_append_string)((*(_tmp752)), ((_append_string)(((_template__showActivation__builtin_signed_int_)((((t)->_a_sets)[(i)]))), ((strCharPointer)(", "))))))); })
         ;
       }
     }
@@ -3596,15 +3568,15 @@ static struct _string_s _template__showThreshold__builtin_signed_int_(struct _te
     {
       {
         ({
-          struct _string_s  *_tmp1073 = (&(result));
-          ((*(_tmp1073)) = ((_append_string)((*(_tmp1073)), ((_template__showActivation__builtin_signed_int_)((((t)->_a_sets)[(i)])))))); })
+          struct _string_s  *_tmp753 = (&(result));
+          ((*(_tmp753)) = ((_append_string)((*(_tmp753)), ((_template__showActivation__builtin_signed_int_)((((t)->_a_sets)[(i)])))))); })
         ;
       }
     }
     return ((_append_string)((result), ((strCharPointer)("}"))));
   }
 }
-typedef signed int _template_param_unused_1077;
+typedef signed int _template_param_unused_757;
 static signed int _template__resizeThresholdSet__builtin_signed_int_(struct _template__ThresholdSet__builtin_signed_int_  * t, signed int  newSize)
 {
 
@@ -3622,7 +3594,7 @@ static signed int _template__resizeThresholdSet__builtin_signed_int_(struct _tem
     return 1;
   }
 }
-typedef signed int _template_param_unused_1085;
+typedef signed int _template_param_unused_765;
 static signed int _template__incompat__builtin_signed_int_(struct _template__Lattice__builtin_signed_int_  * l, struct _template__ActivationSet__builtin_signed_int_  * Q, struct _template__ActivationSet__builtin_signed_int_  * R)
 {
 
@@ -3708,7 +3680,7 @@ static struct _template__ThresholdSet__builtin_signed_int_  *_template__addThres
     return (t);
   }
 }
-typedef signed int _template_param_unused_1089;
+typedef signed int _template_param_unused_769;
 static struct _template__ThresholdSet__builtin_signed_int_  *_template__newThresholdSet__builtin_signed_int_(struct _template__Lattice__builtin_signed_int_  * l, signed int  size)
 {
 
@@ -3730,7 +3702,7 @@ static struct _template__ThresholdSet__builtin_signed_int_  *_template__newThres
     return (t);
   }
 }
-typedef signed int _template_param_unused_1094;
+typedef signed int _template_param_unused_774;
 static signed int _template__freeze__builtin_signed_int_(struct _template__Lvar__builtin_signed_int_  * l)
 {
 
@@ -3742,7 +3714,7 @@ static signed int _template__freeze__builtin_signed_int_(struct _template__Lvar_
     return (result);
   }
 }
-typedef signed int _template_param_unused_1102;
+typedef signed int _template_param_unused_782;
 static struct _string_s _template__showLvar__builtin_signed_int_(struct _template__Lvar__builtin_signed_int_  * l)
 {
 
@@ -3760,7 +3732,7 @@ static struct _string_s _template__showLvar__builtin_signed_int_(struct _templat
     return ((strCharPointer)("<Lvar Value Unavailable>"));
   }
 }
-typedef signed int _template_param_unused_1106;
+typedef signed int _template_param_unused_786;
 static signed int _template__freeActivation__builtin_signed_int_(struct _template__ActivationSet__builtin_signed_int_  * act)
 {
 
@@ -3770,7 +3742,7 @@ static signed int _template__freeActivation__builtin_signed_int_(struct _templat
     return 1;
   }
 }
-typedef signed int _template_param_unused_1110;
+typedef signed int _template_param_unused_790;
 static signed int _template__freeThreshold__builtin_signed_int_(struct _template__ThresholdSet__builtin_signed_int_  * t)
 {
 
@@ -3802,28 +3774,28 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
     struct _template__ActivationSet__builtin_signed_int_  *result;
     ((((_cilk_frame)->header).entry) = 1);
     /* TODO: save only live, dirty variables */;
-    ((((_cilk_frame)->scope88).D) = (D));
-    ((((_cilk_frame)->scope90).a1) = (a1));
-    ((((_cilk_frame)->scope92).result) = (result));
-    ((((_cilk_frame)->scope91).t) = (t));
-    ((((_cilk_frame)->scope89).x) = (x));
+    ((((_cilk_frame)->scope89).D) = (D));
+    ((((_cilk_frame)->scope91).a1) = (a1));
+    ((((_cilk_frame)->scope93).result) = (result));
+    ((((_cilk_frame)->scope92).t) = (t));
+    ((((_cilk_frame)->scope90).x) = (x));
     ;
     ;
-    ((((_cilk_frame)->scope86).argc) = (argc));
-    ((((_cilk_frame)->scope86).argv) = (argv));
+    ((((_cilk_frame)->scope87).argc) = (argc));
+    ((((_cilk_frame)->scope87).argv) = (argv));
     /* expand CILK2C_BEFORE_SPAWN_SLOW() macro */;
     ((Cilk_cilk2c_before_spawn_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
     /* expand CILK2C_PUSH_FRAME() macro */;
     ((Cilk_cilk2c_push_frame)((_cilk_ws), (&(((_cilk_frame)->header)))));
     ((result) = ((putGetEx)((_cilk_ws), (x), (t))));
-    ((((_cilk_frame)->scope92).result) = (result));
+    ((((_cilk_frame)->scope93).result) = (result));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      struct _template__ActivationSet__builtin_signed_int_  *__tmp1090;
+      struct _template__ActivationSet__builtin_signed_int_  *__tmp770;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp1090) = (result));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp1090)), (sizeof((__tmp1090))))))
+        ((__tmp770) = (result));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp770)), (sizeof((__tmp770))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return ;
@@ -3835,40 +3807,40 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
       }
     }
     /* TODO: restore only live variables */;
-    ((D) = (((_cilk_frame)->scope88).D));
-    ((a1) = (((_cilk_frame)->scope90).a1));
-    ((result) = (((_cilk_frame)->scope92).result));
-    ((t) = (((_cilk_frame)->scope91).t));
-    ((x) = (((_cilk_frame)->scope89).x));
+    ((D) = (((_cilk_frame)->scope89).D));
+    ((a1) = (((_cilk_frame)->scope91).a1));
+    ((result) = (((_cilk_frame)->scope93).result));
+    ((t) = (((_cilk_frame)->scope92).t));
+    ((x) = (((_cilk_frame)->scope90).x));
     ;
     ;
-    ((argc) = (((_cilk_frame)->scope86).argc));
-    ((argv) = (((_cilk_frame)->scope86).argv));
+    ((argc) = (((_cilk_frame)->scope87).argc));
+    ((argv) = (((_cilk_frame)->scope87).argv));
     /* expand CILK2C_AFTER_SPAWN_SLOW() macro */;
     ((Cilk_cilk2c_after_spawn_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
     /* TODO: save only live, dirty variables */;
-    ((((_cilk_frame)->scope88).D) = (D));
-    ((((_cilk_frame)->scope90).a1) = (a1));
-    ((((_cilk_frame)->scope92).result) = (result));
-    ((((_cilk_frame)->scope91).t) = (t));
-    ((((_cilk_frame)->scope89).x) = (x));
+    ((((_cilk_frame)->scope89).D) = (D));
+    ((((_cilk_frame)->scope91).a1) = (a1));
+    ((((_cilk_frame)->scope93).result) = (result));
+    ((((_cilk_frame)->scope92).t) = (t));
+    ((((_cilk_frame)->scope90).x) = (x));
     ;
     ;
-    ((((_cilk_frame)->scope86).argc) = (argc));
-    ((((_cilk_frame)->scope86).argv) = (argv));
+    ((((_cilk_frame)->scope87).argc) = (argc));
+    ((((_cilk_frame)->scope87).argv) = (argv));
     if (0)
     {
       _cilk_sync1:;
       /* TODO: restore only live variables */;
-      ((D) = (((_cilk_frame)->scope88).D));
-      ((a1) = (((_cilk_frame)->scope90).a1));
-      ((result) = (((_cilk_frame)->scope92).result));
-      ((t) = (((_cilk_frame)->scope91).t));
-      ((x) = (((_cilk_frame)->scope89).x));
+      ((D) = (((_cilk_frame)->scope89).D));
+      ((a1) = (((_cilk_frame)->scope91).a1));
+      ((result) = (((_cilk_frame)->scope93).result));
+      ((t) = (((_cilk_frame)->scope92).t));
+      ((x) = (((_cilk_frame)->scope90).x));
       ;
       ;
-      ((argc) = (((_cilk_frame)->scope86).argc));
-      ((argv) = (((_cilk_frame)->scope86).argv));
+      ((argc) = (((_cilk_frame)->scope87).argc));
+      ((argv) = (((_cilk_frame)->scope87).argv));
     } else {
       ;
     }
@@ -3879,15 +3851,15 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
     ((Cilk_cilk2c_before_sync_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
     ((((_cilk_frame)->header).entry) = 2);
     /* TODO: save only live, dirty variables */;
-    ((((_cilk_frame)->scope88).D) = (D));
-    ((((_cilk_frame)->scope90).a1) = (a1));
-    ((((_cilk_frame)->scope92).result) = (result));
-    ((((_cilk_frame)->scope91).t) = (t));
-    ((((_cilk_frame)->scope89).x) = (x));
+    ((((_cilk_frame)->scope89).D) = (D));
+    ((((_cilk_frame)->scope91).a1) = (a1));
+    ((((_cilk_frame)->scope93).result) = (result));
+    ((((_cilk_frame)->scope92).t) = (t));
+    ((((_cilk_frame)->scope90).x) = (x));
     ;
     ;
-    ((((_cilk_frame)->scope86).argc) = (argc));
-    ((((_cilk_frame)->scope86).argv) = (argv));
+    ((((_cilk_frame)->scope87).argc) = (argc));
+    ((((_cilk_frame)->scope87).argv) = (argv));
     if (((Cilk_sync)((_cilk_ws))))
     {
       return ;
@@ -3896,15 +3868,15 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
       ;
     }
     /* TODO: restore only live variables */;
-    ((D) = (((_cilk_frame)->scope88).D));
-    ((a1) = (((_cilk_frame)->scope90).a1));
-    ((result) = (((_cilk_frame)->scope92).result));
-    ((t) = (((_cilk_frame)->scope91).t));
-    ((x) = (((_cilk_frame)->scope89).x));
+    ((D) = (((_cilk_frame)->scope89).D));
+    ((a1) = (((_cilk_frame)->scope91).a1));
+    ((result) = (((_cilk_frame)->scope93).result));
+    ((t) = (((_cilk_frame)->scope92).t));
+    ((x) = (((_cilk_frame)->scope90).x));
     ;
     ;
-    ((argc) = (((_cilk_frame)->scope86).argc));
-    ((argv) = (((_cilk_frame)->scope86).argv));
+    ((argc) = (((_cilk_frame)->scope87).argc));
+    ((argv) = (((_cilk_frame)->scope87).argv));
     /* expand CILK2C_AFTER_SYNC_SLOW() macro */;
     ((Cilk_cilk2c_after_sync_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
     /* expand CILK2C_AT_THREAD_BOUNDARY_SLOW() macro */;
@@ -3927,8 +3899,8 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
     ((_template__freeActivation__builtin_signed_int_)((a1)));
     ((_template__freeThreshold__builtin_signed_int_)((t)));
     {
-      signed int __tmp1111 = 1;
-      ((Cilk_set_result)((_cilk_ws), (&(__tmp1111)), (sizeof((__tmp1111)))));
+      signed int __tmp791 = 1;
+      ((Cilk_set_result)((_cilk_ws), (&(__tmp791)), (sizeof((__tmp791)))));
       /* expand CILK2C_BEFORE_RETURN_SLOW macro */;
       ((Cilk_cilk2c_before_return_slow_cp)((_cilk_ws), (&((_cilk_frame)->header))));
       ((Cilk_cilk2c_before_return_slow)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
@@ -3941,8 +3913,8 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
   /* TODO: save only live, dirty variables */;
   ;
   ;
-  ((((_cilk_frame)->scope86).argc) = (argc));
-  ((((_cilk_frame)->scope86).argv) = (argv));
+  ((((_cilk_frame)->scope87).argc) = (argc));
+  ((((_cilk_frame)->scope87).argv) = (argv));
   if (((Cilk_sync)((_cilk_ws))))
   {
     return ;
@@ -3953,8 +3925,8 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
   /* TODO: restore only live variables */;
   ;
   ;
-  ((argc) = (((_cilk_frame)->scope86).argc));
-  ((argv) = (((_cilk_frame)->scope86).argv));
+  ((argc) = (((_cilk_frame)->scope87).argc));
+  ((argv) = (((_cilk_frame)->scope87).argv));
   /* expand CILK2C_AFTER_SYNC_SLOW() macro */;
   ((Cilk_cilk2c_after_sync_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
   /* expand CILK2C_AT_THREAD_BOUNDARY_SLOW() macro */;
@@ -3965,7 +3937,7 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
 #undef CILK_WHERE_AM_I
 #define CILK_WHERE_AM_I IN_C_CODE
 
-static CilkProcInfo _cilk_cilk_main_sig[] = {{(sizeof(signed int)), (sizeof(struct _cilk_cilk_main_frame)), (_cilk_cilk_main_slow), 0, 0}, {(sizeof(struct _template__ActivationSet__builtin_signed_int_ *)), ((size_t)(((char *)(&((((struct _cilk_cilk_main_frame *)0)->scope92).result))) - ((char *)((struct _cilk_cilk_main_frame *)0)))), 0, 0, 0}, {0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}};
+static CilkProcInfo _cilk_cilk_main_sig[] = {{(sizeof(signed int)), (sizeof(struct _cilk_cilk_main_frame)), (_cilk_cilk_main_slow), 0, 0}, {(sizeof(struct _template__ActivationSet__builtin_signed_int_ *)), ((size_t)(((char *)(&((((struct _cilk_cilk_main_frame *)0)->scope93).result))) - ((char *)((struct _cilk_cilk_main_frame *)0)))), 0, 0, 0}, {0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}};
 
 #undef CILK_WHERE_AM_I
 #define CILK_WHERE_AM_I IN_FAST_PROCEDURE
@@ -3987,15 +3959,15 @@ signed int cilk_main(CilkWorkerState  *const  _cilk_ws, signed int  argc, char  
     struct _template__ActivationSet__builtin_signed_int_  *result;
     ((((_cilk_frame)->header).entry) = 1);
     /* TODO: save only live, dirty variables */;
-    ((((_cilk_frame)->scope88).D) = (D));
-    ((((_cilk_frame)->scope90).a1) = (a1));
-    ((((_cilk_frame)->scope92).result) = (result));
-    ((((_cilk_frame)->scope91).t) = (t));
-    ((((_cilk_frame)->scope89).x) = (x));
+    ((((_cilk_frame)->scope89).D) = (D));
+    ((((_cilk_frame)->scope91).a1) = (a1));
+    ((((_cilk_frame)->scope93).result) = (result));
+    ((((_cilk_frame)->scope92).t) = (t));
+    ((((_cilk_frame)->scope90).x) = (x));
     ;
     ;
-    ((((_cilk_frame)->scope86).argc) = (argc));
-    ((((_cilk_frame)->scope86).argv) = (argv));
+    ((((_cilk_frame)->scope87).argc) = (argc));
+    ((((_cilk_frame)->scope87).argv) = (argv));
     /* expand CILK2C_BEFORE_SPAWN_FAST() macro */;
     ((Cilk_cilk2c_before_spawn_fast_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
     /* expand CILK2C_PUSH_FRAME() macro */;
@@ -4003,11 +3975,11 @@ signed int cilk_main(CilkWorkerState  *const  _cilk_ws, signed int  argc, char  
     ((result) = ((putGetEx)((_cilk_ws), (x), (t))));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      struct _template__ActivationSet__builtin_signed_int_  *__tmp1421;
+      struct _template__ActivationSet__builtin_signed_int_  *__tmp1101;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp1421) = (result));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp1421)), (sizeof((__tmp1421))))))
+        ((__tmp1101) = (result));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp1101)), (sizeof((__tmp1101))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return 0;

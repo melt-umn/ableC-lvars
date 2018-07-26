@@ -2,6 +2,7 @@
 #include "lvars.xh"
 #include <cilk.xh>
 
+
 // ******************** eq function for our int lattice ***********************
 
 int eqInt(int n1, int n2) {
@@ -105,4 +106,5 @@ cilk int main(int argc, char **argv) {
   freeSet(a1);
   freeSet(t);
   cilk return 1;
+
 }

@@ -66,7 +66,7 @@ $(ABLEC_JAR): $(GRAMMAR_SOURCES)
 
 %.test: %.out
 	@echo "Running $<..."
-	@./$< || echo "(exit $$?)"
+	@./$< -nproc 2 || echo "(exit $$?)"
 	touch $@
 
 clean:

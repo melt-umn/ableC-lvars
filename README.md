@@ -8,6 +8,8 @@
 
 + Explicitly spell out 1) here's a problem and 2) the LVars example solves this problem.
 + Add in stuff with running example
++ Why use over library (e.g., haskell, ex. infer lattice from lvar, etc., niver syntax, templating, etc.)
++ Focus more on the combined result portion in the example
 + It's hard for me, at least, to see why determinism with sets of integers is important. If you think an example with ADTs is better, go ahead and put it in; we can figure out how to make it look nice later. You can elide code that isn't critical like "... // check that n1/n2 are within acceptable bounds" or something. Even if you have to break it into two figures, that's fine for now.
 + Think about big example-- maybe reading data from large files into a database-type structure, with Cilk?
 
@@ -18,6 +20,8 @@
 + Implement better cilk examples (Read from different files? Sum random numbers until they reach a certain point? A better set example?) Bitwise or? Check out Cilk paper
 + Look over and tidy up examples and header file
 + Fix top <= top in examples and tests
++ Doesn't need to work sequentially-- just with Cilk
++ Add locks where needed in header file
 
 ### Less urgent:
 

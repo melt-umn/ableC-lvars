@@ -2808,103 +2808,6 @@ template<a> struct _Lattice {
   string (*_show)();
 };
 
-template<a> struct _Lvar {
-  Lattice<a> * _lattice;
-  a _value;
-  int _frozen;
-  ThresholdSet<a> * _threshold;
-  pthread_mutex_t _mutex;
-  pthread_cond_t _cond;
-};
-
-template<a>
-static string _showLvar(Lvar<a>* l) {
-
-  if (l->_frozen) {
-    return l->_lattice->_show(l->_value);
-  }
-
-
-
-
-
-
-  return str("<Lvar Value Unavailable>");
-}
-
-template<a>
-struct _putStruct {
-  Lvar<a>* _lvar;
-  a _val;
-};
-
-
-
-
-
-template<a>
-static int _doPut(Lvar<a>* l, a newState) {
-  if (l->_frozen) {
-
-
-
-
-    return 0;
-  }
-
-  pthread_mutex_lock(&(l->_mutex));
-
-  a oldState = l->_value;
-  a newValue = l-> _lattice-> _lub(oldState, newState);
-
-  if (l-> _lattice->_eq(l->_lattice->_top, newValue)){
-      printf("Error: invalid put of %s\n", l->_lattice->_show(newState).text);
-      exit(0);
-  }
-  l->_value = newValue;
-
-  pthread_cond_broadcast(&(l->_cond));
-  pthread_mutex_unlock(&(l->_mutex));
-  return 1;
-}
-
-template<a>
-void * _putVoid(void* valStruct) {
-  inst _putStruct<a> * p = (inst _putStruct<a>*) valStruct;
-  inst _doPut<a>(p->_lvar, p->_val);
-}
-
-pthread_t _currentPut;
-
-template<a>
-static int _declarePut(Lvar<a>* l, a value) {
-
-  inst _putStruct<a> * p = GC_malloc(sizeof(inst _putStruct<a>));
-  p->_lvar = l;
-  p->_val = value;
-  pthread_create(&_currentPut, ((void *)0), inst _putVoid<a>, (void*) p);
-}
-
-template<a>
-static int _put(Lvar<a>* l, a newState) {
-  inst _declarePut<a>(l, newState);
-}
-
-
-
-
-
-template<a>
-static Lvar<a>* _new(Lattice<a>* l) {
-  Lvar<a>* lvarNew = malloc(sizeof(Lvar<a>));
-  lvarNew->_value = l-> _bottom;
-  lvarNew-> _lattice = l;
-  lvarNew-> _frozen = 0;
-  lvarNew->_cond = (pthread_cond_t) { { 0, 0, 0, 0, 0, (void *) 0, 0, 0 } };
-  lvarNew->_mutex = (pthread_mutex_t) { { 0, 0, 0, 0, 0, 0, 0, { 0, 0 } } };
-  return lvarNew;
-}
-
 
 
 template<a>
@@ -2917,9 +2820,6 @@ static Lattice<a>* _newLattice(a least, a greatest, int (*leq)(),
   l-> _lub = lub;
   l->_eq = eq;
   l->_show = showMethod;
-  inst _Lvar<a>* dummyLvar = ((void *)0);
-  a dummyVal = least;
-  inst _declarePut<a>(dummyLvar, dummyVal);
   return l;
 }
 
@@ -2936,7 +2836,7 @@ template<a> struct _ActivationSet {
 
 template<a>
 static ActivationSet<a>* _newActivationSet(Lattice<a>* l, int size) {
-# 179 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 79 "../../../extensions/ableC-lvars/include/lvars.xh"
   ActivationSet<a> * act = malloc(sizeof(ActivationSet<a>));
   act->_size = size;
   act->_set = malloc(sizeof(a) * size);
@@ -3009,7 +2909,7 @@ template<a> struct _ThresholdSet {
 
 template<a>
 static ThresholdSet<a>* _newThresholdSet(Lattice<a> * l, int size) {
-# 264 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 164 "../../../extensions/ableC-lvars/include/lvars.xh"
   ThresholdSet<a> * t = malloc(sizeof(ThresholdSet<a>));
   t ->_lattice = l;
   t->_size = size;
@@ -3022,7 +2922,7 @@ static ThresholdSet<a>* _newThresholdSet(Lattice<a> * l, int size) {
 
 template<a>
 static int _incompat(Lattice<a> * l, ActivationSet<a> *Q, ActivationSet<a> *R) {
-# 284 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 184 "../../../extensions/ableC-lvars/include/lvars.xh"
   if (Q -> _lattice != l || R -> _lattice != l) {
     return 0;
   }
@@ -3050,11 +2950,11 @@ static int _incompat(Lattice<a> * l, ActivationSet<a> *Q, ActivationSet<a> *R) {
 
 template<a>
 static ThresholdSet<a>* _addThreshold(ThresholdSet<a>* t, ActivationSet<a>* act) {
-# 325 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 225 "../../../extensions/ableC-lvars/include/lvars.xh"
   if (t->_index >= t->_size) {
      inst _resizeThresholdSet<a>(t, 2 * t->_size + 1);
   }
-# 337 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 237 "../../../extensions/ableC-lvars/include/lvars.xh"
   t->_a_sets[t->_index] = act;
   t->_index++;
   return t;
@@ -3101,6 +3001,80 @@ static string _showThreshold(ThresholdSet<a>* t){
 
 
 
+template<a> struct _Lvar {
+  Lattice<a> * _lattice;
+  a _value;
+  int _frozen;
+  ThresholdSet<a> * _threshold;
+  pthread_mutex_t _mutex;
+  pthread_cond_t _cond;
+};
+
+template<a>
+static string _showLvar(Lvar<a>* l) {
+
+  if (l->_frozen) {
+    return l->_lattice->_show(l->_value);
+  }
+
+
+
+
+
+
+  return str("<Lvar Value Unavailable>");
+}
+
+
+
+
+
+template<a>
+static Lvar<a>* _new(Lattice<a>* l) {
+  Lvar<a>* lvarNew = malloc(sizeof(Lvar<a>));
+  lvarNew->_value = l-> _bottom;
+  lvarNew-> _lattice = l;
+  lvarNew-> _frozen = 0;
+  lvarNew->_cond = (pthread_cond_t) { { 0, 0, 0, 0, 0, (void *) 0, 0, 0 } };
+  lvarNew->_mutex = (pthread_mutex_t) { { 0, 0, 0, 0, 0, 0, 0, { 0, 0 } } };
+  return lvarNew;
+}
+
+
+
+
+
+
+
+template<a>
+static int _put(Lvar<a>* l, a newState) {
+
+  pthread_mutex_lock(&(l->_mutex));
+
+  if (l->_frozen) {
+
+
+
+
+    pthread_mutex_unlock(&(l->_mutex));
+    return 0;
+  }
+
+  a oldState = l->_value;
+  a newValue = l-> _lattice-> _lub(oldState, newState);
+
+  if (l-> _lattice->_eq(l->_lattice->_top, newValue)){
+      printf("Error: invalid put of %s\n", l->_lattice->_show(newState).text);
+      exit(0);
+  }
+  l->_value = newValue;
+
+  pthread_mutex_unlock(&(l->_mutex));
+  pthread_cond_broadcast(&(l->_cond));
+
+  return 1;
+}
+
 
 
 
@@ -3119,12 +3093,13 @@ static ActivationSet<a>* _thresholdReached(Lvar<a>* l, ThresholdSet<a> * t) {
 
 template<a>
 static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
-# 414 "../../../extensions/ableC-lvars/include/lvars.xh"
+
   pthread_mutex_lock(&(l->_mutex));
+# 392 "../../../extensions/ableC-lvars/include/lvars.xh"
   ActivationSet<a>* actReached = inst _thresholdReached<a>(l, t);
   while (actReached == ((void *)0)) {
-    actReached = inst _thresholdReached<a>(l, t);
     pthread_cond_wait(&(l->_cond), &(l->_mutex));
+    actReached = inst _thresholdReached<a>(l, t);
   }
   pthread_mutex_unlock(&(l->_mutex));
   return actReached;
@@ -3135,8 +3110,11 @@ static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
 
 template<a>
 static a _freeze(Lvar<a>* l) {
+  pthread_mutex_lock(&(l->_mutex));
   l->_frozen = 1;
-  return l->_value;
+  a result = l->_value;
+  pthread_mutex_unlock(&(l->_mutex));
+  return result;
 }
 # 2 "positive/and.xc" 2
 # 11 "positive/and.xc"

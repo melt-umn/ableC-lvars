@@ -2792,15 +2792,16 @@ static signed int _template__put__pointer__tag_struct_State_37__(struct _templat
 {
 
   {
+    ((pthread_mutex_lock)((&(((l)->_mutex)))));
     if (((l)->_frozen))
     {
       {
+        ((pthread_mutex_unlock)((&(((l)->_mutex)))));
         return 0;
       }
     } else {
       ;
     }
-    ((pthread_mutex_lock)((&(((l)->_mutex)))));
     State  *oldState = ((l)->_value);
     State  *newValue = ((((l)->_lattice)->_lub)((oldState), (newState)));
     if (((((l)->_lattice)->_eq)((((l)->_lattice)->_top), (newValue))))
@@ -2813,8 +2814,8 @@ static signed int _template__put__pointer__tag_struct_State_37__(struct _templat
       ;
     }
     (((l)->_value) = (newValue));
-    ((pthread_cond_broadcast)((&(((l)->_cond)))));
     ((pthread_mutex_unlock)((&(((l)->_mutex)))));
+    ((pthread_cond_broadcast)((&(((l)->_cond)))));
     return 1;
   }
 }
@@ -2849,21 +2850,22 @@ static struct _template__ActivationSet__pointer__tag_struct_State_37__  *_templa
 {
 
   {
+    ((pthread_mutex_lock)((&(((l)->_mutex)))));
     if ((((l)->_lattice) != ((t)->_lattice)))
     {
       {
+        ((pthread_mutex_unlock)((&(((l)->_mutex)))));
         return (((void *)0));
       }
     } else {
       ;
     }
-    ((pthread_mutex_lock)((&(((l)->_mutex)))));
     struct _template__ActivationSet__pointer__tag_struct_State_37__  *actReached = ((_template__thresholdReached__pointer__tag_struct_State_37__)((l), (t)));
     while (((actReached) == (((void *)0))))
     {
       {
-        ((actReached) = ((_template__thresholdReached__pointer__tag_struct_State_37__)((l), (t))));
         ((pthread_cond_wait)((&(((l)->_cond))), (&(((l)->_mutex)))));
+        ((actReached) = ((_template__thresholdReached__pointer__tag_struct_State_37__)((l), (t))));
       }
     }
     ((pthread_mutex_unlock)((&(((l)->_mutex)))));

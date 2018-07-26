@@ -1023,453 +1023,170 @@ extern void  *pthread_getspecific(pthread_key_t  __key) __attribute__((__nothrow
 extern signed int pthread_setspecific(pthread_key_t  __key, const void  * __pointer) __attribute__((__nothrow__, __leaf__));
 extern signed int pthread_atfork(void ( * __prepare)(void), void ( * __parent)(void), void ( * __child)(void)) __attribute__((__nothrow__, __leaf__));
 signed int _lvarCheckValue = 1;
-signed int eqint(signed int  i1, signed int  i2)
-{
-
-  {
-    return ((i1) == (i2));
-  }
-}
-struct _string_s showint(signed int  i)
-{
-
-  {
-    return ((showInt)((i)));
-  }
-}
-typedef struct Set_int Set_int;
+typedef struct Bl Bl;
 struct _GenericDatatype {
   unsigned int refId;
   unsigned int tag;
   
 };
-struct Set_int {
+struct Bl {
   unsigned int refId;
-  enum _Set_int_types {
-    Set_int_int_Empty,
-    Set_int_int_Set,
-    Set_int_int_Top
+  enum _Bl_types {
+    Bl_T,
+    Bl_F,
+    Bl_Bot
   } tag;
-  union _Set_int_contents {
-    struct Set_int_int_Empty_s {
+  union _Bl_contents {
+    struct Bl_T_s {
       
-    } int_Empty;
-    struct Set_int_int_Set_s {
-      signed int f0;
-      Set_int  *f1;
+    } T;
+    struct Bl_F_s {
       
-    } int_Set;
-    struct Set_int_int_Top_s {
+    } F;
+    struct Bl_Bot_s {
       
-    } int_Top;
+    } Bot;
     
   } contents;
   
 };
-static inline Set_int  *int_Empty(void)
+static inline Bl  *T(void)
 {
 
-  Set_int  *temp;
+  Bl  *temp;
   ((temp) = ({
     
-    ((Set_int *)((malloc)((sizeof(Set_int))))); })
+    ((Bl *)((malloc)((sizeof(Bl))))); })
   );
-  (((temp)->tag) = (Set_int_int_Empty));
+  (((temp)->tag) = (Bl_T));
   (((temp)->refId) = 13);
   ;
   ;
   return (temp);
 }
-static inline Set_int  *int_Set(signed int  f0, Set_int  * f1)
+static inline Bl  *F(void)
 {
 
-  Set_int  *temp;
+  Bl  *temp;
   ((temp) = ({
     
-    ((Set_int *)((malloc)((sizeof(Set_int))))); })
+    ((Bl *)((malloc)((sizeof(Bl))))); })
   );
-  (((temp)->tag) = (Set_int_int_Set));
-  (((temp)->refId) = 13);
-  ;
-  (((((temp)->contents).int_Set).f0) = (f0));
-  (((((temp)->contents).int_Set).f1) = (f1));
-  ;
-  return (temp);
-}
-static inline Set_int  *int_Top(void)
-{
-
-  Set_int  *temp;
-  ((temp) = ({
-    
-    ((Set_int *)((malloc)((sizeof(Set_int))))); })
-  );
-  (((temp)->tag) = (Set_int_int_Top));
+  (((temp)->tag) = (Bl_F));
   (((temp)->refId) = 13);
   ;
   ;
   return (temp);
 }
-struct _string_s showInner_int(Set_int  * set)
+static inline Bl  *Bot(void)
 {
 
-  {
-    struct _string_s result = ((strCharPointer)(""));
-    {
-      /* match ((set)) ... */;
-      Set_int  *_match_scrutinee_val = (set);
-      Set_int  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
-      /* matching for pattern int_Empty() */;
-      /* ... declarations of pattern variables */;
-      ;
-      Set_int  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
-      if (({
-        signed int _match = 1;
-        /* matching against a ADT constructor pattern */;
-        /* match against constructor */;
-        if (((((*(_curr_scrutinee_ptr)))->tag) != (Set_int_int_Empty)))
-        {
-          ((_match) = 0);
-        } else {
-          /* match against sub-patterns, setting _match to 0 on a fail */;
-          Set_int  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
-          ;
-        }
-        (_match); })
-      )
-      {
-        ;
-      } else {
-        /* matching for pattern int_Set(hd,tl) */;
-        /* ... declarations of pattern variables */;
-        signed int hd;
-        Set_int  *tl;
-        Set_int  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
-        if (({
-          signed int _match = 1;
-          /* matching against a ADT constructor pattern */;
-          /* match against constructor */;
-          if (((((*(_curr_scrutinee_ptr)))->tag) != (Set_int_int_Set)))
-          {
-            ((_match) = 0);
-          } else {
-            /* match against sub-patterns, setting _match to 0 on a fail */;
-            Set_int  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
-            {
-              signed int  *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).int_Set).f0));
-              ((hd) = (*(_curr_scrutinee_ptr)));
-            }
-            {
-              Set_int  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).int_Set).f1));
-              ((tl) = (*(_curr_scrutinee_ptr)));
-            }
-            ;
-          }
-          (_match); })
-        )
-        {
-          ((result) = ((showint)((hd))));
-          {
-            /* match ((tl)) ... */;
-            Set_int  *_match_scrutinee_val = (tl);
-            Set_int  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
-            /* matching for pattern int_Empty() */;
-            /* ... declarations of pattern variables */;
-            ;
-            Set_int  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
-            if (({
-              signed int _match = 1;
-              /* matching against a ADT constructor pattern */;
-              /* match against constructor */;
-              if (((((*(_curr_scrutinee_ptr)))->tag) != (Set_int_int_Empty)))
-              {
-                ((_match) = 0);
-              } else {
-                /* match against sub-patterns, setting _match to 0 on a fail */;
-                Set_int  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
-                ;
-              }
-              (_match); })
-            )
-            {
-              ;
-            } else {
-              /* matching for pattern _ */;
-              /* ... declarations of pattern variables */;
-              ;
-              Set_int  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
-              if (({
-                signed int _match = 1;
-                ;
-                (_match); })
-              )
-              {
-                ({
-                  struct _string_s  *_tmp40 = (&(result));
-                  ((*(_tmp40)) = ((_append_string)((*(_tmp40)), ((_append_string)(((strCharPointer)(", ")), ((showInner_int)((tl)))))))); })
-                ;
-              } else {
-                /* no match, do nothing. */;
-              }
-            }
-          }
-        } else {
-          /* matching for pattern int_Top() */;
-          /* ... declarations of pattern variables */;
-          ;
-          Set_int  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
-          if (({
-            signed int _match = 1;
-            /* matching against a ADT constructor pattern */;
-            /* match against constructor */;
-            if (((((*(_curr_scrutinee_ptr)))->tag) != (Set_int_int_Top)))
-            {
-              ((_match) = 0);
-            } else {
-              /* match against sub-patterns, setting _match to 0 on a fail */;
-              Set_int  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
-              ;
-            }
-            (_match); })
-          )
-          {
-            ((result) = ((strCharPointer)("Top()")));
-          } else {
-            /* no match, do nothing. */;
-          }
-        }
-      }
-    }
-    return (result);
-  }
+  Bl  *temp;
+  ((temp) = ({
+    
+    ((Bl *)((malloc)((sizeof(Bl))))); })
+  );
+  (((temp)->tag) = (Bl_Bot));
+  (((temp)->refId) = 13);
+  ;
+  ;
+  return (temp);
 }
-struct _string_s showSet_int(Set_int  * set)
+typedef struct State State;
+struct State {
+  unsigned int refId;
+  enum _State_types {
+    State_Top,
+    State_Pair
+  } tag;
+  union _State_contents {
+    struct State_Top_s {
+      
+    } Top;
+    struct State_Pair_s {
+      Bl  *f0;
+      Bl  *f1;
+      
+    } Pair;
+    
+  } contents;
+  
+};
+static inline State  *Top(void)
 {
 
-  {
-    return ((_append_string)(((_append_string)(((strCharPointer)("{")), ((showInner_int)((set))))), ((strCharPointer)("}"))));
-  }
+  State  *temp;
+  ((temp) = ({
+    
+    ((State *)((malloc)((sizeof(State))))); })
+  );
+  (((temp)->tag) = (State_Top));
+  (((temp)->refId) = 37);
+  ;
+  ;
+  return (temp);
 }
-signed int isSubset_int(Set_int  * set1, Set_int  * set2)
+static inline State  *Pair(Bl  * f0, Bl  * f1)
+{
+
+  State  *temp;
+  ((temp) = ({
+    
+    ((State *)((malloc)((sizeof(State))))); })
+  );
+  (((temp)->tag) = (State_Pair));
+  (((temp)->refId) = 37);
+  ;
+  (((((temp)->contents).Pair).f0) = (f0));
+  (((((temp)->contents).Pair).f1) = (f1));
+  ;
+  return (temp);
+}
+signed int eqBool(Bl  * b1, Bl  * b2)
 {
 
   {
     {
-      /* match ((set1)) ... */;
-      Set_int  *_match_scrutinee_val = (set1);
-      Set_int  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
-      /* matching for pattern int_Empty() */;
+      /* match ((b1)) ... */;
+      Bl  *_match_scrutinee_val = (b1);
+      Bl  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
+      /* matching for pattern T() */;
       /* ... declarations of pattern variables */;
       ;
-      Set_int  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+      Bl  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
       if (({
         signed int _match = 1;
         /* matching against a ADT constructor pattern */;
         /* match against constructor */;
-        if (((((*(_curr_scrutinee_ptr)))->tag) != (Set_int_int_Empty)))
+        if (((((*(_curr_scrutinee_ptr)))->tag) != (Bl_T)))
         {
           ((_match) = 0);
         } else {
           /* match against sub-patterns, setting _match to 0 on a fail */;
-          Set_int  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
-          ;
-        }
-        (_match); })
-      )
-      {
-        return 1;
-      } else {
-        /* matching for pattern int_Top() */;
-        /* ... declarations of pattern variables */;
-        ;
-        Set_int  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
-        if (({
-          signed int _match = 1;
-          /* matching against a ADT constructor pattern */;
-          /* match against constructor */;
-          if (((((*(_curr_scrutinee_ptr)))->tag) != (Set_int_int_Top)))
-          {
-            ((_match) = 0);
-          } else {
-            /* match against sub-patterns, setting _match to 0 on a fail */;
-            Set_int  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
-            ;
-          }
-          (_match); })
-        )
-        {
-          return 0;
-        } else {
-          /* matching for pattern int_Set(hd1,tl1) */;
-          /* ... declarations of pattern variables */;
-          signed int hd1;
-          Set_int  *tl1;
-          Set_int  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
-          if (({
-            signed int _match = 1;
-            /* matching against a ADT constructor pattern */;
-            /* match against constructor */;
-            if (((((*(_curr_scrutinee_ptr)))->tag) != (Set_int_int_Set)))
-            {
-              ((_match) = 0);
-            } else {
-              /* match against sub-patterns, setting _match to 0 on a fail */;
-              Set_int  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
-              {
-                signed int  *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).int_Set).f0));
-                ((hd1) = (*(_curr_scrutinee_ptr)));
-              }
-              {
-                Set_int  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).int_Set).f1));
-                ((tl1) = (*(_curr_scrutinee_ptr)));
-              }
-              ;
-            }
-            (_match); })
-          )
-          {
-            {
-              /* match ((set2)) ... */;
-              Set_int  *_match_scrutinee_val = (set2);
-              Set_int  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
-              /* matching for pattern int_Empty() */;
-              /* ... declarations of pattern variables */;
-              ;
-              Set_int  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
-              if (({
-                signed int _match = 1;
-                /* matching against a ADT constructor pattern */;
-                /* match against constructor */;
-                if (((((*(_curr_scrutinee_ptr)))->tag) != (Set_int_int_Empty)))
-                {
-                  ((_match) = 0);
-                } else {
-                  /* match against sub-patterns, setting _match to 0 on a fail */;
-                  Set_int  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
-                  ;
-                }
-                (_match); })
-              )
-              {
-                return 0;
-              } else {
-                /* matching for pattern int_Top() */;
-                /* ... declarations of pattern variables */;
-                ;
-                Set_int  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
-                if (({
-                  signed int _match = 1;
-                  /* matching against a ADT constructor pattern */;
-                  /* match against constructor */;
-                  if (((((*(_curr_scrutinee_ptr)))->tag) != (Set_int_int_Top)))
-                  {
-                    ((_match) = 0);
-                  } else {
-                    /* match against sub-patterns, setting _match to 0 on a fail */;
-                    Set_int  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
-                    ;
-                  }
-                  (_match); })
-                )
-                {
-                  return 0;
-                } else {
-                  /* matching for pattern int_Set(hd2,tl2) */;
-                  /* ... declarations of pattern variables */;
-                  signed int hd2;
-                  Set_int  *tl2;
-                  Set_int  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
-                  if (({
-                    signed int _match = 1;
-                    /* matching against a ADT constructor pattern */;
-                    /* match against constructor */;
-                    if (((((*(_curr_scrutinee_ptr)))->tag) != (Set_int_int_Set)))
-                    {
-                      ((_match) = 0);
-                    } else {
-                      /* match against sub-patterns, setting _match to 0 on a fail */;
-                      Set_int  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
-                      {
-                        signed int  *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).int_Set).f0));
-                        ((hd2) = (*(_curr_scrutinee_ptr)));
-                      }
-                      {
-                        Set_int  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).int_Set).f1));
-                        ((tl2) = (*(_curr_scrutinee_ptr)));
-                      }
-                      ;
-                    }
-                    (_match); })
-                  )
-                  {
-                    if (((eqint)((hd1), (hd2))))
-                    {
-                      {
-                        return ((isSubset_int)((tl1), (tl2)));
-                      }
-                    } else {
-                      ;
-                    }
-                    return (((isSubset_int)(((int_Set)((hd1), ((int_Empty)()))), (tl2))) && ((isSubset_int)((tl1), (set2))));
-                  } else {
-                    /* no match, do nothing. */;
-                  }
-                }
-              }
-            }
-          } else {
-            /* no match, do nothing. */;
-          }
-        }
-      }
-    }
-  }
-}
-signed int eqSet_int(Set_int  * set1, Set_int  * set2)
-{
-
-  {
-    {
-      /* match ((set1)) ... */;
-      Set_int  *_match_scrutinee_val = (set1);
-      Set_int  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
-      /* matching for pattern int_Top() */;
-      /* ... declarations of pattern variables */;
-      ;
-      Set_int  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
-      if (({
-        signed int _match = 1;
-        /* matching against a ADT constructor pattern */;
-        /* match against constructor */;
-        if (((((*(_curr_scrutinee_ptr)))->tag) != (Set_int_int_Top)))
-        {
-          ((_match) = 0);
-        } else {
-          /* match against sub-patterns, setting _match to 0 on a fail */;
-          Set_int  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+          Bl  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
           ;
         }
         (_match); })
       )
       {
         {
-          /* match ((set2)) ... */;
-          Set_int  *_match_scrutinee_val = (set2);
-          Set_int  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
-          /* matching for pattern int_Top() */;
+          /* match ((b2)) ... */;
+          Bl  *_match_scrutinee_val = (b2);
+          Bl  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
+          /* matching for pattern T() */;
           /* ... declarations of pattern variables */;
           ;
-          Set_int  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+          Bl  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
           if (({
             signed int _match = 1;
             /* matching against a ADT constructor pattern */;
             /* match against constructor */;
-            if (((((*(_curr_scrutinee_ptr)))->tag) != (Set_int_int_Top)))
+            if (((((*(_curr_scrutinee_ptr)))->tag) != (Bl_T)))
             {
               ((_match) = 0);
             } else {
               /* match against sub-patterns, setting _match to 0 on a fail */;
-              Set_int  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+              Bl  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
               ;
             }
             (_match); })
@@ -1477,13 +1194,13 @@ signed int eqSet_int(Set_int  * set1, Set_int  * set2)
           {
             return 1;
           } else {
-            /* matching for pattern _ */;
+            /* matching for pattern other */;
             /* ... declarations of pattern variables */;
-            ;
-            Set_int  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+            Bl  *other;
+            Bl  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
             if (({
               signed int _match = 1;
-              ;
+              ((other) = (*(_curr_scrutinee_ptr)));
               (_match); })
             )
             {
@@ -1494,118 +1211,127 @@ signed int eqSet_int(Set_int  * set1, Set_int  * set2)
           }
         }
       } else {
-        /* matching for pattern _ */;
+        /* matching for pattern F() */;
         /* ... declarations of pattern variables */;
         ;
-        Set_int  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
-        if (({
-          signed int _match = 1;
-          ;
-          (_match); })
-        )
-        {
-          return (((isSubset_int)((set1), (set2))) && ((isSubset_int)((set2), (set1))));
-        } else {
-          /* no match, do nothing. */;
-        }
-      }
-    }
-  }
-}
-signed int leqSet_int(Set_int  * set1, Set_int  * set2)
-{
-
-  {
-    return ((isSubset_int)((set1), (set2)));
-  }
-}
-signed int isInSet_int(signed int  item, Set_int  * set)
-{
-
-  {
-    {
-      /* match ((set)) ... */;
-      Set_int  *_match_scrutinee_val = (set);
-      Set_int  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
-      /* matching for pattern int_Empty() */;
-      /* ... declarations of pattern variables */;
-      ;
-      Set_int  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
-      if (({
-        signed int _match = 1;
-        /* matching against a ADT constructor pattern */;
-        /* match against constructor */;
-        if (((((*(_curr_scrutinee_ptr)))->tag) != (Set_int_int_Empty)))
-        {
-          ((_match) = 0);
-        } else {
-          /* match against sub-patterns, setting _match to 0 on a fail */;
-          Set_int  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
-          ;
-        }
-        (_match); })
-      )
-      {
-        return 0;
-      } else {
-        /* matching for pattern int_Top() */;
-        /* ... declarations of pattern variables */;
-        ;
-        Set_int  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+        Bl  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
         if (({
           signed int _match = 1;
           /* matching against a ADT constructor pattern */;
           /* match against constructor */;
-          if (((((*(_curr_scrutinee_ptr)))->tag) != (Set_int_int_Top)))
+          if (((((*(_curr_scrutinee_ptr)))->tag) != (Bl_F)))
           {
             ((_match) = 0);
           } else {
             /* match against sub-patterns, setting _match to 0 on a fail */;
-            Set_int  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+            Bl  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
             ;
           }
           (_match); })
         )
         {
-          return 0;
+          {
+            /* match ((b2)) ... */;
+            Bl  *_match_scrutinee_val = (b2);
+            Bl  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
+            /* matching for pattern F() */;
+            /* ... declarations of pattern variables */;
+            ;
+            Bl  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+            if (({
+              signed int _match = 1;
+              /* matching against a ADT constructor pattern */;
+              /* match against constructor */;
+              if (((((*(_curr_scrutinee_ptr)))->tag) != (Bl_F)))
+              {
+                ((_match) = 0);
+              } else {
+                /* match against sub-patterns, setting _match to 0 on a fail */;
+                Bl  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                ;
+              }
+              (_match); })
+            )
+            {
+              return 1;
+            } else {
+              /* matching for pattern other */;
+              /* ... declarations of pattern variables */;
+              Bl  *other;
+              Bl  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+              if (({
+                signed int _match = 1;
+                ((other) = (*(_curr_scrutinee_ptr)));
+                (_match); })
+              )
+              {
+                return 0;
+              } else {
+                /* no match, do nothing. */;
+              }
+            }
+          }
         } else {
-          /* matching for pattern int_Set(hd,tl) */;
+          /* matching for pattern Bot() */;
           /* ... declarations of pattern variables */;
-          signed int hd;
-          Set_int  *tl;
-          Set_int  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+          ;
+          Bl  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
           if (({
             signed int _match = 1;
             /* matching against a ADT constructor pattern */;
             /* match against constructor */;
-            if (((((*(_curr_scrutinee_ptr)))->tag) != (Set_int_int_Set)))
+            if (((((*(_curr_scrutinee_ptr)))->tag) != (Bl_Bot)))
             {
               ((_match) = 0);
             } else {
               /* match against sub-patterns, setting _match to 0 on a fail */;
-              Set_int  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
-              {
-                signed int  *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).int_Set).f0));
-                ((hd) = (*(_curr_scrutinee_ptr)));
-              }
-              {
-                Set_int  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).int_Set).f1));
-                ((tl) = (*(_curr_scrutinee_ptr)));
-              }
+              Bl  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
               ;
             }
             (_match); })
           )
           {
-            if (((eqint)((hd), (item))))
             {
+              /* match ((b2)) ... */;
+              Bl  *_match_scrutinee_val = (b2);
+              Bl  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
+              /* matching for pattern Bot() */;
+              /* ... declarations of pattern variables */;
+              ;
+              Bl  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+              if (({
+                signed int _match = 1;
+                /* matching against a ADT constructor pattern */;
+                /* match against constructor */;
+                if (((((*(_curr_scrutinee_ptr)))->tag) != (Bl_Bot)))
+                {
+                  ((_match) = 0);
+                } else {
+                  /* match against sub-patterns, setting _match to 0 on a fail */;
+                  Bl  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                  ;
+                }
+                (_match); })
+              )
               {
                 return 1;
+              } else {
+                /* matching for pattern other */;
+                /* ... declarations of pattern variables */;
+                Bl  *other;
+                Bl  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+                if (({
+                  signed int _match = 1;
+                  ((other) = (*(_curr_scrutinee_ptr)));
+                  (_match); })
+                )
+                {
+                  return 0;
+                } else {
+                  /* no match, do nothing. */;
+                }
               }
-            } else {
-              ;
             }
-            return ((isInSet_int)((item), (tl)));
           } else {
             /* no match, do nothing. */;
           }
@@ -1614,78 +1340,266 @@ signed int isInSet_int(signed int  item, Set_int  * set)
     }
   }
 }
-Set_int  *lubSet_int(Set_int  * set1, Set_int  * set2)
+signed int eq(State  * s1, State  * s2)
 {
 
   {
     {
-      /* match ((set1)) ... */;
-      Set_int  *_match_scrutinee_val = (set1);
-      Set_int  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
-      /* matching for pattern int_Empty() */;
+      /* match ((s1)) ... */;
+      State  *_match_scrutinee_val = (s1);
+      State  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
+      /* matching for pattern Top() */;
       /* ... declarations of pattern variables */;
       ;
-      Set_int  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+      State  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
       if (({
         signed int _match = 1;
         /* matching against a ADT constructor pattern */;
         /* match against constructor */;
-        if (((((*(_curr_scrutinee_ptr)))->tag) != (Set_int_int_Empty)))
+        if (((((*(_curr_scrutinee_ptr)))->tag) != (State_Top)))
         {
           ((_match) = 0);
         } else {
           /* match against sub-patterns, setting _match to 0 on a fail */;
-          Set_int  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+          State  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
           ;
         }
         (_match); })
       )
       {
-        return (set2);
+        {
+          /* match ((s2)) ... */;
+          State  *_match_scrutinee_val = (s2);
+          State  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
+          /* matching for pattern Top() */;
+          /* ... declarations of pattern variables */;
+          ;
+          State  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+          if (({
+            signed int _match = 1;
+            /* matching against a ADT constructor pattern */;
+            /* match against constructor */;
+            if (((((*(_curr_scrutinee_ptr)))->tag) != (State_Top)))
+            {
+              ((_match) = 0);
+            } else {
+              /* match against sub-patterns, setting _match to 0 on a fail */;
+              State  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+              ;
+            }
+            (_match); })
+          )
+          {
+            return 1;
+          } else {
+            /* matching for pattern other */;
+            /* ... declarations of pattern variables */;
+            State  *other;
+            State  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+            if (({
+              signed int _match = 1;
+              ((other) = (*(_curr_scrutinee_ptr)));
+              (_match); })
+            )
+            {
+              return 0;
+            } else {
+              /* no match, do nothing. */;
+            }
+          }
+        }
       } else {
-        /* matching for pattern int_Top() */;
+        /* matching for pattern Pair(b1,b2) */;
         /* ... declarations of pattern variables */;
-        ;
-        Set_int  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+        Bl  *b1;
+        Bl  *b2;
+        State  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
         if (({
           signed int _match = 1;
           /* matching against a ADT constructor pattern */;
           /* match against constructor */;
-          if (((((*(_curr_scrutinee_ptr)))->tag) != (Set_int_int_Top)))
+          if (((((*(_curr_scrutinee_ptr)))->tag) != (State_Pair)))
           {
             ((_match) = 0);
           } else {
             /* match against sub-patterns, setting _match to 0 on a fail */;
-            Set_int  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+            State  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+            {
+              Bl  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Pair).f0));
+              ((b1) = (*(_curr_scrutinee_ptr)));
+            }
+            {
+              Bl  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Pair).f1));
+              ((b2) = (*(_curr_scrutinee_ptr)));
+            }
             ;
           }
           (_match); })
         )
         {
-          return ((int_Top)());
+          {
+            /* match ((s2)) ... */;
+            State  *_match_scrutinee_val = (s2);
+            State  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
+            /* matching for pattern Pair(b3,b4) */;
+            /* ... declarations of pattern variables */;
+            Bl  *b3;
+            Bl  *b4;
+            State  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+            if (({
+              signed int _match = 1;
+              /* matching against a ADT constructor pattern */;
+              /* match against constructor */;
+              if (((((*(_curr_scrutinee_ptr)))->tag) != (State_Pair)))
+              {
+                ((_match) = 0);
+              } else {
+                /* match against sub-patterns, setting _match to 0 on a fail */;
+                State  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                {
+                  Bl  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Pair).f0));
+                  ((b3) = (*(_curr_scrutinee_ptr)));
+                }
+                {
+                  Bl  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Pair).f1));
+                  ((b4) = (*(_curr_scrutinee_ptr)));
+                }
+                ;
+              }
+              (_match); })
+            )
+            {
+              return (((eqBool)((b1), (b3))) && ((eqBool)((b2), (b4))));
+            } else {
+              /* matching for pattern other */;
+              /* ... declarations of pattern variables */;
+              State  *other;
+              State  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+              if (({
+                signed int _match = 1;
+                ((other) = (*(_curr_scrutinee_ptr)));
+                (_match); })
+              )
+              {
+                return 0;
+              } else {
+                /* no match, do nothing. */;
+              }
+            }
+          }
         } else {
-          /* matching for pattern int_Set(hd1,tl1) */;
+          /* no match, do nothing. */;
+        }
+      }
+    }
+  }
+}
+signed int leq(State  * s1, State  * s2)
+{
+
+  {
+    {
+      /* match ((s1)) ... */;
+      State  *_match_scrutinee_val = (s1);
+      State  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
+      /* matching for pattern Top() */;
+      /* ... declarations of pattern variables */;
+      ;
+      State  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+      if (({
+        signed int _match = 1;
+        /* matching against a ADT constructor pattern */;
+        /* match against constructor */;
+        if (((((*(_curr_scrutinee_ptr)))->tag) != (State_Top)))
+        {
+          ((_match) = 0);
+        } else {
+          /* match against sub-patterns, setting _match to 0 on a fail */;
+          State  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+          ;
+        }
+        (_match); })
+      )
+      {
+        return 0;
+      } else {
+        /* matching for pattern Pair(Bot(),Bot()) */;
+        /* ... declarations of pattern variables */;
+        ;
+        State  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+        if (({
+          signed int _match = 1;
+          /* matching against a ADT constructor pattern */;
+          /* match against constructor */;
+          if (((((*(_curr_scrutinee_ptr)))->tag) != (State_Pair)))
+          {
+            ((_match) = 0);
+          } else {
+            /* match against sub-patterns, setting _match to 0 on a fail */;
+            State  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+            {
+              Bl  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Pair).f0));
+              /* matching against a ADT constructor pattern */;
+              /* match against constructor */;
+              if (((((*(_curr_scrutinee_ptr)))->tag) != (Bl_Bot)))
+              {
+                ((_match) = 0);
+              } else {
+                /* match against sub-patterns, setting _match to 0 on a fail */;
+                Bl  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                ;
+              }
+            }
+            {
+              Bl  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Pair).f1));
+              /* matching against a ADT constructor pattern */;
+              /* match against constructor */;
+              if (((((*(_curr_scrutinee_ptr)))->tag) != (Bl_Bot)))
+              {
+                ((_match) = 0);
+              } else {
+                /* match against sub-patterns, setting _match to 0 on a fail */;
+                Bl  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                ;
+              }
+            }
+            ;
+          }
+          (_match); })
+        )
+        {
+          return 1;
+        } else {
+          /* matching for pattern Pair(b1,Bot()) */;
           /* ... declarations of pattern variables */;
-          signed int hd1;
-          Set_int  *tl1;
-          Set_int  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+          Bl  *b1;
+          State  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
           if (({
             signed int _match = 1;
             /* matching against a ADT constructor pattern */;
             /* match against constructor */;
-            if (((((*(_curr_scrutinee_ptr)))->tag) != (Set_int_int_Set)))
+            if (((((*(_curr_scrutinee_ptr)))->tag) != (State_Pair)))
             {
               ((_match) = 0);
             } else {
               /* match against sub-patterns, setting _match to 0 on a fail */;
-              Set_int  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+              State  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
               {
-                signed int  *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).int_Set).f0));
-                ((hd1) = (*(_curr_scrutinee_ptr)));
+                Bl  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Pair).f0));
+                ((b1) = (*(_curr_scrutinee_ptr)));
               }
               {
-                Set_int  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).int_Set).f1));
-                ((tl1) = (*(_curr_scrutinee_ptr)));
+                Bl  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Pair).f1));
+                /* matching against a ADT constructor pattern */;
+                /* match against constructor */;
+                if (((((*(_curr_scrutinee_ptr)))->tag) != (Bl_Bot)))
+                {
+                  ((_match) = 0);
+                } else {
+                  /* match against sub-patterns, setting _match to 0 on a fail */;
+                  Bl  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                  ;
+                }
               }
               ;
             }
@@ -1693,167 +1607,646 @@ Set_int  *lubSet_int(Set_int  * set1, Set_int  * set2)
           )
           {
             {
-              /* match ((set2)) ... */;
-              Set_int  *_match_scrutinee_val = (set2);
-              Set_int  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
-              /* matching for pattern int_Empty() */;
+              /* match ((s2)) ... */;
+              State  *_match_scrutinee_val = (s2);
+              State  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
+              /* matching for pattern Pair(b2,other) */;
               /* ... declarations of pattern variables */;
-              ;
-              Set_int  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+              Bl  *b2;
+              Bl  *other;
+              State  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
               if (({
                 signed int _match = 1;
                 /* matching against a ADT constructor pattern */;
                 /* match against constructor */;
-                if (((((*(_curr_scrutinee_ptr)))->tag) != (Set_int_int_Empty)))
+                if (((((*(_curr_scrutinee_ptr)))->tag) != (State_Pair)))
                 {
                   ((_match) = 0);
                 } else {
                   /* match against sub-patterns, setting _match to 0 on a fail */;
-                  Set_int  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                  State  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                  {
+                    Bl  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Pair).f0));
+                    ((b2) = (*(_curr_scrutinee_ptr)));
+                  }
+                  {
+                    Bl  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Pair).f1));
+                    ((other) = (*(_curr_scrutinee_ptr)));
+                  }
                   ;
                 }
                 (_match); })
               )
               {
-                return (set1);
+                return ((eqBool)((b1), (b2)));
               } else {
-                /* matching for pattern int_Top() */;
+                /* matching for pattern Top() */;
                 /* ... declarations of pattern variables */;
                 ;
-                Set_int  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+                State  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
                 if (({
                   signed int _match = 1;
                   /* matching against a ADT constructor pattern */;
                   /* match against constructor */;
-                  if (((((*(_curr_scrutinee_ptr)))->tag) != (Set_int_int_Top)))
+                  if (((((*(_curr_scrutinee_ptr)))->tag) != (State_Top)))
                   {
                     ((_match) = 0);
                   } else {
                     /* match against sub-patterns, setting _match to 0 on a fail */;
-                    Set_int  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                    State  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
                     ;
                   }
                   (_match); })
                 )
                 {
-                  return ((int_Top)());
+                  return 1;
                 } else {
-                  /* matching for pattern int_Set(_,_) */;
+                  /* no match, do nothing. */;
+                }
+              }
+            }
+          } else {
+            /* matching for pattern Pair(Bot(),b1) */;
+            /* ... declarations of pattern variables */;
+            Bl  *b1;
+            State  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+            if (({
+              signed int _match = 1;
+              /* matching against a ADT constructor pattern */;
+              /* match against constructor */;
+              if (((((*(_curr_scrutinee_ptr)))->tag) != (State_Pair)))
+              {
+                ((_match) = 0);
+              } else {
+                /* match against sub-patterns, setting _match to 0 on a fail */;
+                State  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                {
+                  Bl  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Pair).f0));
+                  /* matching against a ADT constructor pattern */;
+                  /* match against constructor */;
+                  if (((((*(_curr_scrutinee_ptr)))->tag) != (Bl_Bot)))
+                  {
+                    ((_match) = 0);
+                  } else {
+                    /* match against sub-patterns, setting _match to 0 on a fail */;
+                    Bl  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                    ;
+                  }
+                }
+                {
+                  Bl  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Pair).f1));
+                  ((b1) = (*(_curr_scrutinee_ptr)));
+                }
+                ;
+              }
+              (_match); })
+            )
+            {
+              {
+                /* match ((s2)) ... */;
+                State  *_match_scrutinee_val = (s2);
+                State  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
+                /* matching for pattern Pair(other,b2) */;
+                /* ... declarations of pattern variables */;
+                Bl  *other;
+                Bl  *b2;
+                State  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+                if (({
+                  signed int _match = 1;
+                  /* matching against a ADT constructor pattern */;
+                  /* match against constructor */;
+                  if (((((*(_curr_scrutinee_ptr)))->tag) != (State_Pair)))
+                  {
+                    ((_match) = 0);
+                  } else {
+                    /* match against sub-patterns, setting _match to 0 on a fail */;
+                    State  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                    {
+                      Bl  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Pair).f0));
+                      ((other) = (*(_curr_scrutinee_ptr)));
+                    }
+                    {
+                      Bl  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Pair).f1));
+                      ((b2) = (*(_curr_scrutinee_ptr)));
+                    }
+                    ;
+                  }
+                  (_match); })
+                )
+                {
+                  return ((eqBool)((b1), (b2)));
+                } else {
+                  /* matching for pattern Top() */;
                   /* ... declarations of pattern variables */;
                   ;
-                  Set_int  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+                  State  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
                   if (({
                     signed int _match = 1;
                     /* matching against a ADT constructor pattern */;
                     /* match against constructor */;
-                    if (((((*(_curr_scrutinee_ptr)))->tag) != (Set_int_int_Set)))
+                    if (((((*(_curr_scrutinee_ptr)))->tag) != (State_Top)))
                     {
                       ((_match) = 0);
                     } else {
                       /* match against sub-patterns, setting _match to 0 on a fail */;
-                      Set_int  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                      State  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                      ;
+                    }
+                    (_match); })
+                  )
+                  {
+                    return 1;
+                  } else {
+                    /* no match, do nothing. */;
+                  }
+                }
+              }
+            } else {
+              /* matching for pattern Pair(b1,b2) */;
+              /* ... declarations of pattern variables */;
+              Bl  *b1;
+              Bl  *b2;
+              State  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+              if (({
+                signed int _match = 1;
+                /* matching against a ADT constructor pattern */;
+                /* match against constructor */;
+                if (((((*(_curr_scrutinee_ptr)))->tag) != (State_Pair)))
+                {
+                  ((_match) = 0);
+                } else {
+                  /* match against sub-patterns, setting _match to 0 on a fail */;
+                  State  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                  {
+                    Bl  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Pair).f0));
+                    ((b1) = (*(_curr_scrutinee_ptr)));
+                  }
+                  {
+                    Bl  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Pair).f1));
+                    ((b2) = (*(_curr_scrutinee_ptr)));
+                  }
+                  ;
+                }
+                (_match); })
+              )
+              {
+                {
+                  /* match ((s2)) ... */;
+                  State  *_match_scrutinee_val = (s2);
+                  State  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
+                  /* matching for pattern Top() */;
+                  /* ... declarations of pattern variables */;
+                  ;
+                  State  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+                  if (({
+                    signed int _match = 1;
+                    /* matching against a ADT constructor pattern */;
+                    /* match against constructor */;
+                    if (((((*(_curr_scrutinee_ptr)))->tag) != (State_Top)))
+                    {
+                      ((_match) = 0);
+                    } else {
+                      /* match against sub-patterns, setting _match to 0 on a fail */;
+                      State  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                      ;
+                    }
+                    (_match); })
+                  )
+                  {
+                    return 1;
+                  } else {
+                    /* matching for pattern Pair(other1,other2) */;
+                    /* ... declarations of pattern variables */;
+                    Bl  *other1;
+                    Bl  *other2;
+                    State  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+                    if (({
+                      signed int _match = 1;
+                      /* matching against a ADT constructor pattern */;
+                      /* match against constructor */;
+                      if (((((*(_curr_scrutinee_ptr)))->tag) != (State_Pair)))
                       {
-                        signed int  *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).int_Set).f0));
+                        ((_match) = 0);
+                      } else {
+                        /* match against sub-patterns, setting _match to 0 on a fail */;
+                        State  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                        {
+                          Bl  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Pair).f0));
+                          ((other1) = (*(_curr_scrutinee_ptr)));
+                        }
+                        {
+                          Bl  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Pair).f1));
+                          ((other2) = (*(_curr_scrutinee_ptr)));
+                        }
                         ;
                       }
+                      (_match); })
+                    )
+                    {
+                      return (((eqBool)((b1), (other1))) && ((eqBool)((b2), (other2))));
+                    } else {
+                      /* no match, do nothing. */;
+                    }
+                  }
+                }
+              } else {
+                /* no match, do nothing. */;
+              }
+            }
+          }
+        }
+      }
+    }
+    return 0;
+  }
+}
+State  *lub(State  * s1, State  * s2)
+{
+
+  {
+    {
+      /* match ((s1)) ... */;
+      State  *_match_scrutinee_val = (s1);
+      State  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
+      /* matching for pattern Top() */;
+      /* ... declarations of pattern variables */;
+      ;
+      State  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+      if (({
+        signed int _match = 1;
+        /* matching against a ADT constructor pattern */;
+        /* match against constructor */;
+        if (((((*(_curr_scrutinee_ptr)))->tag) != (State_Top)))
+        {
+          ((_match) = 0);
+        } else {
+          /* match against sub-patterns, setting _match to 0 on a fail */;
+          State  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+          ;
+        }
+        (_match); })
+      )
+      {
+        return ((Top)());
+      } else {
+        /* matching for pattern Pair(Bot(),Bot()) */;
+        /* ... declarations of pattern variables */;
+        ;
+        State  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+        if (({
+          signed int _match = 1;
+          /* matching against a ADT constructor pattern */;
+          /* match against constructor */;
+          if (((((*(_curr_scrutinee_ptr)))->tag) != (State_Pair)))
+          {
+            ((_match) = 0);
+          } else {
+            /* match against sub-patterns, setting _match to 0 on a fail */;
+            State  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+            {
+              Bl  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Pair).f0));
+              /* matching against a ADT constructor pattern */;
+              /* match against constructor */;
+              if (((((*(_curr_scrutinee_ptr)))->tag) != (Bl_Bot)))
+              {
+                ((_match) = 0);
+              } else {
+                /* match against sub-patterns, setting _match to 0 on a fail */;
+                Bl  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                ;
+              }
+            }
+            {
+              Bl  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Pair).f1));
+              /* matching against a ADT constructor pattern */;
+              /* match against constructor */;
+              if (((((*(_curr_scrutinee_ptr)))->tag) != (Bl_Bot)))
+              {
+                ((_match) = 0);
+              } else {
+                /* match against sub-patterns, setting _match to 0 on a fail */;
+                Bl  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                ;
+              }
+            }
+            ;
+          }
+          (_match); })
+        )
+        {
+          return (s2);
+        } else {
+          /* matching for pattern Pair(x1,y1) */;
+          /* ... declarations of pattern variables */;
+          Bl  *x1;
+          Bl  *y1;
+          State  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+          if (({
+            signed int _match = 1;
+            /* matching against a ADT constructor pattern */;
+            /* match against constructor */;
+            if (((((*(_curr_scrutinee_ptr)))->tag) != (State_Pair)))
+            {
+              ((_match) = 0);
+            } else {
+              /* match against sub-patterns, setting _match to 0 on a fail */;
+              State  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+              {
+                Bl  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Pair).f0));
+                ((x1) = (*(_curr_scrutinee_ptr)));
+              }
+              {
+                Bl  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Pair).f1));
+                ((y1) = (*(_curr_scrutinee_ptr)));
+              }
+              ;
+            }
+            (_match); })
+          )
+          {
+            {
+              /* match ((s2)) ... */;
+              State  *_match_scrutinee_val = (s2);
+              State  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
+              /* matching for pattern Top() */;
+              /* ... declarations of pattern variables */;
+              ;
+              State  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+              if (({
+                signed int _match = 1;
+                /* matching against a ADT constructor pattern */;
+                /* match against constructor */;
+                if (((((*(_curr_scrutinee_ptr)))->tag) != (State_Top)))
+                {
+                  ((_match) = 0);
+                } else {
+                  /* match against sub-patterns, setting _match to 0 on a fail */;
+                  State  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                  ;
+                }
+                (_match); })
+              )
+              {
+                return ((Top)());
+              } else {
+                /* matching for pattern Pair(Bot(),Bot()) */;
+                /* ... declarations of pattern variables */;
+                ;
+                State  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+                if (({
+                  signed int _match = 1;
+                  /* matching against a ADT constructor pattern */;
+                  /* match against constructor */;
+                  if (((((*(_curr_scrutinee_ptr)))->tag) != (State_Pair)))
+                  {
+                    ((_match) = 0);
+                  } else {
+                    /* match against sub-patterns, setting _match to 0 on a fail */;
+                    State  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                    {
+                      Bl  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Pair).f0));
+                      /* matching against a ADT constructor pattern */;
+                      /* match against constructor */;
+                      if (((((*(_curr_scrutinee_ptr)))->tag) != (Bl_Bot)))
                       {
-                        Set_int  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).int_Set).f1));
+                        ((_match) = 0);
+                      } else {
+                        /* match against sub-patterns, setting _match to 0 on a fail */;
+                        Bl  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
                         ;
+                      }
+                    }
+                    {
+                      Bl  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Pair).f1));
+                      /* matching against a ADT constructor pattern */;
+                      /* match against constructor */;
+                      if (((((*(_curr_scrutinee_ptr)))->tag) != (Bl_Bot)))
+                      {
+                        ((_match) = 0);
+                      } else {
+                        /* match against sub-patterns, setting _match to 0 on a fail */;
+                        Bl  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                        ;
+                      }
+                    }
+                    ;
+                  }
+                  (_match); })
+                )
+                {
+                  return (s1);
+                } else {
+                  /* matching for pattern Pair(x2,y2) */;
+                  /* ... declarations of pattern variables */;
+                  Bl  *x2;
+                  Bl  *y2;
+                  State  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+                  if (({
+                    signed int _match = 1;
+                    /* matching against a ADT constructor pattern */;
+                    /* match against constructor */;
+                    if (((((*(_curr_scrutinee_ptr)))->tag) != (State_Pair)))
+                    {
+                      ((_match) = 0);
+                    } else {
+                      /* match against sub-patterns, setting _match to 0 on a fail */;
+                      State  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                      {
+                        Bl  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Pair).f0));
+                        ((x2) = (*(_curr_scrutinee_ptr)));
+                      }
+                      {
+                        Bl  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Pair).f1));
+                        ((y2) = (*(_curr_scrutinee_ptr)));
                       }
                       ;
                     }
                     (_match); })
                   )
                   {
-                    Set_int  *partial = ((lubSet_int)((tl1), (set2)));
+                    Bl  *x;
+                    Bl  *y;
                     {
-                      /* match ((partial)) ... */;
-                      Set_int  *_match_scrutinee_val = (partial);
-                      Set_int  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
-                      /* matching for pattern int_Empty() */;
+                      /* match ((x1)) ... */;
+                      Bl  *_match_scrutinee_val = (x1);
+                      Bl  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
+                      /* matching for pattern Bot() */;
                       /* ... declarations of pattern variables */;
                       ;
-                      Set_int  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+                      Bl  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
                       if (({
                         signed int _match = 1;
                         /* matching against a ADT constructor pattern */;
                         /* match against constructor */;
-                        if (((((*(_curr_scrutinee_ptr)))->tag) != (Set_int_int_Empty)))
+                        if (((((*(_curr_scrutinee_ptr)))->tag) != (Bl_Bot)))
                         {
                           ((_match) = 0);
                         } else {
                           /* match against sub-patterns, setting _match to 0 on a fail */;
-                          Set_int  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                          Bl  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
                           ;
                         }
                         (_match); })
                       )
                       {
-                        return ((int_Set)((hd1), ((int_Empty)())));
+                        ((x) = (x2));
                       } else {
-                        /* matching for pattern int_Top() */;
+                        /* matching for pattern other1 */;
                         /* ... declarations of pattern variables */;
-                        ;
-                        Set_int  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+                        Bl  *other1;
+                        Bl  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
                         if (({
                           signed int _match = 1;
-                          /* matching against a ADT constructor pattern */;
-                          /* match against constructor */;
-                          if (((((*(_curr_scrutinee_ptr)))->tag) != (Set_int_int_Top)))
-                          {
-                            ((_match) = 0);
-                          } else {
-                            /* match against sub-patterns, setting _match to 0 on a fail */;
-                            Set_int  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
-                            ;
-                          }
+                          ((other1) = (*(_curr_scrutinee_ptr)));
                           (_match); })
                         )
                         {
-                          return ((int_Top)());
-                        } else {
-                          /* matching for pattern int_Set(_,_) */;
-                          /* ... declarations of pattern variables */;
-                          ;
-                          Set_int  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
-                          if (({
-                            signed int _match = 1;
-                            /* matching against a ADT constructor pattern */;
-                            /* match against constructor */;
-                            if (((((*(_curr_scrutinee_ptr)))->tag) != (Set_int_int_Set)))
-                            {
-                              ((_match) = 0);
-                            } else {
-                              /* match against sub-patterns, setting _match to 0 on a fail */;
-                              Set_int  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
-                              {
-                                signed int  *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).int_Set).f0));
-                                ;
-                              }
-                              {
-                                Set_int  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).int_Set).f1));
-                                ;
-                              }
-                              ;
-                            }
-                            (_match); })
-                          )
                           {
-                            if (((isInSet_int)((hd1), (partial))))
-                            {
+                            /* match ((x2)) ... */;
+                            Bl  *_match_scrutinee_val = (x2);
+                            Bl  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
+                            /* matching for pattern Bot() */;
+                            /* ... declarations of pattern variables */;
+                            ;
+                            Bl  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+                            if (({
+                              signed int _match = 1;
+                              /* matching against a ADT constructor pattern */;
+                              /* match against constructor */;
+                              if (((((*(_curr_scrutinee_ptr)))->tag) != (Bl_Bot)))
                               {
-                                return (partial);
+                                ((_match) = 0);
+                              } else {
+                                /* match against sub-patterns, setting _match to 0 on a fail */;
+                                Bl  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                                ;
                               }
+                              (_match); })
+                            )
+                            {
+                              ((x) = (x1));
                             } else {
-                              ;
+                              /* matching for pattern other2 */;
+                              /* ... declarations of pattern variables */;
+                              Bl  *other2;
+                              Bl  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+                              if (({
+                                signed int _match = 1;
+                                ((other2) = (*(_curr_scrutinee_ptr)));
+                                (_match); })
+                              )
+                              {
+                                if (((eqBool)((x1), (x2))))
+                                {
+                                  {
+                                    ((x) = (x1));
+                                  }
+                                } else {
+                                  {
+                                    return ((Top)());
+                                  }
+                                }
+                              } else {
+                                /* no match, do nothing. */;
+                              }
                             }
-                            return ((int_Set)((hd1), (partial)));
-                          } else {
-                            /* no match, do nothing. */;
                           }
+                        } else {
+                          /* no match, do nothing. */;
                         }
                       }
                     }
+                    {
+                      /* match ((y1)) ... */;
+                      Bl  *_match_scrutinee_val = (y1);
+                      Bl  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
+                      /* matching for pattern Bot() */;
+                      /* ... declarations of pattern variables */;
+                      ;
+                      Bl  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+                      if (({
+                        signed int _match = 1;
+                        /* matching against a ADT constructor pattern */;
+                        /* match against constructor */;
+                        if (((((*(_curr_scrutinee_ptr)))->tag) != (Bl_Bot)))
+                        {
+                          ((_match) = 0);
+                        } else {
+                          /* match against sub-patterns, setting _match to 0 on a fail */;
+                          Bl  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                          ;
+                        }
+                        (_match); })
+                      )
+                      {
+                        ((y) = (y2));
+                      } else {
+                        /* matching for pattern other1 */;
+                        /* ... declarations of pattern variables */;
+                        Bl  *other1;
+                        Bl  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+                        if (({
+                          signed int _match = 1;
+                          ((other1) = (*(_curr_scrutinee_ptr)));
+                          (_match); })
+                        )
+                        {
+                          {
+                            /* match ((y2)) ... */;
+                            Bl  *_match_scrutinee_val = (y2);
+                            Bl  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
+                            /* matching for pattern Bot() */;
+                            /* ... declarations of pattern variables */;
+                            ;
+                            Bl  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+                            if (({
+                              signed int _match = 1;
+                              /* matching against a ADT constructor pattern */;
+                              /* match against constructor */;
+                              if (((((*(_curr_scrutinee_ptr)))->tag) != (Bl_Bot)))
+                              {
+                                ((_match) = 0);
+                              } else {
+                                /* match against sub-patterns, setting _match to 0 on a fail */;
+                                Bl  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                                ;
+                              }
+                              (_match); })
+                            )
+                            {
+                              ((y) = (y1));
+                            } else {
+                              /* matching for pattern other2 */;
+                              /* ... declarations of pattern variables */;
+                              Bl  *other2;
+                              Bl  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+                              if (({
+                                signed int _match = 1;
+                                ((other2) = (*(_curr_scrutinee_ptr)));
+                                (_match); })
+                              )
+                              {
+                                if (((eqBool)((y1), (y2))))
+                                {
+                                  {
+                                    ((y) = (y1));
+                                  }
+                                } else {
+                                  {
+                                    return ((Top)());
+                                  }
+                                }
+                              } else {
+                                /* no match, do nothing. */;
+                              }
+                            }
+                          }
+                        } else {
+                          /* no match, do nothing. */;
+                        }
+                      }
+                    }
+                    return ((Pair)((x), (y)));
                   } else {
                     /* no match, do nothing. */;
                   }
@@ -1866,25 +2259,255 @@ Set_int  *lubSet_int(Set_int  * set1, Set_int  * set2)
         }
       }
     }
+    return (((void *)0));
   }
 }
-typedef Set_int  *_template_param_unused_41;
-typedef __attribute__(()) struct _template__Lattice__pointer__tag_struct_Set_int_13__ _template__Lattice__pointer__tag_struct_Set_int_13__;
-struct _template__Lattice__pointer__tag_struct_Set_int_13__ {
-  Set_int  *_bottom;
-  Set_int  *_top;
+struct _string_s showState(State  * s)
+{
+
+  {
+    struct _string_s result;
+    {
+      /* match ((s)) ... */;
+      State  *_match_scrutinee_val = (s);
+      State  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
+      /* matching for pattern Top() */;
+      /* ... declarations of pattern variables */;
+      ;
+      State  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+      if (({
+        signed int _match = 1;
+        /* matching against a ADT constructor pattern */;
+        /* match against constructor */;
+        if (((((*(_curr_scrutinee_ptr)))->tag) != (State_Top)))
+        {
+          ((_match) = 0);
+        } else {
+          /* match against sub-patterns, setting _match to 0 on a fail */;
+          State  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+          ;
+        }
+        (_match); })
+      )
+      {
+        ((result) = ((strCharPointer)("Top()")));
+      } else {
+        /* matching for pattern Pair(b1,b2) */;
+        /* ... declarations of pattern variables */;
+        Bl  *b1;
+        Bl  *b2;
+        State  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+        if (({
+          signed int _match = 1;
+          /* matching against a ADT constructor pattern */;
+          /* match against constructor */;
+          if (((((*(_curr_scrutinee_ptr)))->tag) != (State_Pair)))
+          {
+            ((_match) = 0);
+          } else {
+            /* match against sub-patterns, setting _match to 0 on a fail */;
+            State  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+            {
+              Bl  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Pair).f0));
+              ((b1) = (*(_curr_scrutinee_ptr)));
+            }
+            {
+              Bl  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Pair).f1));
+              ((b2) = (*(_curr_scrutinee_ptr)));
+            }
+            ;
+          }
+          (_match); })
+        )
+        {
+          ((result) = ((strCharPointer)("Pair(")));
+          {
+            /* match ((b1)) ... */;
+            Bl  *_match_scrutinee_val = (b1);
+            Bl  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
+            /* matching for pattern T() */;
+            /* ... declarations of pattern variables */;
+            ;
+            Bl  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+            if (({
+              signed int _match = 1;
+              /* matching against a ADT constructor pattern */;
+              /* match against constructor */;
+              if (((((*(_curr_scrutinee_ptr)))->tag) != (Bl_T)))
+              {
+                ((_match) = 0);
+              } else {
+                /* match against sub-patterns, setting _match to 0 on a fail */;
+                Bl  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                ;
+              }
+              (_match); })
+            )
+            {
+              ({
+                struct _string_s  *_tmp57 = (&(result));
+                ((*(_tmp57)) = ((_append_string)((*(_tmp57)), ((strCharPointer)("T(), "))))); })
+              ;
+            } else {
+              /* matching for pattern F() */;
+              /* ... declarations of pattern variables */;
+              ;
+              Bl  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+              if (({
+                signed int _match = 1;
+                /* matching against a ADT constructor pattern */;
+                /* match against constructor */;
+                if (((((*(_curr_scrutinee_ptr)))->tag) != (Bl_F)))
+                {
+                  ((_match) = 0);
+                } else {
+                  /* match against sub-patterns, setting _match to 0 on a fail */;
+                  Bl  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                  ;
+                }
+                (_match); })
+              )
+              {
+                ({
+                  struct _string_s  *_tmp58 = (&(result));
+                  ((*(_tmp58)) = ((_append_string)((*(_tmp58)), ((strCharPointer)("F(), "))))); })
+                ;
+              } else {
+                /* matching for pattern Bot() */;
+                /* ... declarations of pattern variables */;
+                ;
+                Bl  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+                if (({
+                  signed int _match = 1;
+                  /* matching against a ADT constructor pattern */;
+                  /* match against constructor */;
+                  if (((((*(_curr_scrutinee_ptr)))->tag) != (Bl_Bot)))
+                  {
+                    ((_match) = 0);
+                  } else {
+                    /* match against sub-patterns, setting _match to 0 on a fail */;
+                    Bl  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                    ;
+                  }
+                  (_match); })
+                )
+                {
+                  ({
+                    struct _string_s  *_tmp59 = (&(result));
+                    ((*(_tmp59)) = ((_append_string)((*(_tmp59)), ((strCharPointer)("Bot(), "))))); })
+                  ;
+                } else {
+                  /* no match, do nothing. */;
+                }
+              }
+            }
+          }
+          {
+            /* match ((b2)) ... */;
+            Bl  *_match_scrutinee_val = (b2);
+            Bl  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
+            /* matching for pattern T() */;
+            /* ... declarations of pattern variables */;
+            ;
+            Bl  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+            if (({
+              signed int _match = 1;
+              /* matching against a ADT constructor pattern */;
+              /* match against constructor */;
+              if (((((*(_curr_scrutinee_ptr)))->tag) != (Bl_T)))
+              {
+                ((_match) = 0);
+              } else {
+                /* match against sub-patterns, setting _match to 0 on a fail */;
+                Bl  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                ;
+              }
+              (_match); })
+            )
+            {
+              ({
+                struct _string_s  *_tmp63 = (&(result));
+                ((*(_tmp63)) = ((_append_string)((*(_tmp63)), ((strCharPointer)("T())"))))); })
+              ;
+            } else {
+              /* matching for pattern F() */;
+              /* ... declarations of pattern variables */;
+              ;
+              Bl  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+              if (({
+                signed int _match = 1;
+                /* matching against a ADT constructor pattern */;
+                /* match against constructor */;
+                if (((((*(_curr_scrutinee_ptr)))->tag) != (Bl_F)))
+                {
+                  ((_match) = 0);
+                } else {
+                  /* match against sub-patterns, setting _match to 0 on a fail */;
+                  Bl  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                  ;
+                }
+                (_match); })
+              )
+              {
+                ({
+                  struct _string_s  *_tmp64 = (&(result));
+                  ((*(_tmp64)) = ((_append_string)((*(_tmp64)), ((strCharPointer)("F())"))))); })
+                ;
+              } else {
+                /* matching for pattern Bot() */;
+                /* ... declarations of pattern variables */;
+                ;
+                Bl  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+                if (({
+                  signed int _match = 1;
+                  /* matching against a ADT constructor pattern */;
+                  /* match against constructor */;
+                  if (((((*(_curr_scrutinee_ptr)))->tag) != (Bl_Bot)))
+                  {
+                    ((_match) = 0);
+                  } else {
+                    /* match against sub-patterns, setting _match to 0 on a fail */;
+                    Bl  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                    ;
+                  }
+                  (_match); })
+                )
+                {
+                  ({
+                    struct _string_s  *_tmp65 = (&(result));
+                    ((*(_tmp65)) = ((_append_string)((*(_tmp65)), ((strCharPointer)("Bot())"))))); })
+                  ;
+                } else {
+                  /* no match, do nothing. */;
+                }
+              }
+            }
+          }
+        } else {
+          /* no match, do nothing. */;
+        }
+      }
+    }
+    return (result);
+  }
+}
+typedef State  *_template_param_unused_66;
+typedef __attribute__(()) struct _template__Lattice__pointer__tag_struct_State_37__ _template__Lattice__pointer__tag_struct_State_37__;
+struct _template__Lattice__pointer__tag_struct_State_37__ {
+  State  *_bottom;
+  State  *_top;
   signed int ( *_leq)();
-  Set_int  *( *_lub)();
+  State  *( *_lub)();
   signed int ( *_eq)();
   struct _string_s ( *_show)();
   
 };
-typedef Set_int  *_template_param_unused_45;
-static struct _template__Lattice__pointer__tag_struct_Set_int_13__  *_template__newLattice__pointer__tag_struct_Set_int_13__(Set_int  * least, Set_int  * greatest, signed int ( * leq)(), Set_int  *( * lub)(), signed int ( * eq)(), struct _string_s ( * showMethod)())
+typedef State  *_template_param_unused_70;
+static struct _template__Lattice__pointer__tag_struct_State_37__  *_template__newLattice__pointer__tag_struct_State_37__(State  * least, State  * greatest, signed int ( * leq)(), State  *( * lub)(), signed int ( * eq)(), struct _string_s ( * showMethod)())
 {
 
   {
-    struct _template__Lattice__pointer__tag_struct_Set_int_13__  *l = ((malloc)((sizeof(struct _template__Lattice__pointer__tag_struct_Set_int_13__))));
+    struct _template__Lattice__pointer__tag_struct_State_37__  *l = ((malloc)((sizeof(struct _template__Lattice__pointer__tag_struct_State_37__))));
     (((l)->_bottom) = (least));
     (((l)->_top) = (greatest));
     (((l)->_leq) = (leq));
@@ -1894,116 +2517,74 @@ static struct _template__Lattice__pointer__tag_struct_Set_int_13__  *_template__
     return (l);
   }
 }
-struct _template__Lattice__pointer__tag_struct_Set_int_13__  *latticeint()
+typedef State  *_template_param_unused_71;
+typedef __attribute__(()) struct _template__ActivationSet__pointer__tag_struct_State_37__ _template__ActivationSet__pointer__tag_struct_State_37__;
+struct _template__ActivationSet__pointer__tag_struct_State_37__ {
+  signed int _size;
+  State  * *_set;
+  signed int _index;
+  struct _template__Lattice__pointer__tag_struct_State_37__  *_lattice;
+  
+};
+typedef State  *_template_param_unused_231;
+typedef State  *_template_param_unused_235;
+static signed int _template__resizeActSet__pointer__tag_struct_State_37__(struct _template__ActivationSet__pointer__tag_struct_State_37__  * act, signed int  newSize)
 {
 
   {
-    return ((_template__newLattice__pointer__tag_struct_Set_int_13__)(((int_Empty)()), ((int_Top)()), (leqSet_int), (lubSet_int), (eqSet_int), (showSet_int)));
-  }
-}
-typedef Set_int  *_template_param_unused_46;
-typedef __attribute__(()) struct _template__Lvar__pointer__tag_struct_Set_int_13__ _template__Lvar__pointer__tag_struct_Set_int_13__;
-typedef Set_int  *_template_param_unused_47;
-typedef __attribute__(()) struct _template__ThresholdSet__pointer__tag_struct_Set_int_13__ _template__ThresholdSet__pointer__tag_struct_Set_int_13__;
-typedef Set_int  *_template_param_unused_48;
-typedef __attribute__(()) struct _template__ActivationSet__pointer__tag_struct_Set_int_13__ _template__ActivationSet__pointer__tag_struct_Set_int_13__;
-struct _template__ActivationSet__pointer__tag_struct_Set_int_13__ {
-  signed int _size;
-  Set_int  * *_set;
-  signed int _index;
-  struct _template__Lattice__pointer__tag_struct_Set_int_13__  *_lattice;
-  
-};
-struct _template__ThresholdSet__pointer__tag_struct_Set_int_13__ {
-  struct _template__Lattice__pointer__tag_struct_Set_int_13__  *_lattice;
-  signed int _size;
-  signed int _index;
-  struct _template__ActivationSet__pointer__tag_struct_Set_int_13__  * *_a_sets;
-  
-};
-struct _template__Lvar__pointer__tag_struct_Set_int_13__ {
-  struct _template__Lattice__pointer__tag_struct_Set_int_13__  *_lattice;
-  Set_int  *_value;
-  signed int _frozen;
-  struct _template__ThresholdSet__pointer__tag_struct_Set_int_13__  *_threshold;
-  pthread_mutex_t _mutex;
-  pthread_cond_t _cond;
-  
-};
-signed int buildSet(signed int  start, signed int  stop, struct _template__Lvar__pointer__tag_struct_Set_int_13__  * l);
-typedef Set_int  *_template_param_unused_52;
-static signed int _template__put__pointer__tag_struct_Set_int_13__(struct _template__Lvar__pointer__tag_struct_Set_int_13__  * l, Set_int  * newState)
-{
-
-  {
-    if (((l)->_frozen))
+    State  * *newSet = ((malloc)(((sizeof(State * *)) * (newSize))));
+    for (signed int i = 0; ((i) < ((act)->_size)); ((i)++))
     {
       {
-        ((printf)("Error: can't write to a frozen lvar.\n"));
-        ((exit)(0));
-        return 0;
+        (((newSet)[(i)]) = (((act)->_set)[(i)]));
       }
-    } else {
-      ;
     }
-    ((pthread_mutex_lock)((&(((l)->_mutex)))));
-    Set_int  *oldState = ((l)->_value);
-    Set_int  *newValue = ((((l)->_lattice)->_lub)((oldState), (newState)));
-    if (((((l)->_lattice)->_eq)((((l)->_lattice)->_top), (newValue))))
-    {
-      {
-        ((printf)("Error: invalid put of %s\n", (((((l)->_lattice)->_show)((newState))).text)));
-        ((exit)(0));
-        ((pthread_mutex_unlock)((&(((l)->_mutex)))));
-        return 0;
-      }
-    } else {
-      ;
-    }
-    (((l)->_value) = (newValue));
-    ((pthread_cond_broadcast)((&(((l)->_cond)))));
-    ((pthread_mutex_unlock)((&(((l)->_mutex)))));
+    ((free)(((act)->_set)));
+    (((act)->_set) = (newSet));
+    (((act)->_size) = (newSize));
     return 1;
   }
 }
-signed int buildSet(signed int  start, signed int  stop, struct _template__Lvar__pointer__tag_struct_Set_int_13__  * l)
+static struct _template__ActivationSet__pointer__tag_struct_State_37__  *_template__addAct__pointer__tag_struct_State_37__(struct _template__ActivationSet__pointer__tag_struct_State_37__  * act, State  * element)
 {
 
   {
-    if (((stop) < (start)))
+    if ((((act)->_index) >= ((act)->_size)))
     {
       {
-        ((_template__put__pointer__tag_struct_Set_int_13__)((l), ((int_Empty)())));
-        return 1;
+        ((_template__resizeActSet__pointer__tag_struct_State_37__)((act), ((2 * ((act)->_size)) + 1)));
       }
     } else {
       ;
     }
-    ((_template__put__pointer__tag_struct_Set_int_13__)((l), ((int_Set)((start), ((int_Empty)())))));
-    signed int res1, res2, res3;
-    ((res1) = ((buildSet)(((start) + 2), ((stop) - 2), (l))));
-    ((res3) = ((buildSet)(((start) + 2), ((stop) - 2), (l))));
-    ((res2) = ((buildSet)(((start) + 1), (stop), (l))));
-    return (((res1) && (res2)) && (res3));
+    ((((act)->_set)[((act)->_index)]) = (element));
+    (((act)->_index)++);
+    return (act);
   }
 }
-typedef Set_int  *_template_param_unused_56;
-static struct _template__Lvar__pointer__tag_struct_Set_int_13__  *_template__new__pointer__tag_struct_Set_int_13__(struct _template__Lattice__pointer__tag_struct_Set_int_13__  * l)
+typedef State  *_template_param_unused_299;
+static struct _template__ActivationSet__pointer__tag_struct_State_37__  *_template__newActivationSet__pointer__tag_struct_State_37__(struct _template__Lattice__pointer__tag_struct_State_37__  * l, signed int  size)
 {
 
   {
-    struct _template__Lvar__pointer__tag_struct_Set_int_13__  *lvarNew = ((malloc)((sizeof(struct _template__Lvar__pointer__tag_struct_Set_int_13__))));
-    (((lvarNew)->_value) = ((l)->_bottom));
-    (((lvarNew)->_lattice) = (l));
-    (((lvarNew)->_frozen) = 0);
-    (((lvarNew)->_cond) = ((pthread_cond_t){{0, 0, 0, 0, 0, ((void *)0), 0, 0}}));
-    (((lvarNew)->_mutex) = ((pthread_mutex_t){{0, 0, 0, 0, 0, 0, 0, {0, 0}}}));
-    return (lvarNew);
+    if (((size) < 0))
+    {
+      {
+        ((size) = 0);
+      }
+    } else {
+      ;
+    }
+    struct _template__ActivationSet__pointer__tag_struct_State_37__  *act = ((malloc)((sizeof(struct _template__ActivationSet__pointer__tag_struct_State_37__))));
+    (((act)->_size) = (size));
+    (((act)->_set) = ((malloc)(((sizeof(State *)) * (size)))));
+    (((act)->_index) = 0);
+    (((act)->_lattice) = (l));
+    return (act);
   }
 }
-typedef Set_int  *_template_param_unused_272;
-typedef Set_int  *_template_param_unused_294;
-static struct _string_s _template__showActivation__pointer__tag_struct_Set_int_13__(struct _template__ActivationSet__pointer__tag_struct_Set_int_13__  * act)
+typedef State  *_template_param_unused_321;
+static struct _string_s _template__showActivation__pointer__tag_struct_State_37__(struct _template__ActivationSet__pointer__tag_struct_State_37__  * act)
 {
 
   {
@@ -2013,8 +2594,8 @@ static struct _string_s _template__showActivation__pointer__tag_struct_Set_int_1
     {
       {
         ({
-          struct _string_s  *_tmp295 = (&(result));
-          ((*(_tmp295)) = ((_append_string)((*(_tmp295)), ((_append_string)(((((act)->_lattice)->_show)((((act)->_set)[(i)]))), ((strCharPointer)(", "))))))); })
+          struct _string_s  *_tmp322 = (&(result));
+          ((*(_tmp322)) = ((_append_string)((*(_tmp322)), ((_append_string)(((((act)->_lattice)->_show)((((act)->_set)[(i)]))), ((strCharPointer)(", "))))))); })
         ;
       }
     }
@@ -2022,48 +2603,30 @@ static struct _string_s _template__showActivation__pointer__tag_struct_Set_int_1
     {
       {
         ({
-          struct _string_s  *_tmp296 = (&(result));
-          ((*(_tmp296)) = ((_append_string)((*(_tmp296)), ((((act)->_lattice)->_show)((((act)->_set)[(i)])))))); })
+          struct _string_s  *_tmp323 = (&(result));
+          ((*(_tmp323)) = ((_append_string)((*(_tmp323)), ((((act)->_lattice)->_show)((((act)->_set)[(i)])))))); })
         ;
       }
     }
     return ((_append_string)((result), ((strCharPointer)("}"))));
   }
 }
-typedef Set_int  *_template_param_unused_318;
-static struct _string_s _template__showThreshold__pointer__tag_struct_Set_int_13__(struct _template__ThresholdSet__pointer__tag_struct_Set_int_13__  * t)
+typedef State  *_template_param_unused_324;
+typedef __attribute__(()) struct _template__ThresholdSet__pointer__tag_struct_State_37__ _template__ThresholdSet__pointer__tag_struct_State_37__;
+struct _template__ThresholdSet__pointer__tag_struct_State_37__ {
+  struct _template__Lattice__pointer__tag_struct_State_37__  *_lattice;
+  signed int _size;
+  signed int _index;
+  struct _template__ActivationSet__pointer__tag_struct_State_37__  * *_a_sets;
+  
+};
+typedef State  *_template_param_unused_368;
+typedef State  *_template_param_unused_372;
+static signed int _template__resizeThresholdSet__pointer__tag_struct_State_37__(struct _template__ThresholdSet__pointer__tag_struct_State_37__  * t, signed int  newSize)
 {
 
   {
-    struct _string_s result = ((strCharPointer)("{"));
-    signed int i = 0;
-    for(; ((i) < (((t)->_index) - 1)); ((i)++))
-    {
-      {
-        ({
-          struct _string_s  *_tmp319 = (&(result));
-          ((*(_tmp319)) = ((_append_string)((*(_tmp319)), ((_append_string)(((_template__showActivation__pointer__tag_struct_Set_int_13__)((((t)->_a_sets)[(i)]))), ((strCharPointer)(", "))))))); })
-        ;
-      }
-    }
-    for(; ((i) < ((t)->_index)); ((i)++))
-    {
-      {
-        ({
-          struct _string_s  *_tmp320 = (&(result));
-          ((*(_tmp320)) = ((_append_string)((*(_tmp320)), ((_template__showActivation__pointer__tag_struct_Set_int_13__)((((t)->_a_sets)[(i)])))))); })
-        ;
-      }
-    }
-    return ((_append_string)((result), ((strCharPointer)("}"))));
-  }
-}
-typedef Set_int  *_template_param_unused_324;
-static signed int _template__resizeThresholdSet__pointer__tag_struct_Set_int_13__(struct _template__ThresholdSet__pointer__tag_struct_Set_int_13__  * t, signed int  newSize)
-{
-
-  {
-    struct _template__ActivationSet__pointer__tag_struct_Set_int_13__  * *newSet = ((malloc)(((sizeof(struct _template__ActivationSet__pointer__tag_struct_Set_int_13__ *)) * (newSize))));
+    struct _template__ActivationSet__pointer__tag_struct_State_37__  * *newSet = ((malloc)(((sizeof(struct _template__ActivationSet__pointer__tag_struct_State_37__ *)) * (newSize))));
     for (signed int i = 0; ((i) < ((t)->_index)); ((i)++))
     {
       {
@@ -2076,20 +2639,11 @@ static signed int _template__resizeThresholdSet__pointer__tag_struct_Set_int_13_
     return 1;
   }
 }
-typedef Set_int  *_template_param_unused_332;
-static signed int _template__incompat__pointer__tag_struct_Set_int_13__(struct _template__Lattice__pointer__tag_struct_Set_int_13__  * l, struct _template__ActivationSet__pointer__tag_struct_Set_int_13__  * Q, struct _template__ActivationSet__pointer__tag_struct_Set_int_13__  * R)
+typedef State  *_template_param_unused_380;
+static signed int _template__incompat__pointer__tag_struct_State_37__(struct _template__Lattice__pointer__tag_struct_State_37__  * l, struct _template__ActivationSet__pointer__tag_struct_State_37__  * Q, struct _template__ActivationSet__pointer__tag_struct_State_37__  * R)
 {
 
   {
-    if (((((Q)->_lattice) != (l)) || (((R)->_lattice) != (l))))
-    {
-      {
-        ((printf)("Error: The activation sets %s and %s don't belong to the same lattice!\n", (((_template__showActivation__pointer__tag_struct_Set_int_13__)((Q))).text), (((_template__showActivation__pointer__tag_struct_Set_int_13__)((R))).text)));
-        ((exit)(0));
-      }
-    } else {
-      ;
-    }
     if (((((Q)->_lattice) != (l)) || (((R)->_lattice) != (l))))
     {
       {
@@ -2104,13 +2658,11 @@ static signed int _template__incompat__pointer__tag_struct_Set_int_13__(struct _
         for (signed int j = 0; ((j) < ((R)->_index)); ((j)++))
         {
           {
-            Set_int  *q = (((Q)->_set)[(i)]);
-            Set_int  *r = (((R)->_set)[(j)]);
+            State  *q = (((Q)->_set)[(i)]);
+            State  *r = (((R)->_set)[(j)]);
             if ((!((((l)->_eq)((((l)->_lub)((q), (r))), ((l)->_top))))))
             {
               {
-                ((printf)("Error: %s and %s are compatible, with lub %s!\n", ((((l)->_show)((q))).text), ((((l)->_show)((r))).text), ((((l)->_show)((((l)->_lub)((q), (r))))).text)));
-                ((exit)(0));
                 return 0;
               }
             } else {
@@ -2123,15 +2675,14 @@ static signed int _template__incompat__pointer__tag_struct_Set_int_13__(struct _
     return 1;
   }
 }
-static struct _template__ThresholdSet__pointer__tag_struct_Set_int_13__  *_template__addThreshold__pointer__tag_struct_Set_int_13__(struct _template__ThresholdSet__pointer__tag_struct_Set_int_13__  * t, struct _template__ActivationSet__pointer__tag_struct_Set_int_13__  * act)
+static struct _template__ThresholdSet__pointer__tag_struct_State_37__  *_template__addThreshold__pointer__tag_struct_State_37__(struct _template__ThresholdSet__pointer__tag_struct_State_37__  * t, struct _template__ActivationSet__pointer__tag_struct_State_37__  * act)
 {
 
   {
     if ((((t)->_lattice) != ((act)->_lattice)))
     {
       {
-        ((printf)("Error: activation set %s and threshold set %s do not have the same lattice. \n", (((_template__showActivation__pointer__tag_struct_Set_int_13__)((act))).text), (((_template__showThreshold__pointer__tag_struct_Set_int_13__)((t))).text)));
-        ((exit)(0));
+        return (t);
       }
     } else {
       ;
@@ -2139,7 +2690,7 @@ static struct _template__ThresholdSet__pointer__tag_struct_Set_int_13__  *_templ
     if ((((t)->_index) >= ((t)->_size)))
     {
       {
-        ((_template__resizeThresholdSet__pointer__tag_struct_Set_int_13__)((t), ((2 * ((t)->_size)) + 1)));
+        ((_template__resizeThresholdSet__pointer__tag_struct_State_37__)((t), ((2 * ((t)->_size)) + 1)));
       }
     } else {
       ;
@@ -2147,7 +2698,7 @@ static struct _template__ThresholdSet__pointer__tag_struct_Set_int_13__  *_templ
     for (signed int i = 0; ((i) < ((t)->_index)); ((i)++))
     {
       {
-        if ((!((_template__incompat__pointer__tag_struct_Set_int_13__)(((t)->_lattice), (((t)->_a_sets)[(i)]), (act)))))
+        if ((!((_template__incompat__pointer__tag_struct_State_37__)(((t)->_lattice), (((t)->_a_sets)[(i)]), (act)))))
         {
           {
             return (t);
@@ -2162,89 +2713,115 @@ static struct _template__ThresholdSet__pointer__tag_struct_Set_int_13__  *_templ
     return (t);
   }
 }
-typedef Set_int  *_template_param_unused_336;
-static struct _template__ThresholdSet__pointer__tag_struct_Set_int_13__  *_template__newThresholdSet__pointer__tag_struct_Set_int_13__(struct _template__Lattice__pointer__tag_struct_Set_int_13__  * l, signed int  size)
+typedef State  *_template_param_unused_384;
+static struct _template__ThresholdSet__pointer__tag_struct_State_37__  *_template__newThresholdSet__pointer__tag_struct_State_37__(struct _template__Lattice__pointer__tag_struct_State_37__  * l, signed int  size)
 {
 
   {
     if (((size) < 0))
     {
       {
-        ((printf)("Error: Can't create a threshold set of negative size!\n"));
-        ((exit)(0));
+        ((size) = 0);
       }
     } else {
       ;
     }
-    struct _template__ThresholdSet__pointer__tag_struct_Set_int_13__  *t = ((malloc)((sizeof(struct _template__ThresholdSet__pointer__tag_struct_Set_int_13__))));
+    struct _template__ThresholdSet__pointer__tag_struct_State_37__  *t = ((malloc)((sizeof(struct _template__ThresholdSet__pointer__tag_struct_State_37__))));
     (((t)->_lattice) = (l));
     (((t)->_size) = (size));
     (((t)->_index) = 0);
-    (((t)->_a_sets) = ((malloc)(((sizeof(struct _template__ActivationSet__pointer__tag_struct_Set_int_13__ *)) * (size)))));
+    (((t)->_a_sets) = ((malloc)(((sizeof(struct _template__ActivationSet__pointer__tag_struct_State_37__ *)) * (size)))));
     return (t);
   }
 }
-typedef Set_int  *_template_param_unused_356;
-typedef Set_int  *_template_param_unused_360;
-static signed int _template__resizeActSet__pointer__tag_struct_Set_int_13__(struct _template__ActivationSet__pointer__tag_struct_Set_int_13__  * act, signed int  newSize)
+typedef State  *_template_param_unused_406;
+static struct _string_s _template__showThreshold__pointer__tag_struct_State_37__(struct _template__ThresholdSet__pointer__tag_struct_State_37__  * t)
 {
 
   {
-    Set_int  * *newSet = ((malloc)(((sizeof(Set_int * *)) * (newSize))));
-    for (signed int i = 0; ((i) < ((act)->_size)); ((i)++))
+    struct _string_s result = ((strCharPointer)("{"));
+    signed int i = 0;
+    for(; ((i) < (((t)->_index) - 1)); ((i)++))
     {
       {
-        (((newSet)[(i)]) = (((act)->_set)[(i)]));
+        ({
+          struct _string_s  *_tmp407 = (&(result));
+          ((*(_tmp407)) = ((_append_string)((*(_tmp407)), ((_append_string)(((_template__showActivation__pointer__tag_struct_State_37__)((((t)->_a_sets)[(i)]))), ((strCharPointer)(", "))))))); })
+        ;
       }
     }
-    ((free)(((act)->_set)));
-    (((act)->_set) = (newSet));
-    (((act)->_size) = (newSize));
-    return 1;
+    for(; ((i) < ((t)->_index)); ((i)++))
+    {
+      {
+        ({
+          struct _string_s  *_tmp408 = (&(result));
+          ((*(_tmp408)) = ((_append_string)((*(_tmp408)), ((_template__showActivation__pointer__tag_struct_State_37__)((((t)->_a_sets)[(i)])))))); })
+        ;
+      }
+    }
+    return ((_append_string)((result), ((strCharPointer)("}"))));
   }
 }
-static struct _template__ActivationSet__pointer__tag_struct_Set_int_13__  *_template__addAct__pointer__tag_struct_Set_int_13__(struct _template__ActivationSet__pointer__tag_struct_Set_int_13__  * act, Set_int  * element)
+typedef State  *_template_param_unused_409;
+typedef __attribute__(()) struct _template__Lvar__pointer__tag_struct_State_37__ _template__Lvar__pointer__tag_struct_State_37__;
+struct _template__Lvar__pointer__tag_struct_State_37__ {
+  struct _template__Lattice__pointer__tag_struct_State_37__  *_lattice;
+  State  *_value;
+  signed int _frozen;
+  struct _template__ThresholdSet__pointer__tag_struct_State_37__  *_threshold;
+  pthread_mutex_t _mutex;
+  pthread_cond_t _cond;
+  
+};
+typedef State  *_template_param_unused_413;
+static struct _template__Lvar__pointer__tag_struct_State_37__  *_template__new__pointer__tag_struct_State_37__(struct _template__Lattice__pointer__tag_struct_State_37__  * l)
 {
 
   {
-    if ((((act)->_index) >= ((act)->_size)))
+    struct _template__Lvar__pointer__tag_struct_State_37__  *lvarNew = ((malloc)((sizeof(struct _template__Lvar__pointer__tag_struct_State_37__))));
+    (((lvarNew)->_value) = ((l)->_bottom));
+    (((lvarNew)->_lattice) = (l));
+    (((lvarNew)->_frozen) = 0);
+    (((lvarNew)->_cond) = ((pthread_cond_t){{0, 0, 0, 0, 0, ((void *)0), 0, 0}}));
+    (((lvarNew)->_mutex) = ((pthread_mutex_t){{0, 0, 0, 0, 0, 0, 0, {0, 0}}}));
+    return (lvarNew);
+  }
+}
+typedef State  *_template_param_unused_417;
+static signed int _template__put__pointer__tag_struct_State_37__(struct _template__Lvar__pointer__tag_struct_State_37__  * l, State  * newState)
+{
+
+  {
+    ((pthread_mutex_lock)((&(((l)->_mutex)))));
+    if (((l)->_frozen))
     {
       {
-        ((_template__resizeActSet__pointer__tag_struct_Set_int_13__)((act), ((2 * ((act)->_size)) + 1)));
+        ((pthread_mutex_unlock)((&(((l)->_mutex)))));
+        return 0;
       }
     } else {
       ;
     }
-    ((((act)->_set)[((act)->_index)]) = (element));
-    (((act)->_index)++);
-    return (act);
-  }
-}
-typedef Set_int  *_template_param_unused_364;
-static struct _template__ActivationSet__pointer__tag_struct_Set_int_13__  *_template__newActivationSet__pointer__tag_struct_Set_int_13__(struct _template__Lattice__pointer__tag_struct_Set_int_13__  * l, signed int  size)
-{
-
-  {
-    if (((size) < 0))
+    State  *oldState = ((l)->_value);
+    State  *newValue = ((((l)->_lattice)->_lub)((oldState), (newState)));
+    if (((((l)->_lattice)->_eq)((((l)->_lattice)->_top), (newValue))))
     {
       {
-        ((printf)("Can't create an activation set of negative size!\n"));
+        ((printf)("Error: invalid put of %s\n", (((((l)->_lattice)->_show)((newState))).text)));
         ((exit)(0));
       }
     } else {
       ;
     }
-    struct _template__ActivationSet__pointer__tag_struct_Set_int_13__  *act = ((malloc)((sizeof(struct _template__ActivationSet__pointer__tag_struct_Set_int_13__))));
-    (((act)->_size) = (size));
-    (((act)->_set) = ((malloc)(((sizeof(Set_int *)) * (size)))));
-    (((act)->_index) = 0);
-    (((act)->_lattice) = (l));
-    return (act);
+    (((l)->_value) = (newValue));
+    ((pthread_mutex_unlock)((&(((l)->_mutex)))));
+    ((pthread_cond_broadcast)((&(((l)->_cond)))));
+    return 1;
   }
 }
-typedef Set_int  *_template_param_unused_380;
-typedef Set_int  *_template_param_unused_384;
-static struct _template__ActivationSet__pointer__tag_struct_Set_int_13__  *_template__thresholdReached__pointer__tag_struct_Set_int_13__(struct _template__Lvar__pointer__tag_struct_Set_int_13__  * l, struct _template__ThresholdSet__pointer__tag_struct_Set_int_13__  * t)
+typedef State  *_template_param_unused_433;
+typedef State  *_template_param_unused_437;
+static struct _template__ActivationSet__pointer__tag_struct_State_37__  *_template__thresholdReached__pointer__tag_struct_State_37__(struct _template__Lvar__pointer__tag_struct_State_37__  * l, struct _template__ThresholdSet__pointer__tag_struct_State_37__  * t)
 {
 
   {
@@ -2269,43 +2846,34 @@ static struct _template__ActivationSet__pointer__tag_struct_Set_int_13__  *_temp
     return (((void *)0));
   }
 }
-static struct _template__ActivationSet__pointer__tag_struct_Set_int_13__  *_template__get__pointer__tag_struct_Set_int_13__(struct _template__Lvar__pointer__tag_struct_Set_int_13__  * l, struct _template__ThresholdSet__pointer__tag_struct_Set_int_13__  * t)
+static struct _template__ActivationSet__pointer__tag_struct_State_37__  *_template__get__pointer__tag_struct_State_37__(struct _template__Lvar__pointer__tag_struct_State_37__  * l, struct _template__ThresholdSet__pointer__tag_struct_State_37__  * t)
 {
 
   {
+    ((pthread_mutex_lock)((&(((l)->_mutex)))));
     if ((((l)->_lattice) != ((t)->_lattice)))
     {
       {
-        ((printf)("Error: can't get() when Lvar doesn't have same lattice as threshold set.\n"));
-        ((exit)(0));
+        ((pthread_mutex_unlock)((&(((l)->_mutex)))));
+        return (((void *)0));
       }
     } else {
       ;
     }
-    ((pthread_mutex_lock)((&(((l)->_mutex)))));
-    struct _template__ActivationSet__pointer__tag_struct_Set_int_13__  *actReached = ((_template__thresholdReached__pointer__tag_struct_Set_int_13__)((l), (t)));
+    struct _template__ActivationSet__pointer__tag_struct_State_37__  *actReached = ((_template__thresholdReached__pointer__tag_struct_State_37__)((l), (t)));
     while (((actReached) == (((void *)0))))
     {
       {
-        ((actReached) = ((_template__thresholdReached__pointer__tag_struct_Set_int_13__)((l), (t))));
         ((pthread_cond_wait)((&(((l)->_cond))), (&(((l)->_mutex)))));
+        ((actReached) = ((_template__thresholdReached__pointer__tag_struct_State_37__)((l), (t))));
       }
     }
     ((pthread_mutex_unlock)((&(((l)->_mutex)))));
     return (actReached);
   }
 }
-typedef Set_int  *_template_param_unused_388;
-static Set_int  *_template__freeze__pointer__tag_struct_Set_int_13__(struct _template__Lvar__pointer__tag_struct_Set_int_13__  * l)
-{
-
-  {
-    (((l)->_frozen) = 1);
-    return ((l)->_value);
-  }
-}
-typedef Set_int  *_template_param_unused_396;
-static struct _string_s _template__showLvar__pointer__tag_struct_Set_int_13__(struct _template__Lvar__pointer__tag_struct_Set_int_13__  * l)
+typedef State  *_template_param_unused_445;
+static struct _string_s _template__showLvar__pointer__tag_struct_State_37__(struct _template__Lvar__pointer__tag_struct_State_37__  * l)
 {
 
   {
@@ -2317,49 +2885,29 @@ static struct _string_s _template__showLvar__pointer__tag_struct_Set_int_13__(st
     } else {
       ;
     }
-    ((printf)("Error: Can't show a lvar before it is frozen!\n"));
-    ((exit)(0));
     return ((strCharPointer)("<Lvar Value Unavailable>"));
-  }
-}
-typedef Set_int  *_template_param_unused_400;
-static signed int _template__freeThreshold__pointer__tag_struct_Set_int_13__(struct _template__ThresholdSet__pointer__tag_struct_Set_int_13__  * t)
-{
-
-  {
-    ((free)(((t)->_a_sets)));
-    ((free)((t)));
-    return 1;
-  }
-}
-typedef Set_int  *_template_param_unused_404;
-static signed int _template__freeActivation__pointer__tag_struct_Set_int_13__(struct _template__ActivationSet__pointer__tag_struct_Set_int_13__  * act)
-{
-
-  {
-    ((free)(((act)->_set)));
-    ((free)((act)));
-    return 1;
   }
 }
 signed int main(signed int  argc, char  * * argv)
 {
 
   {
-    struct _template__Lattice__pointer__tag_struct_Set_int_13__  *D = ((latticeint)());
-    struct _template__Lvar__pointer__tag_struct_Set_int_13__  *set = ((_template__new__pointer__tag_struct_Set_int_13__)((D)));
-    signed int res;
-    ((res) = ((buildSet)(0, 35, (set))));
-    struct _template__ThresholdSet__pointer__tag_struct_Set_int_13__  *t = ((_template__addThreshold__pointer__tag_struct_Set_int_13__)(((_template__newThresholdSet__pointer__tag_struct_Set_int_13__)((D), 1)), ((_template__addAct__pointer__tag_struct_Set_int_13__)(((_template__newActivationSet__pointer__tag_struct_Set_int_13__)((D), 20)), ((int_Empty)())))));
-    struct _template__ActivationSet__pointer__tag_struct_Set_int_13__  *result = ((_template__get__pointer__tag_struct_Set_int_13__)((set), (t)));
-    ((printf)("Act Set: %s\n", (((_template__showActivation__pointer__tag_struct_Set_int_13__)((result))).text)));
-    Set_int  *frozen = ((_template__freeze__pointer__tag_struct_Set_int_13__)((set)));
-    ((printf)("Frozen Lvar: %s\n", (((_template__showLvar__pointer__tag_struct_Set_int_13__)((set))).text)));
-    ((free)((D)));
-    ((free)((set)));
-    ((_template__freeThreshold__pointer__tag_struct_Set_int_13__)((t)));
-    ((_template__freeActivation__pointer__tag_struct_Set_int_13__)((result)));
-    ((free)((frozen)));
-    return 1;
+    struct _template__Lattice__pointer__tag_struct_State_37__  *l = ((_template__newLattice__pointer__tag_struct_State_37__)(((Pair)(((Bot)()), ((Bot)()))), ((Top)()), (leq), (lub), (eq), (showState)));
+    struct _template__ActivationSet__pointer__tag_struct_State_37__  *fSet = ((_template__addAct__pointer__tag_struct_State_37__)(((_template__addAct__pointer__tag_struct_State_37__)(((_template__addAct__pointer__tag_struct_State_37__)(((_template__addAct__pointer__tag_struct_State_37__)(((_template__addAct__pointer__tag_struct_State_37__)(((_template__newActivationSet__pointer__tag_struct_State_37__)((l), 20)), ((Pair)(((F)()), ((F)()))))), ((Pair)(((F)()), ((T)()))))), ((Pair)(((T)()), ((F)()))))), ((Pair)(((F)()), ((Bot)()))))), ((Pair)(((Bot)()), ((F)())))));
+    ((printf)("fSet: %s\n", (((_template__showActivation__pointer__tag_struct_State_37__)((fSet))).text)));
+    struct _template__ActivationSet__pointer__tag_struct_State_37__  *tSet = ((_template__newActivationSet__pointer__tag_struct_State_37__)((l), 1));
+    ((printf)("tSet (before adding): %s\n", (((_template__showActivation__pointer__tag_struct_State_37__)((tSet))).text)));
+    ((_template__addAct__pointer__tag_struct_State_37__)((tSet), ((Pair)(((T)()), ((T)())))));
+    ((printf)("tSet: %s\n", (((_template__showActivation__pointer__tag_struct_State_37__)((tSet))).text)));
+    struct _template__ThresholdSet__pointer__tag_struct_State_37__  *thresh = ((_template__addThreshold__pointer__tag_struct_State_37__)(((_template__newThresholdSet__pointer__tag_struct_State_37__)((l), 2)), (fSet)));
+    ((printf)("thresh (before adding): %s\n", (((_template__showThreshold__pointer__tag_struct_State_37__)((thresh))).text)));
+    ((_template__addThreshold__pointer__tag_struct_State_37__)((thresh), (tSet)));
+    ((printf)("thresh: %s\n", (((_template__showThreshold__pointer__tag_struct_State_37__)((thresh))).text)));
+    struct _template__Lvar__pointer__tag_struct_State_37__  *boolPair1 = ((_template__new__pointer__tag_struct_State_37__)((l)));
+    ((_template__put__pointer__tag_struct_State_37__)((boolPair1), ((Pair)(((T)()), ((Bot)())))));
+    ((_template__put__pointer__tag_struct_State_37__)((boolPair1), ((Pair)(((Bot)()), ((T)())))));
+    struct _template__ActivationSet__pointer__tag_struct_State_37__  *result1 = ((_template__get__pointer__tag_struct_State_37__)((boolPair1), (thresh)));
+    ((printf)("result1: %s\n", (((_template__showActivation__pointer__tag_struct_State_37__)((result1))).text)));
+    ((printf)("lvar: %s\n", (((_template__showLvar__pointer__tag_struct_State_37__)((boolPair1))).text)));
   }
 }
