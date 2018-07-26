@@ -3307,7 +3307,6 @@ int main(int argc, char **argv) {
 
   ActivationSet<double> * a4 = activationSet(D2){8.5};
   ThresholdSet<double> *t2 = thresholdSet(D2, 1){a4};
-
   printf("Showing a threshold set: %s\n", show(t2).text);
   printf("Showing an activation set: %s\n", show(a4).text);
 
