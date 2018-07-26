@@ -2179,7 +2179,7 @@ struct Customer {
       
     } CustTop;
     struct Customer_Person_s {
-      char  *f0;
+      signed int f0;
       ProductSet  *f1;
       signed int f2;
       
@@ -2205,7 +2205,7 @@ static inline Customer  *CustTop(void)
   ;
   return (temp);
 }
-static inline Customer  *Person(char  * f0, ProductSet  * f1, signed int  f2)
+static inline Customer  *Person(signed int  f0, ProductSet  * f1, signed int  f2)
 {
 
   Customer  *temp;
@@ -2506,7 +2506,7 @@ signed int eqCustomer(Customer  * c1, Customer  * c2)
         } else {
           /* matching for pattern Person(name1,prods1,score1) */;
           /* ... declarations of pattern variables */;
-          char  *name1;
+          signed int name1;
           ProductSet  *prods1;
           signed int score1;
           Customer  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
@@ -2521,7 +2521,7 @@ signed int eqCustomer(Customer  * c1, Customer  * c2)
               /* match against sub-patterns, setting _match to 0 on a fail */;
               Customer  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
               {
-                char  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Person).f0));
+                signed int  *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Person).f0));
                 ((name1) = (*(_curr_scrutinee_ptr)));
               }
               {
@@ -2543,7 +2543,7 @@ signed int eqCustomer(Customer  * c1, Customer  * c2)
               Customer  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
               /* matching for pattern Person(name2,prods2,score2) */;
               /* ... declarations of pattern variables */;
-              char  *name2;
+              signed int name2;
               ProductSet  *prods2;
               signed int score2;
               Customer  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
@@ -2558,7 +2558,7 @@ signed int eqCustomer(Customer  * c1, Customer  * c2)
                   /* match against sub-patterns, setting _match to 0 on a fail */;
                   Customer  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
                   {
-                    char  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Person).f0));
+                    signed int  *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Person).f0));
                     ((name2) = (*(_curr_scrutinee_ptr)));
                   }
                   {
@@ -2574,7 +2574,7 @@ signed int eqCustomer(Customer  * c1, Customer  * c2)
                 (_match); })
               )
               {
-                return ((((strcmp)((name1), (name2))) == 0) && ((eqProdSets)((prods1), (prods2))));
+                return (((name1) == (name2)) && ((eqProdSets)((prods1), (prods2))));
               } else {
                 /* matching for pattern _ */;
                 /* ... declarations of pattern variables */;
@@ -2692,7 +2692,7 @@ signed int leqCustomer(Customer  * c1, Customer  * c2)
         } else {
           /* matching for pattern Person(name1,prods1,score1) */;
           /* ... declarations of pattern variables */;
-          char  *name1;
+          signed int name1;
           ProductSet  *prods1;
           signed int score1;
           Customer  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
@@ -2707,7 +2707,7 @@ signed int leqCustomer(Customer  * c1, Customer  * c2)
               /* match against sub-patterns, setting _match to 0 on a fail */;
               Customer  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
               {
-                char  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Person).f0));
+                signed int  *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Person).f0));
                 ((name1) = (*(_curr_scrutinee_ptr)));
               }
               {
@@ -2771,7 +2771,7 @@ signed int leqCustomer(Customer  * c1, Customer  * c2)
                 } else {
                   /* matching for pattern Person(name2,prods2,score2) */;
                   /* ... declarations of pattern variables */;
-                  char  *name2;
+                  signed int name2;
                   ProductSet  *prods2;
                   signed int score2;
                   Customer  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
@@ -2786,7 +2786,7 @@ signed int leqCustomer(Customer  * c1, Customer  * c2)
                       /* match against sub-patterns, setting _match to 0 on a fail */;
                       Customer  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
                       {
-                        char  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Person).f0));
+                        signed int  *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Person).f0));
                         ((name2) = (*(_curr_scrutinee_ptr)));
                       }
                       {
@@ -2802,7 +2802,7 @@ signed int leqCustomer(Customer  * c1, Customer  * c2)
                     (_match); })
                   )
                   {
-                    return ((((strcmp)((name1), (name2))) == 0) && ((isProdSubset)((prods1), (prods2))));
+                    return (((name1) == (name2)) && ((isProdSubset)((prods1), (prods2))));
                   } else {
                     /* no match, do nothing. */;
                   }
@@ -3066,7 +3066,7 @@ Customer  *lubCustomer(Customer  * c1, Customer  * c2)
         } else {
           /* matching for pattern Person(name1,prods1,score1) */;
           /* ... declarations of pattern variables */;
-          char  *name1;
+          signed int name1;
           ProductSet  *prods1;
           signed int score1;
           Customer  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
@@ -3081,7 +3081,7 @@ Customer  *lubCustomer(Customer  * c1, Customer  * c2)
               /* match against sub-patterns, setting _match to 0 on a fail */;
               Customer  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
               {
-                char  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Person).f0));
+                signed int  *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Person).f0));
                 ((name1) = (*(_curr_scrutinee_ptr)));
               }
               {
@@ -3145,7 +3145,7 @@ Customer  *lubCustomer(Customer  * c1, Customer  * c2)
                 } else {
                   /* matching for pattern Person(name2,prods2,score2) */;
                   /* ... declarations of pattern variables */;
-                  char  *name2;
+                  signed int name2;
                   ProductSet  *prods2;
                   signed int score2;
                   Customer  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
@@ -3160,7 +3160,7 @@ Customer  *lubCustomer(Customer  * c1, Customer  * c2)
                       /* match against sub-patterns, setting _match to 0 on a fail */;
                       Customer  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
                       {
-                        char  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Person).f0));
+                        signed int  *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Person).f0));
                         ((name2) = (*(_curr_scrutinee_ptr)));
                       }
                       {
@@ -3176,7 +3176,7 @@ Customer  *lubCustomer(Customer  * c1, Customer  * c2)
                     (_match); })
                   )
                   {
-                    if ((((strcmp)((name1), (name2))) != 0))
+                    if (((name1) != (name2)))
                     {
                       {
                         return ((CustTop)());
@@ -3375,7 +3375,7 @@ struct _string_s showCustomer(Customer  * c)
         } else {
           /* matching for pattern Person(name,prods,score) */;
           /* ... declarations of pattern variables */;
-          char  *name;
+          signed int name;
           ProductSet  *prods;
           signed int score;
           Customer  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
@@ -3390,7 +3390,7 @@ struct _string_s showCustomer(Customer  * c)
               /* match against sub-patterns, setting _match to 0 on a fail */;
               Customer  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
               {
-                char  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Person).f0));
+                signed int  *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Person).f0));
                 ((name) = (*(_curr_scrutinee_ptr)));
               }
               {
@@ -3406,7 +3406,7 @@ struct _string_s showCustomer(Customer  * c)
             (_match); })
           )
           {
-            struct _string_s result = ((_append_string)(((_append_string)(((_append_string)(((_append_string)(((_append_string)(((_append_string)(((strCharPointer)("Person(")), ((strCharPointer)((name))))), ((strCharPointer)(", {")))), ((showProducts)((prods))))), ((strCharPointer)("}, ")))), ((showInt)((score))))), ((strCharPointer)(")"))));
+            struct _string_s result = ((_append_string)(((_append_string)(((_append_string)(((_append_string)(((_append_string)(((_append_string)(((strCharPointer)("Person(")), ((showInt)((name))))), ((strCharPointer)(", {")))), ((showProducts)((prods))))), ((strCharPointer)("}, ")))), ((showInt)((score))))), ((strCharPointer)(")"))));
             return (result);
           } else {
             /* no match, do nothing. */;
@@ -3416,13 +3416,52 @@ struct _string_s showCustomer(Customer  * c)
     }
   }
 }
+signed int  * *readCustData(char  * filename, signed int  num)
+{
+
+  {
+    FILE  *fp = ((fopen)((filename), "r"));
+    if (((fp) == (((void *)0))))
+    {
+      {
+        ((printf)("Error reading file!\n"));
+        ((exit)(0));
+      }
+    } else {
+      ;
+    }
+    signed int  * *customers = ((malloc)(((num) * (sizeof(signed int *)))));
+    for (signed int i = 0; ((i) < (num)); ((i)++))
+    {
+      {
+        signed int  *data = ((malloc)((2 * (sizeof(signed int)))));
+        ((fscanf)((fp), "%d,%d\n", (&((data)[0])), (&((data)[1]))));
+        (((customers)[(i)]) = (data));
+      }
+    }
+    ((fclose)((fp)));
+    return (customers);
+  }
+}
 struct _cilk_cilk_main_frame {
   CilkStackFrame header;
   struct  {
     char  * *argv;
     signed int argc;
     
-  } scope192;
+  } scope211;
+  struct  {
+    signed int  * *store1_cs;
+    
+  } scope212;
+  struct  {
+    signed int  * *store2_cs;
+    
+  } scope213;
+  struct  {
+    signed int  * *store3_cs;
+    
+  } scope214;
   
 };
 struct _cilk_cilk_main_args {
@@ -3450,9 +3489,12 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
   ;
   ;
   {
+    signed int  * *store1_cs = ((readCustData)("store1.csv", 10));
+    signed int  * *store2_cs = ((readCustData)("store2.csv", 10));
+    signed int  * *store3_cs = ((readCustData)("store3.csv", 10));
     {
-      signed int __tmp60 = 1;
-      ((Cilk_set_result)((_cilk_ws), (&(__tmp60)), (sizeof((__tmp60)))));
+      signed int __tmp63 = 1;
+      ((Cilk_set_result)((_cilk_ws), (&(__tmp63)), (sizeof((__tmp63)))));
       /* expand CILK2C_BEFORE_RETURN_SLOW macro */;
       ((Cilk_cilk2c_before_return_slow_cp)((_cilk_ws), (&((_cilk_frame)->header))));
       ((Cilk_cilk2c_before_return_slow)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
@@ -3465,8 +3507,8 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
   /* TODO: save only live, dirty variables */;
   ;
   ;
-  ((((_cilk_frame)->scope192).argc) = (argc));
-  ((((_cilk_frame)->scope192).argv) = (argv));
+  ((((_cilk_frame)->scope211).argc) = (argc));
+  ((((_cilk_frame)->scope211).argv) = (argv));
   if (((Cilk_sync)((_cilk_ws))))
   {
     return ;
@@ -3477,8 +3519,8 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
   /* TODO: restore only live variables */;
   ;
   ;
-  ((argc) = (((_cilk_frame)->scope192).argc));
-  ((argv) = (((_cilk_frame)->scope192).argv));
+  ((argc) = (((_cilk_frame)->scope211).argc));
+  ((argv) = (((_cilk_frame)->scope211).argv));
   /* expand CILK2C_AFTER_SYNC_SLOW() macro */;
   ((Cilk_cilk2c_after_sync_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
   /* expand CILK2C_AT_THREAD_BOUNDARY_SLOW() macro */;
@@ -3504,6 +3546,9 @@ signed int cilk_main(CilkWorkerState  *const  _cilk_ws, signed int  argc, char  
   ((Cilk_cilk2c_start_thread_fast_cp)((_cilk_ws), (&((_cilk_frame)->header))));
   ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
   {
+    signed int  * *store1_cs = ((readCustData)("store1.csv", 10));
+    signed int  * *store2_cs = ((readCustData)("store2.csv", 10));
+    signed int  * *store3_cs = ((readCustData)("store3.csv", 10));
     {
       signed int _cilk_tmp = 1;
       /* expand CILK2C_BEFORE_RETURN_FAST() macro */;

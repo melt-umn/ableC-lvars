@@ -17,8 +17,8 @@ datatype ProductSet {
 typedef datatype Customer Customer;
 datatype Customer {
   CustTop();
-  // name, set of product ids, total product score
-  Person (char*, ProductSet*, int);
+  // customer id, set of product ids, total product score
+  Person (int, ProductSet*, int);
   CustBot();
 }
 
@@ -70,7 +70,7 @@ int eqCustomer(Customer* c1, Customer* c2) {
       match (c2) {
         Person(name2, prods2, score2) -> {
         // note that we assume the scores are internally consistent
-          return strcmp(name1, name2) == 0 && eqProdSets(prods1, prods2);
+          return name1 == name2 && eqProdSets(prods1, prods2);
         }
         _ -> {return 0;}
       }
@@ -95,7 +95,7 @@ int leqCustomer(Customer* c1, Customer* c2) {
         CustBot() -> {return 0;}
         Person(name2, prods2, score2) -> {
         // note that we assume the scores are internally consistent
-          return strcmp(name1, name2) == 0 && isProdSubset(prods1, prods2);
+          return name1 == name2 && isProdSubset(prods1, prods2);
         }
       }
     }
@@ -144,7 +144,7 @@ Customer* lubCustomer (Customer* c1, Customer* c2) {
         CustTop() -> {return c2;}
         CustBot() -> {return c1;}
         Person(name2, prods2, score2) -> {
-          if (strcmp(name1, name2) != 0) {
+          if (name1 != name2) {
             return CustTop();
           }
           ProductSet* totalProds = prodSetUnion(prods1, prods2);
@@ -177,7 +177,8 @@ string showCustomer(Customer* c) {
     CustTop() -> {return str("Top()");}
     CustBot() -> {return str("Bot()");}
     Person(name, prods, score) -> {
-      string result = str("Person(") + name + str(", {") + showProducts(prods) + str("}, ") + show(score) + ")";
+      string result = str("Person(") + show(name) + str(", {") +
+                      showProducts(prods) + str("}, ") + show(score) + ")";
       return result;
     }
   }
@@ -189,6 +190,27 @@ string showCustomer(Customer* c) {
 // might want a function to generate a threshold for given customer based on their name? 
 // Might have min score for each product, so reached threshold when total score is at or above some amount?
 
+// to generate array of random customer data (could also be read from a file, e.g.)
+
+int** readCustData(char* filename, int num) {
+  FILE *fp = fopen(filename, "r");
+  if (fp == NULL) {
+    printf("Error reading file!\n");
+    exit(0);
+  }
+  int** customers = malloc(num * sizeof(int*));
+  for (int i = 0; i < num; i++) {
+    int* data = malloc(2 * sizeof(int));
+    fscanf(fp, "%d,%d\n", &data[0], &data[1]);
+    customers[i] = data;
+  }
+  fclose(fp);
+  return customers;
+}
+
 cilk int main(int argc, char **argv) {
+  int** store1_cs = readCustData("store1.csv", 10);
+  int** store2_cs = readCustData("store2.csv", 10);
+  int** store3_cs = readCustData("store3.csv", 10);
   cilk return 1;
 }

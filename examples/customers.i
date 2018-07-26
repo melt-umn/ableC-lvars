@@ -4868,7 +4868,7 @@ typedef datatype Customer Customer;
 datatype Customer {
   CustTop();
 
-  Person (char*, ProductSet*, int);
+  Person (int, ProductSet*, int);
   CustBot();
 }
 
@@ -4920,7 +4920,7 @@ int eqCustomer(Customer* c1, Customer* c2) {
       match (c2) {
         Person(name2, prods2, score2) -> {
 
-          return strcmp(name1, name2) == 0 && eqProdSets(prods1, prods2);
+          return name1 == name2 && eqProdSets(prods1, prods2);
         }
         _ -> {return 0;}
       }
@@ -4945,7 +4945,7 @@ int leqCustomer(Customer* c1, Customer* c2) {
         CustBot() -> {return 0;}
         Person(name2, prods2, score2) -> {
 
-          return strcmp(name1, name2) == 0 && isProdSubset(prods1, prods2);
+          return name1 == name2 && isProdSubset(prods1, prods2);
         }
       }
     }
@@ -4994,7 +4994,7 @@ Customer* lubCustomer (Customer* c1, Customer* c2) {
         CustTop() -> {return c2;}
         CustBot() -> {return c1;}
         Person(name2, prods2, score2) -> {
-          if (strcmp(name1, name2) != 0) {
+          if (name1 != name2) {
             return CustTop();
           }
           ProductSet* totalProds = prodSetUnion(prods1, prods2);
@@ -5027,18 +5027,32 @@ string showCustomer(Customer* c) {
     CustTop() -> {return str("Top()");}
     CustBot() -> {return str("Bot()");}
     Person(name, prods, score) -> {
-      string result = str("Person(") + name + str(", {") + showProducts(prods) + str("}, ") + show(score) + ")";
+      string result = str("Person(") + show(name) + str(", {") +
+                      showProducts(prods) + str("}, ") + show(score) + ")";
       return result;
     }
   }
 }
-
-
-
-
-
-
+# 195 "customers.xc"
+int** readCustData(char* filename, int num) {
+  FILE *fp = fopen(filename, "r");
+  if (fp == ((void *)0)) {
+    printf("Error reading file!\n");
+    exit(0);
+  }
+  int** customers = malloc(num * sizeof(int*));
+  for (int i = 0; i < num; i++) {
+    int* data = malloc(2 * sizeof(int));
+    fscanf(fp, "%d,%d\n", &data[0], &data[1]);
+    customers[i] = data;
+  }
+  fclose(fp);
+  return customers;
+}
 
 cilk int main(int argc, char **argv) {
+  int** store1_cs = readCustData("store1.csv", 10);
+  int** store2_cs = readCustData("store2.csv", 10);
+  int** store3_cs = readCustData("store3.csv", 10);
   cilk return 1;
 }
