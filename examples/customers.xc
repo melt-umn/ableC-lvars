@@ -190,9 +190,26 @@ string showCustomer(Customer* c) {
 // might want a function to generate a threshold for given customer based on their name? 
 // Might have min score for each product, so reached threshold when total score is at or above some amount?
 
-// to generate array of random customer data (could also be read from a file, e.g.)
+// to generate array of random customer data (could also be read from a file, e.g.) 
 
-int** readCustData(char* filename, int num) {
+Lvar** initCustomers(char* filename, int num) {
+  FILE *fp = fopen(filename, "r");
+  if (fp == NULL) {
+    printf("Error reading file!\n");
+    exit(0);
+  }
+  int** customers = malloc(num * sizeof(Lvar<Customer*>*));
+  for (int i = 0; i < num; i++) {
+    int custId;
+    fscanf(fp, "%d\n", &custId);
+    customers[i] = newLvar(D);
+    put(customers[i], Person(custId, 
+  }
+  fclose(fp);
+  return customers;
+}
+
+int** readStoreData(char* filename, int num) {
   FILE *fp = fopen(filename, "r");
   if (fp == NULL) {
     printf("Error reading file!\n");
@@ -208,9 +225,20 @@ int** readCustData(char* filename, int num) {
   return customers;
 }
 
+// how to initialize new customers? could have an lvar containing a set of customers?
+// how to create threshold for each customer?
+// maybe allow empty name to begin with?
+
 cilk int main(int argc, char **argv) {
-  int** store1_cs = readCustData("store1.csv", 10);
-  int** store2_cs = readCustData("store2.csv", 10);
-  int** store3_cs = readCustData("store3.csv", 10);
+  Lvar** customers = initCustomers("customerList.csv", 8);
+  int** store1_cs = readStoreData("store1.csv", 10);
+  int** store2_cs = readStoreData("store2.csv", 10);
+  int** store3_cs = readStoreData("store3.csv", 10);
+  int result1, result2, result3;
+  spawn result1 = addCustData(store1_cs);
+  spawn result2 = addCustData(store2_cs);
+  spawn result3 = addCustData(store3_cs);
+  spawn topCustomer = getTopCusts();
+  sync;
   cilk return 1;
 }
