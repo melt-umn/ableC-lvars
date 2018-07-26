@@ -1,4 +1,5 @@
 #define DEBUG
+#define GC_THREADS
 #include "lvars.xh"
 #include <cilk.xh>
 
@@ -61,50 +62,40 @@ int* lubArr(int* arr1, int* arr2) {
 
 cilk int putOnes(Lvar<int*>* x, int index, ThresholdSet<int*>* t);
 cilk int putOnes(Lvar<int*>* x, int index, ThresholdSet<int*>* t) {
-  printf("a\n");
   if (index < 0 || index >= ARRSIZE) {
     cilk return 0;
   }
-  printf("b\n");
-  if (get(x, t) == NULL) {
-    printf("c\n");
-    int* newArr = GC_MALLOC(sizeof(int)* ARRSIZE);
-    printf("d\n");
-    for (int i = 0; i < ARRSIZE; i++) {
-      newArr[i] = 0;
-    }
-    printf("e\n");
-    newArr[index] = 1;
-    printf("f\n");
-    put(x, newArr);
-    printf("g\n");
-    int result1, result2;
-    printf("h\n");
-    spawn result1 = putOnes(x, index - 2, t);
-    printf("i\n");
-    spawn result2 = putOnes(x, index - 1, t);
-    printf("j\n");
-    sync;
-    printf("k\n");
-    cilk return result1 && result2;
+  int* newArr = malloc(sizeof(int)* ARRSIZE);
+  for (int i = 0; i < ARRSIZE; i++) {
+    newArr[i] = 0;
   }
-  cilk return 1;
+  newArr[index] = 1;
+  put(x, newArr);
+  int result1, result2;
+  spawn result1 = putOnes(x, index - 2, t);
+  spawn result2 = putOnes(x, index - 1, t);
+  sync;
+  cilk return result1 && result2;
+}
+
+cilk ActivationSet<int*>* getCilk(Lvar<int*>* l, ThresholdSet<int*>* t) {
+  cilk return get(l, t);
 }
         
 
 cilk int main(int argc, char **argv) {
-  int* bottom = GC_MALLOC(sizeof(int) * ARRSIZE);
+  int* bottom = malloc(sizeof(int) * ARRSIZE);
   for (int i = 0; i < ARRSIZE; i++){
     bottom[i] = 0;
   }
 
-  int* top = GC_MALLOC(sizeof(int) * ARRSIZE);
+  int* top = malloc(sizeof(int) * ARRSIZE);
   top = NULL;
 
   Lattice<int*>* D = lattice(bottom, top, leqArr, lubArr, eqArr, showArr);
   Lvar<int*> * x = newLvar(D);
 
-  int* act1 = GC_MALLOC(ARRSIZE * sizeof(int));
+  int* act1 = malloc(ARRSIZE * sizeof(int));
   for (int i = 0; i < ARRSIZE; i++) {
     act1[i] = 1;
   }
@@ -113,16 +104,13 @@ cilk int main(int argc, char **argv) {
   ThresholdSet<int*> * t = thresholdSet(D){a1};
 
   int result;
+  ActivationSet<int*> * getRes;
   spawn result = putOnes(x, ARRSIZE - 1, t);
+  spawn getRes = getCilk(x, t);
   sync;
 
-  if (get(x, t) != NULL){ 
-    freeze(x);
-    printf("Result is: %s, act set matched: %s\n", show(x).text, show(get(x, t)).text);
-  }
-  else { 
-    printf("Result is NULL\n");
-  }
+  freeze(x);
+  printf("Result is: %s, act set matched: %s\n", show(x).text, show(get(x, t)).text);
   free(D);
   free(x);
   freeSet(a1);

@@ -3052,17 +3052,18 @@ static signed int _template__put__pointer__tag_struct_Set_int_45__(struct _templ
 {
 
   {
+    ((pthread_mutex_lock)((&(((l)->_mutex)))));
     if (((l)->_frozen))
     {
       {
         ((printf)("Error: can't write to a frozen lvar.\n"));
         ((exit)(0));
+        ((pthread_mutex_unlock)((&(((l)->_mutex)))));
         return 0;
       }
     } else {
       ;
     }
-    ((pthread_mutex_lock)((&(((l)->_mutex)))));
     Set_int  *oldState = ((l)->_value);
     Set_int  *newValue = ((((l)->_lattice)->_lub)((oldState), (newState)));
     if (((((l)->_lattice)->_eq)((((l)->_lattice)->_top), (newValue))))
@@ -3075,8 +3076,8 @@ static signed int _template__put__pointer__tag_struct_Set_int_45__(struct _templ
       ;
     }
     (((l)->_value) = (newValue));
-    ((pthread_cond_broadcast)((&(((l)->_cond)))));
     ((pthread_mutex_unlock)((&(((l)->_mutex)))));
+    ((pthread_cond_broadcast)((&(((l)->_cond)))));
     return 1;
   }
 }
@@ -3624,7 +3625,7 @@ struct _cilk_cilk_main_args {
 #undef CILK_WHERE_AM_I
 #define CILK_WHERE_AM_I IN_SLOW_PROCEDURE
 
-typedef Set_int  *_template_param_unused_531;
+typedef Set_int  *_template_param_unused_451;
 static struct _template__Lvar__pointer__tag_struct_Set_int_45__  *_template__new__pointer__tag_struct_Set_int_45__(struct _template__Lattice__pointer__tag_struct_Set_int_45__  * l)
 {
 
@@ -3638,8 +3639,8 @@ static struct _template__Lvar__pointer__tag_struct_Set_int_45__  *_template__new
     return (lvarNew);
   }
 }
-typedef Set_int  *_template_param_unused_748;
-typedef Set_int  *_template_param_unused_770;
+typedef Set_int  *_template_param_unused_668;
+typedef Set_int  *_template_param_unused_690;
 static struct _string_s _template__showActivation__pointer__tag_struct_Set_int_45__(struct _template__ActivationSet__pointer__tag_struct_Set_int_45__  * act)
 {
 
@@ -3650,8 +3651,8 @@ static struct _string_s _template__showActivation__pointer__tag_struct_Set_int_4
     {
       {
         ({
-          struct _string_s  *_tmp771 = (&(result));
-          ((*(_tmp771)) = ((_append_string)((*(_tmp771)), ((_append_string)(((((act)->_lattice)->_show)((((act)->_set)[(i)]))), ((strCharPointer)(", "))))))); })
+          struct _string_s  *_tmp691 = (&(result));
+          ((*(_tmp691)) = ((_append_string)((*(_tmp691)), ((_append_string)(((((act)->_lattice)->_show)((((act)->_set)[(i)]))), ((strCharPointer)(", "))))))); })
         ;
       }
     }
@@ -3659,15 +3660,15 @@ static struct _string_s _template__showActivation__pointer__tag_struct_Set_int_4
     {
       {
         ({
-          struct _string_s  *_tmp772 = (&(result));
-          ((*(_tmp772)) = ((_append_string)((*(_tmp772)), ((((act)->_lattice)->_show)((((act)->_set)[(i)])))))); })
+          struct _string_s  *_tmp692 = (&(result));
+          ((*(_tmp692)) = ((_append_string)((*(_tmp692)), ((((act)->_lattice)->_show)((((act)->_set)[(i)])))))); })
         ;
       }
     }
     return ((_append_string)((result), ((strCharPointer)("}"))));
   }
 }
-typedef Set_int  *_template_param_unused_794;
+typedef Set_int  *_template_param_unused_714;
 static struct _string_s _template__showThreshold__pointer__tag_struct_Set_int_45__(struct _template__ThresholdSet__pointer__tag_struct_Set_int_45__  * t)
 {
 
@@ -3678,8 +3679,8 @@ static struct _string_s _template__showThreshold__pointer__tag_struct_Set_int_45
     {
       {
         ({
-          struct _string_s  *_tmp795 = (&(result));
-          ((*(_tmp795)) = ((_append_string)((*(_tmp795)), ((_append_string)(((_template__showActivation__pointer__tag_struct_Set_int_45__)((((t)->_a_sets)[(i)]))), ((strCharPointer)(", "))))))); })
+          struct _string_s  *_tmp715 = (&(result));
+          ((*(_tmp715)) = ((_append_string)((*(_tmp715)), ((_append_string)(((_template__showActivation__pointer__tag_struct_Set_int_45__)((((t)->_a_sets)[(i)]))), ((strCharPointer)(", "))))))); })
         ;
       }
     }
@@ -3687,15 +3688,15 @@ static struct _string_s _template__showThreshold__pointer__tag_struct_Set_int_45
     {
       {
         ({
-          struct _string_s  *_tmp796 = (&(result));
-          ((*(_tmp796)) = ((_append_string)((*(_tmp796)), ((_template__showActivation__pointer__tag_struct_Set_int_45__)((((t)->_a_sets)[(i)])))))); })
+          struct _string_s  *_tmp716 = (&(result));
+          ((*(_tmp716)) = ((_append_string)((*(_tmp716)), ((_template__showActivation__pointer__tag_struct_Set_int_45__)((((t)->_a_sets)[(i)])))))); })
         ;
       }
     }
     return ((_append_string)((result), ((strCharPointer)("}"))));
   }
 }
-typedef Set_int  *_template_param_unused_800;
+typedef Set_int  *_template_param_unused_720;
 static signed int _template__resizeThresholdSet__pointer__tag_struct_Set_int_45__(struct _template__ThresholdSet__pointer__tag_struct_Set_int_45__  * t, signed int  newSize)
 {
 
@@ -3713,7 +3714,7 @@ static signed int _template__resizeThresholdSet__pointer__tag_struct_Set_int_45_
     return 1;
   }
 }
-typedef Set_int  *_template_param_unused_808;
+typedef Set_int  *_template_param_unused_728;
 static signed int _template__incompat__pointer__tag_struct_Set_int_45__(struct _template__Lattice__pointer__tag_struct_Set_int_45__  * l, struct _template__ActivationSet__pointer__tag_struct_Set_int_45__  * Q, struct _template__ActivationSet__pointer__tag_struct_Set_int_45__  * R)
 {
 
@@ -3799,7 +3800,7 @@ static struct _template__ThresholdSet__pointer__tag_struct_Set_int_45__  *_templ
     return (t);
   }
 }
-typedef Set_int  *_template_param_unused_812;
+typedef Set_int  *_template_param_unused_732;
 static struct _template__ThresholdSet__pointer__tag_struct_Set_int_45__  *_template__newThresholdSet__pointer__tag_struct_Set_int_45__(struct _template__Lattice__pointer__tag_struct_Set_int_45__  * l, signed int  size)
 {
 
@@ -3821,8 +3822,8 @@ static struct _template__ThresholdSet__pointer__tag_struct_Set_int_45__  *_templ
     return (t);
   }
 }
-typedef Set_int  *_template_param_unused_832;
-typedef Set_int  *_template_param_unused_836;
+typedef Set_int  *_template_param_unused_752;
+typedef Set_int  *_template_param_unused_756;
 static signed int _template__resizeActSet__pointer__tag_struct_Set_int_45__(struct _template__ActivationSet__pointer__tag_struct_Set_int_45__  * act, signed int  newSize)
 {
 
@@ -3857,7 +3858,7 @@ static struct _template__ActivationSet__pointer__tag_struct_Set_int_45__  *_temp
     return (act);
   }
 }
-typedef Set_int  *_template_param_unused_840;
+typedef Set_int  *_template_param_unused_760;
 static struct _template__ActivationSet__pointer__tag_struct_Set_int_45__  *_template__newActivationSet__pointer__tag_struct_Set_int_45__(struct _template__Lattice__pointer__tag_struct_Set_int_45__  * l, signed int  size)
 {
 
@@ -3879,37 +3880,8 @@ static struct _template__ActivationSet__pointer__tag_struct_Set_int_45__  *_temp
     return (act);
   }
 }
-typedef Set_int  *_template_param_unused_916;
-typedef Set_int  *_template_param_unused_932;
-typedef Set_int  *_template_param_unused_934;
-typedef __attribute__(()) struct _template__putStruct__pointer__tag_struct_Set_int_45__ _template__putStruct__pointer__tag_struct_Set_int_45__;
-struct _template__putStruct__pointer__tag_struct_Set_int_45__ {
-  struct _template__Lvar__pointer__tag_struct_Set_int_45__  *_lvar;
-  Set_int  *_val;
-  
-};
-typedef Set_int  *_template_param_unused_936;
-static void  *_template__putVoid__pointer__tag_struct_Set_int_45__(void  * valStruct)
-{
-
-  {
-    _template__putStruct__pointer__tag_struct_Set_int_45__  *p = ((_template__putStruct__pointer__tag_struct_Set_int_45__ *)(valStruct));
-    ((_template__put__pointer__tag_struct_Set_int_45__)(((p)->_lvar), ((p)->_val)));
-    ((free)((valStruct)));
-  }
-}
-static signed int _template__declarePut__pointer__tag_struct_Set_int_45__(struct _template__Lvar__pointer__tag_struct_Set_int_45__  * l, Set_int  * value)
-{
-
-  {
-    pthread_t child;
-    _template__putStruct__pointer__tag_struct_Set_int_45__  *p = ((malloc)((sizeof(_template__putStruct__pointer__tag_struct_Set_int_45__))));
-    (((p)->_lvar) = (l));
-    (((p)->_val) = (value));
-    ((pthread_create)((&(child)), (((void *)0)), (_template__putVoid__pointer__tag_struct_Set_int_45__), ((void *)(p))));
-  }
-}
-typedef Set_int  *_template_param_unused_940;
+typedef Set_int  *_template_param_unused_776;
+typedef Set_int  *_template_param_unused_780;
 static struct _template__ActivationSet__pointer__tag_struct_Set_int_45__  *_template__thresholdReached__pointer__tag_struct_Set_int_45__(struct _template__Lvar__pointer__tag_struct_Set_int_45__  * l, struct _template__ThresholdSet__pointer__tag_struct_Set_int_45__  * t)
 {
 
@@ -3939,7 +3911,7 @@ static struct _template__ActivationSet__pointer__tag_struct_Set_int_45__  *_temp
 {
 
   {
-    ((_template__declarePut__pointer__tag_struct_Set_int_45__)((l), (((l)->_lattice)->_bottom)));
+    ((pthread_mutex_lock)((&(((l)->_mutex)))));
     if ((((l)->_lattice) != ((t)->_lattice)))
     {
       {
@@ -3949,20 +3921,19 @@ static struct _template__ActivationSet__pointer__tag_struct_Set_int_45__  *_temp
     } else {
       ;
     }
-    ((pthread_mutex_lock)((&(((l)->_mutex)))));
     struct _template__ActivationSet__pointer__tag_struct_Set_int_45__  *actReached = ((_template__thresholdReached__pointer__tag_struct_Set_int_45__)((l), (t)));
     while (((actReached) == (((void *)0))))
     {
       {
-        ((actReached) = ((_template__thresholdReached__pointer__tag_struct_Set_int_45__)((l), (t))));
         ((pthread_cond_wait)((&(((l)->_cond))), (&(((l)->_mutex)))));
+        ((actReached) = ((_template__thresholdReached__pointer__tag_struct_Set_int_45__)((l), (t))));
       }
     }
     ((pthread_mutex_unlock)((&(((l)->_mutex)))));
     return (actReached);
   }
 }
-typedef Set_int  *_template_param_unused_944;
+typedef Set_int  *_template_param_unused_784;
 static Set_int  *_template__freeze__pointer__tag_struct_Set_int_45__(struct _template__Lvar__pointer__tag_struct_Set_int_45__  * l)
 {
 
@@ -3974,7 +3945,7 @@ static Set_int  *_template__freeze__pointer__tag_struct_Set_int_45__(struct _tem
     return (result);
   }
 }
-typedef Set_int  *_template_param_unused_952;
+typedef Set_int  *_template_param_unused_792;
 static struct _string_s _template__showLvar__pointer__tag_struct_Set_int_45__(struct _template__Lvar__pointer__tag_struct_Set_int_45__  * l)
 {
 
@@ -3992,7 +3963,7 @@ static struct _string_s _template__showLvar__pointer__tag_struct_Set_int_45__(st
     return ((strCharPointer)("<Lvar Value Unavailable>"));
   }
 }
-typedef Set_int  *_template_param_unused_956;
+typedef Set_int  *_template_param_unused_796;
 static signed int _template__freeThreshold__pointer__tag_struct_Set_int_45__(struct _template__ThresholdSet__pointer__tag_struct_Set_int_45__  * t)
 {
 
@@ -4002,7 +3973,7 @@ static signed int _template__freeThreshold__pointer__tag_struct_Set_int_45__(str
     return 1;
   }
 }
-typedef Set_int  *_template_param_unused_960;
+typedef Set_int  *_template_param_unused_800;
 static signed int _template__freeActivation__pointer__tag_struct_Set_int_45__(struct _template__ActivationSet__pointer__tag_struct_Set_int_45__  * act)
 {
 
@@ -4047,11 +4018,11 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
     ((((_cilk_frame)->scope141).res) = (res));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      signed int __tmp532;
+      signed int __tmp452;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp532) = (res));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp532)), (sizeof((__tmp532))))))
+        ((__tmp452) = (res));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp452)), (sizeof((__tmp452))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return ;
@@ -4139,8 +4110,8 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
     ((_template__freeActivation__pointer__tag_struct_Set_int_45__)((result)));
     ((free)((frozen)));
     {
-      signed int __tmp961 = 1;
-      ((Cilk_set_result)((_cilk_ws), (&(__tmp961)), (sizeof((__tmp961)))));
+      signed int __tmp801 = 1;
+      ((Cilk_set_result)((_cilk_ws), (&(__tmp801)), (sizeof((__tmp801)))));
       /* expand CILK2C_BEFORE_RETURN_SLOW macro */;
       ((Cilk_cilk2c_before_return_slow_cp)((_cilk_ws), (&((_cilk_frame)->header))));
       ((Cilk_cilk2c_before_return_slow)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
@@ -4211,11 +4182,11 @@ signed int cilk_main(CilkWorkerState  *const  _cilk_ws, signed int  argc, char  
     ((res) = ((buildSet)((_cilk_ws), 0, 35, (set))));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      signed int __tmp1395;
+      signed int __tmp1155;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp1395) = (res));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp1395)), (sizeof((__tmp1395))))))
+        ((__tmp1155) = (res));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp1155)), (sizeof((__tmp1155))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return 0;

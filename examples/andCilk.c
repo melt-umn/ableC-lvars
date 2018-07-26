@@ -3643,17 +3643,18 @@ static signed int _template__put__pointer__tag_struct_State_52__(struct _templat
 {
 
   {
+    ((pthread_mutex_lock)((&(((l)->_mutex)))));
     if (((l)->_frozen))
     {
       {
         ((printf)("Error: can't write to a frozen lvar.\n"));
         ((exit)(0));
+        ((pthread_mutex_unlock)((&(((l)->_mutex)))));
         return 0;
       }
     } else {
       ;
     }
-    ((pthread_mutex_lock)((&(((l)->_mutex)))));
     State  *oldState = ((l)->_value);
     State  *newValue = ((((l)->_lattice)->_lub)((oldState), (newState)));
     if (((((l)->_lattice)->_eq)((((l)->_lattice)->_top), (newValue))))
@@ -3666,8 +3667,8 @@ static signed int _template__put__pointer__tag_struct_State_52__(struct _templat
       ;
     }
     (((l)->_value) = (newValue));
-    ((pthread_cond_broadcast)((&(((l)->_cond)))));
     ((pthread_mutex_unlock)((&(((l)->_mutex)))));
+    ((pthread_cond_broadcast)((&(((l)->_cond)))));
     return 1;
   }
 }
@@ -3830,7 +3831,7 @@ struct _cilk_asyncAnd_args {
 #undef CILK_WHERE_AM_I
 #define CILK_WHERE_AM_I IN_SLOW_PROCEDURE
 
-typedef State  *_template_param_unused_770;
+typedef State  *_template_param_unused_690;
 static struct _template__Lattice__pointer__tag_struct_State_52__  *_template__newLattice__pointer__tag_struct_State_52__(State  * least, State  * greatest, signed int ( * leq)(), State  *( * lub)(), signed int ( * eq)(), struct _string_s ( * showMethod)())
 {
 
@@ -3845,7 +3846,7 @@ static struct _template__Lattice__pointer__tag_struct_State_52__  *_template__ne
     return (l);
   }
 }
-typedef State  *_template_param_unused_774;
+typedef State  *_template_param_unused_694;
 static struct _template__Lvar__pointer__tag_struct_State_52__  *_template__new__pointer__tag_struct_State_52__(struct _template__Lattice__pointer__tag_struct_State_52__  * l)
 {
 
@@ -3859,8 +3860,8 @@ static struct _template__Lvar__pointer__tag_struct_State_52__  *_template__new__
     return (lvarNew);
   }
 }
-typedef State  *_template_param_unused_794;
-typedef State  *_template_param_unused_798;
+typedef State  *_template_param_unused_714;
+typedef State  *_template_param_unused_718;
 static signed int _template__resizeActSet__pointer__tag_struct_State_52__(struct _template__ActivationSet__pointer__tag_struct_State_52__  * act, signed int  newSize)
 {
 
@@ -3895,7 +3896,7 @@ static struct _template__ActivationSet__pointer__tag_struct_State_52__  *_templa
     return (act);
   }
 }
-typedef State  *_template_param_unused_802;
+typedef State  *_template_param_unused_722;
 static struct _template__ActivationSet__pointer__tag_struct_State_52__  *_template__newActivationSet__pointer__tag_struct_State_52__(struct _template__Lattice__pointer__tag_struct_State_52__  * l, signed int  size)
 {
 
@@ -3917,8 +3918,8 @@ static struct _template__ActivationSet__pointer__tag_struct_State_52__  *_templa
     return (act);
   }
 }
-typedef State  *_template_param_unused_1238;
-typedef State  *_template_param_unused_1260;
+typedef State  *_template_param_unused_1158;
+typedef State  *_template_param_unused_1180;
 static struct _string_s _template__showActivation__pointer__tag_struct_State_52__(struct _template__ActivationSet__pointer__tag_struct_State_52__  * act)
 {
 
@@ -3929,8 +3930,8 @@ static struct _string_s _template__showActivation__pointer__tag_struct_State_52_
     {
       {
         ({
-          struct _string_s  *_tmp1261 = (&(result));
-          ((*(_tmp1261)) = ((_append_string)((*(_tmp1261)), ((_append_string)(((((act)->_lattice)->_show)((((act)->_set)[(i)]))), ((strCharPointer)(", "))))))); })
+          struct _string_s  *_tmp1181 = (&(result));
+          ((*(_tmp1181)) = ((_append_string)((*(_tmp1181)), ((_append_string)(((((act)->_lattice)->_show)((((act)->_set)[(i)]))), ((strCharPointer)(", "))))))); })
         ;
       }
     }
@@ -3938,15 +3939,15 @@ static struct _string_s _template__showActivation__pointer__tag_struct_State_52_
     {
       {
         ({
-          struct _string_s  *_tmp1262 = (&(result));
-          ((*(_tmp1262)) = ((_append_string)((*(_tmp1262)), ((((act)->_lattice)->_show)((((act)->_set)[(i)])))))); })
+          struct _string_s  *_tmp1182 = (&(result));
+          ((*(_tmp1182)) = ((_append_string)((*(_tmp1182)), ((((act)->_lattice)->_show)((((act)->_set)[(i)])))))); })
         ;
       }
     }
     return ((_append_string)((result), ((strCharPointer)("}"))));
   }
 }
-typedef State  *_template_param_unused_1284;
+typedef State  *_template_param_unused_1204;
 static struct _string_s _template__showThreshold__pointer__tag_struct_State_52__(struct _template__ThresholdSet__pointer__tag_struct_State_52__  * t)
 {
 
@@ -3957,8 +3958,8 @@ static struct _string_s _template__showThreshold__pointer__tag_struct_State_52__
     {
       {
         ({
-          struct _string_s  *_tmp1285 = (&(result));
-          ((*(_tmp1285)) = ((_append_string)((*(_tmp1285)), ((_append_string)(((_template__showActivation__pointer__tag_struct_State_52__)((((t)->_a_sets)[(i)]))), ((strCharPointer)(", "))))))); })
+          struct _string_s  *_tmp1205 = (&(result));
+          ((*(_tmp1205)) = ((_append_string)((*(_tmp1205)), ((_append_string)(((_template__showActivation__pointer__tag_struct_State_52__)((((t)->_a_sets)[(i)]))), ((strCharPointer)(", "))))))); })
         ;
       }
     }
@@ -3966,15 +3967,15 @@ static struct _string_s _template__showThreshold__pointer__tag_struct_State_52__
     {
       {
         ({
-          struct _string_s  *_tmp1286 = (&(result));
-          ((*(_tmp1286)) = ((_append_string)((*(_tmp1286)), ((_template__showActivation__pointer__tag_struct_State_52__)((((t)->_a_sets)[(i)])))))); })
+          struct _string_s  *_tmp1206 = (&(result));
+          ((*(_tmp1206)) = ((_append_string)((*(_tmp1206)), ((_template__showActivation__pointer__tag_struct_State_52__)((((t)->_a_sets)[(i)])))))); })
         ;
       }
     }
     return ((_append_string)((result), ((strCharPointer)("}"))));
   }
 }
-typedef State  *_template_param_unused_1290;
+typedef State  *_template_param_unused_1210;
 static signed int _template__resizeThresholdSet__pointer__tag_struct_State_52__(struct _template__ThresholdSet__pointer__tag_struct_State_52__  * t, signed int  newSize)
 {
 
@@ -3992,7 +3993,7 @@ static signed int _template__resizeThresholdSet__pointer__tag_struct_State_52__(
     return 1;
   }
 }
-typedef State  *_template_param_unused_1298;
+typedef State  *_template_param_unused_1218;
 static signed int _template__incompat__pointer__tag_struct_State_52__(struct _template__Lattice__pointer__tag_struct_State_52__  * l, struct _template__ActivationSet__pointer__tag_struct_State_52__  * Q, struct _template__ActivationSet__pointer__tag_struct_State_52__  * R)
 {
 
@@ -4078,7 +4079,7 @@ static struct _template__ThresholdSet__pointer__tag_struct_State_52__  *_templat
     return (t);
   }
 }
-typedef State  *_template_param_unused_1306;
+typedef State  *_template_param_unused_1226;
 static struct _template__ThresholdSet__pointer__tag_struct_State_52__  *_template__newThresholdSet__pointer__tag_struct_State_52__(struct _template__Lattice__pointer__tag_struct_State_52__  * l, signed int  size)
 {
 
@@ -4100,37 +4101,8 @@ static struct _template__ThresholdSet__pointer__tag_struct_State_52__  *_templat
     return (t);
   }
 }
-typedef State  *_template_param_unused_1384;
-typedef State  *_template_param_unused_1400;
-typedef State  *_template_param_unused_1402;
-typedef __attribute__(()) struct _template__putStruct__pointer__tag_struct_State_52__ _template__putStruct__pointer__tag_struct_State_52__;
-struct _template__putStruct__pointer__tag_struct_State_52__ {
-  struct _template__Lvar__pointer__tag_struct_State_52__  *_lvar;
-  State  *_val;
-  
-};
-typedef State  *_template_param_unused_1404;
-static void  *_template__putVoid__pointer__tag_struct_State_52__(void  * valStruct)
-{
-
-  {
-    _template__putStruct__pointer__tag_struct_State_52__  *p = ((_template__putStruct__pointer__tag_struct_State_52__ *)(valStruct));
-    ((_template__put__pointer__tag_struct_State_52__)(((p)->_lvar), ((p)->_val)));
-    ((free)((valStruct)));
-  }
-}
-static signed int _template__declarePut__pointer__tag_struct_State_52__(struct _template__Lvar__pointer__tag_struct_State_52__  * l, State  * value)
-{
-
-  {
-    pthread_t child;
-    _template__putStruct__pointer__tag_struct_State_52__  *p = ((malloc)((sizeof(_template__putStruct__pointer__tag_struct_State_52__))));
-    (((p)->_lvar) = (l));
-    (((p)->_val) = (value));
-    ((pthread_create)((&(child)), (((void *)0)), (_template__putVoid__pointer__tag_struct_State_52__), ((void *)(p))));
-  }
-}
-typedef State  *_template_param_unused_1408;
+typedef State  *_template_param_unused_1244;
+typedef State  *_template_param_unused_1248;
 static struct _template__ActivationSet__pointer__tag_struct_State_52__  *_template__thresholdReached__pointer__tag_struct_State_52__(struct _template__Lvar__pointer__tag_struct_State_52__  * l, struct _template__ThresholdSet__pointer__tag_struct_State_52__  * t)
 {
 
@@ -4160,7 +4132,7 @@ static struct _template__ActivationSet__pointer__tag_struct_State_52__  *_templa
 {
 
   {
-    ((_template__declarePut__pointer__tag_struct_State_52__)((l), (((l)->_lattice)->_bottom)));
+    ((pthread_mutex_lock)((&(((l)->_mutex)))));
     if ((((l)->_lattice) != ((t)->_lattice)))
     {
       {
@@ -4170,20 +4142,19 @@ static struct _template__ActivationSet__pointer__tag_struct_State_52__  *_templa
     } else {
       ;
     }
-    ((pthread_mutex_lock)((&(((l)->_mutex)))));
     struct _template__ActivationSet__pointer__tag_struct_State_52__  *actReached = ((_template__thresholdReached__pointer__tag_struct_State_52__)((l), (t)));
     while (((actReached) == (((void *)0))))
     {
       {
-        ((actReached) = ((_template__thresholdReached__pointer__tag_struct_State_52__)((l), (t))));
         ((pthread_cond_wait)((&(((l)->_cond))), (&(((l)->_mutex)))));
+        ((actReached) = ((_template__thresholdReached__pointer__tag_struct_State_52__)((l), (t))));
       }
     }
     ((pthread_mutex_unlock)((&(((l)->_mutex)))));
     return (actReached);
   }
 }
-typedef State  *_template_param_unused_1412;
+typedef State  *_template_param_unused_1252;
 static signed int _template__freeActivation__pointer__tag_struct_State_52__(struct _template__ActivationSet__pointer__tag_struct_State_52__  * act)
 {
 
@@ -4193,7 +4164,7 @@ static signed int _template__freeActivation__pointer__tag_struct_State_52__(stru
     return 1;
   }
 }
-typedef State  *_template_param_unused_1416;
+typedef State  *_template_param_unused_1256;
 static signed int _template__freeThreshold__pointer__tag_struct_State_52__(struct _template__ThresholdSet__pointer__tag_struct_State_52__  * t)
 {
 
@@ -4248,11 +4219,11 @@ static void _cilk_asyncAnd_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_
     ((((_cilk_frame)->scope202).success1) = (success1));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      signed int __tmp1307;
+      signed int __tmp1227;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp1307) = (success1));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp1307)), (sizeof((__tmp1307))))))
+        ((__tmp1227) = (success1));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp1227)), (sizeof((__tmp1227))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return ;
@@ -4331,11 +4302,11 @@ static void _cilk_asyncAnd_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_
     ((((_cilk_frame)->scope202).success2) = (success2));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      signed int __tmp1308;
+      signed int __tmp1228;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp1308) = (success2));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp1308)), (sizeof((__tmp1308))))))
+        ((__tmp1228) = (success2));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp1228)), (sizeof((__tmp1228))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return ;
@@ -4464,8 +4435,8 @@ static void _cilk_asyncAnd_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_
     ((_template__freeActivation__pointer__tag_struct_State_52__)((falseRes)));
     ((_template__freeThreshold__pointer__tag_struct_State_52__)((threshold)));
     {
-      signed int __tmp1417 = (result);
-      ((Cilk_set_result)((_cilk_ws), (&(__tmp1417)), (sizeof((__tmp1417)))));
+      signed int __tmp1257 = (result);
+      ((Cilk_set_result)((_cilk_ws), (&(__tmp1257)), (sizeof((__tmp1257)))));
       /* expand CILK2C_BEFORE_RETURN_SLOW macro */;
       ((Cilk_cilk2c_before_return_slow_cp)((_cilk_ws), (&((_cilk_frame)->header))));
       ((Cilk_cilk2c_before_return_slow)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
@@ -4546,11 +4517,11 @@ signed int asyncAnd(CilkWorkerState  *const  _cilk_ws, Bl  * b1, Bl  * b2)
     ((success1) = ((putCilk)((_cilk_ws), (andResult), ((Pair)((b1), ((Bot)()))))));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      signed int __tmp2068;
+      signed int __tmp1828;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp2068) = (success1));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp2068)), (sizeof((__tmp2068))))))
+        ((__tmp1828) = (success1));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp1828)), (sizeof((__tmp1828))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return 0;
@@ -4584,11 +4555,11 @@ signed int asyncAnd(CilkWorkerState  *const  _cilk_ws, Bl  * b1, Bl  * b2)
     ((success2) = ((putCilk)((_cilk_ws), (andResult), ((Pair)(((Bot)()), (b2))))));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      signed int __tmp2069;
+      signed int __tmp1829;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp2069) = (success2));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp2069)), (sizeof((__tmp2069))))))
+        ((__tmp1829) = (success2));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp1829)), (sizeof((__tmp1829))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return 0;
@@ -4730,11 +4701,11 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
     ((((_cilk_frame)->scope233).trueRes) = (trueRes));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      signed int __tmp2074;
+      signed int __tmp1834;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp2074) = (trueRes));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp2074)), (sizeof((__tmp2074))))))
+        ((__tmp1834) = (trueRes));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp1834)), (sizeof((__tmp1834))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return ;
@@ -4793,11 +4764,11 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
     ((((_cilk_frame)->scope233).falseRes) = (falseRes));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      signed int __tmp2075;
+      signed int __tmp1835;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp2075) = (falseRes));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp2075)), (sizeof((__tmp2075))))))
+        ((__tmp1835) = (falseRes));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp1835)), (sizeof((__tmp1835))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return ;
@@ -4871,8 +4842,8 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
     ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
     ((printf)("True is %d and False is %d\n", (trueRes), (falseRes)));
     {
-      signed int __tmp2076 = 0;
-      ((Cilk_set_result)((_cilk_ws), (&(__tmp2076)), (sizeof((__tmp2076)))));
+      signed int __tmp1836 = 0;
+      ((Cilk_set_result)((_cilk_ws), (&(__tmp1836)), (sizeof((__tmp1836)))));
       /* expand CILK2C_BEFORE_RETURN_SLOW macro */;
       ((Cilk_cilk2c_before_return_slow_cp)((_cilk_ws), (&((_cilk_frame)->header))));
       ((Cilk_cilk2c_before_return_slow)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
@@ -4940,11 +4911,11 @@ signed int cilk_main(CilkWorkerState  *const  _cilk_ws, signed int  argc, char  
     ((trueRes) = ((asyncAnd)((_cilk_ws), ((T)()), ((T)()))));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      signed int __tmp2079;
+      signed int __tmp1839;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp2079) = (trueRes));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp2079)), (sizeof((__tmp2079))))))
+        ((__tmp1839) = (trueRes));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp1839)), (sizeof((__tmp1839))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return 0;
@@ -4973,11 +4944,11 @@ signed int cilk_main(CilkWorkerState  *const  _cilk_ws, signed int  argc, char  
     ((falseRes) = ((asyncAnd)((_cilk_ws), ((T)()), ((F)()))));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      signed int __tmp2080;
+      signed int __tmp1840;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp2080) = (falseRes));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp2080)), (sizeof((__tmp2080))))))
+        ((__tmp1840) = (falseRes));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp1840)), (sizeof((__tmp1840))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return 0;

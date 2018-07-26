@@ -159,12 +159,12 @@ int main(int argc, char **argv) {
   // try to add activation set from another lattice to a threshold set
   ActivationSet<double> * a4 = activationSet(D2){8.5};
   ThresholdSet<double> *t2 = thresholdSet(D2, 1){a4};
-  get(y, t2);
   printf("Showing a threshold set: %s\n", show(t2).text);
   printf("Showing an activation set: %s\n", show(a4).text);
 
   // ****************** Step 5. Attempt to get value(s) of lvar(s) ************
   
+  printf("before get\n");
   ActivationSet<int>*  result = get(x, t);
 
   if (result == NULL) {

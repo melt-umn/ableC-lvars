@@ -2565,15 +2565,16 @@ static signed int _template__put__pointer__tag_struct_State_37__(struct _templat
 {
 
   {
+    ((pthread_mutex_lock)((&(((l)->_mutex)))));
     if (((l)->_frozen))
     {
       {
+        ((pthread_mutex_unlock)((&(((l)->_mutex)))));
         return 0;
       }
     } else {
       ;
     }
-    ((pthread_mutex_lock)((&(((l)->_mutex)))));
     State  *oldState = ((l)->_value);
     State  *newValue = ((((l)->_lattice)->_lub)((oldState), (newState)));
     if (((((l)->_lattice)->_eq)((((l)->_lattice)->_top), (newValue))))
@@ -2586,8 +2587,8 @@ static signed int _template__put__pointer__tag_struct_State_37__(struct _templat
       ;
     }
     (((l)->_value) = (newValue));
-    ((pthread_cond_broadcast)((&(((l)->_cond)))));
     ((pthread_mutex_unlock)((&(((l)->_mutex)))));
+    ((pthread_cond_broadcast)((&(((l)->_cond)))));
     return 1;
   }
 }
@@ -2818,37 +2819,8 @@ static struct _string_s _template__showThreshold__pointer__tag_struct_State_37__
     return ((_append_string)((result), ((strCharPointer)("}"))));
   }
 }
-typedef State  *_template_param_unused_2929;
-typedef State  *_template_param_unused_2945;
-typedef State  *_template_param_unused_2947;
-typedef __attribute__(()) struct _template__putStruct__pointer__tag_struct_State_37__ _template__putStruct__pointer__tag_struct_State_37__;
-struct _template__putStruct__pointer__tag_struct_State_37__ {
-  struct _template__Lvar__pointer__tag_struct_State_37__  *_lvar;
-  State  *_val;
-  
-};
-typedef State  *_template_param_unused_2949;
-static void  *_template__putVoid__pointer__tag_struct_State_37__(void  * valStruct)
-{
-
-  {
-    _template__putStruct__pointer__tag_struct_State_37__  *p = ((_template__putStruct__pointer__tag_struct_State_37__ *)(valStruct));
-    ((_template__put__pointer__tag_struct_State_37__)(((p)->_lvar), ((p)->_val)));
-    ((free)((valStruct)));
-  }
-}
-static signed int _template__declarePut__pointer__tag_struct_State_37__(struct _template__Lvar__pointer__tag_struct_State_37__  * l, State  * value)
-{
-
-  {
-    pthread_t child;
-    _template__putStruct__pointer__tag_struct_State_37__  *p = ((malloc)((sizeof(_template__putStruct__pointer__tag_struct_State_37__))));
-    (((p)->_lvar) = (l));
-    (((p)->_val) = (value));
-    ((pthread_create)((&(child)), (((void *)0)), (_template__putVoid__pointer__tag_struct_State_37__), ((void *)(p))));
-  }
-}
-typedef State  *_template_param_unused_2953;
+typedef State  *_template_param_unused_2869;
+typedef State  *_template_param_unused_2873;
 static struct _template__ActivationSet__pointer__tag_struct_State_37__  *_template__thresholdReached__pointer__tag_struct_State_37__(struct _template__Lvar__pointer__tag_struct_State_37__  * l, struct _template__ThresholdSet__pointer__tag_struct_State_37__  * t)
 {
 
@@ -2878,29 +2850,29 @@ static struct _template__ActivationSet__pointer__tag_struct_State_37__  *_templa
 {
 
   {
-    ((_template__declarePut__pointer__tag_struct_State_37__)((l), (((l)->_lattice)->_bottom)));
+    ((pthread_mutex_lock)((&(((l)->_mutex)))));
     if ((((l)->_lattice) != ((t)->_lattice)))
     {
       {
+        ((pthread_mutex_unlock)((&(((l)->_mutex)))));
         return (((void *)0));
       }
     } else {
       ;
     }
-    ((pthread_mutex_lock)((&(((l)->_mutex)))));
     struct _template__ActivationSet__pointer__tag_struct_State_37__  *actReached = ((_template__thresholdReached__pointer__tag_struct_State_37__)((l), (t)));
     while (((actReached) == (((void *)0))))
     {
       {
-        ((actReached) = ((_template__thresholdReached__pointer__tag_struct_State_37__)((l), (t))));
         ((pthread_cond_wait)((&(((l)->_cond))), (&(((l)->_mutex)))));
+        ((actReached) = ((_template__thresholdReached__pointer__tag_struct_State_37__)((l), (t))));
       }
     }
     ((pthread_mutex_unlock)((&(((l)->_mutex)))));
     return (actReached);
   }
 }
-typedef State  *_template_param_unused_2957;
+typedef State  *_template_param_unused_2877;
 static signed int _template__freeActivation__pointer__tag_struct_State_37__(struct _template__ActivationSet__pointer__tag_struct_State_37__  * act)
 {
 
@@ -2910,7 +2882,7 @@ static signed int _template__freeActivation__pointer__tag_struct_State_37__(stru
     return 1;
   }
 }
-typedef State  *_template_param_unused_2961;
+typedef State  *_template_param_unused_2881;
 static signed int _template__freeThreshold__pointer__tag_struct_State_37__(struct _template__ThresholdSet__pointer__tag_struct_State_37__  * t)
 {
 

@@ -3075,28 +3075,6 @@ static Lvar<a>* _new(Lattice<a>* l) {
 
 
 
-template<a>
-struct _putStruct {
-  Lvar<a>* _lvar;
-  a _val;
-};
-
-template<a>
-void * _putVoid(void* valStruct) {
-  inst _putStruct<a> * p = (inst _putStruct<a>*) valStruct;
-  put(p->_lvar, p->_val);
-  free(valStruct);
-}
-
-template<a>
-static int _declarePut(Lvar<a>* l, a value) {
-  pthread_t child;
-  inst _putStruct<a> * p = malloc(sizeof(inst _putStruct<a>));
-  p->_lvar = l;
-  p->_val = value;
-  pthread_create(&child, ((void *)0), inst _putVoid<a>, (void*) p);
-}
-
 
 
 
@@ -3104,15 +3082,16 @@ static int _declarePut(Lvar<a>* l, a value) {
 template<a>
 static int _put(Lvar<a>* l, a newState) {
 
+  pthread_mutex_lock(&(l->_mutex));
+
   if (l->_frozen) {
 
         printf("Error: can't write to a frozen lvar.\n");
         exit(0);
 
+    pthread_mutex_unlock(&(l->_mutex));
     return 0;
   }
-
-  pthread_mutex_lock(&(l->_mutex));
 
   a oldState = l->_value;
   a newValue = l-> _lattice-> _lub(oldState, newState);
@@ -3123,8 +3102,9 @@ static int _put(Lvar<a>* l, a newState) {
   }
   l->_value = newValue;
 
-  pthread_cond_broadcast(&(l->_cond));
   pthread_mutex_unlock(&(l->_mutex));
+  pthread_cond_broadcast(&(l->_cond));
+
   return 1;
 }
 
@@ -3147,19 +3127,18 @@ static ActivationSet<a>* _thresholdReached(Lvar<a>* l, ThresholdSet<a> * t) {
 template<a>
 static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
 
-  inst _declarePut<a>(l, l->_lattice->_bottom);
+  pthread_mutex_lock(&(l->_mutex));
 
 
     if (l->_lattice != t->_lattice) {
       printf("Error: can't get() when Lvar doesn't have same lattice as threshold set.\n");
       exit(0);
     }
-# 411 "../../../extensions/ableC-lvars/include/lvars.xh"
-  pthread_mutex_lock(&(l->_mutex));
+# 392 "../../../extensions/ableC-lvars/include/lvars.xh"
   ActivationSet<a>* actReached = inst _thresholdReached<a>(l, t);
   while (actReached == ((void *)0)) {
-    actReached = inst _thresholdReached<a>(l, t);
     pthread_cond_wait(&(l->_cond), &(l->_mutex));
+    actReached = inst _thresholdReached<a>(l, t);
   }
   pthread_mutex_unlock(&(l->_mutex));
   return actReached;

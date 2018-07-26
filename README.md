@@ -14,17 +14,14 @@
 + Think about big example-- maybe reading data from large files into a database-type structure, with Cilk?
 
 #### Other:
-+ Serious Problem: if get happened to be scheduled before a put, might get an error, while would get a result if put was scheduled before the get.
-+ Can fix with condition variables, but have to create pthreads at point where already know the values to put in-- but impractical to declare all possible calls to put before any get occurs...
-+ Think about determinism (esp. when invalid put doesn't error out)
 + Implement better cilk examples (Read from different files? Sum random numbers until they reach a certain point? A better set example?) Bitwise or? Check out Cilk paper
-+ Look over and tidy up examples and header file
++ Look over and tidy up examples and header file (to work better with new set up)
 + Fix top <= top in examples and tests
-+ Doesn't need to work sequentially-- just with Cilk
 + Add locks where needed in header file
 
 ### Less urgent:
 
++ Work on speeding up thread waiting/locking process
 + Add freezing examples
 + Lvars as global variables?
 + Implement more prefab lattices

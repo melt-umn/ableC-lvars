@@ -1916,15 +1916,16 @@ static signed int _template__put__pointer__tag_struct_Integer_13__(struct _templ
 {
 
   {
+    ((pthread_mutex_lock)((&(((l)->_mutex)))));
     if (((l)->_frozen))
     {
       {
+        ((pthread_mutex_unlock)((&(((l)->_mutex)))));
         return 0;
       }
     } else {
       ;
     }
-    ((pthread_mutex_lock)((&(((l)->_mutex)))));
     Integer  *oldState = ((l)->_value);
     Integer  *newValue = ((((l)->_lattice)->_lub)((oldState), (newState)));
     if (((((l)->_lattice)->_eq)((((l)->_lattice)->_top), (newValue))))
@@ -1937,42 +1938,13 @@ static signed int _template__put__pointer__tag_struct_Integer_13__(struct _templ
       ;
     }
     (((l)->_value) = (newValue));
-    ((pthread_cond_broadcast)((&(((l)->_cond)))));
     ((pthread_mutex_unlock)((&(((l)->_mutex)))));
+    ((pthread_cond_broadcast)((&(((l)->_cond)))));
     return 1;
   }
 }
-typedef Integer  *_template_param_unused_184;
-typedef Integer  *_template_param_unused_200;
-typedef Integer  *_template_param_unused_202;
-typedef __attribute__(()) struct _template__putStruct__pointer__tag_struct_Integer_13__ _template__putStruct__pointer__tag_struct_Integer_13__;
-struct _template__putStruct__pointer__tag_struct_Integer_13__ {
-  struct _template__Lvar__pointer__tag_struct_Integer_13__  *_lvar;
-  Integer  *_val;
-  
-};
-typedef Integer  *_template_param_unused_204;
-static void  *_template__putVoid__pointer__tag_struct_Integer_13__(void  * valStruct)
-{
-
-  {
-    _template__putStruct__pointer__tag_struct_Integer_13__  *p = ((_template__putStruct__pointer__tag_struct_Integer_13__ *)(valStruct));
-    ((_template__put__pointer__tag_struct_Integer_13__)(((p)->_lvar), ((p)->_val)));
-    ((free)((valStruct)));
-  }
-}
-static signed int _template__declarePut__pointer__tag_struct_Integer_13__(struct _template__Lvar__pointer__tag_struct_Integer_13__  * l, Integer  * value)
-{
-
-  {
-    pthread_t child;
-    _template__putStruct__pointer__tag_struct_Integer_13__  *p = ((malloc)((sizeof(_template__putStruct__pointer__tag_struct_Integer_13__))));
-    (((p)->_lvar) = (l));
-    (((p)->_val) = (value));
-    ((pthread_create)((&(child)), (((void *)0)), (_template__putVoid__pointer__tag_struct_Integer_13__), ((void *)(p))));
-  }
-}
-typedef Integer  *_template_param_unused_208;
+typedef Integer  *_template_param_unused_124;
+typedef Integer  *_template_param_unused_128;
 static struct _template__ActivationSet__pointer__tag_struct_Integer_13__  *_template__thresholdReached__pointer__tag_struct_Integer_13__(struct _template__Lvar__pointer__tag_struct_Integer_13__  * l, struct _template__ThresholdSet__pointer__tag_struct_Integer_13__  * t)
 {
 
@@ -2002,21 +1974,20 @@ static struct _template__ActivationSet__pointer__tag_struct_Integer_13__  *_temp
 {
 
   {
-    ((_template__declarePut__pointer__tag_struct_Integer_13__)((l), (((l)->_lattice)->_bottom)));
     ((pthread_mutex_lock)((&(((l)->_mutex)))));
     struct _template__ActivationSet__pointer__tag_struct_Integer_13__  *actReached = ((_template__thresholdReached__pointer__tag_struct_Integer_13__)((l), (t)));
     while (((actReached) == (((void *)0))))
     {
       {
-        ((actReached) = ((_template__thresholdReached__pointer__tag_struct_Integer_13__)((l), (t))));
         ((pthread_cond_wait)((&(((l)->_cond))), (&(((l)->_mutex)))));
+        ((actReached) = ((_template__thresholdReached__pointer__tag_struct_Integer_13__)((l), (t))));
       }
     }
     ((pthread_mutex_unlock)((&(((l)->_mutex)))));
     return (actReached);
   }
 }
-typedef Integer  *_template_param_unused_212;
+typedef Integer  *_template_param_unused_132;
 static Integer  *_template__freeze__pointer__tag_struct_Integer_13__(struct _template__Lvar__pointer__tag_struct_Integer_13__  * l)
 {
 
@@ -2028,7 +1999,7 @@ static Integer  *_template__freeze__pointer__tag_struct_Integer_13__(struct _tem
     return (result);
   }
 }
-typedef Integer  *_template_param_unused_234;
+typedef Integer  *_template_param_unused_154;
 static struct _string_s _template__showActivation__pointer__tag_struct_Integer_13__(struct _template__ActivationSet__pointer__tag_struct_Integer_13__  * act)
 {
 
@@ -2039,8 +2010,8 @@ static struct _string_s _template__showActivation__pointer__tag_struct_Integer_1
     {
       {
         ({
-          struct _string_s  *_tmp235 = (&(result));
-          ((*(_tmp235)) = ((_append_string)((*(_tmp235)), ((_append_string)(((((act)->_lattice)->_show)((((act)->_set)[(i)]))), ((strCharPointer)(", "))))))); })
+          struct _string_s  *_tmp155 = (&(result));
+          ((*(_tmp155)) = ((_append_string)((*(_tmp155)), ((_append_string)(((((act)->_lattice)->_show)((((act)->_set)[(i)]))), ((strCharPointer)(", "))))))); })
         ;
       }
     }
@@ -2048,15 +2019,15 @@ static struct _string_s _template__showActivation__pointer__tag_struct_Integer_1
     {
       {
         ({
-          struct _string_s  *_tmp236 = (&(result));
-          ((*(_tmp236)) = ((_append_string)((*(_tmp236)), ((((act)->_lattice)->_show)((((act)->_set)[(i)])))))); })
+          struct _string_s  *_tmp156 = (&(result));
+          ((*(_tmp156)) = ((_append_string)((*(_tmp156)), ((((act)->_lattice)->_show)((((act)->_set)[(i)])))))); })
         ;
       }
     }
     return ((_append_string)((result), ((strCharPointer)("}"))));
   }
 }
-typedef Integer  *_template_param_unused_244;
+typedef Integer  *_template_param_unused_164;
 static struct _string_s _template__showLvar__pointer__tag_struct_Integer_13__(struct _template__Lvar__pointer__tag_struct_Integer_13__  * l)
 {
 
@@ -2072,7 +2043,7 @@ static struct _string_s _template__showLvar__pointer__tag_struct_Integer_13__(st
     return ((strCharPointer)("<Lvar Value Unavailable>"));
   }
 }
-typedef Integer  *_template_param_unused_248;
+typedef Integer  *_template_param_unused_168;
 static signed int _template__freeActivation__pointer__tag_struct_Integer_13__(struct _template__ActivationSet__pointer__tag_struct_Integer_13__  * act)
 {
 
@@ -2082,7 +2053,7 @@ static signed int _template__freeActivation__pointer__tag_struct_Integer_13__(st
     return 1;
   }
 }
-typedef Integer  *_template_param_unused_252;
+typedef Integer  *_template_param_unused_172;
 static signed int _template__freeThreshold__pointer__tag_struct_Integer_13__(struct _template__ThresholdSet__pointer__tag_struct_Integer_13__  * t)
 {
 

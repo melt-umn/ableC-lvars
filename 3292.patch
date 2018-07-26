@@ -1,0 +1,103 @@
+From 653c8e9ef7d2495de8adb2cf7131049c90bbc835 Mon Sep 17 00:00:00 2001
+From: Reimer Behrends <behrends@gmail.com>
+Date: Sun, 6 Sep 2015 01:48:31 +0200
+Subject: [PATCH 1/2] Properly initialize the Boehm GC on all platforms.
+
+---
+ lib/system/mmdisp.nim | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/system/mmdisp.nim b/lib/system/mmdisp.nim
+index 8a946716d6..bf006f68a7 100644
+--- a/lib/system/mmdisp.nim
++++ b/lib/system/mmdisp.nim
+@@ -157,7 +157,7 @@ when defined(boehmgc):
+     proc setStackBottom(theStackBottom: pointer) = discard
+ 
+   proc initGC() =
+-    when defined(macosx): boehmGCinit()
++    boehmGCinit()
+ 
+   proc newObj(typ: PNimType, size: int): pointer {.compilerproc.} =
+     if ntfNoRefs in typ.flags: result = allocAtomic(size)
+
+From 3dfc444e7e0b77c4bf7ac31adbeb3517c552ca9e Mon Sep 17 00:00:00 2001
+From: Reimer Behrends <behrends@gmail.com>
+Date: Sun, 6 Sep 2015 03:03:31 +0200
+Subject: [PATCH 2/2] Inform the Boehm GC about newly created threads.
+
+In order to be able to scan thread stacks, the Boehm GC needs to know
+about newly created threads. This is done by redirecting calls from
+pthread_create() to GC_pthread_create(). This normally happens
+automatically when including <gc/gc.h>, but since Nim does not include
+header files, we need to do this explicitly in system/threads.nim
+---
+ lib/system.nim         |  8 ++++++++
+ lib/system/mmdisp.nim  |  7 -------
+ lib/system/threads.nim | 16 ++++++++++++----
+ 3 files changed, 20 insertions(+), 11 deletions(-)
+
+diff --git a/lib/system.nim b/lib/system.nim
+index 5bd8c56c76..0d04d0a742 100644
+--- a/lib/system.nim
++++ b/lib/system.nim
+@@ -1200,6 +1200,14 @@ const
+   hasSharedHeap = defined(boehmgc) or defined(gogc) # don't share heaps; every thread has its own
+   taintMode = compileOption("taintmode")
+ 
++when defined(boehmgc):
++  when defined(windows):
++    const boehmLib = "boehmgc.dll"
++  elif defined(macosx):
++    const boehmLib = "libgc.dylib"
++  else:
++    const boehmLib = "libgc.so.1"
++
+ when taintMode:
+   type TaintedString* = distinct string ## a distinct string type that
+                                         ## is `tainted`:idx:. It is an alias for
+diff --git a/lib/system/mmdisp.nim b/lib/system/mmdisp.nim
+index bf006f68a7..be9028de27 100644
+--- a/lib/system/mmdisp.nim
++++ b/lib/system/mmdisp.nim
+@@ -66,13 +66,6 @@ proc raiseOutOfMem() {.noinline.} =
+   quit(1)
+ 
+ when defined(boehmgc):
+-  when defined(windows):
+-    const boehmLib = "boehmgc.dll"
+-  elif defined(macosx):
+-    const boehmLib = "libgc.dylib"
+-  else:
+-    const boehmLib = "libgc.so.1"
+-
+   proc boehmGCinit {.importc: "GC_init", dynlib: boehmLib.}
+   proc boehmGC_disable {.importc: "GC_disable", dynlib: boehmLib.}
+   proc boehmGC_enable {.importc: "GC_enable", dynlib: boehmLib.}
+diff --git a/lib/system/threads.nim b/lib/system/threads.nim
+index c7cb8d9df8..35690c98d3 100644
+--- a/lib/system/threads.nim
++++ b/lib/system/threads.nim
+@@ -135,10 +135,18 @@ else:
+   proc pthread_attr_setstacksize(a1: var PthreadAttr, a2: int) {.
+     importc, header: pthreadh.}
+ 
+-  proc pthread_create(a1: var SysThread, a2: var PthreadAttr,
+-            a3: proc (x: pointer): pointer {.noconv.},
+-            a4: pointer): cint {.importc: "pthread_create",
+-            header: pthreadh.}
++  when not defined(boehmgc):
++    proc pthread_create(a1: var SysThread, a2: var PthreadAttr,
++              a3: proc (x: pointer): pointer {.noconv.},
++              a4: pointer): cint {.importc: "pthread_create",
++              header: pthreadh.}
++  else:
++    # The Boehm GC needs to know about newly created threads,
++    # so pthread_create() is redirected to GC_pthread_create().
++    proc pthread_create(a1: var SysThread, a2: var PthreadAttr,
++              a3: proc (x: pointer): pointer {.noconv.},
++              a4: pointer): cint {.importc: "GC_pthread_create",
++              dynlib: boehmLib.}
+   proc pthread_join(a1: SysThread, a2: ptr pointer): cint {.
+     importc, header: pthreadh.}
+ 

@@ -5078,15 +5078,16 @@ static signed int _template__put__pointer__tag_struct_VoteSet_58__(struct _templ
 {
 
   {
+    ((pthread_mutex_lock)((&(((l)->_mutex)))));
     if (((l)->_frozen))
     {
       {
+        ((pthread_mutex_unlock)((&(((l)->_mutex)))));
         return 0;
       }
     } else {
       ;
     }
-    ((pthread_mutex_lock)((&(((l)->_mutex)))));
     VoteSet  *oldState = ((l)->_value);
     VoteSet  *newValue = ((((l)->_lattice)->_lub)((oldState), (newState)));
     if (((((l)->_lattice)->_eq)((((l)->_lattice)->_top), (newValue))))
@@ -5099,42 +5100,13 @@ static signed int _template__put__pointer__tag_struct_VoteSet_58__(struct _templ
       ;
     }
     (((l)->_value) = (newValue));
-    ((pthread_cond_broadcast)((&(((l)->_cond)))));
     ((pthread_mutex_unlock)((&(((l)->_mutex)))));
+    ((pthread_cond_broadcast)((&(((l)->_cond)))));
     return 1;
   }
 }
-typedef VoteSet  *_template_param_unused_264;
-typedef VoteSet  *_template_param_unused_280;
-typedef VoteSet  *_template_param_unused_282;
-typedef __attribute__(()) struct _template__putStruct__pointer__tag_struct_VoteSet_58__ _template__putStruct__pointer__tag_struct_VoteSet_58__;
-struct _template__putStruct__pointer__tag_struct_VoteSet_58__ {
-  struct _template__Lvar__pointer__tag_struct_VoteSet_58__  *_lvar;
-  VoteSet  *_val;
-  
-};
-typedef VoteSet  *_template_param_unused_284;
-static void  *_template__putVoid__pointer__tag_struct_VoteSet_58__(void  * valStruct)
-{
-
-  {
-    _template__putStruct__pointer__tag_struct_VoteSet_58__  *p = ((_template__putStruct__pointer__tag_struct_VoteSet_58__ *)(valStruct));
-    ((_template__put__pointer__tag_struct_VoteSet_58__)(((p)->_lvar), ((p)->_val)));
-    ((free)((valStruct)));
-  }
-}
-static signed int _template__declarePut__pointer__tag_struct_VoteSet_58__(struct _template__Lvar__pointer__tag_struct_VoteSet_58__  * l, VoteSet  * value)
-{
-
-  {
-    pthread_t child;
-    _template__putStruct__pointer__tag_struct_VoteSet_58__  *p = ((malloc)((sizeof(_template__putStruct__pointer__tag_struct_VoteSet_58__))));
-    (((p)->_lvar) = (l));
-    (((p)->_val) = (value));
-    ((pthread_create)((&(child)), (((void *)0)), (_template__putVoid__pointer__tag_struct_VoteSet_58__), ((void *)(p))));
-  }
-}
-typedef VoteSet  *_template_param_unused_288;
+typedef VoteSet  *_template_param_unused_204;
+typedef VoteSet  *_template_param_unused_208;
 static struct _template__ActivationSet__pointer__tag_struct_VoteSet_58__  *_template__thresholdReached__pointer__tag_struct_VoteSet_58__(struct _template__Lvar__pointer__tag_struct_VoteSet_58__  * l, struct _template__ThresholdSet__pointer__tag_struct_VoteSet_58__  * t)
 {
 
@@ -5164,14 +5136,13 @@ static struct _template__ActivationSet__pointer__tag_struct_VoteSet_58__  *_temp
 {
 
   {
-    ((_template__declarePut__pointer__tag_struct_VoteSet_58__)((l), (((l)->_lattice)->_bottom)));
     ((pthread_mutex_lock)((&(((l)->_mutex)))));
     struct _template__ActivationSet__pointer__tag_struct_VoteSet_58__  *actReached = ((_template__thresholdReached__pointer__tag_struct_VoteSet_58__)((l), (t)));
     while (((actReached) == (((void *)0))))
     {
       {
-        ((actReached) = ((_template__thresholdReached__pointer__tag_struct_VoteSet_58__)((l), (t))));
         ((pthread_cond_wait)((&(((l)->_cond))), (&(((l)->_mutex)))));
+        ((actReached) = ((_template__thresholdReached__pointer__tag_struct_VoteSet_58__)((l), (t))));
       }
     }
     ((pthread_mutex_unlock)((&(((l)->_mutex)))));
@@ -5327,11 +5298,11 @@ static void _cilk_withCilk_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_
     ((((_cilk_frame)->scope460).kresult) = (kresult));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      YN  *__tmp301;
+      YN  *__tmp221;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp301) = (kresult));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp301)), (sizeof((__tmp301))))))
+        ((__tmp221) = (kresult));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp221)), (sizeof((__tmp221))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return ;
@@ -5414,11 +5385,11 @@ static void _cilk_withCilk_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_
     ((((_cilk_frame)->scope461).hresult) = (hresult));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      YN  *__tmp302;
+      YN  *__tmp222;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp302) = (hresult));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp302)), (sizeof((__tmp302))))))
+        ((__tmp222) = (hresult));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp222)), (sizeof((__tmp222))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return ;
@@ -5501,11 +5472,11 @@ static void _cilk_withCilk_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_
     ((((_cilk_frame)->scope462).fresult) = (fresult));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      YN  *__tmp303;
+      YN  *__tmp223;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp303) = (fresult));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp303)), (sizeof((__tmp303))))))
+        ((__tmp223) = (fresult));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp223)), (sizeof((__tmp223))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return ;
@@ -5616,8 +5587,8 @@ static void _cilk_withCilk_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_
       {
         ((printf)("Get pizza! At least one person will eat some.\n"));
         {
-          signed int __tmp304 = 1;
-          ((Cilk_set_result)((_cilk_ws), (&(__tmp304)), (sizeof((__tmp304)))));
+          signed int __tmp224 = 1;
+          ((Cilk_set_result)((_cilk_ws), (&(__tmp224)), (sizeof((__tmp224)))));
           /* expand CILK2C_BEFORE_RETURN_SLOW macro */;
           ((Cilk_cilk2c_before_return_slow_cp)((_cilk_ws), (&((_cilk_frame)->header))));
           ((Cilk_cilk2c_before_return_slow)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
@@ -5632,8 +5603,8 @@ static void _cilk_withCilk_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_
       {
         ((printf)("Don't get pizza. Nobody will eat any.\n"));
         {
-          signed int __tmp305 = 0;
-          ((Cilk_set_result)((_cilk_ws), (&(__tmp305)), (sizeof((__tmp305)))));
+          signed int __tmp225 = 0;
+          ((Cilk_set_result)((_cilk_ws), (&(__tmp225)), (sizeof((__tmp225)))));
           /* expand CILK2C_BEFORE_RETURN_SLOW macro */;
           ((Cilk_cilk2c_before_return_slow_cp)((_cilk_ws), (&((_cilk_frame)->header))));
           ((Cilk_cilk2c_before_return_slow)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
@@ -5645,8 +5616,8 @@ static void _cilk_withCilk_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk_
     }
     ((printf)("Not enough information to get pizza or not!\n"));
     {
-      signed int __tmp306 = (-1);
-      ((Cilk_set_result)((_cilk_ws), (&(__tmp306)), (sizeof((__tmp306)))));
+      signed int __tmp226 = (-1);
+      ((Cilk_set_result)((_cilk_ws), (&(__tmp226)), (sizeof((__tmp226)))));
       /* expand CILK2C_BEFORE_RETURN_SLOW macro */;
       ((Cilk_cilk2c_before_return_slow_cp)((_cilk_ws), (&((_cilk_frame)->header))));
       ((Cilk_cilk2c_before_return_slow)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
@@ -5731,11 +5702,11 @@ signed int withCilk(CilkWorkerState  *const  _cilk_ws, signed int  * arr, signed
     ((kresult) = ((getVoteSearchCilk)((_cilk_ws), (arr), (size))));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      YN  *__tmp310;
+      YN  *__tmp230;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp310) = (kresult));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp310)), (sizeof((__tmp310))))))
+        ((__tmp230) = (kresult));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp230)), (sizeof((__tmp230))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return 0;
@@ -5770,11 +5741,11 @@ signed int withCilk(CilkWorkerState  *const  _cilk_ws, signed int  * arr, signed
     ((hresult) = ((getVoteSearchCilk)((_cilk_ws), (arr), (size))));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      YN  *__tmp311;
+      YN  *__tmp231;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp311) = (hresult));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp311)), (sizeof((__tmp311))))))
+        ((__tmp231) = (hresult));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp231)), (sizeof((__tmp231))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return 0;
@@ -5809,11 +5780,11 @@ signed int withCilk(CilkWorkerState  *const  _cilk_ws, signed int  * arr, signed
     ((fresult) = ((getVoteSearchCilk)((_cilk_ws), (arr), (size))));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      YN  *__tmp312;
+      YN  *__tmp232;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp312) = (fresult));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp312)), (sizeof((__tmp312))))))
+        ((__tmp232) = (fresult));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp232)), (sizeof((__tmp232))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return 0;
@@ -5971,11 +5942,11 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
     ((((_cilk_frame)->scope487).result) = (result));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      signed int __tmp319;
+      signed int __tmp239;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp319) = (result));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp319)), (sizeof((__tmp319))))))
+        ((__tmp239) = (result));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp239)), (sizeof((__tmp239))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return ;
@@ -6054,8 +6025,8 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
     ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
     ((free)((arr)));
     {
-      signed int __tmp320 = 1;
-      ((Cilk_set_result)((_cilk_ws), (&(__tmp320)), (sizeof((__tmp320)))));
+      signed int __tmp240 = 1;
+      ((Cilk_set_result)((_cilk_ws), (&(__tmp240)), (sizeof((__tmp240)))));
       /* expand CILK2C_BEFORE_RETURN_SLOW macro */;
       ((Cilk_cilk2c_before_return_slow_cp)((_cilk_ws), (&((_cilk_frame)->header))));
       ((Cilk_cilk2c_before_return_slow)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
@@ -6127,11 +6098,11 @@ signed int cilk_main(CilkWorkerState  *const  _cilk_ws, signed int  argc, char  
     ((result) = ((withCilk)((_cilk_ws), (arr), (size))));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      signed int __tmp322;
+      signed int __tmp242;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp322) = (result));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp322)), (sizeof((__tmp322))))))
+        ((__tmp242) = (result));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp242)), (sizeof((__tmp242))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return 0;
