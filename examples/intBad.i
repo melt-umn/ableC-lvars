@@ -2795,467 +2795,31 @@ extern int pthread_atfork (void (*__prepare) (void),
 # 1159 "/usr/include/pthread.h" 3 4
 
 # 6 "../../../extensions/ableC-lvars/include/lvars.xh" 2
-# 24 "../../../extensions/ableC-lvars/include/lvars.xh"
-int _lvarCheckValue = 1;
+# 1 "/usr/include/errno.h" 1 3 4
+# 31 "/usr/include/errno.h" 3 4
 
 
 
-template<a> struct _Lattice {
-  a _bottom;
-  a _top;
-  int (*_leq)();
-  a (* _lub)();
-  int (*_eq)();
-  string (*_show)();
-};
 
+# 1 "/usr/include/x86_64-linux-gnu/bits/errno.h" 1 3 4
+# 24 "/usr/include/x86_64-linux-gnu/bits/errno.h" 3 4
+# 1 "/usr/include/linux/errno.h" 1 3 4
+# 1 "/usr/include/x86_64-linux-gnu/asm/errno.h" 1 3 4
+# 1 "/usr/include/asm-generic/errno.h" 1 3 4
 
 
-template<a>
-static Lattice<a>* _newLattice(a least, a greatest, int (*leq)(),
-                               a (*lub)(), int (*eq)(), string (*showMethod)()) {
-  Lattice<a> * l = malloc(sizeof(Lattice<a>));
-  l->_bottom = least;
-  l->_top = greatest;
-  l->_leq = leq;
-  l-> _lub = lub;
-  l->_eq = eq;
-  l->_show = showMethod;
-  return l;
-}
 
+# 1 "/usr/include/asm-generic/errno-base.h" 1 3 4
+# 5 "/usr/include/asm-generic/errno.h" 2 3 4
+# 1 "/usr/include/x86_64-linux-gnu/asm/errno.h" 2 3 4
+# 1 "/usr/include/linux/errno.h" 2 3 4
+# 25 "/usr/include/x86_64-linux-gnu/bits/errno.h" 2 3 4
+# 50 "/usr/include/x86_64-linux-gnu/bits/errno.h" 3 4
+extern int *__errno_location (void) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
+# 36 "/usr/include/errno.h" 2 3 4
+# 58 "/usr/include/errno.h" 3 4
 
-
-template<a> struct _ActivationSet {
-  int _size;
-  a* _set;
-  int _index;
-  Lattice<a>* _lattice;
-};
-
-
-
-template<a>
-static ActivationSet<a>* _newActivationSet(Lattice<a>* l, int size) {
-
-
-    if (size < 0) {
-      printf("Can't create an activation set of negative size!\n");
-      exit(0);
-    }
-# 79 "../../../extensions/ableC-lvars/include/lvars.xh"
-  ActivationSet<a> * act = malloc(sizeof(ActivationSet<a>));
-  act->_size = size;
-  act->_set = malloc(sizeof(a) * size);
-  act->_index = 0;
-  act ->_lattice = l;
-  return act;
-}
-
-
-
-template<a>
-static string _showActivation(ActivationSet<a>* act){
-  string result = str("{");
-
-  int i = 0;
-  for (; i < act->_index - 1; i++) {
-    result += act ->_lattice->_show(act->_set[i]) + ", ";
-  }
-  for (; i < act->_index; i++) {
-    result += act ->_lattice->_show(act->_set[i]);
-  }
-
-  return result + "}";
-}
-
-
-
-template<a>
-static ActivationSet<a>* _addAct(ActivationSet<a>* act, a element) {
-  if (act->_index >= act->_size) {
-     inst _resizeActSet<a>(act, 2 * act->_size + 1);
-  }
-  act->_set[act->_index] = element;
-  act->_index++;
-  return act;
-}
-
-
-
-template<a>
-static int _resizeActSet(ActivationSet<a>* act, int newSize) {
-  a* newSet = malloc(sizeof(a*) * newSize);
-  for (int i = 0; i < act->_size; i++) {
-    newSet[i] = act->_set[i];
-  }
-  free(act->_set);
-  act->_set = newSet;
-  act->_size = newSize;
-  return 1;
-}
-
-
-template<a>
-static int _freeActivation(ActivationSet<a>* act) {
-  free(act->_set);
-  free(act);
-  return 1;
-}
-
-
-
-template<a> struct _ThresholdSet {
-  Lattice<a>* _lattice;
-  int _size;
-  int _index;
-  ActivationSet<a> ** _a_sets;
-};
-
-
-
-template<a>
-static ThresholdSet<a>* _newThresholdSet(Lattice<a> * l, int size) {
-
-    if (size < 0) {
-      printf("Error: Can't create a threshold set of negative size!\n");
-      exit(0);
-    }
-# 164 "../../../extensions/ableC-lvars/include/lvars.xh"
-  ThresholdSet<a> * t = malloc(sizeof(ThresholdSet<a>));
-  t ->_lattice = l;
-  t->_size = size;
-  t->_index = 0;
-  t->_a_sets = malloc(sizeof(ActivationSet<a>*) * size);
-  return t;
-}
-
-
-
-template<a>
-static int _incompat(Lattice<a> * l, ActivationSet<a> *Q, ActivationSet<a> *R) {
-
-    if (Q -> _lattice != l || R -> _lattice != l) {
-      printf("Error: The activation sets %s and %s don't belong to the same lattice!\n",
-              show(Q).text, show(R).text);
-      exit(0);
-    }
-
-
-  if (Q -> _lattice != l || R -> _lattice != l) {
-    return 0;
-  }
-
-  for (int i = 0; i < Q->_index; i++) {
-    for (int j = 0; j < R->_index; j++) {
-      a q = Q->_set[i];
-      a r = R->_set[j];
-      if (!(l->_eq(l->_lub(q, r), l->_top))) {
-
-          printf("Error: %s and %s are compatible, with lub %s!\n",
-                 l->_show(q).text, l->_show(r).text, l->_show(l->_lub(q, r)).text);
-          exit(0);
-
-        return 0;
-      }
-    }
-  }
-  return 1;
-}
-
-
-
-
-
-template<a>
-static ThresholdSet<a>* _addThreshold(ThresholdSet<a>* t, ActivationSet<a>* act) {
-
-    if (t->_lattice != act->_lattice) {
-      printf("Error: activation set %s and threshold set %s do not have the same lattice. \n",
-             show(act).text, show(t).text);
-      exit(0);
-    }
-# 225 "../../../extensions/ableC-lvars/include/lvars.xh"
-  if (t->_index >= t->_size) {
-     inst _resizeThresholdSet<a>(t, 2 * t->_size + 1);
-  }
-
-
-    for (int i = 0; i < t->_index; i++) {
-      if (!inst _incompat<a>(t ->_lattice, t->_a_sets[i], act)) {
-        return t;
-      }
-    }
-
-
-  t->_a_sets[t->_index] = act;
-  t->_index++;
-  return t;
-}
-
-
-
-template<a>
-static int _resizeThresholdSet(ThresholdSet<a>* t, int newSize) {
- ActivationSet<a>** newSet = malloc(sizeof(ActivationSet<a>*) * newSize);
- for (int i = 0; i < t->_index; i++) {
-   newSet[i] = t->_a_sets[i];
- }
-
- free(t->_a_sets);
- t->_a_sets= newSet;
- t->_size = newSize;
- return 1;
-}
-
-
-
-template<a>
-static int _freeThreshold(ThresholdSet<a> *t) {
-  free(t->_a_sets);
-  free(t);
-  return 1;
-}
-
-
-
-template<a>
-static string _showThreshold(ThresholdSet<a>* t){
-  string result = str("{");
-  int i = 0;
-  for (; i < t->_index - 1; i++) {
-    result += show(t->_a_sets[i]) + ", ";
-  }
-  for (; i < t->_index; i++) {
-    result += show(t->_a_sets[i]);
-  }
-  return result + "}";
-}
-
-
-
-template<a> struct _Lvar {
-  Lattice<a> * _lattice;
-  a _value;
-  int _frozen;
-  ThresholdSet<a> * _threshold;
-  pthread_mutex_t _mutex;
-  pthread_cond_t _cond;
-};
-
-template<a>
-static string _showLvar(Lvar<a>* l) {
-
-  if (l->_frozen) {
-    return l->_lattice->_show(l->_value);
-  }
-
-
-    printf("Error: Can't show a lvar before it is frozen!\n");
-    exit(0);
-
-
-  return str("<Lvar Value Unavailable>");
-}
-
-
-
-
-
-template<a>
-static Lvar<a>* _new(Lattice<a>* l) {
-  Lvar<a>* lvarNew = malloc(sizeof(Lvar<a>));
-  lvarNew->_value = l-> _bottom;
-  lvarNew-> _lattice = l;
-  lvarNew-> _frozen = 0;
-  lvarNew->_cond = (pthread_cond_t) { { 0, 0, 0, 0, 0, (void *) 0, 0, 0 } };
-  lvarNew->_mutex = (pthread_mutex_t) { { 0, 0, 0, 0, 0, 0, 0, { 0, 0 } } };
-  return lvarNew;
-}
-
-
-
-
-
-
-
-template<a>
-static int _put(Lvar<a>* l, a newState) {
-
-  pthread_mutex_lock(&(l->_mutex));
-
-  if (l->_frozen) {
-
-        printf("Error: can't write to a frozen lvar.\n");
-        exit(0);
-
-    pthread_mutex_unlock(&(l->_mutex));
-    return 0;
-  }
-
-  a oldState = l->_value;
-  a newValue = l-> _lattice-> _lub(oldState, newState);
-
-  if (l-> _lattice->_eq(l->_lattice->_top, newValue)){
-      printf("Error: invalid put of %s into lvar of value %s\n",
-             l->_lattice->_show(newState).text, l->_lattice->_show(oldState).text);
-      exit(0);
-  }
-  l->_value = newValue;
-
-  pthread_mutex_unlock(&(l->_mutex));
-  pthread_cond_broadcast(&(l->_cond));
-
-  return 1;
-}
-
-
-
-
-
-template<a>
-static ActivationSet<a>* _thresholdReached(Lvar<a>* l, ThresholdSet<a> * t) {
-  for (int i = 0; i < t->_index; i++) {
-    for (int j = 0; j < t->_a_sets[i]->_index; j++) {
-      if (l-> _lattice->_leq(t->_a_sets[i]->_set[j], l->_value)) {
-        return t->_a_sets[i];
-      }
-    }
-  }
-  return ((void *)0);
-}
-
-template<a>
-static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
-
-  pthread_mutex_lock(&(l->_mutex));
-
-
-    if (l->_lattice != t->_lattice) {
-      printf("Error: can't get() when Lvar doesn't have same lattice as threshold set.\n");
-      exit(0);
-    }
-# 393 "../../../extensions/ableC-lvars/include/lvars.xh"
-  ActivationSet<a>* actReached = inst _thresholdReached<a>(l, t);
-  while (actReached == ((void *)0)) {
-    pthread_cond_wait(&(l->_cond), &(l->_mutex));
-    actReached = inst _thresholdReached<a>(l, t);
-  }
-  pthread_mutex_unlock(&(l->_mutex));
-  return actReached;
-}
-
-
-
-
-template<a>
-static a _freeze(Lvar<a>* l) {
-  pthread_mutex_lock(&(l->_mutex));
-  l->_frozen = 1;
-  a result = l->_value;
-  pthread_mutex_unlock(&(l->_mutex));
-  return result;
-}
-# 3 "intBad.xc" 2
-# 1 "../../../extensions/ableC-cilk/include/cilk.xh" 1
-
-
-
-# 1 "/usr/local/include/cilk/cilk.h" 1
-# 35 "/usr/local/include/cilk/cilk.h"
-# 1 "/usr/include/x86_64-linux-gnu/sys/types.h" 1 3 4
-# 27 "/usr/include/x86_64-linux-gnu/sys/types.h" 3 4
-
-# 44 "/usr/include/x86_64-linux-gnu/sys/types.h" 3 4
-typedef __loff_t loff_t;
-
-
-
-typedef __ino_t ino_t;
-# 60 "/usr/include/x86_64-linux-gnu/sys/types.h" 3 4
-typedef __dev_t dev_t;
-
-
-
-
-typedef __gid_t gid_t;
-
-
-
-
-typedef __mode_t mode_t;
-
-
-
-
-typedef __nlink_t nlink_t;
-
-
-
-
-typedef __uid_t uid_t;
-
-
-
-
-
-typedef __off_t off_t;
-# 109 "/usr/include/x86_64-linux-gnu/sys/types.h" 3 4
-typedef __ssize_t ssize_t;
-# 146 "/usr/include/x86_64-linux-gnu/sys/types.h" 3 4
-# 1 "/soft/gcc/4.9.2/ubuntuamd2010/lib/gcc/x86_64-linux-gnu/4.9.2/include/stddef.h" 1 3 4
-# 147 "/usr/include/x86_64-linux-gnu/sys/types.h" 2 3 4
-# 194 "/usr/include/x86_64-linux-gnu/sys/types.h" 3 4
-typedef int int8_t __attribute__ ((__mode__ (__QI__)));
-typedef int int16_t __attribute__ ((__mode__ (__HI__)));
-typedef int int32_t __attribute__ ((__mode__ (__SI__)));
-typedef int int64_t __attribute__ ((__mode__ (__DI__)));
-
-
-typedef unsigned int u_int8_t __attribute__ ((__mode__ (__QI__)));
-typedef unsigned int u_int16_t __attribute__ ((__mode__ (__HI__)));
-typedef unsigned int u_int32_t __attribute__ ((__mode__ (__SI__)));
-typedef unsigned int u_int64_t __attribute__ ((__mode__ (__DI__)));
-
-typedef int register_t __attribute__ ((__mode__ (__word__)));
-# 235 "/usr/include/x86_64-linux-gnu/sys/types.h" 3 4
-typedef __blkcnt_t blkcnt_t;
-
-
-
-typedef __fsblkcnt_t fsblkcnt_t;
-
-
-
-typedef __fsfilcnt_t fsfilcnt_t;
-# 273 "/usr/include/x86_64-linux-gnu/sys/types.h" 3 4
-
-# 36 "/usr/local/include/cilk/cilk.h" 2
-
-
-
-
-# 1 "/soft/gcc/4.9.2/ubuntuamd2010/lib/gcc/x86_64-linux-gnu/4.9.2/include/stddef.h" 1 3 4
-# 41 "/usr/local/include/cilk/cilk.h" 2
-
-# 1 "/usr/local/include/cilk/cilk-sysdep.h" 1
-# 146 "/usr/local/include/cilk/cilk-sysdep.h"
-static const char *ident_cilk_sysdep_h __attribute__((__unused__)) = "$HeadURL: https://bradley.csail.mit.edu/svn/repos/cilk/5.4.3/runtime/cilk-sysdep.h.in $ $LastChangedBy: bradley $ $Rev: 2311 $ $Date: 2005-07-13 17:38:21 -0400 (Wed, 13 Jul 2005) $"
-                                                                                                                                                                                              ;
-# 295 "/usr/local/include/cilk/cilk-sysdep.h"
-   static inline void CILK_MB(void) {
-     __asm__ volatile ("mfence":::"memory");
-   }
-
-
-
-
-   static inline int Cilk_xchg(volatile int *ptr, int x)
-   {
- __asm__("xchgl %0,%1" :"=r" (x) :"m" (*(ptr)), "0" (x) :"memory");
- return x;
-   }
-# 516 "/usr/local/include/cilk/cilk-sysdep.h"
+# 7 "../../../extensions/ableC-lvars/include/lvars.xh" 2
 # 1 "/usr/include/x86_64-linux-gnu/sys/time.h" 1 3 4
 # 27 "/usr/include/x86_64-linux-gnu/sys/time.h" 3 4
 # 1 "/usr/include/x86_64-linux-gnu/bits/time.h" 1 3 4
@@ -3404,9 +2968,492 @@ extern int utimes (const char *__file, const struct timeval __tvp[2])
      __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
 # 189 "/usr/include/x86_64-linux-gnu/sys/time.h" 3 4
 
-# 517 "/usr/local/include/cilk/cilk-sysdep.h" 2
+# 8 "../../../extensions/ableC-lvars/include/lvars.xh" 2
+# 26 "../../../extensions/ableC-lvars/include/lvars.xh"
+int _lvarCheckValue = 1;
 
 
+
+template<a> struct _Lattice {
+  a _bottom;
+  a _top;
+  int (*_leq)();
+  a (* _lub)();
+  int (*_eq)();
+  string (*_show)();
+};
+
+
+
+template<a>
+static Lattice<a>* _newLattice(a least, a greatest, int (*leq)(),
+                               a (*lub)(), int (*eq)(), string (*showMethod)()) {
+  Lattice<a> * l = malloc(sizeof(Lattice<a>));
+  l->_bottom = least;
+  l->_top = greatest;
+  l->_leq = leq;
+  l-> _lub = lub;
+  l->_eq = eq;
+  l->_show = showMethod;
+  return l;
+}
+
+
+
+template<a> struct _ActivationSet {
+  int _size;
+  a* _set;
+  int _index;
+  Lattice<a>* _lattice;
+};
+
+
+
+template<a>
+static ActivationSet<a>* _newActivationSet(Lattice<a>* l, int size) {
+
+
+    if (size < 0) {
+      printf("Can't create an activation set of negative size!\n");
+      exit(0);
+    }
+# 81 "../../../extensions/ableC-lvars/include/lvars.xh"
+  ActivationSet<a> * act = malloc(sizeof(ActivationSet<a>));
+  act->_size = size;
+  act->_set = malloc(sizeof(a) * size);
+  act->_index = 0;
+  act ->_lattice = l;
+  return act;
+}
+
+
+
+template<a>
+static string _showActivation(ActivationSet<a>* act){
+  string result = str("{");
+
+  int i = 0;
+  for (; i < act->_index - 1; i++) {
+    result += act ->_lattice->_show(act->_set[i]) + ", ";
+  }
+  for (; i < act->_index; i++) {
+    result += act ->_lattice->_show(act->_set[i]);
+  }
+
+  return result + "}";
+}
+
+
+
+template<a>
+static ActivationSet<a>* _addAct(ActivationSet<a>* act, a element) {
+  if (act->_index >= act->_size) {
+     inst _resizeActSet<a>(act, 2 * act->_size + 1);
+  }
+  act->_set[act->_index] = element;
+  act->_index++;
+  return act;
+}
+
+
+
+template<a>
+static int _resizeActSet(ActivationSet<a>* act, int newSize) {
+  a* newSet = malloc(sizeof(a*) * newSize);
+  for (int i = 0; i < act->_size; i++) {
+    newSet[i] = act->_set[i];
+  }
+  free(act->_set);
+  act->_set = newSet;
+  act->_size = newSize;
+  return 1;
+}
+
+
+template<a>
+static int _freeActivation(ActivationSet<a>* act) {
+  free(act->_set);
+  free(act);
+  return 1;
+}
+
+
+
+template<a> struct _ThresholdSet {
+  Lattice<a>* _lattice;
+  int _size;
+  int _index;
+  ActivationSet<a> ** _a_sets;
+};
+
+
+
+template<a>
+static ThresholdSet<a>* _newThresholdSet(Lattice<a> * l, int size) {
+
+    if (size < 0) {
+      printf("Error: Can't create a threshold set of negative size!\n");
+      exit(0);
+    }
+# 166 "../../../extensions/ableC-lvars/include/lvars.xh"
+  ThresholdSet<a> * t = malloc(sizeof(ThresholdSet<a>));
+  t ->_lattice = l;
+  t->_size = size;
+  t->_index = 0;
+  t->_a_sets = malloc(sizeof(ActivationSet<a>*) * size);
+  return t;
+}
+
+
+
+template<a>
+static int _incompat(Lattice<a> * l, ActivationSet<a> *Q, ActivationSet<a> *R) {
+
+    if (Q -> _lattice != l || R -> _lattice != l) {
+      printf("Error: The activation sets %s and %s don't belong to the same lattice!\n",
+              show(Q).text, show(R).text);
+      exit(0);
+    }
+
+
+  if (Q -> _lattice != l || R -> _lattice != l) {
+    return 0;
+  }
+
+  for (int i = 0; i < Q->_index; i++) {
+    for (int j = 0; j < R->_index; j++) {
+      a q = Q->_set[i];
+      a r = R->_set[j];
+      if (!(l->_eq(l->_lub(q, r), l->_top))) {
+
+          printf("Error: %s and %s are compatible, with lub %s!\n",
+                 l->_show(q).text, l->_show(r).text, l->_show(l->_lub(q, r)).text);
+          exit(0);
+
+        return 0;
+      }
+    }
+  }
+  return 1;
+}
+
+
+
+
+
+template<a>
+static ThresholdSet<a>* _addThreshold(ThresholdSet<a>* t, ActivationSet<a>* act) {
+
+    if (t->_lattice != act->_lattice) {
+      printf("Error: activation set %s and threshold set %s do not have the same lattice. \n",
+             show(act).text, show(t).text);
+      exit(0);
+    }
+# 227 "../../../extensions/ableC-lvars/include/lvars.xh"
+  if (t->_index >= t->_size) {
+     inst _resizeThresholdSet<a>(t, 2 * t->_size + 1);
+  }
+
+
+    for (int i = 0; i < t->_index; i++) {
+      if (!inst _incompat<a>(t ->_lattice, t->_a_sets[i], act)) {
+        return t;
+      }
+    }
+
+
+  t->_a_sets[t->_index] = act;
+  t->_index++;
+  return t;
+}
+
+
+
+template<a>
+static int _resizeThresholdSet(ThresholdSet<a>* t, int newSize) {
+ ActivationSet<a>** newSet = malloc(sizeof(ActivationSet<a>*) * newSize);
+ for (int i = 0; i < t->_index; i++) {
+   newSet[i] = t->_a_sets[i];
+ }
+
+ free(t->_a_sets);
+ t->_a_sets= newSet;
+ t->_size = newSize;
+ return 1;
+}
+
+
+
+template<a>
+static int _freeThreshold(ThresholdSet<a> *t) {
+  free(t->_a_sets);
+  free(t);
+  return 1;
+}
+
+
+
+template<a>
+static string _showThreshold(ThresholdSet<a>* t){
+  string result = str("{");
+  int i = 0;
+  for (; i < t->_index - 1; i++) {
+    result += show(t->_a_sets[i]) + ", ";
+  }
+  for (; i < t->_index; i++) {
+    result += show(t->_a_sets[i]);
+  }
+  return result + "}";
+}
+
+
+
+template<a> struct _Lvar {
+  Lattice<a> * _lattice;
+  a _value;
+  int _frozen;
+  ThresholdSet<a> * _threshold;
+  pthread_mutex_t _mutex;
+  pthread_cond_t _cond;
+};
+
+template<a>
+static string _showLvar(Lvar<a>* l) {
+
+  if (l->_frozen) {
+    return l->_lattice->_show(l->_value);
+  }
+
+
+    printf("Error: Can't show a lvar before it is frozen!\n");
+    exit(0);
+
+
+  return str("<Lvar Value Unavailable>");
+}
+
+
+
+
+
+template<a>
+static Lvar<a>* _new(Lattice<a>* l) {
+  Lvar<a>* lvarNew = malloc(sizeof(Lvar<a>));
+  lvarNew->_value = l-> _bottom;
+  lvarNew-> _lattice = l;
+  lvarNew-> _frozen = 0;
+  lvarNew->_cond = (pthread_cond_t) { { 0, 0, 0, 0, 0, (void *) 0, 0, 0 } };
+  lvarNew->_mutex = (pthread_mutex_t) { { 0, 0, 0, 0, 0, 0, 0, { 0, 0 } } };
+  return lvarNew;
+}
+
+
+
+
+
+
+
+template<a>
+static int _put(Lvar<a>* l, a newState) {
+
+  pthread_mutex_lock(&(l->_mutex));
+
+  if (l->_frozen) {
+
+        printf("Error: can't write to a frozen lvar.\n");
+        exit(0);
+
+    pthread_mutex_unlock(&(l->_mutex));
+    return 0;
+  }
+
+  a oldState = l->_value;
+  a newValue = l-> _lattice-> _lub(oldState, newState);
+
+  if (l-> _lattice->_eq(l->_lattice->_top, newValue)){
+
+        printf("Error: invalid put of %s into lvar of value %s\n",
+               l->_lattice->_show(newState).text, l->_lattice->_show(oldState).text);
+        exit(0);
+
+
+
+
+
+
+  }
+  l->_value = newValue;
+
+  pthread_mutex_unlock(&(l->_mutex));
+  pthread_cond_broadcast(&(l->_cond));
+
+  return 1;
+}
+
+
+
+
+
+template<a>
+static ActivationSet<a>* _thresholdReached(Lvar<a>* l, ThresholdSet<a> * t) {
+  for (int i = 0; i < t->_index; i++) {
+    for (int j = 0; j < t->_a_sets[i]->_index; j++) {
+      if (l-> _lattice->_leq(t->_a_sets[i]->_set[j], l->_value)) {
+        return t->_a_sets[i];
+      }
+    }
+  }
+  return ((void *)0);
+}
+
+template<a>
+static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
+
+  int timeInMs = 1000;
+
+  struct timeval tv;
+  struct timespec ts;
+
+  gettimeofday(&tv, ((void *)0));
+  ts.tv_sec = time(((void *)0)) + timeInMs / 1000;
+  ts.tv_nsec = tv.tv_usec * 1000 + 1000 * 1000 * (timeInMs % 1000);
+  ts.tv_sec += ts.tv_nsec / (1000 * 1000 * 1000);
+  ts.tv_nsec %= (1000 * 1000 * 1000);
+
+  pthread_mutex_lock(&(l->_mutex));
+
+
+    if (l->_lattice != t->_lattice) {
+      printf("Error: can't get() when Lvar doesn't have same lattice as threshold set.\n");
+      exit(0);
+    }
+# 413 "../../../extensions/ableC-lvars/include/lvars.xh"
+  ActivationSet<a>* actReached = inst _thresholdReached<a>(l, t);
+  while (actReached == ((void *)0)) {
+    int n = pthread_cond_timedwait(&(l->_cond), &(l->_mutex), &ts);
+    if (n == 110) {
+      pthread_mutex_unlock(&(l->_mutex));
+      printf("Get timed out.\n");
+      exit(0);
+    }
+
+    actReached = inst _thresholdReached<a>(l, t);
+  }
+  pthread_mutex_unlock(&(l->_mutex));
+  return actReached;
+}
+
+
+
+
+template<a>
+static a _freeze(Lvar<a>* l) {
+  pthread_mutex_lock(&(l->_mutex));
+  l->_frozen = 1;
+  a result = l->_value;
+  pthread_mutex_unlock(&(l->_mutex));
+  return result;
+}
+# 3 "intBad.xc" 2
+# 1 "../../../extensions/ableC-cilk/include/cilk.xh" 1
+
+
+
+# 1 "/usr/local/include/cilk/cilk.h" 1
+# 35 "/usr/local/include/cilk/cilk.h"
+# 1 "/usr/include/x86_64-linux-gnu/sys/types.h" 1 3 4
+# 27 "/usr/include/x86_64-linux-gnu/sys/types.h" 3 4
+
+# 44 "/usr/include/x86_64-linux-gnu/sys/types.h" 3 4
+typedef __loff_t loff_t;
+
+
+
+typedef __ino_t ino_t;
+# 60 "/usr/include/x86_64-linux-gnu/sys/types.h" 3 4
+typedef __dev_t dev_t;
+
+
+
+
+typedef __gid_t gid_t;
+
+
+
+
+typedef __mode_t mode_t;
+
+
+
+
+typedef __nlink_t nlink_t;
+
+
+
+
+typedef __uid_t uid_t;
+
+
+
+
+
+typedef __off_t off_t;
+# 109 "/usr/include/x86_64-linux-gnu/sys/types.h" 3 4
+typedef __ssize_t ssize_t;
+# 146 "/usr/include/x86_64-linux-gnu/sys/types.h" 3 4
+# 1 "/soft/gcc/4.9.2/ubuntuamd2010/lib/gcc/x86_64-linux-gnu/4.9.2/include/stddef.h" 1 3 4
+# 147 "/usr/include/x86_64-linux-gnu/sys/types.h" 2 3 4
+# 194 "/usr/include/x86_64-linux-gnu/sys/types.h" 3 4
+typedef int int8_t __attribute__ ((__mode__ (__QI__)));
+typedef int int16_t __attribute__ ((__mode__ (__HI__)));
+typedef int int32_t __attribute__ ((__mode__ (__SI__)));
+typedef int int64_t __attribute__ ((__mode__ (__DI__)));
+
+
+typedef unsigned int u_int8_t __attribute__ ((__mode__ (__QI__)));
+typedef unsigned int u_int16_t __attribute__ ((__mode__ (__HI__)));
+typedef unsigned int u_int32_t __attribute__ ((__mode__ (__SI__)));
+typedef unsigned int u_int64_t __attribute__ ((__mode__ (__DI__)));
+
+typedef int register_t __attribute__ ((__mode__ (__word__)));
+# 235 "/usr/include/x86_64-linux-gnu/sys/types.h" 3 4
+typedef __blkcnt_t blkcnt_t;
+
+
+
+typedef __fsblkcnt_t fsblkcnt_t;
+
+
+
+typedef __fsfilcnt_t fsfilcnt_t;
+# 273 "/usr/include/x86_64-linux-gnu/sys/types.h" 3 4
+
+# 36 "/usr/local/include/cilk/cilk.h" 2
+
+
+
+
+# 1 "/soft/gcc/4.9.2/ubuntuamd2010/lib/gcc/x86_64-linux-gnu/4.9.2/include/stddef.h" 1 3 4
+# 41 "/usr/local/include/cilk/cilk.h" 2
+
+# 1 "/usr/local/include/cilk/cilk-sysdep.h" 1
+# 146 "/usr/local/include/cilk/cilk-sysdep.h"
+static const char *ident_cilk_sysdep_h __attribute__((__unused__)) = "$HeadURL: https://bradley.csail.mit.edu/svn/repos/cilk/5.4.3/runtime/cilk-sysdep.h.in $ $LastChangedBy: bradley $ $Rev: 2311 $ $Date: 2005-07-13 17:38:21 -0400 (Wed, 13 Jul 2005) $"
+                                                                                                                                                                                              ;
+# 295 "/usr/local/include/cilk/cilk-sysdep.h"
+   static inline void CILK_MB(void) {
+     __asm__ volatile ("mfence":::"memory");
+   }
+
+
+
+
+   static inline int Cilk_xchg(volatile int *ptr, int x)
+   {
+ __asm__("xchgl %0,%1" :"=r" (x) :"m" (*(ptr)), "0" (x) :"memory");
+ return x;
+   }
+# 519 "/usr/local/include/cilk/cilk-sysdep.h"
 # 1 "/usr/include/unistd.h" 1 3 4
 # 27 "/usr/include/unistd.h" 3 4
 

@@ -2795,7 +2795,181 @@ extern int pthread_atfork (void (*__prepare) (void),
 # 1159 "/usr/include/pthread.h" 3 4
 
 # 6 "../../../extensions/ableC-lvars/include/lvars.xh" 2
-# 24 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 1 "/usr/include/errno.h" 1 3 4
+# 31 "/usr/include/errno.h" 3 4
+
+
+
+
+# 1 "/usr/include/x86_64-linux-gnu/bits/errno.h" 1 3 4
+# 24 "/usr/include/x86_64-linux-gnu/bits/errno.h" 3 4
+# 1 "/usr/include/linux/errno.h" 1 3 4
+# 1 "/usr/include/x86_64-linux-gnu/asm/errno.h" 1 3 4
+# 1 "/usr/include/asm-generic/errno.h" 1 3 4
+
+
+
+# 1 "/usr/include/asm-generic/errno-base.h" 1 3 4
+# 5 "/usr/include/asm-generic/errno.h" 2 3 4
+# 1 "/usr/include/x86_64-linux-gnu/asm/errno.h" 2 3 4
+# 1 "/usr/include/linux/errno.h" 2 3 4
+# 25 "/usr/include/x86_64-linux-gnu/bits/errno.h" 2 3 4
+# 50 "/usr/include/x86_64-linux-gnu/bits/errno.h" 3 4
+extern int *__errno_location (void) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
+# 36 "/usr/include/errno.h" 2 3 4
+# 58 "/usr/include/errno.h" 3 4
+
+# 7 "../../../extensions/ableC-lvars/include/lvars.xh" 2
+# 1 "/usr/include/x86_64-linux-gnu/sys/time.h" 1 3 4
+# 27 "/usr/include/x86_64-linux-gnu/sys/time.h" 3 4
+# 1 "/usr/include/x86_64-linux-gnu/bits/time.h" 1 3 4
+# 30 "/usr/include/x86_64-linux-gnu/bits/time.h" 3 4
+struct timeval
+  {
+    __time_t tv_sec;
+    __suseconds_t tv_usec;
+  };
+# 28 "/usr/include/x86_64-linux-gnu/sys/time.h" 2 3 4
+
+# 1 "/usr/include/x86_64-linux-gnu/sys/select.h" 1 3 4
+# 30 "/usr/include/x86_64-linux-gnu/sys/select.h" 3 4
+# 1 "/usr/include/x86_64-linux-gnu/bits/select.h" 1 3 4
+# 22 "/usr/include/x86_64-linux-gnu/bits/select.h" 3 4
+# 1 "/usr/include/x86_64-linux-gnu/bits/wordsize.h" 1 3 4
+# 23 "/usr/include/x86_64-linux-gnu/bits/select.h" 2 3 4
+# 31 "/usr/include/x86_64-linux-gnu/sys/select.h" 2 3 4
+
+
+# 1 "/usr/include/x86_64-linux-gnu/bits/sigset.h" 1 3 4
+# 22 "/usr/include/x86_64-linux-gnu/bits/sigset.h" 3 4
+typedef int __sig_atomic_t;
+
+
+
+
+typedef struct
+  {
+    unsigned long int __val[(1024 / (8 * sizeof (unsigned long int)))];
+  } __sigset_t;
+# 34 "/usr/include/x86_64-linux-gnu/sys/select.h" 2 3 4
+
+
+
+typedef __sigset_t sigset_t;
+
+
+
+
+
+
+
+# 1 "/usr/include/x86_64-linux-gnu/bits/time.h" 1 3 4
+# 46 "/usr/include/x86_64-linux-gnu/sys/select.h" 2 3 4
+
+
+typedef __suseconds_t suseconds_t;
+
+
+
+
+
+typedef long int __fd_mask;
+# 64 "/usr/include/x86_64-linux-gnu/sys/select.h" 3 4
+typedef struct
+  {
+
+
+
+
+
+
+    __fd_mask __fds_bits[1024 / (8 * (int) sizeof (__fd_mask))];
+
+
+  } fd_set;
+# 96 "/usr/include/x86_64-linux-gnu/sys/select.h" 3 4
+
+# 106 "/usr/include/x86_64-linux-gnu/sys/select.h" 3 4
+extern int select (int __nfds, fd_set *__restrict __readfds,
+     fd_set *__restrict __writefds,
+     fd_set *__restrict __exceptfds,
+     struct timeval *__restrict __timeout);
+# 131 "/usr/include/x86_64-linux-gnu/sys/select.h" 3 4
+
+# 30 "/usr/include/x86_64-linux-gnu/sys/time.h" 2 3 4
+
+
+
+
+
+
+
+
+# 63 "/usr/include/x86_64-linux-gnu/sys/time.h" 3 4
+typedef void *__restrict __timezone_ptr_t;
+
+
+
+
+
+
+
+extern int gettimeofday (struct timeval *__restrict __tv,
+    __timezone_ptr_t __tz) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+# 91 "/usr/include/x86_64-linux-gnu/sys/time.h" 3 4
+enum __itimer_which
+  {
+
+    ITIMER_REAL = 0,
+
+
+    ITIMER_VIRTUAL = 1,
+
+
+
+    ITIMER_PROF = 2
+
+  };
+
+
+
+struct itimerval
+  {
+
+    struct timeval it_interval;
+
+    struct timeval it_value;
+  };
+
+
+
+
+
+
+typedef int __itimer_which_t;
+
+
+
+
+extern int getitimer (__itimer_which_t __which,
+        struct itimerval *__value) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+extern int setitimer (__itimer_which_t __which,
+        const struct itimerval *__restrict __new,
+        struct itimerval *__restrict __old) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+extern int utimes (const char *__file, const struct timeval __tvp[2])
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+# 189 "/usr/include/x86_64-linux-gnu/sys/time.h" 3 4
+
+# 8 "../../../extensions/ableC-lvars/include/lvars.xh" 2
+# 26 "../../../extensions/ableC-lvars/include/lvars.xh"
 int _lvarCheckValue = 1;
 
 
@@ -2837,7 +3011,7 @@ template<a> struct _ActivationSet {
 
 template<a>
 static ActivationSet<a>* _newActivationSet(Lattice<a>* l, int size) {
-# 74 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 76 "../../../extensions/ableC-lvars/include/lvars.xh"
     if (size < 0) {
       size = 0;
     }
@@ -2915,7 +3089,7 @@ template<a> struct _ThresholdSet {
 
 template<a>
 static ThresholdSet<a>* _newThresholdSet(Lattice<a> * l, int size) {
-# 159 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 161 "../../../extensions/ableC-lvars/include/lvars.xh"
     if (size < 0) {
       size = 0;
     }
@@ -2933,7 +3107,7 @@ static ThresholdSet<a>* _newThresholdSet(Lattice<a> * l, int size) {
 
 template<a>
 static int _incompat(Lattice<a> * l, ActivationSet<a> *Q, ActivationSet<a> *R) {
-# 184 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 186 "../../../extensions/ableC-lvars/include/lvars.xh"
   if (Q -> _lattice != l || R -> _lattice != l) {
     return 0;
   }
@@ -2961,7 +3135,7 @@ static int _incompat(Lattice<a> * l, ActivationSet<a> *Q, ActivationSet<a> *R) {
 
 template<a>
 static ThresholdSet<a>* _addThreshold(ThresholdSet<a>* t, ActivationSet<a>* act) {
-# 220 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 222 "../../../extensions/ableC-lvars/include/lvars.xh"
     if (t->_lattice != act->_lattice) {
       return t;
     }
@@ -3126,8 +3300,19 @@ static ActivationSet<a>* _thresholdReached(Lvar<a>* l, ThresholdSet<a> * t) {
 template<a>
 static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
 
+  int timeInMs = 1000;
+
+  struct timeval tv;
+  struct timespec ts;
+
+  gettimeofday(&tv, ((void *)0));
+  ts.tv_sec = time(((void *)0)) + timeInMs / 1000;
+  ts.tv_nsec = tv.tv_usec * 1000 + 1000 * 1000 * (timeInMs % 1000);
+  ts.tv_sec += ts.tv_nsec / (1000 * 1000 * 1000);
+  ts.tv_nsec %= (1000 * 1000 * 1000);
+
   pthread_mutex_lock(&(l->_mutex));
-# 394 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 407 "../../../extensions/ableC-lvars/include/lvars.xh"
     if (l->_lattice != t->_lattice) {
       pthread_mutex_unlock(&(l->_mutex));
       return ((void *)0);
@@ -3136,7 +3321,13 @@ static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
 
   ActivationSet<a>* actReached = inst _thresholdReached<a>(l, t);
   while (actReached == ((void *)0)) {
-    pthread_cond_wait(&(l->_cond), &(l->_mutex));
+    int n = pthread_cond_timedwait(&(l->_cond), &(l->_mutex), &ts);
+    if (n == 110) {
+      pthread_mutex_unlock(&(l->_mutex));
+      printf("Get timed out.\n");
+      exit(0);
+    }
+
     actReached = inst _thresholdReached<a>(l, t);
   }
   pthread_mutex_unlock(&(l->_mutex));
@@ -3253,158 +3444,7 @@ static const char *ident_cilk_sysdep_h __attribute__((__unused__)) = "$HeadURL: 
  __asm__("xchgl %0,%1" :"=r" (x) :"m" (*(ptr)), "0" (x) :"memory");
  return x;
    }
-# 516 "/usr/local/include/cilk/cilk-sysdep.h"
-# 1 "/usr/include/x86_64-linux-gnu/sys/time.h" 1 3 4
-# 27 "/usr/include/x86_64-linux-gnu/sys/time.h" 3 4
-# 1 "/usr/include/x86_64-linux-gnu/bits/time.h" 1 3 4
-# 30 "/usr/include/x86_64-linux-gnu/bits/time.h" 3 4
-struct timeval
-  {
-    __time_t tv_sec;
-    __suseconds_t tv_usec;
-  };
-# 28 "/usr/include/x86_64-linux-gnu/sys/time.h" 2 3 4
-
-# 1 "/usr/include/x86_64-linux-gnu/sys/select.h" 1 3 4
-# 30 "/usr/include/x86_64-linux-gnu/sys/select.h" 3 4
-# 1 "/usr/include/x86_64-linux-gnu/bits/select.h" 1 3 4
-# 22 "/usr/include/x86_64-linux-gnu/bits/select.h" 3 4
-# 1 "/usr/include/x86_64-linux-gnu/bits/wordsize.h" 1 3 4
-# 23 "/usr/include/x86_64-linux-gnu/bits/select.h" 2 3 4
-# 31 "/usr/include/x86_64-linux-gnu/sys/select.h" 2 3 4
-
-
-# 1 "/usr/include/x86_64-linux-gnu/bits/sigset.h" 1 3 4
-# 22 "/usr/include/x86_64-linux-gnu/bits/sigset.h" 3 4
-typedef int __sig_atomic_t;
-
-
-
-
-typedef struct
-  {
-    unsigned long int __val[(1024 / (8 * sizeof (unsigned long int)))];
-  } __sigset_t;
-# 34 "/usr/include/x86_64-linux-gnu/sys/select.h" 2 3 4
-
-
-
-typedef __sigset_t sigset_t;
-
-
-
-
-
-
-
-# 1 "/usr/include/x86_64-linux-gnu/bits/time.h" 1 3 4
-# 46 "/usr/include/x86_64-linux-gnu/sys/select.h" 2 3 4
-
-
-typedef __suseconds_t suseconds_t;
-
-
-
-
-
-typedef long int __fd_mask;
-# 64 "/usr/include/x86_64-linux-gnu/sys/select.h" 3 4
-typedef struct
-  {
-
-
-
-
-
-
-    __fd_mask __fds_bits[1024 / (8 * (int) sizeof (__fd_mask))];
-
-
-  } fd_set;
-# 96 "/usr/include/x86_64-linux-gnu/sys/select.h" 3 4
-
-# 106 "/usr/include/x86_64-linux-gnu/sys/select.h" 3 4
-extern int select (int __nfds, fd_set *__restrict __readfds,
-     fd_set *__restrict __writefds,
-     fd_set *__restrict __exceptfds,
-     struct timeval *__restrict __timeout);
-# 131 "/usr/include/x86_64-linux-gnu/sys/select.h" 3 4
-
-# 30 "/usr/include/x86_64-linux-gnu/sys/time.h" 2 3 4
-
-
-
-
-
-
-
-
-# 63 "/usr/include/x86_64-linux-gnu/sys/time.h" 3 4
-typedef void *__restrict __timezone_ptr_t;
-
-
-
-
-
-
-
-extern int gettimeofday (struct timeval *__restrict __tv,
-    __timezone_ptr_t __tz) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
-# 91 "/usr/include/x86_64-linux-gnu/sys/time.h" 3 4
-enum __itimer_which
-  {
-
-    ITIMER_REAL = 0,
-
-
-    ITIMER_VIRTUAL = 1,
-
-
-
-    ITIMER_PROF = 2
-
-  };
-
-
-
-struct itimerval
-  {
-
-    struct timeval it_interval;
-
-    struct timeval it_value;
-  };
-
-
-
-
-
-
-typedef int __itimer_which_t;
-
-
-
-
-extern int getitimer (__itimer_which_t __which,
-        struct itimerval *__value) __attribute__ ((__nothrow__ , __leaf__));
-
-
-
-
-extern int setitimer (__itimer_which_t __which,
-        const struct itimerval *__restrict __new,
-        struct itimerval *__restrict __old) __attribute__ ((__nothrow__ , __leaf__));
-
-
-
-
-extern int utimes (const char *__file, const struct timeval __tvp[2])
-     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
-# 189 "/usr/include/x86_64-linux-gnu/sys/time.h" 3 4
-
-# 517 "/usr/local/include/cilk/cilk-sysdep.h" 2
-
-
+# 519 "/usr/local/include/cilk/cilk-sysdep.h"
 # 1 "/usr/include/unistd.h" 1 3 4
 # 27 "/usr/include/unistd.h" 3 4
 
@@ -5043,9 +5083,8 @@ Lvar<Customer*>** initCustomers(int num) {
 
 
 
-cilk int** readStoreData(char* filename, int num) {
+int** readStoreData(char* filename, int num) {
   FILE *fp = fopen(filename, "r");
-  CustBot();
   if (fp == ((void *)0)) {
     printf("Error reading file!\n");
     exit(0);
@@ -5057,7 +5096,7 @@ cilk int** readStoreData(char* filename, int num) {
     customers[i] = data;
   }
   fclose(fp);
-  cilk return customers;
+  return customers;
 }
 
 
@@ -5076,11 +5115,9 @@ cilk int addCustData(Lvar<Customer*>** customers, int** store, int custLen, int 
   cilk return 1;
 }
 
-cilk int getCustomer(Lvar<Customer*>* c, ThresholdSet<Customer*>* t) {
+cilk Customer* getCustomer(Lvar<Customer*>* c, ThresholdSet<Customer*>* t) {
   get(c, t);
-  freeze(c);
-  printf("%s\n", show(c).text);
-  cilk return 1;
+  cilk return freeze(c);
 }
 
 
@@ -5090,9 +5127,11 @@ cilk int getTopCusts(Lvar<Customer*>** customers, int custLen, ProductSet* desir
   ThresholdSet<Customer*>* t = thresholdSet(lat, 1){a};
 
   printf("The following customers have purchased the specified products:\n");
+
   for (int i = 0; i < custLen; i++) {
-    int result;
+    Customer* result;
     spawn result = getCustomer(customers[i], t);
+    printf("%s\n", showCustomer(result).text);
   }
   sync;
   freeSet(a);
@@ -5102,28 +5141,22 @@ cilk int getTopCusts(Lvar<Customer*>** customers, int custLen, ProductSet* desir
 
 cilk int main(int argc, char **argv) {
   lat = lattice(CustBot(), CustTop(), leqCustomer, lubCustomer, eqCustomer, showCustomer);
-
   int numCustomers = 8;
   int numStore1 = 10;
   int numStore2 = 10;
   int numStore3 = 10;
 
   Lvar<Customer*>** customers = initCustomers(numCustomers);
-  int** store1_cs;
-  int** store2_cs;
-  int** store3_cs;
-  spawn store1_cs = readStoreData("store1.csv", numStore1);
-  spawn store2_cs = readStoreData("store2.csv", numStore2);
-  spawn store3_cs = readStoreData("store3.csv", numStore3);
-  sync;
+  int** store1_cs = readStoreData("store1.csv", numStore1);
+  int** store2_cs = readStoreData("store2.csv", numStore2);
+  int** store3_cs = readStoreData("store3.csv", numStore3);
 
   int result1, result2, result3, result4;
   spawn result1 = addCustData(customers, store1_cs, numCustomers, numStore1);
   spawn result2 = addCustData(customers, store2_cs, numCustomers, numStore2);
   spawn result3 = addCustData(customers, store3_cs, numCustomers, numStore3);
+  spawn result4 = getTopCusts(customers, numCustomers, P_Set(123, P_Empty()));
   sync;
 
-  spawn result4 = getTopCusts(customers, numCustomers, P_Set(124, P_Empty()));
-  sync;
   cilk return 1;
 }

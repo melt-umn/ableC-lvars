@@ -2794,7 +2794,181 @@ extern int pthread_atfork (void (*__prepare) (void),
 # 1159 "/usr/include/pthread.h" 3 4
 
 # 6 "../../../extensions/ableC-lvars/include/lvars.xh" 2
-# 24 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 1 "/usr/include/errno.h" 1 3 4
+# 31 "/usr/include/errno.h" 3 4
+
+
+
+
+# 1 "/usr/include/x86_64-linux-gnu/bits/errno.h" 1 3 4
+# 24 "/usr/include/x86_64-linux-gnu/bits/errno.h" 3 4
+# 1 "/usr/include/linux/errno.h" 1 3 4
+# 1 "/usr/include/x86_64-linux-gnu/asm/errno.h" 1 3 4
+# 1 "/usr/include/asm-generic/errno.h" 1 3 4
+
+
+
+# 1 "/usr/include/asm-generic/errno-base.h" 1 3 4
+# 5 "/usr/include/asm-generic/errno.h" 2 3 4
+# 1 "/usr/include/x86_64-linux-gnu/asm/errno.h" 2 3 4
+# 1 "/usr/include/linux/errno.h" 2 3 4
+# 25 "/usr/include/x86_64-linux-gnu/bits/errno.h" 2 3 4
+# 50 "/usr/include/x86_64-linux-gnu/bits/errno.h" 3 4
+extern int *__errno_location (void) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
+# 36 "/usr/include/errno.h" 2 3 4
+# 58 "/usr/include/errno.h" 3 4
+
+# 7 "../../../extensions/ableC-lvars/include/lvars.xh" 2
+# 1 "/usr/include/x86_64-linux-gnu/sys/time.h" 1 3 4
+# 27 "/usr/include/x86_64-linux-gnu/sys/time.h" 3 4
+# 1 "/usr/include/x86_64-linux-gnu/bits/time.h" 1 3 4
+# 30 "/usr/include/x86_64-linux-gnu/bits/time.h" 3 4
+struct timeval
+  {
+    __time_t tv_sec;
+    __suseconds_t tv_usec;
+  };
+# 28 "/usr/include/x86_64-linux-gnu/sys/time.h" 2 3 4
+
+# 1 "/usr/include/x86_64-linux-gnu/sys/select.h" 1 3 4
+# 30 "/usr/include/x86_64-linux-gnu/sys/select.h" 3 4
+# 1 "/usr/include/x86_64-linux-gnu/bits/select.h" 1 3 4
+# 22 "/usr/include/x86_64-linux-gnu/bits/select.h" 3 4
+# 1 "/usr/include/x86_64-linux-gnu/bits/wordsize.h" 1 3 4
+# 23 "/usr/include/x86_64-linux-gnu/bits/select.h" 2 3 4
+# 31 "/usr/include/x86_64-linux-gnu/sys/select.h" 2 3 4
+
+
+# 1 "/usr/include/x86_64-linux-gnu/bits/sigset.h" 1 3 4
+# 22 "/usr/include/x86_64-linux-gnu/bits/sigset.h" 3 4
+typedef int __sig_atomic_t;
+
+
+
+
+typedef struct
+  {
+    unsigned long int __val[(1024 / (8 * sizeof (unsigned long int)))];
+  } __sigset_t;
+# 34 "/usr/include/x86_64-linux-gnu/sys/select.h" 2 3 4
+
+
+
+typedef __sigset_t sigset_t;
+
+
+
+
+
+
+
+# 1 "/usr/include/x86_64-linux-gnu/bits/time.h" 1 3 4
+# 46 "/usr/include/x86_64-linux-gnu/sys/select.h" 2 3 4
+
+
+typedef __suseconds_t suseconds_t;
+
+
+
+
+
+typedef long int __fd_mask;
+# 64 "/usr/include/x86_64-linux-gnu/sys/select.h" 3 4
+typedef struct
+  {
+
+
+
+
+
+
+    __fd_mask __fds_bits[1024 / (8 * (int) sizeof (__fd_mask))];
+
+
+  } fd_set;
+# 96 "/usr/include/x86_64-linux-gnu/sys/select.h" 3 4
+
+# 106 "/usr/include/x86_64-linux-gnu/sys/select.h" 3 4
+extern int select (int __nfds, fd_set *__restrict __readfds,
+     fd_set *__restrict __writefds,
+     fd_set *__restrict __exceptfds,
+     struct timeval *__restrict __timeout);
+# 131 "/usr/include/x86_64-linux-gnu/sys/select.h" 3 4
+
+# 30 "/usr/include/x86_64-linux-gnu/sys/time.h" 2 3 4
+
+
+
+
+
+
+
+
+# 63 "/usr/include/x86_64-linux-gnu/sys/time.h" 3 4
+typedef void *__restrict __timezone_ptr_t;
+
+
+
+
+
+
+
+extern int gettimeofday (struct timeval *__restrict __tv,
+    __timezone_ptr_t __tz) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+# 91 "/usr/include/x86_64-linux-gnu/sys/time.h" 3 4
+enum __itimer_which
+  {
+
+    ITIMER_REAL = 0,
+
+
+    ITIMER_VIRTUAL = 1,
+
+
+
+    ITIMER_PROF = 2
+
+  };
+
+
+
+struct itimerval
+  {
+
+    struct timeval it_interval;
+
+    struct timeval it_value;
+  };
+
+
+
+
+
+
+typedef int __itimer_which_t;
+
+
+
+
+extern int getitimer (__itimer_which_t __which,
+        struct itimerval *__value) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+extern int setitimer (__itimer_which_t __which,
+        const struct itimerval *__restrict __new,
+        struct itimerval *__restrict __old) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+extern int utimes (const char *__file, const struct timeval __tvp[2])
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+# 189 "/usr/include/x86_64-linux-gnu/sys/time.h" 3 4
+
+# 8 "../../../extensions/ableC-lvars/include/lvars.xh" 2
+# 26 "../../../extensions/ableC-lvars/include/lvars.xh"
 int _lvarCheckValue = 1;
 
 
@@ -2836,7 +3010,7 @@ template<a> struct _ActivationSet {
 
 template<a>
 static ActivationSet<a>* _newActivationSet(Lattice<a>* l, int size) {
-# 79 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 81 "../../../extensions/ableC-lvars/include/lvars.xh"
   ActivationSet<a> * act = malloc(sizeof(ActivationSet<a>));
   act->_size = size;
   act->_set = malloc(sizeof(a) * size);
@@ -2909,7 +3083,7 @@ template<a> struct _ThresholdSet {
 
 template<a>
 static ThresholdSet<a>* _newThresholdSet(Lattice<a> * l, int size) {
-# 164 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 166 "../../../extensions/ableC-lvars/include/lvars.xh"
   ThresholdSet<a> * t = malloc(sizeof(ThresholdSet<a>));
   t ->_lattice = l;
   t->_size = size;
@@ -2922,7 +3096,7 @@ static ThresholdSet<a>* _newThresholdSet(Lattice<a> * l, int size) {
 
 template<a>
 static int _incompat(Lattice<a> * l, ActivationSet<a> *Q, ActivationSet<a> *R) {
-# 184 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 186 "../../../extensions/ableC-lvars/include/lvars.xh"
   if (Q -> _lattice != l || R -> _lattice != l) {
     return 0;
   }
@@ -2950,11 +3124,11 @@ static int _incompat(Lattice<a> * l, ActivationSet<a> *Q, ActivationSet<a> *R) {
 
 template<a>
 static ThresholdSet<a>* _addThreshold(ThresholdSet<a>* t, ActivationSet<a>* act) {
-# 225 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 227 "../../../extensions/ableC-lvars/include/lvars.xh"
   if (t->_index >= t->_size) {
      inst _resizeThresholdSet<a>(t, 2 * t->_size + 1);
   }
-# 237 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 239 "../../../extensions/ableC-lvars/include/lvars.xh"
   t->_a_sets[t->_index] = act;
   t->_index++;
   return t;
@@ -3064,7 +3238,7 @@ static int _put(Lvar<a>* l, a newState) {
   a newValue = l-> _lattice-> _lub(oldState, newState);
 
   if (l-> _lattice->_eq(l->_lattice->_top, newValue)){
-# 356 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 358 "../../../extensions/ableC-lvars/include/lvars.xh"
   }
   l->_value = newValue;
 
@@ -3093,11 +3267,28 @@ static ActivationSet<a>* _thresholdReached(Lvar<a>* l, ThresholdSet<a> * t) {
 template<a>
 static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
 
+  int timeInMs = 1000;
+
+  struct timeval tv;
+  struct timespec ts;
+
+  gettimeofday(&tv, ((void *)0));
+  ts.tv_sec = time(((void *)0)) + timeInMs / 1000;
+  ts.tv_nsec = tv.tv_usec * 1000 + 1000 * 1000 * (timeInMs % 1000);
+  ts.tv_sec += ts.tv_nsec / (1000 * 1000 * 1000);
+  ts.tv_nsec %= (1000 * 1000 * 1000);
+
   pthread_mutex_lock(&(l->_mutex));
-# 400 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 413 "../../../extensions/ableC-lvars/include/lvars.xh"
   ActivationSet<a>* actReached = inst _thresholdReached<a>(l, t);
   while (actReached == ((void *)0)) {
-    pthread_cond_wait(&(l->_cond), &(l->_mutex));
+    int n = pthread_cond_timedwait(&(l->_cond), &(l->_mutex), &ts);
+    if (n == 110) {
+      pthread_mutex_unlock(&(l->_mutex));
+      printf("Get timed out.\n");
+      exit(0);
+    }
+
     actReached = inst _thresholdReached<a>(l, t);
   }
   pthread_mutex_unlock(&(l->_mutex));

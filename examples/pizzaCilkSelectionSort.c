@@ -1022,6 +1022,41 @@ extern signed int pthread_key_delete(pthread_key_t  __key) __attribute__((__noth
 extern void  *pthread_getspecific(pthread_key_t  __key) __attribute__((__nothrow__, __leaf__));
 extern signed int pthread_setspecific(pthread_key_t  __key, const void  * __pointer) __attribute__((__nothrow__, __leaf__));
 extern signed int pthread_atfork(void ( * __prepare)(void), void ( * __parent)(void), void ( * __child)(void)) __attribute__((__nothrow__, __leaf__));
+extern signed int  *__errno_location(void) __attribute__((__nothrow__, __leaf__)) __attribute__((__const__));
+struct timeval {
+  __time_t tv_sec;
+  __suseconds_t tv_usec;
+  
+};
+typedef signed int __sig_atomic_t;
+typedef struct  {
+  unsigned long __val[((1024 / ((8 * (sizeof(unsigned long))))))];
+  
+} __sigset_t;
+typedef __sigset_t sigset_t;
+typedef __suseconds_t suseconds_t;
+typedef signed long __fd_mask;
+typedef struct  {
+  __fd_mask __fds_bits[(1024 / ((8 * ((signed int)(sizeof(__fd_mask))))))];
+  
+} fd_set;
+extern signed int select(signed int  __nfds, fd_set  *__restrict  __readfds, fd_set  *__restrict  __writefds, fd_set  *__restrict  __exceptfds, struct timeval  *__restrict  __timeout);
+typedef void  *__restrict __timezone_ptr_t;
+extern signed int gettimeofday(struct timeval  *__restrict  __tv, __timezone_ptr_t  __tz) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+enum __itimer_which {
+  ITIMER_REAL = 0,
+  ITIMER_VIRTUAL = 1,
+  ITIMER_PROF = 2
+};
+struct itimerval {
+  struct timeval it_interval;
+  struct timeval it_value;
+  
+};
+typedef signed int __itimer_which_t;
+extern signed int getitimer(__itimer_which_t  __which, struct itimerval  * __value) __attribute__((__nothrow__, __leaf__));
+extern signed int setitimer(__itimer_which_t  __which, const struct itimerval  *__restrict  __new, struct itimerval  *__restrict  __old) __attribute__((__nothrow__, __leaf__));
+extern signed int utimes(const char  * __file, const struct timeval  __tvp[2]) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
 signed int _lvarCheckValue = 1;
 typedef __loff_t loff_t;
 typedef __ino_t ino_t;
@@ -1060,40 +1095,6 @@ static inline signed int Cilk_xchg(volatile signed int  * ptr, signed int  x)
     return (x);
   }
 }
-struct timeval {
-  __time_t tv_sec;
-  __suseconds_t tv_usec;
-  
-};
-typedef signed int __sig_atomic_t;
-typedef struct  {
-  unsigned long __val[((1024 / ((8 * (sizeof(unsigned long))))))];
-  
-} __sigset_t;
-typedef __sigset_t sigset_t;
-typedef __suseconds_t suseconds_t;
-typedef signed long __fd_mask;
-typedef struct  {
-  __fd_mask __fds_bits[(1024 / ((8 * ((signed int)(sizeof(__fd_mask))))))];
-  
-} fd_set;
-extern signed int select(signed int  __nfds, fd_set  *__restrict  __readfds, fd_set  *__restrict  __writefds, fd_set  *__restrict  __exceptfds, struct timeval  *__restrict  __timeout);
-typedef void  *__restrict __timezone_ptr_t;
-extern signed int gettimeofday(struct timeval  *__restrict  __tv, __timezone_ptr_t  __tz) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
-enum __itimer_which {
-  ITIMER_REAL = 0,
-  ITIMER_VIRTUAL = 1,
-  ITIMER_PROF = 2
-};
-struct itimerval {
-  struct timeval it_interval;
-  struct timeval it_value;
-  
-};
-typedef signed int __itimer_which_t;
-extern signed int getitimer(__itimer_which_t  __which, struct itimerval  * __value) __attribute__((__nothrow__, __leaf__));
-extern signed int setitimer(__itimer_which_t  __which, const struct itimerval  *__restrict  __new, struct itimerval  *__restrict  __old) __attribute__((__nothrow__, __leaf__));
-extern signed int utimes(const char  * __file, const struct timeval  __tvp[2]) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
 extern signed int access(const char  * __name, signed int  __type) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
 extern __off_t lseek(signed int  __fd, __off_t  __offset, signed int  __whence) __attribute__((__nothrow__, __leaf__));
 extern signed int close(signed int  __fd);
@@ -5092,10 +5093,7 @@ static signed int _template__put__pointer__tag_struct_VoteSet_58__(struct _templ
     VoteSet  *newValue = ((((l)->_lattice)->_lub)((oldState), (newState)));
     if (((((l)->_lattice)->_eq)((((l)->_lattice)->_top), (newValue))))
     {
-      {
-        ((printf)("Error: invalid put of %s into lvar of value %s\n", (((((l)->_lattice)->_show)((newState))).text), (((((l)->_lattice)->_show)((oldState))).text)));
-        ((exit)(0));
-      }
+      ;
     } else {
       ;
     }
@@ -5136,12 +5134,30 @@ static struct _template__ActivationSet__pointer__tag_struct_VoteSet_58__  *_temp
 {
 
   {
+    signed int timeInMs = 1000;
+    struct timeval tv;
+    struct timespec ts;
+    ((gettimeofday)((&(tv)), (((void *)0))));
+    (((ts).tv_sec) = (((time)((((void *)0)))) + ((timeInMs) / 1000)));
+    (((ts).tv_nsec) = ((((tv).tv_usec) * 1000) + ((1000 * 1000) * (((timeInMs) % 1000)))));
+    (((ts).tv_sec) += (((ts).tv_nsec) / (((1000 * 1000) * 1000))));
+    (((ts).tv_nsec) %= (((1000 * 1000) * 1000)));
     ((pthread_mutex_lock)((&(((l)->_mutex)))));
     struct _template__ActivationSet__pointer__tag_struct_VoteSet_58__  *actReached = ((_template__thresholdReached__pointer__tag_struct_VoteSet_58__)((l), (t)));
     while (((actReached) == (((void *)0))))
     {
       {
-        ((pthread_cond_wait)((&(((l)->_cond))), (&(((l)->_mutex)))));
+        signed int n = ((pthread_cond_timedwait)((&(((l)->_cond))), (&(((l)->_mutex))), (&(ts))));
+        if (((n) == 110))
+        {
+          {
+            ((pthread_mutex_unlock)((&(((l)->_mutex)))));
+            ((printf)("Get timed out.\n"));
+            ((exit)(0));
+          }
+        } else {
+          ;
+        }
         ((actReached) = ((_template__thresholdReached__pointer__tag_struct_VoteSet_58__)((l), (t))));
       }
     }

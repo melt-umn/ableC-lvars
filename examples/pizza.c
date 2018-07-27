@@ -1022,6 +1022,41 @@ extern signed int pthread_key_delete(pthread_key_t  __key) __attribute__((__noth
 extern void  *pthread_getspecific(pthread_key_t  __key) __attribute__((__nothrow__, __leaf__));
 extern signed int pthread_setspecific(pthread_key_t  __key, const void  * __pointer) __attribute__((__nothrow__, __leaf__));
 extern signed int pthread_atfork(void ( * __prepare)(void), void ( * __parent)(void), void ( * __child)(void)) __attribute__((__nothrow__, __leaf__));
+extern signed int  *__errno_location(void) __attribute__((__nothrow__, __leaf__)) __attribute__((__const__));
+struct timeval {
+  __time_t tv_sec;
+  __suseconds_t tv_usec;
+  
+};
+typedef signed int __sig_atomic_t;
+typedef struct  {
+  unsigned long __val[((1024 / ((8 * (sizeof(unsigned long))))))];
+  
+} __sigset_t;
+typedef __sigset_t sigset_t;
+typedef __suseconds_t suseconds_t;
+typedef signed long __fd_mask;
+typedef struct  {
+  __fd_mask __fds_bits[(1024 / ((8 * ((signed int)(sizeof(__fd_mask))))))];
+  
+} fd_set;
+extern signed int select(signed int  __nfds, fd_set  *__restrict  __readfds, fd_set  *__restrict  __writefds, fd_set  *__restrict  __exceptfds, struct timeval  *__restrict  __timeout);
+typedef void  *__restrict __timezone_ptr_t;
+extern signed int gettimeofday(struct timeval  *__restrict  __tv, __timezone_ptr_t  __tz) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+enum __itimer_which {
+  ITIMER_REAL = 0,
+  ITIMER_VIRTUAL = 1,
+  ITIMER_PROF = 2
+};
+struct itimerval {
+  struct timeval it_interval;
+  struct timeval it_value;
+  
+};
+typedef signed int __itimer_which_t;
+extern signed int getitimer(__itimer_which_t  __which, struct itimerval  * __value) __attribute__((__nothrow__, __leaf__));
+extern signed int setitimer(__itimer_which_t  __which, const struct itimerval  *__restrict  __new, struct itimerval  *__restrict  __old) __attribute__((__nothrow__, __leaf__));
+extern signed int utimes(const char  * __file, const struct timeval  __tvp[2]) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
 signed int _lvarCheckValue = 1;
 typedef struct YN YN;
 struct _GenericDatatype {
@@ -1126,7 +1161,7 @@ static inline Vote  *Horace(YN  * f0)
     ((Vote *)((malloc)((sizeof(Vote))))); })
   );
   (((temp)->tag) = (Vote_Horace));
-  (((temp)->refId) = 37);
+  (((temp)->refId) = 41);
   ;
   (((((temp)->contents).Horace).f0) = (f0));
   ;
@@ -1141,7 +1176,7 @@ static inline Vote  *Franz(YN  * f0)
     ((Vote *)((malloc)((sizeof(Vote))))); })
   );
   (((temp)->tag) = (Vote_Franz));
-  (((temp)->refId) = 37);
+  (((temp)->refId) = 41);
   ;
   (((((temp)->contents).Franz).f0) = (f0));
   ;
@@ -1156,7 +1191,7 @@ static inline Vote  *Kat(YN  * f0)
     ((Vote *)((malloc)((sizeof(Vote))))); })
   );
   (((temp)->tag) = (Vote_Kat));
-  (((temp)->refId) = 37);
+  (((temp)->refId) = 41);
   ;
   (((((temp)->contents).Kat).f0) = (f0));
   ;
@@ -1195,7 +1230,7 @@ static inline VoteSet  *Empty(void)
     ((VoteSet *)((malloc)((sizeof(VoteSet))))); })
   );
   (((temp)->tag) = (VoteSet_Empty));
-  (((temp)->refId) = 43);
+  (((temp)->refId) = 47);
   ;
   ;
   return (temp);
@@ -1209,7 +1244,7 @@ static inline VoteSet  *Set(Vote  * f0, VoteSet  * f1)
     ((VoteSet *)((malloc)((sizeof(VoteSet))))); })
   );
   (((temp)->tag) = (VoteSet_Set));
-  (((temp)->refId) = 43);
+  (((temp)->refId) = 47);
   ;
   (((((temp)->contents).Set).f0) = (f0));
   (((((temp)->contents).Set).f1) = (f1));
@@ -1225,7 +1260,7 @@ static inline VoteSet  *Top(void)
     ((VoteSet *)((malloc)((sizeof(VoteSet))))); })
   );
   (((temp)->tag) = (VoteSet_Top));
-  (((temp)->refId) = 43);
+  (((temp)->refId) = 47);
   ;
   ;
   return (temp);
@@ -1497,8 +1532,8 @@ struct _string_s showInner(VoteSet  * v)
               )
               {
                 ({
-                  struct _string_s  *_tmp52 = (&(result));
-                  ((*(_tmp52)) = ((_append_string)((*(_tmp52)), ((_append_string)(((strCharPointer)(", ")), ((showInner)((tl)))))))); })
+                  struct _string_s  *_tmp56 = (&(result));
+                  ((*(_tmp56)) = ((_append_string)((*(_tmp56)), ((_append_string)(((strCharPointer)(", ")), ((showInner)((tl)))))))); })
                 ;
               } else {
                 /* no match, do nothing. */;
@@ -3041,9 +3076,9 @@ VoteSet  *lub(VoteSet  * v1, VoteSet  * v2)
     }
   }
 }
-typedef VoteSet  *_template_param_unused_53;
-typedef __attribute__(()) struct _template__Lattice__pointer__tag_struct_VoteSet_43__ _template__Lattice__pointer__tag_struct_VoteSet_43__;
-struct _template__Lattice__pointer__tag_struct_VoteSet_43__ {
+typedef VoteSet  *_template_param_unused_57;
+typedef __attribute__(()) struct _template__Lattice__pointer__tag_struct_VoteSet_47__ _template__Lattice__pointer__tag_struct_VoteSet_47__;
+struct _template__Lattice__pointer__tag_struct_VoteSet_47__ {
   VoteSet  *_bottom;
   VoteSet  *_top;
   signed int ( *_leq)();
@@ -3052,12 +3087,12 @@ struct _template__Lattice__pointer__tag_struct_VoteSet_43__ {
   struct _string_s ( *_show)();
   
 };
-typedef VoteSet  *_template_param_unused_57;
-static struct _template__Lattice__pointer__tag_struct_VoteSet_43__  *_template__newLattice__pointer__tag_struct_VoteSet_43__(VoteSet  * least, VoteSet  * greatest, signed int ( * leq)(), VoteSet  *( * lub)(), signed int ( * eq)(), struct _string_s ( * showMethod)())
+typedef VoteSet  *_template_param_unused_61;
+static struct _template__Lattice__pointer__tag_struct_VoteSet_47__  *_template__newLattice__pointer__tag_struct_VoteSet_47__(VoteSet  * least, VoteSet  * greatest, signed int ( * leq)(), VoteSet  *( * lub)(), signed int ( * eq)(), struct _string_s ( * showMethod)())
 {
 
   {
-    struct _template__Lattice__pointer__tag_struct_VoteSet_43__  *l = ((malloc)((sizeof(struct _template__Lattice__pointer__tag_struct_VoteSet_43__))));
+    struct _template__Lattice__pointer__tag_struct_VoteSet_47__  *l = ((malloc)((sizeof(struct _template__Lattice__pointer__tag_struct_VoteSet_47__))));
     (((l)->_bottom) = (least));
     (((l)->_top) = (greatest));
     (((l)->_leq) = (leq));
@@ -3067,41 +3102,41 @@ static struct _template__Lattice__pointer__tag_struct_VoteSet_43__  *_template__
     return (l);
   }
 }
-typedef VoteSet  *_template_param_unused_58;
-typedef __attribute__(()) struct _template__Lvar__pointer__tag_struct_VoteSet_43__ _template__Lvar__pointer__tag_struct_VoteSet_43__;
-typedef VoteSet  *_template_param_unused_59;
-typedef __attribute__(()) struct _template__ThresholdSet__pointer__tag_struct_VoteSet_43__ _template__ThresholdSet__pointer__tag_struct_VoteSet_43__;
-typedef VoteSet  *_template_param_unused_60;
-typedef __attribute__(()) struct _template__ActivationSet__pointer__tag_struct_VoteSet_43__ _template__ActivationSet__pointer__tag_struct_VoteSet_43__;
-struct _template__ActivationSet__pointer__tag_struct_VoteSet_43__ {
+typedef VoteSet  *_template_param_unused_62;
+typedef __attribute__(()) struct _template__Lvar__pointer__tag_struct_VoteSet_47__ _template__Lvar__pointer__tag_struct_VoteSet_47__;
+typedef VoteSet  *_template_param_unused_63;
+typedef __attribute__(()) struct _template__ThresholdSet__pointer__tag_struct_VoteSet_47__ _template__ThresholdSet__pointer__tag_struct_VoteSet_47__;
+typedef VoteSet  *_template_param_unused_64;
+typedef __attribute__(()) struct _template__ActivationSet__pointer__tag_struct_VoteSet_47__ _template__ActivationSet__pointer__tag_struct_VoteSet_47__;
+struct _template__ActivationSet__pointer__tag_struct_VoteSet_47__ {
   signed int _size;
   VoteSet  * *_set;
   signed int _index;
-  struct _template__Lattice__pointer__tag_struct_VoteSet_43__  *_lattice;
+  struct _template__Lattice__pointer__tag_struct_VoteSet_47__  *_lattice;
   
 };
-struct _template__ThresholdSet__pointer__tag_struct_VoteSet_43__ {
-  struct _template__Lattice__pointer__tag_struct_VoteSet_43__  *_lattice;
+struct _template__ThresholdSet__pointer__tag_struct_VoteSet_47__ {
+  struct _template__Lattice__pointer__tag_struct_VoteSet_47__  *_lattice;
   signed int _size;
   signed int _index;
-  struct _template__ActivationSet__pointer__tag_struct_VoteSet_43__  * *_a_sets;
+  struct _template__ActivationSet__pointer__tag_struct_VoteSet_47__  * *_a_sets;
   
 };
-struct _template__Lvar__pointer__tag_struct_VoteSet_43__ {
-  struct _template__Lattice__pointer__tag_struct_VoteSet_43__  *_lattice;
+struct _template__Lvar__pointer__tag_struct_VoteSet_47__ {
+  struct _template__Lattice__pointer__tag_struct_VoteSet_47__  *_lattice;
   VoteSet  *_value;
   signed int _frozen;
-  struct _template__ThresholdSet__pointer__tag_struct_VoteSet_43__  *_threshold;
+  struct _template__ThresholdSet__pointer__tag_struct_VoteSet_47__  *_threshold;
   pthread_mutex_t _mutex;
   pthread_cond_t _cond;
   
 };
-typedef VoteSet  *_template_param_unused_64;
-static struct _template__Lvar__pointer__tag_struct_VoteSet_43__  *_template__new__pointer__tag_struct_VoteSet_43__(struct _template__Lattice__pointer__tag_struct_VoteSet_43__  * l)
+typedef VoteSet  *_template_param_unused_68;
+static struct _template__Lvar__pointer__tag_struct_VoteSet_47__  *_template__new__pointer__tag_struct_VoteSet_47__(struct _template__Lattice__pointer__tag_struct_VoteSet_47__  * l)
 {
 
   {
-    struct _template__Lvar__pointer__tag_struct_VoteSet_43__  *lvarNew = ((malloc)((sizeof(struct _template__Lvar__pointer__tag_struct_VoteSet_43__))));
+    struct _template__Lvar__pointer__tag_struct_VoteSet_47__  *lvarNew = ((malloc)((sizeof(struct _template__Lvar__pointer__tag_struct_VoteSet_47__))));
     (((lvarNew)->_value) = ((l)->_bottom));
     (((lvarNew)->_lattice) = (l));
     (((lvarNew)->_frozen) = 0);
@@ -3110,12 +3145,12 @@ static struct _template__Lvar__pointer__tag_struct_VoteSet_43__  *_template__new
     return (lvarNew);
   }
 }
-typedef VoteSet  *_template_param_unused_68;
-static struct _template__ActivationSet__pointer__tag_struct_VoteSet_43__  *_template__newActivationSet__pointer__tag_struct_VoteSet_43__(struct _template__Lattice__pointer__tag_struct_VoteSet_43__  * l, signed int  size)
+typedef VoteSet  *_template_param_unused_72;
+static struct _template__ActivationSet__pointer__tag_struct_VoteSet_47__  *_template__newActivationSet__pointer__tag_struct_VoteSet_47__(struct _template__Lattice__pointer__tag_struct_VoteSet_47__  * l, signed int  size)
 {
 
   {
-    struct _template__ActivationSet__pointer__tag_struct_VoteSet_43__  *act = ((malloc)((sizeof(struct _template__ActivationSet__pointer__tag_struct_VoteSet_43__))));
+    struct _template__ActivationSet__pointer__tag_struct_VoteSet_47__  *act = ((malloc)((sizeof(struct _template__ActivationSet__pointer__tag_struct_VoteSet_47__))));
     (((act)->_size) = (size));
     (((act)->_set) = ((malloc)(((sizeof(VoteSet *)) * (size)))));
     (((act)->_index) = 0);
@@ -3123,9 +3158,9 @@ static struct _template__ActivationSet__pointer__tag_struct_VoteSet_43__  *_temp
     return (act);
   }
 }
-typedef VoteSet  *_template_param_unused_84;
 typedef VoteSet  *_template_param_unused_88;
-static signed int _template__resizeActSet__pointer__tag_struct_VoteSet_43__(struct _template__ActivationSet__pointer__tag_struct_VoteSet_43__  * act, signed int  newSize)
+typedef VoteSet  *_template_param_unused_92;
+static signed int _template__resizeActSet__pointer__tag_struct_VoteSet_47__(struct _template__ActivationSet__pointer__tag_struct_VoteSet_47__  * act, signed int  newSize)
 {
 
   {
@@ -3142,14 +3177,14 @@ static signed int _template__resizeActSet__pointer__tag_struct_VoteSet_43__(stru
     return 1;
   }
 }
-static struct _template__ActivationSet__pointer__tag_struct_VoteSet_43__  *_template__addAct__pointer__tag_struct_VoteSet_43__(struct _template__ActivationSet__pointer__tag_struct_VoteSet_43__  * act, VoteSet  * element)
+static struct _template__ActivationSet__pointer__tag_struct_VoteSet_47__  *_template__addAct__pointer__tag_struct_VoteSet_47__(struct _template__ActivationSet__pointer__tag_struct_VoteSet_47__  * act, VoteSet  * element)
 {
 
   {
     if ((((act)->_index) >= ((act)->_size)))
     {
       {
-        ((_template__resizeActSet__pointer__tag_struct_VoteSet_43__)((act), ((2 * ((act)->_size)) + 1)));
+        ((_template__resizeActSet__pointer__tag_struct_VoteSet_47__)((act), ((2 * ((act)->_size)) + 1)));
       }
     } else {
       ;
@@ -3159,8 +3194,8 @@ static struct _template__ActivationSet__pointer__tag_struct_VoteSet_43__  *_temp
     return (act);
   }
 }
-typedef VoteSet  *_template_param_unused_110;
-static struct _string_s _template__showActivation__pointer__tag_struct_VoteSet_43__(struct _template__ActivationSet__pointer__tag_struct_VoteSet_43__  * act)
+typedef VoteSet  *_template_param_unused_114;
+static struct _string_s _template__showActivation__pointer__tag_struct_VoteSet_47__(struct _template__ActivationSet__pointer__tag_struct_VoteSet_47__  * act)
 {
 
   {
@@ -3170,8 +3205,8 @@ static struct _string_s _template__showActivation__pointer__tag_struct_VoteSet_4
     {
       {
         ({
-          struct _string_s  *_tmp111 = (&(result));
-          ((*(_tmp111)) = ((_append_string)((*(_tmp111)), ((_append_string)(((((act)->_lattice)->_show)((((act)->_set)[(i)]))), ((strCharPointer)(", "))))))); })
+          struct _string_s  *_tmp115 = (&(result));
+          ((*(_tmp115)) = ((_append_string)((*(_tmp115)), ((_append_string)(((((act)->_lattice)->_show)((((act)->_set)[(i)]))), ((strCharPointer)(", "))))))); })
         ;
       }
     }
@@ -3179,21 +3214,21 @@ static struct _string_s _template__showActivation__pointer__tag_struct_VoteSet_4
     {
       {
         ({
-          struct _string_s  *_tmp112 = (&(result));
-          ((*(_tmp112)) = ((_append_string)((*(_tmp112)), ((((act)->_lattice)->_show)((((act)->_set)[(i)])))))); })
+          struct _string_s  *_tmp116 = (&(result));
+          ((*(_tmp116)) = ((_append_string)((*(_tmp116)), ((((act)->_lattice)->_show)((((act)->_set)[(i)])))))); })
         ;
       }
     }
     return ((_append_string)((result), ((strCharPointer)("}"))));
   }
 }
-typedef VoteSet  *_template_param_unused_156;
 typedef VoteSet  *_template_param_unused_160;
-static signed int _template__resizeThresholdSet__pointer__tag_struct_VoteSet_43__(struct _template__ThresholdSet__pointer__tag_struct_VoteSet_43__  * t, signed int  newSize)
+typedef VoteSet  *_template_param_unused_164;
+static signed int _template__resizeThresholdSet__pointer__tag_struct_VoteSet_47__(struct _template__ThresholdSet__pointer__tag_struct_VoteSet_47__  * t, signed int  newSize)
 {
 
   {
-    struct _template__ActivationSet__pointer__tag_struct_VoteSet_43__  * *newSet = ((malloc)(((sizeof(struct _template__ActivationSet__pointer__tag_struct_VoteSet_43__ *)) * (newSize))));
+    struct _template__ActivationSet__pointer__tag_struct_VoteSet_47__  * *newSet = ((malloc)(((sizeof(struct _template__ActivationSet__pointer__tag_struct_VoteSet_47__ *)) * (newSize))));
     for (signed int i = 0; ((i) < ((t)->_index)); ((i)++))
     {
       {
@@ -3206,14 +3241,14 @@ static signed int _template__resizeThresholdSet__pointer__tag_struct_VoteSet_43_
     return 1;
   }
 }
-static struct _template__ThresholdSet__pointer__tag_struct_VoteSet_43__  *_template__addThreshold__pointer__tag_struct_VoteSet_43__(struct _template__ThresholdSet__pointer__tag_struct_VoteSet_43__  * t, struct _template__ActivationSet__pointer__tag_struct_VoteSet_43__  * act)
+static struct _template__ThresholdSet__pointer__tag_struct_VoteSet_47__  *_template__addThreshold__pointer__tag_struct_VoteSet_47__(struct _template__ThresholdSet__pointer__tag_struct_VoteSet_47__  * t, struct _template__ActivationSet__pointer__tag_struct_VoteSet_47__  * act)
 {
 
   {
     if ((((t)->_index) >= ((t)->_size)))
     {
       {
-        ((_template__resizeThresholdSet__pointer__tag_struct_VoteSet_43__)((t), ((2 * ((t)->_size)) + 1)));
+        ((_template__resizeThresholdSet__pointer__tag_struct_VoteSet_47__)((t), ((2 * ((t)->_size)) + 1)));
       }
     } else {
       ;
@@ -3223,21 +3258,21 @@ static struct _template__ThresholdSet__pointer__tag_struct_VoteSet_43__  *_templ
     return (t);
   }
 }
-typedef VoteSet  *_template_param_unused_168;
-static struct _template__ThresholdSet__pointer__tag_struct_VoteSet_43__  *_template__newThresholdSet__pointer__tag_struct_VoteSet_43__(struct _template__Lattice__pointer__tag_struct_VoteSet_43__  * l, signed int  size)
+typedef VoteSet  *_template_param_unused_172;
+static struct _template__ThresholdSet__pointer__tag_struct_VoteSet_47__  *_template__newThresholdSet__pointer__tag_struct_VoteSet_47__(struct _template__Lattice__pointer__tag_struct_VoteSet_47__  * l, signed int  size)
 {
 
   {
-    struct _template__ThresholdSet__pointer__tag_struct_VoteSet_43__  *t = ((malloc)((sizeof(struct _template__ThresholdSet__pointer__tag_struct_VoteSet_43__))));
+    struct _template__ThresholdSet__pointer__tag_struct_VoteSet_47__  *t = ((malloc)((sizeof(struct _template__ThresholdSet__pointer__tag_struct_VoteSet_47__))));
     (((t)->_lattice) = (l));
     (((t)->_size) = (size));
     (((t)->_index) = 0);
-    (((t)->_a_sets) = ((malloc)(((sizeof(struct _template__ActivationSet__pointer__tag_struct_VoteSet_43__ *)) * (size)))));
+    (((t)->_a_sets) = ((malloc)(((sizeof(struct _template__ActivationSet__pointer__tag_struct_VoteSet_47__ *)) * (size)))));
     return (t);
   }
 }
-typedef VoteSet  *_template_param_unused_190;
-static struct _string_s _template__showThreshold__pointer__tag_struct_VoteSet_43__(struct _template__ThresholdSet__pointer__tag_struct_VoteSet_43__  * t)
+typedef VoteSet  *_template_param_unused_194;
+static struct _string_s _template__showThreshold__pointer__tag_struct_VoteSet_47__(struct _template__ThresholdSet__pointer__tag_struct_VoteSet_47__  * t)
 {
 
   {
@@ -3247,8 +3282,8 @@ static struct _string_s _template__showThreshold__pointer__tag_struct_VoteSet_43
     {
       {
         ({
-          struct _string_s  *_tmp191 = (&(result));
-          ((*(_tmp191)) = ((_append_string)((*(_tmp191)), ((_append_string)(((_template__showActivation__pointer__tag_struct_VoteSet_43__)((((t)->_a_sets)[(i)]))), ((strCharPointer)(", "))))))); })
+          struct _string_s  *_tmp195 = (&(result));
+          ((*(_tmp195)) = ((_append_string)((*(_tmp195)), ((_append_string)(((_template__showActivation__pointer__tag_struct_VoteSet_47__)((((t)->_a_sets)[(i)]))), ((strCharPointer)(", "))))))); })
         ;
       }
     }
@@ -3256,16 +3291,16 @@ static struct _string_s _template__showThreshold__pointer__tag_struct_VoteSet_43
     {
       {
         ({
-          struct _string_s  *_tmp192 = (&(result));
-          ((*(_tmp192)) = ((_append_string)((*(_tmp192)), ((_template__showActivation__pointer__tag_struct_VoteSet_43__)((((t)->_a_sets)[(i)])))))); })
+          struct _string_s  *_tmp196 = (&(result));
+          ((*(_tmp196)) = ((_append_string)((*(_tmp196)), ((_template__showActivation__pointer__tag_struct_VoteSet_47__)((((t)->_a_sets)[(i)])))))); })
         ;
       }
     }
     return ((_append_string)((result), ((strCharPointer)("}"))));
   }
 }
-typedef VoteSet  *_template_param_unused_196;
-static signed int _template__put__pointer__tag_struct_VoteSet_43__(struct _template__Lvar__pointer__tag_struct_VoteSet_43__  * l, VoteSet  * newState)
+typedef VoteSet  *_template_param_unused_200;
+static signed int _template__put__pointer__tag_struct_VoteSet_47__(struct _template__Lvar__pointer__tag_struct_VoteSet_47__  * l, VoteSet  * newState)
 {
 
   {
@@ -3283,10 +3318,7 @@ static signed int _template__put__pointer__tag_struct_VoteSet_43__(struct _templ
     VoteSet  *newValue = ((((l)->_lattice)->_lub)((oldState), (newState)));
     if (((((l)->_lattice)->_eq)((((l)->_lattice)->_top), (newValue))))
     {
-      {
-        ((printf)("Error: invalid put of %s into lvar of value %s\n", (((((l)->_lattice)->_show)((newState))).text), (((((l)->_lattice)->_show)((oldState))).text)));
-        ((exit)(0));
-      }
+      ;
     } else {
       ;
     }
@@ -3296,8 +3328,8 @@ static signed int _template__put__pointer__tag_struct_VoteSet_43__(struct _templ
     return 1;
   }
 }
-typedef VoteSet  *_template_param_unused_200;
-static signed int _template__freeThreshold__pointer__tag_struct_VoteSet_43__(struct _template__ThresholdSet__pointer__tag_struct_VoteSet_43__  * t)
+typedef VoteSet  *_template_param_unused_204;
+static signed int _template__freeThreshold__pointer__tag_struct_VoteSet_47__(struct _template__ThresholdSet__pointer__tag_struct_VoteSet_47__  * t)
 {
 
   {
@@ -3306,9 +3338,9 @@ static signed int _template__freeThreshold__pointer__tag_struct_VoteSet_43__(str
     return 1;
   }
 }
-typedef VoteSet  *_template_param_unused_216;
 typedef VoteSet  *_template_param_unused_220;
-static struct _template__ActivationSet__pointer__tag_struct_VoteSet_43__  *_template__thresholdReached__pointer__tag_struct_VoteSet_43__(struct _template__Lvar__pointer__tag_struct_VoteSet_43__  * l, struct _template__ThresholdSet__pointer__tag_struct_VoteSet_43__  * t)
+typedef VoteSet  *_template_param_unused_224;
+static struct _template__ActivationSet__pointer__tag_struct_VoteSet_47__  *_template__thresholdReached__pointer__tag_struct_VoteSet_47__(struct _template__Lvar__pointer__tag_struct_VoteSet_47__  * l, struct _template__ThresholdSet__pointer__tag_struct_VoteSet_47__  * t)
 {
 
   {
@@ -3333,25 +3365,43 @@ static struct _template__ActivationSet__pointer__tag_struct_VoteSet_43__  *_temp
     return (((void *)0));
   }
 }
-static struct _template__ActivationSet__pointer__tag_struct_VoteSet_43__  *_template__get__pointer__tag_struct_VoteSet_43__(struct _template__Lvar__pointer__tag_struct_VoteSet_43__  * l, struct _template__ThresholdSet__pointer__tag_struct_VoteSet_43__  * t)
+static struct _template__ActivationSet__pointer__tag_struct_VoteSet_47__  *_template__get__pointer__tag_struct_VoteSet_47__(struct _template__Lvar__pointer__tag_struct_VoteSet_47__  * l, struct _template__ThresholdSet__pointer__tag_struct_VoteSet_47__  * t)
 {
 
   {
+    signed int timeInMs = 1000;
+    struct timeval tv;
+    struct timespec ts;
+    ((gettimeofday)((&(tv)), (((void *)0))));
+    (((ts).tv_sec) = (((time)((((void *)0)))) + ((timeInMs) / 1000)));
+    (((ts).tv_nsec) = ((((tv).tv_usec) * 1000) + ((1000 * 1000) * (((timeInMs) % 1000)))));
+    (((ts).tv_sec) += (((ts).tv_nsec) / (((1000 * 1000) * 1000))));
+    (((ts).tv_nsec) %= (((1000 * 1000) * 1000)));
     ((pthread_mutex_lock)((&(((l)->_mutex)))));
-    struct _template__ActivationSet__pointer__tag_struct_VoteSet_43__  *actReached = ((_template__thresholdReached__pointer__tag_struct_VoteSet_43__)((l), (t)));
+    struct _template__ActivationSet__pointer__tag_struct_VoteSet_47__  *actReached = ((_template__thresholdReached__pointer__tag_struct_VoteSet_47__)((l), (t)));
     while (((actReached) == (((void *)0))))
     {
       {
-        ((pthread_cond_wait)((&(((l)->_cond))), (&(((l)->_mutex)))));
-        ((actReached) = ((_template__thresholdReached__pointer__tag_struct_VoteSet_43__)((l), (t))));
+        signed int n = ((pthread_cond_timedwait)((&(((l)->_cond))), (&(((l)->_mutex))), (&(ts))));
+        if (((n) == 110))
+        {
+          {
+            ((pthread_mutex_unlock)((&(((l)->_mutex)))));
+            ((printf)("Get timed out.\n"));
+            ((exit)(0));
+          }
+        } else {
+          ;
+        }
+        ((actReached) = ((_template__thresholdReached__pointer__tag_struct_VoteSet_47__)((l), (t))));
       }
     }
     ((pthread_mutex_unlock)((&(((l)->_mutex)))));
     return (actReached);
   }
 }
-typedef VoteSet  *_template_param_unused_224;
-static signed int _template__freeActivation__pointer__tag_struct_VoteSet_43__(struct _template__ActivationSet__pointer__tag_struct_VoteSet_43__  * act)
+typedef VoteSet  *_template_param_unused_228;
+static signed int _template__freeActivation__pointer__tag_struct_VoteSet_47__(struct _template__ActivationSet__pointer__tag_struct_VoteSet_47__  * act)
 {
 
   {
@@ -3364,65 +3414,65 @@ signed int main(signed int  argc, char  * * argv)
 {
 
   {
-    struct _template__Lattice__pointer__tag_struct_VoteSet_43__  *D = ((_template__newLattice__pointer__tag_struct_VoteSet_43__)(((Empty)()), ((Top)()), (leq), (lub), (eq), (showVoteSet)));
-    struct _template__Lvar__pointer__tag_struct_VoteSet_43__  *x = ((_template__new__pointer__tag_struct_VoteSet_43__)((D)));
-    struct _template__Lvar__pointer__tag_struct_VoteSet_43__  *y = ((_template__new__pointer__tag_struct_VoteSet_43__)((D)));
-    struct _template__ActivationSet__pointer__tag_struct_VoteSet_43__  *noPizza = ((_template__newActivationSet__pointer__tag_struct_VoteSet_43__)((D), 1));
-    ((_template__addAct__pointer__tag_struct_VoteSet_43__)((noPizza), ((Set)(((Horace)(((No)()))), ((Set)(((Kat)(((No)()))), ((Set)(((Franz)(((No)()))), ((Empty)())))))))));
-    ((printf)("Activation Set noPizza: %s\n", (((_template__showActivation__pointer__tag_struct_VoteSet_43__)((noPizza))).text)));
-    struct _template__ActivationSet__pointer__tag_struct_VoteSet_43__  *yesPizza = ((_template__newActivationSet__pointer__tag_struct_VoteSet_43__)((D), 20));
-    ((_template__addAct__pointer__tag_struct_VoteSet_43__)((yesPizza), ((Set)(((Horace)(((Yes)()))), ((Empty)())))));
-    ((_template__addAct__pointer__tag_struct_VoteSet_43__)((yesPizza), ((Set)(((Kat)(((Yes)()))), ((Empty)())))));
-    ((_template__addAct__pointer__tag_struct_VoteSet_43__)((yesPizza), ((Set)(((Franz)(((Yes)()))), ((Empty)())))));
-    ((printf)("Activation Set yesPizza: %s\n", (((_template__showActivation__pointer__tag_struct_VoteSet_43__)((yesPizza))).text)));
-    struct _template__ThresholdSet__pointer__tag_struct_VoteSet_43__  *t = ((_template__addThreshold__pointer__tag_struct_VoteSet_43__)(((_template__addThreshold__pointer__tag_struct_VoteSet_43__)(((_template__newThresholdSet__pointer__tag_struct_VoteSet_43__)((D), 2)), (yesPizza))), (noPizza)));
-    ((printf)("Threshold set: %s\n", (((_template__showThreshold__pointer__tag_struct_VoteSet_43__)((t))).text)));
-    signed int success = ((_template__put__pointer__tag_struct_VoteSet_43__)((x), ((Set)(((Kat)(((No)()))), ((Empty)())))));
+    struct _template__Lattice__pointer__tag_struct_VoteSet_47__  *D = ((_template__newLattice__pointer__tag_struct_VoteSet_47__)(((Empty)()), ((Top)()), (leq), (lub), (eq), (showVoteSet)));
+    struct _template__Lvar__pointer__tag_struct_VoteSet_47__  *x = ((_template__new__pointer__tag_struct_VoteSet_47__)((D)));
+    struct _template__Lvar__pointer__tag_struct_VoteSet_47__  *y = ((_template__new__pointer__tag_struct_VoteSet_47__)((D)));
+    struct _template__ActivationSet__pointer__tag_struct_VoteSet_47__  *noPizza = ((_template__newActivationSet__pointer__tag_struct_VoteSet_47__)((D), 1));
+    ((_template__addAct__pointer__tag_struct_VoteSet_47__)((noPizza), ((Set)(((Horace)(((No)()))), ((Set)(((Kat)(((No)()))), ((Set)(((Franz)(((No)()))), ((Empty)())))))))));
+    ((printf)("Activation Set noPizza: %s\n", (((_template__showActivation__pointer__tag_struct_VoteSet_47__)((noPizza))).text)));
+    struct _template__ActivationSet__pointer__tag_struct_VoteSet_47__  *yesPizza = ((_template__newActivationSet__pointer__tag_struct_VoteSet_47__)((D), 20));
+    ((_template__addAct__pointer__tag_struct_VoteSet_47__)((yesPizza), ((Set)(((Horace)(((Yes)()))), ((Empty)())))));
+    ((_template__addAct__pointer__tag_struct_VoteSet_47__)((yesPizza), ((Set)(((Kat)(((Yes)()))), ((Empty)())))));
+    ((_template__addAct__pointer__tag_struct_VoteSet_47__)((yesPizza), ((Set)(((Franz)(((Yes)()))), ((Empty)())))));
+    ((printf)("Activation Set yesPizza: %s\n", (((_template__showActivation__pointer__tag_struct_VoteSet_47__)((yesPizza))).text)));
+    struct _template__ThresholdSet__pointer__tag_struct_VoteSet_47__  *t = ((_template__addThreshold__pointer__tag_struct_VoteSet_47__)(((_template__addThreshold__pointer__tag_struct_VoteSet_47__)(((_template__newThresholdSet__pointer__tag_struct_VoteSet_47__)((D), 2)), (yesPizza))), (noPizza)));
+    ((printf)("Threshold set: %s\n", (((_template__showThreshold__pointer__tag_struct_VoteSet_47__)((t))).text)));
+    signed int success = ((_template__put__pointer__tag_struct_VoteSet_47__)((x), ((Set)(((Kat)(((No)()))), ((Empty)())))));
     if ((!(success)))
     {
       {
         ((printf)("Invalid put operation of Set(Kat(No()), Empty())!\n"));
-        ((_template__freeThreshold__pointer__tag_struct_VoteSet_43__)((t)));
+        ((_template__freeThreshold__pointer__tag_struct_VoteSet_47__)((t)));
         ((free)((D)));
         return 0;
       }
     } else {
       ;
     }
-    ((success) = ((_template__put__pointer__tag_struct_VoteSet_43__)((x), ((Set)(((Franz)(((No)()))), ((Empty)()))))));
+    ((success) = ((_template__put__pointer__tag_struct_VoteSet_47__)((x), ((Set)(((Franz)(((No)()))), ((Empty)()))))));
     if ((!(success)))
     {
       {
         ((printf)("Invalid put operation of Set(Franz(No()), Empty())!\n"));
-        ((_template__freeThreshold__pointer__tag_struct_VoteSet_43__)((t)));
+        ((_template__freeThreshold__pointer__tag_struct_VoteSet_47__)((t)));
         ((free)((D)));
         return 0;
       }
     } else {
       ;
     }
-    ((success) = ((_template__put__pointer__tag_struct_VoteSet_43__)((x), ((Set)(((Horace)(((Yes)()))), ((Empty)()))))));
+    ((success) = ((_template__put__pointer__tag_struct_VoteSet_47__)((x), ((Set)(((Horace)(((Yes)()))), ((Empty)()))))));
     if ((!(success)))
     {
       {
         ((printf)("Invalid put operation of Set(Horace(Yes()), Empty())!\n"));
-        ((_template__freeThreshold__pointer__tag_struct_VoteSet_43__)((t)));
+        ((_template__freeThreshold__pointer__tag_struct_VoteSet_47__)((t)));
         ((free)((D)));
         return 0;
       }
     } else {
       ;
     }
-    struct _template__ActivationSet__pointer__tag_struct_VoteSet_43__  *result = ((_template__get__pointer__tag_struct_VoteSet_43__)((x), (t)));
+    struct _template__ActivationSet__pointer__tag_struct_VoteSet_47__  *result = ((_template__get__pointer__tag_struct_VoteSet_47__)((x), (t)));
     if (((result) == (((void *)0))))
     {
       {
         ((printf)("Invalid get operation.\n"));
         ((free)((x)));
         ((free)((y)));
-        ((_template__freeActivation__pointer__tag_struct_VoteSet_43__)((noPizza)));
-        ((_template__freeActivation__pointer__tag_struct_VoteSet_43__)((yesPizza)));
-        ((_template__freeThreshold__pointer__tag_struct_VoteSet_43__)((t)));
+        ((_template__freeActivation__pointer__tag_struct_VoteSet_47__)((noPizza)));
+        ((_template__freeActivation__pointer__tag_struct_VoteSet_47__)((yesPizza)));
+        ((_template__freeThreshold__pointer__tag_struct_VoteSet_47__)((t)));
         ((free)((D)));
         return 0;
       }
@@ -3446,13 +3496,13 @@ signed int main(signed int  argc, char  * * argv)
         }
       }
     }
-    ((_template__addAct__pointer__tag_struct_VoteSet_43__)((result), ((Set)(((Horace)(((Undecided)()))), ((Set)(((Franz)(((Yes)()))), ((Empty)())))))));
-    ((printf)("%s\n", (((_template__showActivation__pointer__tag_struct_VoteSet_43__)((result))).text)));
+    ((_template__addAct__pointer__tag_struct_VoteSet_47__)((result), ((Set)(((Horace)(((Undecided)()))), ((Set)(((Franz)(((Yes)()))), ((Empty)())))))));
+    ((printf)("%s\n", (((_template__showActivation__pointer__tag_struct_VoteSet_47__)((result))).text)));
     ((free)((x)));
     ((free)((y)));
-    ((_template__freeActivation__pointer__tag_struct_VoteSet_43__)((noPizza)));
-    ((_template__freeActivation__pointer__tag_struct_VoteSet_43__)((yesPizza)));
-    ((_template__freeThreshold__pointer__tag_struct_VoteSet_43__)((t)));
+    ((_template__freeActivation__pointer__tag_struct_VoteSet_47__)((noPizza)));
+    ((_template__freeActivation__pointer__tag_struct_VoteSet_47__)((yesPizza)));
+    ((_template__freeThreshold__pointer__tag_struct_VoteSet_47__)((t)));
     ((free)((D)));
   }
 }

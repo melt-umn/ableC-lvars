@@ -1022,6 +1022,41 @@ extern signed int pthread_key_delete(pthread_key_t  __key) __attribute__((__noth
 extern void  *pthread_getspecific(pthread_key_t  __key) __attribute__((__nothrow__, __leaf__));
 extern signed int pthread_setspecific(pthread_key_t  __key, const void  * __pointer) __attribute__((__nothrow__, __leaf__));
 extern signed int pthread_atfork(void ( * __prepare)(void), void ( * __parent)(void), void ( * __child)(void)) __attribute__((__nothrow__, __leaf__));
+extern signed int  *__errno_location(void) __attribute__((__nothrow__, __leaf__)) __attribute__((__const__));
+struct timeval {
+  __time_t tv_sec;
+  __suseconds_t tv_usec;
+  
+};
+typedef signed int __sig_atomic_t;
+typedef struct  {
+  unsigned long __val[((1024 / ((8 * (sizeof(unsigned long))))))];
+  
+} __sigset_t;
+typedef __sigset_t sigset_t;
+typedef __suseconds_t suseconds_t;
+typedef signed long __fd_mask;
+typedef struct  {
+  __fd_mask __fds_bits[(1024 / ((8 * ((signed int)(sizeof(__fd_mask))))))];
+  
+} fd_set;
+extern signed int select(signed int  __nfds, fd_set  *__restrict  __readfds, fd_set  *__restrict  __writefds, fd_set  *__restrict  __exceptfds, struct timeval  *__restrict  __timeout);
+typedef void  *__restrict __timezone_ptr_t;
+extern signed int gettimeofday(struct timeval  *__restrict  __tv, __timezone_ptr_t  __tz) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+enum __itimer_which {
+  ITIMER_REAL = 0,
+  ITIMER_VIRTUAL = 1,
+  ITIMER_PROF = 2
+};
+struct itimerval {
+  struct timeval it_interval;
+  struct timeval it_value;
+  
+};
+typedef signed int __itimer_which_t;
+extern signed int getitimer(__itimer_which_t  __which, struct itimerval  * __value) __attribute__((__nothrow__, __leaf__));
+extern signed int setitimer(__itimer_which_t  __which, const struct itimerval  *__restrict  __new, struct itimerval  *__restrict  __old) __attribute__((__nothrow__, __leaf__));
+extern signed int utimes(const char  * __file, const struct timeval  __tvp[2]) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
 signed int _lvarCheckValue = 1;
 typedef struct Color Color;
 struct _GenericDatatype {
@@ -5770,7 +5805,7 @@ Color  *getColor(char  * c)
     }
   }
 }
-typedef Color  *_template_param_unused_48;
+typedef Color  *_template_param_unused_52;
 typedef __attribute__(()) struct _template__Lattice__pointer__tag_struct_Color_13__ _template__Lattice__pointer__tag_struct_Color_13__;
 struct _template__Lattice__pointer__tag_struct_Color_13__ {
   Color  *_bottom;
@@ -5781,7 +5816,7 @@ struct _template__Lattice__pointer__tag_struct_Color_13__ {
   struct _string_s ( *_show)();
   
 };
-typedef Color  *_template_param_unused_52;
+typedef Color  *_template_param_unused_56;
 static struct _template__Lattice__pointer__tag_struct_Color_13__  *_template__newLattice__pointer__tag_struct_Color_13__(Color  * least, Color  * greatest, signed int ( * leq)(), Color  *( * lub)(), signed int ( * eq)(), struct _string_s ( * showMethod)())
 {
 
@@ -5796,11 +5831,11 @@ static struct _template__Lattice__pointer__tag_struct_Color_13__  *_template__ne
     return (l);
   }
 }
-typedef Color  *_template_param_unused_53;
+typedef Color  *_template_param_unused_57;
 typedef __attribute__(()) struct _template__Lvar__pointer__tag_struct_Color_13__ _template__Lvar__pointer__tag_struct_Color_13__;
-typedef Color  *_template_param_unused_54;
+typedef Color  *_template_param_unused_58;
 typedef __attribute__(()) struct _template__ThresholdSet__pointer__tag_struct_Color_13__ _template__ThresholdSet__pointer__tag_struct_Color_13__;
-typedef Color  *_template_param_unused_55;
+typedef Color  *_template_param_unused_59;
 typedef __attribute__(()) struct _template__ActivationSet__pointer__tag_struct_Color_13__ _template__ActivationSet__pointer__tag_struct_Color_13__;
 struct _template__ActivationSet__pointer__tag_struct_Color_13__ {
   signed int _size;
@@ -5825,7 +5860,7 @@ struct _template__Lvar__pointer__tag_struct_Color_13__ {
   pthread_cond_t _cond;
   
 };
-typedef Color  *_template_param_unused_59;
+typedef Color  *_template_param_unused_63;
 static struct _template__Lvar__pointer__tag_struct_Color_13__  *_template__new__pointer__tag_struct_Color_13__(struct _template__Lattice__pointer__tag_struct_Color_13__  * l)
 {
 
@@ -5839,7 +5874,7 @@ static struct _template__Lvar__pointer__tag_struct_Color_13__  *_template__new__
     return (lvarNew);
   }
 }
-typedef Color  *_template_param_unused_63;
+typedef Color  *_template_param_unused_67;
 static signed int _template__put__pointer__tag_struct_Color_13__(struct _template__Lvar__pointer__tag_struct_Color_13__  * l, Color  * newState)
 {
 
@@ -5873,8 +5908,8 @@ static signed int _template__put__pointer__tag_struct_Color_13__(struct _templat
     return 1;
   }
 }
-typedef Color  *_template_param_unused_83;
 typedef Color  *_template_param_unused_87;
+typedef Color  *_template_param_unused_91;
 static signed int _template__resizeActSet__pointer__tag_struct_Color_13__(struct _template__ActivationSet__pointer__tag_struct_Color_13__  * act, signed int  newSize)
 {
 
@@ -5909,7 +5944,7 @@ static struct _template__ActivationSet__pointer__tag_struct_Color_13__  *_templa
     return (act);
   }
 }
-typedef Color  *_template_param_unused_91;
+typedef Color  *_template_param_unused_95;
 static struct _template__ActivationSet__pointer__tag_struct_Color_13__  *_template__newActivationSet__pointer__tag_struct_Color_13__(struct _template__Lattice__pointer__tag_struct_Color_13__  * l, signed int  size)
 {
 
@@ -5931,8 +5966,8 @@ static struct _template__ActivationSet__pointer__tag_struct_Color_13__  *_templa
     return (act);
   }
 }
-typedef Color  *_template_param_unused_779;
-typedef Color  *_template_param_unused_801;
+typedef Color  *_template_param_unused_783;
+typedef Color  *_template_param_unused_805;
 static struct _string_s _template__showActivation__pointer__tag_struct_Color_13__(struct _template__ActivationSet__pointer__tag_struct_Color_13__  * act)
 {
 
@@ -5943,8 +5978,8 @@ static struct _string_s _template__showActivation__pointer__tag_struct_Color_13_
     {
       {
         ({
-          struct _string_s  *_tmp802 = (&(result));
-          ((*(_tmp802)) = ((_append_string)((*(_tmp802)), ((_append_string)(((((act)->_lattice)->_show)((((act)->_set)[(i)]))), ((strCharPointer)(", "))))))); })
+          struct _string_s  *_tmp806 = (&(result));
+          ((*(_tmp806)) = ((_append_string)((*(_tmp806)), ((_append_string)(((((act)->_lattice)->_show)((((act)->_set)[(i)]))), ((strCharPointer)(", "))))))); })
         ;
       }
     }
@@ -5952,15 +5987,15 @@ static struct _string_s _template__showActivation__pointer__tag_struct_Color_13_
     {
       {
         ({
-          struct _string_s  *_tmp803 = (&(result));
-          ((*(_tmp803)) = ((_append_string)((*(_tmp803)), ((((act)->_lattice)->_show)((((act)->_set)[(i)])))))); })
+          struct _string_s  *_tmp807 = (&(result));
+          ((*(_tmp807)) = ((_append_string)((*(_tmp807)), ((((act)->_lattice)->_show)((((act)->_set)[(i)])))))); })
         ;
       }
     }
     return ((_append_string)((result), ((strCharPointer)("}"))));
   }
 }
-typedef Color  *_template_param_unused_825;
+typedef Color  *_template_param_unused_829;
 static struct _string_s _template__showThreshold__pointer__tag_struct_Color_13__(struct _template__ThresholdSet__pointer__tag_struct_Color_13__  * t)
 {
 
@@ -5971,8 +6006,8 @@ static struct _string_s _template__showThreshold__pointer__tag_struct_Color_13__
     {
       {
         ({
-          struct _string_s  *_tmp826 = (&(result));
-          ((*(_tmp826)) = ((_append_string)((*(_tmp826)), ((_append_string)(((_template__showActivation__pointer__tag_struct_Color_13__)((((t)->_a_sets)[(i)]))), ((strCharPointer)(", "))))))); })
+          struct _string_s  *_tmp830 = (&(result));
+          ((*(_tmp830)) = ((_append_string)((*(_tmp830)), ((_append_string)(((_template__showActivation__pointer__tag_struct_Color_13__)((((t)->_a_sets)[(i)]))), ((strCharPointer)(", "))))))); })
         ;
       }
     }
@@ -5980,15 +6015,15 @@ static struct _string_s _template__showThreshold__pointer__tag_struct_Color_13__
     {
       {
         ({
-          struct _string_s  *_tmp827 = (&(result));
-          ((*(_tmp827)) = ((_append_string)((*(_tmp827)), ((_template__showActivation__pointer__tag_struct_Color_13__)((((t)->_a_sets)[(i)])))))); })
+          struct _string_s  *_tmp831 = (&(result));
+          ((*(_tmp831)) = ((_append_string)((*(_tmp831)), ((_template__showActivation__pointer__tag_struct_Color_13__)((((t)->_a_sets)[(i)])))))); })
         ;
       }
     }
     return ((_append_string)((result), ((strCharPointer)("}"))));
   }
 }
-typedef Color  *_template_param_unused_831;
+typedef Color  *_template_param_unused_835;
 static signed int _template__resizeThresholdSet__pointer__tag_struct_Color_13__(struct _template__ThresholdSet__pointer__tag_struct_Color_13__  * t, signed int  newSize)
 {
 
@@ -6006,7 +6041,7 @@ static signed int _template__resizeThresholdSet__pointer__tag_struct_Color_13__(
     return 1;
   }
 }
-typedef Color  *_template_param_unused_839;
+typedef Color  *_template_param_unused_843;
 static signed int _template__incompat__pointer__tag_struct_Color_13__(struct _template__Lattice__pointer__tag_struct_Color_13__  * l, struct _template__ActivationSet__pointer__tag_struct_Color_13__  * Q, struct _template__ActivationSet__pointer__tag_struct_Color_13__  * R)
 {
 
@@ -6092,7 +6127,7 @@ static struct _template__ThresholdSet__pointer__tag_struct_Color_13__  *_templat
     return (t);
   }
 }
-typedef Color  *_template_param_unused_855;
+typedef Color  *_template_param_unused_859;
 static struct _template__ThresholdSet__pointer__tag_struct_Color_13__  *_template__newThresholdSet__pointer__tag_struct_Color_13__(struct _template__Lattice__pointer__tag_struct_Color_13__  * l, signed int  size)
 {
 
@@ -6114,8 +6149,8 @@ static struct _template__ThresholdSet__pointer__tag_struct_Color_13__  *_templat
     return (t);
   }
 }
-typedef Color  *_template_param_unused_871;
 typedef Color  *_template_param_unused_875;
+typedef Color  *_template_param_unused_879;
 static struct _template__ActivationSet__pointer__tag_struct_Color_13__  *_template__thresholdReached__pointer__tag_struct_Color_13__(struct _template__Lvar__pointer__tag_struct_Color_13__  * l, struct _template__ThresholdSet__pointer__tag_struct_Color_13__  * t)
 {
 
@@ -6145,6 +6180,14 @@ static struct _template__ActivationSet__pointer__tag_struct_Color_13__  *_templa
 {
 
   {
+    signed int timeInMs = 1000;
+    struct timeval tv;
+    struct timespec ts;
+    ((gettimeofday)((&(tv)), (((void *)0))));
+    (((ts).tv_sec) = (((time)((((void *)0)))) + ((timeInMs) / 1000)));
+    (((ts).tv_nsec) = ((((tv).tv_usec) * 1000) + ((1000 * 1000) * (((timeInMs) % 1000)))));
+    (((ts).tv_sec) += (((ts).tv_nsec) / (((1000 * 1000) * 1000))));
+    (((ts).tv_nsec) %= (((1000 * 1000) * 1000)));
     ((pthread_mutex_lock)((&(((l)->_mutex)))));
     if ((((l)->_lattice) != ((t)->_lattice)))
     {
@@ -6159,7 +6202,17 @@ static struct _template__ActivationSet__pointer__tag_struct_Color_13__  *_templa
     while (((actReached) == (((void *)0))))
     {
       {
-        ((pthread_cond_wait)((&(((l)->_cond))), (&(((l)->_mutex)))));
+        signed int n = ((pthread_cond_timedwait)((&(((l)->_cond))), (&(((l)->_mutex))), (&(ts))));
+        if (((n) == 110))
+        {
+          {
+            ((pthread_mutex_unlock)((&(((l)->_mutex)))));
+            ((printf)("Get timed out.\n"));
+            ((exit)(0));
+          }
+        } else {
+          ;
+        }
         ((actReached) = ((_template__thresholdReached__pointer__tag_struct_Color_13__)((l), (t))));
       }
     }
@@ -6167,7 +6220,7 @@ static struct _template__ActivationSet__pointer__tag_struct_Color_13__  *_templa
     return (actReached);
   }
 }
-typedef Color  *_template_param_unused_879;
+typedef Color  *_template_param_unused_883;
 static Color  *_template__freeze__pointer__tag_struct_Color_13__(struct _template__Lvar__pointer__tag_struct_Color_13__  * l)
 {
 
@@ -6179,7 +6232,7 @@ static Color  *_template__freeze__pointer__tag_struct_Color_13__(struct _templat
     return (result);
   }
 }
-typedef Color  *_template_param_unused_887;
+typedef Color  *_template_param_unused_891;
 static struct _string_s _template__showLvar__pointer__tag_struct_Color_13__(struct _template__Lvar__pointer__tag_struct_Color_13__  * l)
 {
 
@@ -6197,7 +6250,7 @@ static struct _string_s _template__showLvar__pointer__tag_struct_Color_13__(stru
     return ((strCharPointer)("<Lvar Value Unavailable>"));
   }
 }
-typedef Color  *_template_param_unused_891;
+typedef Color  *_template_param_unused_895;
 static signed int _template__freeActivation__pointer__tag_struct_Color_13__(struct _template__ActivationSet__pointer__tag_struct_Color_13__  * act)
 {
 
@@ -6207,7 +6260,7 @@ static signed int _template__freeActivation__pointer__tag_struct_Color_13__(stru
     return 1;
   }
 }
-typedef Color  *_template_param_unused_895;
+typedef Color  *_template_param_unused_899;
 static signed int _template__freeThreshold__pointer__tag_struct_Color_13__(struct _template__ThresholdSet__pointer__tag_struct_Color_13__  * t)
 {
 

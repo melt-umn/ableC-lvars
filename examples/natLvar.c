@@ -1022,6 +1022,41 @@ extern signed int pthread_key_delete(pthread_key_t  __key) __attribute__((__noth
 extern void  *pthread_getspecific(pthread_key_t  __key) __attribute__((__nothrow__, __leaf__));
 extern signed int pthread_setspecific(pthread_key_t  __key, const void  * __pointer) __attribute__((__nothrow__, __leaf__));
 extern signed int pthread_atfork(void ( * __prepare)(void), void ( * __parent)(void), void ( * __child)(void)) __attribute__((__nothrow__, __leaf__));
+extern signed int  *__errno_location(void) __attribute__((__nothrow__, __leaf__)) __attribute__((__const__));
+struct timeval {
+  __time_t tv_sec;
+  __suseconds_t tv_usec;
+  
+};
+typedef signed int __sig_atomic_t;
+typedef struct  {
+  unsigned long __val[((1024 / ((8 * (sizeof(unsigned long))))))];
+  
+} __sigset_t;
+typedef __sigset_t sigset_t;
+typedef __suseconds_t suseconds_t;
+typedef signed long __fd_mask;
+typedef struct  {
+  __fd_mask __fds_bits[(1024 / ((8 * ((signed int)(sizeof(__fd_mask))))))];
+  
+} fd_set;
+extern signed int select(signed int  __nfds, fd_set  *__restrict  __readfds, fd_set  *__restrict  __writefds, fd_set  *__restrict  __exceptfds, struct timeval  *__restrict  __timeout);
+typedef void  *__restrict __timezone_ptr_t;
+extern signed int gettimeofday(struct timeval  *__restrict  __tv, __timezone_ptr_t  __tz) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
+enum __itimer_which {
+  ITIMER_REAL = 0,
+  ITIMER_VIRTUAL = 1,
+  ITIMER_PROF = 2
+};
+struct itimerval {
+  struct timeval it_interval;
+  struct timeval it_value;
+  
+};
+typedef signed int __itimer_which_t;
+extern signed int getitimer(__itimer_which_t  __which, struct itimerval  * __value) __attribute__((__nothrow__, __leaf__));
+extern signed int setitimer(__itimer_which_t  __which, const struct itimerval  *__restrict  __new, struct itimerval  *__restrict  __old) __attribute__((__nothrow__, __leaf__));
+extern signed int utimes(const char  * __file, const struct timeval  __tvp[2]) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
 signed int _lvarCheckValue = 1;
 typedef struct Nat Nat;
 struct _GenericDatatype {
@@ -1712,7 +1747,7 @@ struct _string_s showNat(Nat  * n)
     return (result);
   }
 }
-typedef Nat  *_template_param_unused_37;
+typedef Nat  *_template_param_unused_41;
 typedef __attribute__(()) struct _template__Lattice__pointer__tag_struct_Nat_13__ _template__Lattice__pointer__tag_struct_Nat_13__;
 struct _template__Lattice__pointer__tag_struct_Nat_13__ {
   Nat  *_bottom;
@@ -1723,7 +1758,7 @@ struct _template__Lattice__pointer__tag_struct_Nat_13__ {
   struct _string_s ( *_show)();
   
 };
-typedef Nat  *_template_param_unused_41;
+typedef Nat  *_template_param_unused_45;
 static struct _template__Lattice__pointer__tag_struct_Nat_13__  *_template__newLattice__pointer__tag_struct_Nat_13__(Nat  * least, Nat  * greatest, signed int ( * leq)(), Nat  *( * lub)(), signed int ( * eq)(), struct _string_s ( * showMethod)())
 {
 
@@ -1738,11 +1773,11 @@ static struct _template__Lattice__pointer__tag_struct_Nat_13__  *_template__newL
     return (l);
   }
 }
-typedef Nat  *_template_param_unused_42;
+typedef Nat  *_template_param_unused_46;
 typedef __attribute__(()) struct _template__Lvar__pointer__tag_struct_Nat_13__ _template__Lvar__pointer__tag_struct_Nat_13__;
-typedef Nat  *_template_param_unused_43;
+typedef Nat  *_template_param_unused_47;
 typedef __attribute__(()) struct _template__ThresholdSet__pointer__tag_struct_Nat_13__ _template__ThresholdSet__pointer__tag_struct_Nat_13__;
-typedef Nat  *_template_param_unused_44;
+typedef Nat  *_template_param_unused_48;
 typedef __attribute__(()) struct _template__ActivationSet__pointer__tag_struct_Nat_13__ _template__ActivationSet__pointer__tag_struct_Nat_13__;
 struct _template__ActivationSet__pointer__tag_struct_Nat_13__ {
   signed int _size;
@@ -1767,7 +1802,7 @@ struct _template__Lvar__pointer__tag_struct_Nat_13__ {
   pthread_cond_t _cond;
   
 };
-typedef Nat  *_template_param_unused_48;
+typedef Nat  *_template_param_unused_52;
 static struct _template__Lvar__pointer__tag_struct_Nat_13__  *_template__new__pointer__tag_struct_Nat_13__(struct _template__Lattice__pointer__tag_struct_Nat_13__  * l)
 {
 
@@ -1781,7 +1816,7 @@ static struct _template__Lvar__pointer__tag_struct_Nat_13__  *_template__new__po
     return (lvarNew);
   }
 }
-typedef Nat  *_template_param_unused_52;
+typedef Nat  *_template_param_unused_56;
 static signed int _template__put__pointer__tag_struct_Nat_13__(struct _template__Lvar__pointer__tag_struct_Nat_13__  * l, Nat  * newState)
 {
 
@@ -1815,8 +1850,8 @@ static signed int _template__put__pointer__tag_struct_Nat_13__(struct _template_
     return 1;
   }
 }
-typedef Nat  *_template_param_unused_72;
 typedef Nat  *_template_param_unused_76;
+typedef Nat  *_template_param_unused_80;
 static signed int _template__resizeActSet__pointer__tag_struct_Nat_13__(struct _template__ActivationSet__pointer__tag_struct_Nat_13__  * act, signed int  newSize)
 {
 
@@ -1851,7 +1886,7 @@ static struct _template__ActivationSet__pointer__tag_struct_Nat_13__  *_template
     return (act);
   }
 }
-typedef Nat  *_template_param_unused_80;
+typedef Nat  *_template_param_unused_84;
 static struct _template__ActivationSet__pointer__tag_struct_Nat_13__  *_template__newActivationSet__pointer__tag_struct_Nat_13__(struct _template__Lattice__pointer__tag_struct_Nat_13__  * l, signed int  size)
 {
 
@@ -1873,8 +1908,8 @@ static struct _template__ActivationSet__pointer__tag_struct_Nat_13__  *_template
     return (act);
   }
 }
-typedef Nat  *_template_param_unused_516;
-typedef Nat  *_template_param_unused_538;
+typedef Nat  *_template_param_unused_520;
+typedef Nat  *_template_param_unused_542;
 static struct _string_s _template__showActivation__pointer__tag_struct_Nat_13__(struct _template__ActivationSet__pointer__tag_struct_Nat_13__  * act)
 {
 
@@ -1885,8 +1920,8 @@ static struct _string_s _template__showActivation__pointer__tag_struct_Nat_13__(
     {
       {
         ({
-          struct _string_s  *_tmp539 = (&(result));
-          ((*(_tmp539)) = ((_append_string)((*(_tmp539)), ((_append_string)(((((act)->_lattice)->_show)((((act)->_set)[(i)]))), ((strCharPointer)(", "))))))); })
+          struct _string_s  *_tmp543 = (&(result));
+          ((*(_tmp543)) = ((_append_string)((*(_tmp543)), ((_append_string)(((((act)->_lattice)->_show)((((act)->_set)[(i)]))), ((strCharPointer)(", "))))))); })
         ;
       }
     }
@@ -1894,15 +1929,15 @@ static struct _string_s _template__showActivation__pointer__tag_struct_Nat_13__(
     {
       {
         ({
-          struct _string_s  *_tmp540 = (&(result));
-          ((*(_tmp540)) = ((_append_string)((*(_tmp540)), ((((act)->_lattice)->_show)((((act)->_set)[(i)])))))); })
+          struct _string_s  *_tmp544 = (&(result));
+          ((*(_tmp544)) = ((_append_string)((*(_tmp544)), ((((act)->_lattice)->_show)((((act)->_set)[(i)])))))); })
         ;
       }
     }
     return ((_append_string)((result), ((strCharPointer)("}"))));
   }
 }
-typedef Nat  *_template_param_unused_562;
+typedef Nat  *_template_param_unused_566;
 static struct _string_s _template__showThreshold__pointer__tag_struct_Nat_13__(struct _template__ThresholdSet__pointer__tag_struct_Nat_13__  * t)
 {
 
@@ -1913,8 +1948,8 @@ static struct _string_s _template__showThreshold__pointer__tag_struct_Nat_13__(s
     {
       {
         ({
-          struct _string_s  *_tmp563 = (&(result));
-          ((*(_tmp563)) = ((_append_string)((*(_tmp563)), ((_append_string)(((_template__showActivation__pointer__tag_struct_Nat_13__)((((t)->_a_sets)[(i)]))), ((strCharPointer)(", "))))))); })
+          struct _string_s  *_tmp567 = (&(result));
+          ((*(_tmp567)) = ((_append_string)((*(_tmp567)), ((_append_string)(((_template__showActivation__pointer__tag_struct_Nat_13__)((((t)->_a_sets)[(i)]))), ((strCharPointer)(", "))))))); })
         ;
       }
     }
@@ -1922,15 +1957,15 @@ static struct _string_s _template__showThreshold__pointer__tag_struct_Nat_13__(s
     {
       {
         ({
-          struct _string_s  *_tmp564 = (&(result));
-          ((*(_tmp564)) = ((_append_string)((*(_tmp564)), ((_template__showActivation__pointer__tag_struct_Nat_13__)((((t)->_a_sets)[(i)])))))); })
+          struct _string_s  *_tmp568 = (&(result));
+          ((*(_tmp568)) = ((_append_string)((*(_tmp568)), ((_template__showActivation__pointer__tag_struct_Nat_13__)((((t)->_a_sets)[(i)])))))); })
         ;
       }
     }
     return ((_append_string)((result), ((strCharPointer)("}"))));
   }
 }
-typedef Nat  *_template_param_unused_568;
+typedef Nat  *_template_param_unused_572;
 static signed int _template__resizeThresholdSet__pointer__tag_struct_Nat_13__(struct _template__ThresholdSet__pointer__tag_struct_Nat_13__  * t, signed int  newSize)
 {
 
@@ -1948,7 +1983,7 @@ static signed int _template__resizeThresholdSet__pointer__tag_struct_Nat_13__(st
     return 1;
   }
 }
-typedef Nat  *_template_param_unused_576;
+typedef Nat  *_template_param_unused_580;
 static signed int _template__incompat__pointer__tag_struct_Nat_13__(struct _template__Lattice__pointer__tag_struct_Nat_13__  * l, struct _template__ActivationSet__pointer__tag_struct_Nat_13__  * Q, struct _template__ActivationSet__pointer__tag_struct_Nat_13__  * R)
 {
 
@@ -2034,7 +2069,7 @@ static struct _template__ThresholdSet__pointer__tag_struct_Nat_13__  *_template_
     return (t);
   }
 }
-typedef Nat  *_template_param_unused_584;
+typedef Nat  *_template_param_unused_588;
 static struct _template__ThresholdSet__pointer__tag_struct_Nat_13__  *_template__newThresholdSet__pointer__tag_struct_Nat_13__(struct _template__Lattice__pointer__tag_struct_Nat_13__  * l, signed int  size)
 {
 
@@ -2056,8 +2091,8 @@ static struct _template__ThresholdSet__pointer__tag_struct_Nat_13__  *_template_
     return (t);
   }
 }
-typedef Nat  *_template_param_unused_600;
 typedef Nat  *_template_param_unused_604;
+typedef Nat  *_template_param_unused_608;
 static struct _template__ActivationSet__pointer__tag_struct_Nat_13__  *_template__thresholdReached__pointer__tag_struct_Nat_13__(struct _template__Lvar__pointer__tag_struct_Nat_13__  * l, struct _template__ThresholdSet__pointer__tag_struct_Nat_13__  * t)
 {
 
@@ -2087,6 +2122,14 @@ static struct _template__ActivationSet__pointer__tag_struct_Nat_13__  *_template
 {
 
   {
+    signed int timeInMs = 1000;
+    struct timeval tv;
+    struct timespec ts;
+    ((gettimeofday)((&(tv)), (((void *)0))));
+    (((ts).tv_sec) = (((time)((((void *)0)))) + ((timeInMs) / 1000)));
+    (((ts).tv_nsec) = ((((tv).tv_usec) * 1000) + ((1000 * 1000) * (((timeInMs) % 1000)))));
+    (((ts).tv_sec) += (((ts).tv_nsec) / (((1000 * 1000) * 1000))));
+    (((ts).tv_nsec) %= (((1000 * 1000) * 1000)));
     ((pthread_mutex_lock)((&(((l)->_mutex)))));
     if ((((l)->_lattice) != ((t)->_lattice)))
     {
@@ -2101,7 +2144,17 @@ static struct _template__ActivationSet__pointer__tag_struct_Nat_13__  *_template
     while (((actReached) == (((void *)0))))
     {
       {
-        ((pthread_cond_wait)((&(((l)->_cond))), (&(((l)->_mutex)))));
+        signed int n = ((pthread_cond_timedwait)((&(((l)->_cond))), (&(((l)->_mutex))), (&(ts))));
+        if (((n) == 110))
+        {
+          {
+            ((pthread_mutex_unlock)((&(((l)->_mutex)))));
+            ((printf)("Get timed out.\n"));
+            ((exit)(0));
+          }
+        } else {
+          ;
+        }
         ((actReached) = ((_template__thresholdReached__pointer__tag_struct_Nat_13__)((l), (t))));
       }
     }
@@ -2109,7 +2162,7 @@ static struct _template__ActivationSet__pointer__tag_struct_Nat_13__  *_template
     return (actReached);
   }
 }
-typedef Nat  *_template_param_unused_608;
+typedef Nat  *_template_param_unused_612;
 static signed int _template__freeActivation__pointer__tag_struct_Nat_13__(struct _template__ActivationSet__pointer__tag_struct_Nat_13__  * act)
 {
 
@@ -2119,7 +2172,7 @@ static signed int _template__freeActivation__pointer__tag_struct_Nat_13__(struct
     return 1;
   }
 }
-typedef Nat  *_template_param_unused_612;
+typedef Nat  *_template_param_unused_616;
 static signed int _template__freeThreshold__pointer__tag_struct_Nat_13__(struct _template__ThresholdSet__pointer__tag_struct_Nat_13__  * t)
 {
 
