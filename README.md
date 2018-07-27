@@ -4,12 +4,23 @@
 
 ### Urgent:
 
+#### Big Example:
+
+Create big array of customers (?) and read through the array
+
 #### POPL Paper:
 
 + Explicitly spell out 1) here's a problem and 2) the LVars example solves this problem.
 + Add in stuff with running example
-+ Why use over library (e.g., haskell, ex. infer lattice from lvar, etc., niver syntax, templating, etc.)
++ Why use over library (e.g., haskell, ex. infer lattice from lvar, etc., nicer syntax, templating, prefer C over Haskell etc.)
 + Focus more on the combined result portion in the example
+
+"But suppose that we want to concurrently insert two strings that happen to share a prefix — suppose, for instance, that one thread is trying to insert '1100' while another is trying to insert '1111'. Now we have a dilemma. If one thread writes into the topmost IVar for 1, but the other thread has gotten there first and done its insertion, we’ll raise a multiple-put error. So we need to check for emptiness before doing a write — but there’s no way to do so, since the only deterministic way to read from an IVar is to make a get call that will block until the IVar is full. So, each thread will have to block waiting for the other — even though the result of the two writes would be the same regardless of the order in which they occurred. If we were using LVars instead of IVars, then the two inserting threads could happily race to write their shared prefix, with no risk of nondeterminism, since they’d both be writing the same thing!"
+
++ Need examples with no side effects (yikes) until after syncing
+
+Guarantees of determinism don't hold with side-effects: "We define a program to be deterministic if, given the same inputs, it will always produce the same observable result. Here, inputs are votes, and we define the observable result of a program to be the value to which it evaluates. We’ve therefore cheated a bit with our call to call_for_pizza, since it triggers a side effect, and our determinism guarantee doesn’t say anything about side effects."
+
 + It's hard for me, at least, to see why determinism with sets of integers is important. If you think an example with ADTs is better, go ahead and put it in; we can figure out how to make it look nice later. You can elide code that isn't critical like "... // check that n1/n2 are within acceptable bounds" or something. Even if you have to break it into two figures, that's fine for now.
 + Think about big example-- maybe reading data from large files into a database-type structure, with Cilk?
 

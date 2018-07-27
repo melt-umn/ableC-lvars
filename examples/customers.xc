@@ -228,33 +228,32 @@ cilk int addCustData(Lvar<Customer*>** customers, int** store, int custLen, int 
 }
 
 cilk Customer* getCustomer(Lvar<Customer*>* c, ThresholdSet<Customer*>* t) {
-  get(c, t);
+  ActivationSet<Customer*>* result = get(c, t);
+  if (result == NULL) {
+    cilk return NULL;
+  }
   cilk return freeze(c);
 }
 
 // get the customers with matching products
 
-cilk int getTopCusts(Lvar<Customer*>** customers, int custLen, ProductSet* desiredProds) {
+cilk Customer* getTopCusts(Lvar<Customer*>** customers, int custLen, ProductSet* desiredProds) {
   ActivationSet<Customer*>* a = activationSet(lat, 1){Person(0, desiredProds)};
   ThresholdSet<Customer*>* t = thresholdSet(lat, 1){a};
-
-  printf("The following customers have purchased the specified products:\n");
-
+  Customer* result;
   for (int i = 0; i < custLen; i++) {
-    Customer* result;
     spawn result = getCustomer(customers[i], t); //need to keep track of successes in some way
-    printf("%s\n", showCustomer(result).text);
   }
   sync;
   freeSet(a);
   freeSet(t);
-  cilk return 1;
+  cilk return result;
 }
 
 cilk int main(int argc, char **argv) {
   lat = lattice(CustBot(), CustTop(), leqCustomer, lubCustomer, eqCustomer, showCustomer);
   int numCustomers = 8;
-  int numStore1 = 10;
+  int numStore1 = 12;
   int numStore2 = 10;
   int numStore3 = 10;
 
@@ -263,12 +262,12 @@ cilk int main(int argc, char **argv) {
   int** store2_cs = readStoreData("store2.csv", numStore2);
   int** store3_cs = readStoreData("store3.csv", numStore3);
 
-  int result1, result2, result3, result4;
+  int result1, result2, result3;
+  Customer* result4;
   spawn result1 = addCustData(customers, store1_cs, numCustomers, numStore1);
   spawn result2 = addCustData(customers, store2_cs, numCustomers, numStore2);
   spawn result3 = addCustData(customers, store3_cs, numCustomers, numStore3);
-  spawn result4 = getTopCusts(customers, numCustomers, P_Set(123, P_Empty()));
+  spawn result4 = getTopCusts(customers, numCustomers, P_Set(42, P_Empty()));
   sync;
-
   cilk return 1;
 }

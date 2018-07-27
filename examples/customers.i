@@ -3210,7 +3210,6 @@ template<a> struct _Lvar {
 
 template<a>
 static string _showLvar(Lvar<a>* l) {
-
   if (l->_frozen) {
     return l->_lattice->_show(l->_value);
   }
@@ -3300,7 +3299,7 @@ static ActivationSet<a>* _thresholdReached(Lvar<a>* l, ThresholdSet<a> * t) {
 template<a>
 static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
 
-  int timeInMs = 1000;
+  int timeInMs = 10000;
 
   struct timeval tv;
   struct timespec ts;
@@ -3312,7 +3311,7 @@ static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
   ts.tv_nsec %= (1000 * 1000 * 1000);
 
   pthread_mutex_lock(&(l->_mutex));
-# 407 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 406 "../../../extensions/ableC-lvars/include/lvars.xh"
     if (l->_lattice != t->_lattice) {
       pthread_mutex_unlock(&(l->_mutex));
       return ((void *)0);
@@ -3325,7 +3324,7 @@ static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
     if (n == 110) {
       pthread_mutex_unlock(&(l->_mutex));
       printf("Get timed out.\n");
-      exit(0);
+      return ((void *)0);
     }
 
     actReached = inst _thresholdReached<a>(l, t);
@@ -5116,33 +5115,32 @@ cilk int addCustData(Lvar<Customer*>** customers, int** store, int custLen, int 
 }
 
 cilk Customer* getCustomer(Lvar<Customer*>* c, ThresholdSet<Customer*>* t) {
-  get(c, t);
+  ActivationSet<Customer*>* result = get(c, t);
+  if (result == ((void *)0)) {
+    cilk return ((void *)0);
+  }
   cilk return freeze(c);
 }
 
 
 
-cilk int getTopCusts(Lvar<Customer*>** customers, int custLen, ProductSet* desiredProds) {
+cilk Customer* getTopCusts(Lvar<Customer*>** customers, int custLen, ProductSet* desiredProds) {
   ActivationSet<Customer*>* a = activationSet(lat, 1){Person(0, desiredProds)};
   ThresholdSet<Customer*>* t = thresholdSet(lat, 1){a};
-
-  printf("The following customers have purchased the specified products:\n");
-
+  Customer* result;
   for (int i = 0; i < custLen; i++) {
-    Customer* result;
     spawn result = getCustomer(customers[i], t);
-    printf("%s\n", showCustomer(result).text);
   }
   sync;
   freeSet(a);
   freeSet(t);
-  cilk return 1;
+  cilk return result;
 }
 
 cilk int main(int argc, char **argv) {
   lat = lattice(CustBot(), CustTop(), leqCustomer, lubCustomer, eqCustomer, showCustomer);
   int numCustomers = 8;
-  int numStore1 = 10;
+  int numStore1 = 12;
   int numStore2 = 10;
   int numStore3 = 10;
 
@@ -5151,12 +5149,21 @@ cilk int main(int argc, char **argv) {
   int** store2_cs = readStoreData("store2.csv", numStore2);
   int** store3_cs = readStoreData("store3.csv", numStore3);
 
-  int result1, result2, result3, result4;
+  int result1, result2, result3;
+  Customer* result4;
   spawn result1 = addCustData(customers, store1_cs, numCustomers, numStore1);
   spawn result2 = addCustData(customers, store2_cs, numCustomers, numStore2);
   spawn result3 = addCustData(customers, store3_cs, numCustomers, numStore3);
-  spawn result4 = getTopCusts(customers, numCustomers, P_Set(123, P_Empty()));
   sync;
 
+  for (int i = 0; i < numCustomers; i++) {
+    printf("%s\n", showCustomer(customers[i]->_value).text);
+  }
+  spawn result4 = getTopCusts(customers, numCustomers, P_Set(42, P_Empty()));
+  sync;
+
+  if (result4 != ((void *)0)) {
+    printf("%s\n", showCustomer(result4).text);
+  }
   cilk return 1;
 }
