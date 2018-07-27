@@ -2837,13 +2837,12 @@ template<a> struct _ActivationSet {
 
 template<a>
 static ActivationSet<a>* _newActivationSet(Lattice<a>* l, int size) {
-
-
+# 74 "../../../extensions/ableC-lvars/include/lvars.xh"
     if (size < 0) {
-      printf("Can't create an activation set of negative size!\n");
-      exit(0);
+      size = 0;
     }
-# 79 "../../../extensions/ableC-lvars/include/lvars.xh"
+
+
   ActivationSet<a> * act = malloc(sizeof(ActivationSet<a>));
   act->_size = size;
   act->_set = malloc(sizeof(a) * size);
@@ -2916,12 +2915,12 @@ template<a> struct _ThresholdSet {
 
 template<a>
 static ThresholdSet<a>* _newThresholdSet(Lattice<a> * l, int size) {
-
+# 159 "../../../extensions/ableC-lvars/include/lvars.xh"
     if (size < 0) {
-      printf("Error: Can't create a threshold set of negative size!\n");
-      exit(0);
+      size = 0;
     }
-# 164 "../../../extensions/ableC-lvars/include/lvars.xh"
+
+
   ThresholdSet<a> * t = malloc(sizeof(ThresholdSet<a>));
   t ->_lattice = l;
   t->_size = size;
@@ -2934,14 +2933,7 @@ static ThresholdSet<a>* _newThresholdSet(Lattice<a> * l, int size) {
 
 template<a>
 static int _incompat(Lattice<a> * l, ActivationSet<a> *Q, ActivationSet<a> *R) {
-
-    if (Q -> _lattice != l || R -> _lattice != l) {
-      printf("Error: The activation sets %s and %s don't belong to the same lattice!\n",
-              show(Q).text, show(R).text);
-      exit(0);
-    }
-
-
+# 184 "../../../extensions/ableC-lvars/include/lvars.xh"
   if (Q -> _lattice != l || R -> _lattice != l) {
     return 0;
   }
@@ -2952,9 +2944,9 @@ static int _incompat(Lattice<a> * l, ActivationSet<a> *Q, ActivationSet<a> *R) {
       a r = R->_set[j];
       if (!(l->_eq(l->_lub(q, r), l->_top))) {
 
-          printf("Error: %s and %s are compatible, with lub %s!\n",
-                 l->_show(q).text, l->_show(r).text, l->_show(l->_lub(q, r)).text);
-          exit(0);
+
+
+
 
         return 0;
       }
@@ -2969,13 +2961,12 @@ static int _incompat(Lattice<a> * l, ActivationSet<a> *Q, ActivationSet<a> *R) {
 
 template<a>
 static ThresholdSet<a>* _addThreshold(ThresholdSet<a>* t, ActivationSet<a>* act) {
-
+# 220 "../../../extensions/ableC-lvars/include/lvars.xh"
     if (t->_lattice != act->_lattice) {
-      printf("Error: activation set %s and threshold set %s do not have the same lattice. \n",
-             show(act).text, show(t).text);
-      exit(0);
+      return t;
     }
-# 225 "../../../extensions/ableC-lvars/include/lvars.xh"
+
+
   if (t->_index >= t->_size) {
      inst _resizeThresholdSet<a>(t, 2 * t->_size + 1);
   }
@@ -3051,8 +3042,8 @@ static string _showLvar(Lvar<a>* l) {
   }
 
 
-    printf("Error: Can't show a lvar before it is frozen!\n");
-    exit(0);
+
+
 
 
   return str("<Lvar Value Unavailable>");
@@ -3086,8 +3077,8 @@ static int _put(Lvar<a>* l, a newState) {
 
   if (l->_frozen) {
 
-        printf("Error: can't write to a frozen lvar.\n");
-        exit(0);
+
+
 
     pthread_mutex_unlock(&(l->_mutex));
     return 0;
@@ -3097,9 +3088,16 @@ static int _put(Lvar<a>* l, a newState) {
   a newValue = l-> _lattice-> _lub(oldState, newState);
 
   if (l-> _lattice->_eq(l->_lattice->_top, newValue)){
-      printf("Error: invalid put of %s into lvar of value %s\n",
-             l->_lattice->_show(newState).text, l->_lattice->_show(oldState).text);
-      exit(0);
+
+
+
+
+
+
+
+        pthread_mutex_unlock(&(l->_mutex));
+        return 0;
+
   }
   l->_value = newValue;
 
@@ -3129,13 +3127,13 @@ template<a>
 static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
 
   pthread_mutex_lock(&(l->_mutex));
-
-
+# 394 "../../../extensions/ableC-lvars/include/lvars.xh"
     if (l->_lattice != t->_lattice) {
-      printf("Error: can't get() when Lvar doesn't have same lattice as threshold set.\n");
-      exit(0);
+      pthread_mutex_unlock(&(l->_mutex));
+      return ((void *)0);
     }
-# 393 "../../../extensions/ableC-lvars/include/lvars.xh"
+
+
   ActivationSet<a>* actReached = inst _thresholdReached<a>(l, t);
   while (actReached == ((void *)0)) {
     pthread_cond_wait(&(l->_cond), &(l->_mutex));
@@ -4868,7 +4866,8 @@ typedef datatype Customer Customer;
 datatype Customer {
   CustTop();
 
-  Person (int, ProductSet*, int);
+
+  Person (int, ProductSet*);
   CustBot();
 }
 
@@ -4916,10 +4915,9 @@ int eqCustomer(Customer* c1, Customer* c2) {
         _ -> {return 0;}
       }
     }
-    Person(name1, prods1, score1) -> {
+    Person(name1, prods1) -> {
       match (c2) {
-        Person(name2, prods2, score2) -> {
-
+        Person(name2, prods2) -> {
           return name1 == name2 && eqProdSets(prods1, prods2);
         }
         _ -> {return 0;}
@@ -4939,13 +4937,12 @@ int leqCustomer(Customer* c1, Customer* c2) {
       }
     }
     CustBot() -> {return 1;}
-    Person(name1, prods1, score1) -> {
+    Person(name1, prods1) -> {
       match (c2) {
         CustTop() -> {return 1;}
         CustBot() -> {return 0;}
-        Person(name2, prods2, score2) -> {
-
-          return name1 == name2 && isProdSubset(prods1, prods2);
+        Person(name2, prods2) -> {
+          return (name1 == name2 || name1 == 0) && isProdSubset(prods1, prods2);
         }
       }
     }
@@ -4953,17 +4950,6 @@ int leqCustomer(Customer* c1, Customer* c2) {
 }
 
 
-
-
-
-int getScore(ProductSet* p) {
-  match (p) {
-    P_Empty() -> {return 0;}
-    P_Set(hd, tail) -> {
-      return hd + getScore(tail);
-    }
-  }
-}
 
 
 
@@ -4989,16 +4975,19 @@ Customer* lubCustomer (Customer* c1, Customer* c2) {
   match (c1) {
     CustTop() -> {return c1;}
     CustBot() -> {return c2;}
-    Person(name1, prods1, score1) -> {
+    Person(name1, prods1) -> {
       match (c2) {
         CustTop() -> {return c2;}
         CustBot() -> {return c1;}
-        Person(name2, prods2, score2) -> {
-          if (name1 != name2) {
+        Person(name2, prods2) -> {
+          if (name1 != name2 && name1 != 0 && name2 != 0) {
             return CustTop();
           }
           ProductSet* totalProds = prodSetUnion(prods1, prods2);
-          return Person(name1, totalProds, getScore(totalProds));
+          if (name1 == 0) {
+            return Person(name2, totalProds);
+          }
+          return Person(name1, totalProds);
         }
       }
     }
@@ -5026,16 +5015,37 @@ string showCustomer(Customer* c) {
   match (c) {
     CustTop() -> {return str("Top()");}
     CustBot() -> {return str("Bot()");}
-    Person(name, prods, score) -> {
+    Person(name, prods) -> {
       string result = str("Person(") + show(name) + str(", {") +
-                      showProducts(prods) + str("}, ") + show(score) + ")";
+                      showProducts(prods) + str("})");
       return result;
     }
   }
 }
-# 195 "customers.xc"
-int** readCustData(char* filename, int num) {
+
+
+
+
+
+
+
+Lattice<Customer*>* lat;
+
+
+
+Lvar<Customer*>** initCustomers(int num) {
+  Lvar<Customer*>** customers = malloc(num * sizeof(Lvar<Customer*>*));
+  for (int i = 0; i < num; i++) {
+    customers[i] = newLvar(lat);
+  }
+  return customers;
+}
+
+
+
+cilk int** readStoreData(char* filename, int num) {
   FILE *fp = fopen(filename, "r");
+  CustBot();
   if (fp == ((void *)0)) {
     printf("Error reading file!\n");
     exit(0);
@@ -5047,12 +5057,73 @@ int** readCustData(char* filename, int num) {
     customers[i] = data;
   }
   fclose(fp);
-  return customers;
+  cilk return customers;
+}
+
+
+
+cilk int addCustData(Lvar<Customer*>** customers, int** store, int custLen, int storeLen) {
+  for (int i = 0; i < storeLen; i++) {
+    int matchFound = 0;
+    for (int j = 0; j < custLen && !matchFound; j++) {
+      matchFound = put(customers[j], Person(store[i][0], P_Set(store[i][1], P_Empty())));
+    }
+    if (!matchFound) {
+      printf("No matching customer!\n");
+      cilk return 0;
+    }
+  }
+  cilk return 1;
+}
+
+cilk int getCustomer(Lvar<Customer*>* c, ThresholdSet<Customer*>* t) {
+  get(c, t);
+  freeze(c);
+  printf("%s\n", show(c).text);
+  cilk return 1;
+}
+
+
+
+cilk int getTopCusts(Lvar<Customer*>** customers, int custLen, ProductSet* desiredProds) {
+  ActivationSet<Customer*>* a = activationSet(lat, 1){Person(0, desiredProds)};
+  ThresholdSet<Customer*>* t = thresholdSet(lat, 1){a};
+
+  printf("The following customers have purchased the specified products:\n");
+  for (int i = 0; i < custLen; i++) {
+    int result;
+    spawn result = getCustomer(customers[i], t);
+  }
+  sync;
+  freeSet(a);
+  freeSet(t);
+  cilk return 1;
 }
 
 cilk int main(int argc, char **argv) {
-  int** store1_cs = readCustData("store1.csv", 10);
-  int** store2_cs = readCustData("store2.csv", 10);
-  int** store3_cs = readCustData("store3.csv", 10);
+  lat = lattice(CustBot(), CustTop(), leqCustomer, lubCustomer, eqCustomer, showCustomer);
+
+  int numCustomers = 8;
+  int numStore1 = 10;
+  int numStore2 = 10;
+  int numStore3 = 10;
+
+  Lvar<Customer*>** customers = initCustomers(numCustomers);
+  int** store1_cs;
+  int** store2_cs;
+  int** store3_cs;
+  spawn store1_cs = readStoreData("store1.csv", numStore1);
+  spawn store2_cs = readStoreData("store2.csv", numStore2);
+  spawn store3_cs = readStoreData("store3.csv", numStore3);
+  sync;
+
+  int result1, result2, result3, result4;
+  spawn result1 = addCustData(customers, store1_cs, numCustomers, numStore1);
+  spawn result2 = addCustData(customers, store2_cs, numCustomers, numStore2);
+  spawn result3 = addCustData(customers, store3_cs, numCustomers, numStore3);
+  sync;
+
+  spawn result4 = getTopCusts(customers, numCustomers, P_Set(124, P_Empty()));
+  sync;
   cilk return 1;
 }

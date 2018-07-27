@@ -3097,9 +3097,16 @@ static int _put(Lvar<a>* l, a newState) {
   a newValue = l-> _lattice-> _lub(oldState, newState);
 
   if (l-> _lattice->_eq(l->_lattice->_top, newValue)){
-      printf("Error: invalid put of %s into lvar of value %s\n",
-             l->_lattice->_show(newState).text, l->_lattice->_show(oldState).text);
-      exit(0);
+
+        printf("Error: invalid put of %s into lvar of value %s\n",
+               l->_lattice->_show(newState).text, l->_lattice->_show(oldState).text);
+        exit(0);
+
+
+
+
+
+
   }
   l->_value = newValue;
 
@@ -3135,7 +3142,7 @@ static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
       printf("Error: can't get() when Lvar doesn't have same lattice as threshold set.\n");
       exit(0);
     }
-# 393 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 400 "../../../extensions/ableC-lvars/include/lvars.xh"
   ActivationSet<a>* actReached = inst _thresholdReached<a>(l, t);
   while (actReached == ((void *)0)) {
     pthread_cond_wait(&(l->_cond), &(l->_mutex));

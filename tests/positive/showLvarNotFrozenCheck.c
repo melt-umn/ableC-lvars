@@ -2804,11 +2804,12 @@ static signed int _template__put__pointer__tag_struct_State_37__(struct _templat
     }
     State  *oldState = ((l)->_value);
     State  *newValue = ((((l)->_lattice)->_lub)((oldState), (newState)));
+    ((printf)("Put %s into lvar of value %s\n", (((((l)->_lattice)->_show)((newState))).text), (((((l)->_lattice)->_show)((oldState))).text)));
     if (((((l)->_lattice)->_eq)((((l)->_lattice)->_top), (newValue))))
     {
       {
-        ((printf)("Error: invalid put of %s into lvar of value %s\n", (((((l)->_lattice)->_show)((newState))).text), (((((l)->_lattice)->_show)((oldState))).text)));
-        ((exit)(0));
+        ((pthread_mutex_unlock)((&(((l)->_mutex)))));
+        return 0;
       }
     } else {
       ;

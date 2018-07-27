@@ -3088,9 +3088,16 @@ static int _put(Lvar<a>* l, a newState) {
   a newValue = l-> _lattice-> _lub(oldState, newState);
 
   if (l-> _lattice->_eq(l->_lattice->_top, newValue)){
-      printf("Error: invalid put of %s into lvar of value %s\n",
-             l->_lattice->_show(newState).text, l->_lattice->_show(oldState).text);
-      exit(0);
+
+
+
+
+
+
+
+        pthread_mutex_unlock(&(l->_mutex));
+        return 0;
+
   }
   l->_value = newValue;
 
@@ -3120,7 +3127,7 @@ template<a>
 static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
 
   pthread_mutex_lock(&(l->_mutex));
-# 387 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 394 "../../../extensions/ableC-lvars/include/lvars.xh"
     if (l->_lattice != t->_lattice) {
       pthread_mutex_unlock(&(l->_mutex));
       return ((void *)0);
