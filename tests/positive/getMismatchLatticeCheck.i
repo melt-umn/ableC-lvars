@@ -3210,7 +3210,6 @@ template<a> struct _Lvar {
 
 template<a>
 static string _showLvar(Lvar<a>* l) {
-
   if (l->_frozen) {
     return l->_lattice->_show(l->_value);
   }
@@ -3300,7 +3299,7 @@ static ActivationSet<a>* _thresholdReached(Lvar<a>* l, ThresholdSet<a> * t) {
 template<a>
 static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
 
-  int timeInMs = 1000;
+  int timeInMs = 10000;
 
   struct timeval tv;
   struct timespec ts;
@@ -3312,7 +3311,7 @@ static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
   ts.tv_nsec %= (1000 * 1000 * 1000);
 
   pthread_mutex_lock(&(l->_mutex));
-# 407 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 406 "../../../extensions/ableC-lvars/include/lvars.xh"
     if (l->_lattice != t->_lattice) {
       pthread_mutex_unlock(&(l->_mutex));
       return ((void *)0);
@@ -3325,7 +3324,7 @@ static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
     if (n == 110) {
       pthread_mutex_unlock(&(l->_mutex));
       printf("Get timed out.\n");
-      exit(0);
+      return ((void *)0);
     }
 
     actReached = inst _thresholdReached<a>(l, t);

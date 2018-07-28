@@ -2885,7 +2885,7 @@ static struct _template__ActivationSet__pointer__tag_struct_State_41__  *_templa
 {
 
   {
-    signed int timeInMs = 1000;
+    signed int timeInMs = 10000;
     struct timeval tv;
     struct timespec ts;
     ((gettimeofday)((&(tv)), (((void *)0))));
@@ -2913,7 +2913,7 @@ static struct _template__ActivationSet__pointer__tag_struct_State_41__  *_templa
           {
             ((pthread_mutex_unlock)((&(((l)->_mutex)))));
             ((printf)("Get timed out.\n"));
-            ((exit)(0));
+            return (((void *)0));
           }
         } else {
           ;

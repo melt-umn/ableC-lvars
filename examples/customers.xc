@@ -227,34 +227,49 @@ cilk int addCustData(Lvar<Customer*>** customers, int** store, int custLen, int 
   cilk return 1;
 }
 
-cilk Customer* getCustomer(Lvar<Customer*>* c, ThresholdSet<Customer*>* t) {
+cilk int checkCust(Lvar<Customer*>* c, ThresholdSet<Customer*>* t) {
   ActivationSet<Customer*>* result = get(c, t);
   if (result == NULL) {
-    cilk return NULL;
+    cilk return 0;
   }
-  cilk return freeze(c);
+  cilk return 1;
 }
 
-// get the customers with matching products
-
-cilk Customer* getTopCusts(Lvar<Customer*>** customers, int custLen, ProductSet* desiredProds) {
-  ActivationSet<Customer*>* a = activationSet(lat, 1){Person(0, desiredProds)};
+cilk int checkPurchase(Lvar<Customer*>** customers, int custLen, int cid, ProductSet* p) {
+  Customer* threshPurchase = Person(cid, p);
+  ActivationSet<Customer*>* a = activationSet(lat, 1){threshPurchase};
   ThresholdSet<Customer*>* t = thresholdSet(lat, 1){a};
-  Customer* result;
   for (int i = 0; i < custLen; i++) {
-    spawn result = getCustomer(customers[i], t); //need to keep track of successes in some way
+    int result;
+    printf("checking next customer, %s\n", showCustomer(customers[i]->_value).text);
+    spawn result = checkCust(customers[i], t);
+    sync;
+    if (result) {
+      cilk return 1;
+    }
   }
   sync;
   freeSet(a);
   freeSet(t);
-  cilk return result;
+  cilk return 0;
 }
 
 cilk int main(int argc, char **argv) {
+  if (argc == 1) {
+    cilk return 1;
+  }
+  int cid = atoi(argv[1]);
+  int numProducts = atoi(argv[2]);
+
+  ProductSet* prods = P_Empty();
+  for (int i = 3; i < numProducts + 3; i++) {
+    prods = P_Set(atoi(argv[i]), prods);
+  }
+
   lat = lattice(CustBot(), CustTop(), leqCustomer, lubCustomer, eqCustomer, showCustomer);
-  int numCustomers = 8;
+  int numCustomers = 20;
   int numStore1 = 12;
-  int numStore2 = 10;
+  int numStore2 = 20;
   int numStore3 = 10;
 
   Lvar<Customer*>** customers = initCustomers(numCustomers);
@@ -262,12 +277,17 @@ cilk int main(int argc, char **argv) {
   int** store2_cs = readStoreData("store2.csv", numStore2);
   int** store3_cs = readStoreData("store3.csv", numStore3);
 
-  int result1, result2, result3;
-  Customer* result4;
+  int result1, result2, result3, result4;
+
   spawn result1 = addCustData(customers, store1_cs, numCustomers, numStore1);
   spawn result2 = addCustData(customers, store2_cs, numCustomers, numStore2);
   spawn result3 = addCustData(customers, store3_cs, numCustomers, numStore3);
-  spawn result4 = getTopCusts(customers, numCustomers, P_Set(42, P_Empty()));
+
+  spawn result4 = checkPurchase(customers, numCustomers, cid, prods);
   sync;
+  
+  if (result4) {
+    printf("Customer %d purchased products %s\n", cid, showProducts(prods).text);
+  }
   cilk return 1;
 }
