@@ -3476,7 +3476,6 @@ template<a> struct _Lvar {
 
 template<a>
 static string _showLvar(Lvar<a>* l) {
-
   if (l->_frozen) {
     return l->_lattice->_show(l->_value);
   }
@@ -3565,18 +3564,7 @@ static ActivationSet<a>* _thresholdReached(Lvar<a>* l, ThresholdSet<a> * t) {
 
 template<a>
 static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
-
-  int timeInMs = 1000;
-
-  struct timeval tv;
-  struct timespec ts;
-
-  gettimeofday(&tv, ((void *)0));
-  ts.tv_sec = time(((void *)0)) + timeInMs / 1000;
-  ts.tv_nsec = tv.tv_usec * 1000 + 1000 * 1000 * (timeInMs % 1000);
-  ts.tv_sec += ts.tv_nsec / (1000 * 1000 * 1000);
-  ts.tv_nsec %= (1000 * 1000 * 1000);
-
+# 396 "../../../extensions/ableC-lvars/include/lvars.xh"
   pthread_mutex_lock(&(l->_mutex));
 
 
@@ -3584,16 +3572,16 @@ static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
       printf("Error: can't get() when Lvar doesn't have same lattice as threshold set.\n");
       exit(0);
     }
-# 413 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 412 "../../../extensions/ableC-lvars/include/lvars.xh"
   ActivationSet<a>* actReached = inst _thresholdReached<a>(l, t);
   while (actReached == ((void *)0)) {
-    int n = pthread_cond_timedwait(&(l->_cond), &(l->_mutex), &ts);
-    if (n == 110) {
-      pthread_mutex_unlock(&(l->_mutex));
-      printf("Get timed out.\n");
-      exit(0);
-    }
 
+
+
+
+
+
+    pthread_cond_wait(&(l->_cond), &(l->_mutex));
     actReached = inst _thresholdReached<a>(l, t);
   }
   pthread_mutex_unlock(&(l->_mutex));

@@ -3299,19 +3299,8 @@ static ActivationSet<a>* _thresholdReached(Lvar<a>* l, ThresholdSet<a> * t) {
 template<a>
 static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
 
-  int timeInMs = 10000;
-
-  struct timeval tv;
-  struct timespec ts;
-
-  gettimeofday(&tv, ((void *)0));
-  ts.tv_sec = time(((void *)0)) + timeInMs / 1000;
-  ts.tv_nsec = tv.tv_usec * 1000 + 1000 * 1000 * (timeInMs % 1000);
-  ts.tv_sec += ts.tv_nsec / (1000 * 1000 * 1000);
-  ts.tv_nsec %= (1000 * 1000 * 1000);
-
   pthread_mutex_lock(&(l->_mutex));
-# 406 "../../../extensions/ableC-lvars/include/lvars.xh"
+# 395 "../../../extensions/ableC-lvars/include/lvars.xh"
     if (l->_lattice != t->_lattice) {
       pthread_mutex_unlock(&(l->_mutex));
       return ((void *)0);
@@ -3320,13 +3309,11 @@ static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
 
   ActivationSet<a>* actReached = inst _thresholdReached<a>(l, t);
   while (actReached == ((void *)0)) {
-    int n = pthread_cond_timedwait(&(l->_cond), &(l->_mutex), &ts);
-    if (n == 110) {
+    if (l->_frozen) {
       pthread_mutex_unlock(&(l->_mutex));
-      printf("Get timed out.\n");
       return ((void *)0);
     }
-
+    pthread_cond_wait(&(l->_cond), &(l->_mutex));
     actReached = inst _thresholdReached<a>(l, t);
   }
   pthread_mutex_unlock(&(l->_mutex));
@@ -5062,6 +5049,14 @@ string showCustomer(Customer* c) {
   }
 }
 
+string showCustomerID(Customer* c) {
+  match(c) {
+    CustTop() -> {return str("Top()");}
+    CustBot() -> {return str("Bot()");}
+    Person(name, prods) -> {return show(name);}
+  }
+}
+
 
 
 
@@ -5098,14 +5093,18 @@ int** readStoreData(char* filename, int num) {
   return customers;
 }
 
+cilk int cilkPut(Lvar<Customer*>* l, Customer* c) {
+  cilk return put(l, c);
+}
+
 
 
 cilk int addCustData(Lvar<Customer*>** customers, int** store, int custLen, int storeLen) {
-  printf("reading in next store\n");
   for (int i = 0; i < storeLen; i++) {
     int matchFound = 0;
     for (int j = 0; j < custLen && !matchFound; j++) {
-      matchFound = put(customers[j], Person(store[i][0], P_Set(store[i][1], P_Empty())));
+      spawn matchFound = cilkPut(customers[j], Person(store[i][0], P_Set(store[i][1], P_Empty())));
+      sync;
     }
     if (!matchFound) {
       printf("No matching customer!\n");
@@ -5115,52 +5114,52 @@ cilk int addCustData(Lvar<Customer*>** customers, int** store, int custLen, int 
   cilk return 1;
 }
 
-cilk int checkCust(Lvar<Customer*>* c, ThresholdSet<Customer*>* t) {
-  printf("trying next get\n");
-  ActivationSet<Customer*>* result = get(c, t);
-  if (result == ((void *)0)) {
-    cilk return 0;
+
+
+int freezeCustomers(Lvar<Customer*>** customers, int custLen) {
+  for (int i = 0; i < custLen; i++) {
+    freeze(customers[i]);
   }
-  cilk return 1;
+  return 1;
 }
 
-cilk int checkPurchase(Lvar<Customer*>** customers, int custLen, int cid, ProductSet* p) {
-  Customer* threshPurchase = Person(cid, p);
-  printf("%s\n", showCustomer(threshPurchase).text);
-  ActivationSet<Customer*>* a = activationSet(lat, 1){threshPurchase};
+
+
+int lookupCustomer(Lvar<Customer*>** customers, int custLen, int cid) {
+  ActivationSet<Customer*>* a = activationSet(lat, 1){Person(cid, P_Empty())};
   ThresholdSet<Customer*>* t = thresholdSet(lat, 1){a};
   for (int i = 0; i < custLen; i++) {
-    int result;
-    printf("checking next customer, %s\n", showCustomer(customers[i]->_value).text);
-    spawn result = checkCust(customers[i], t);
-    sync;
-    if (result) {
-      cilk return 1;
+    ActivationSet<Customer*>* result = get(customers[i], t);
+    if (result != ((void *)0)) {
+      printf("%s\n", show(customers[i]).text);
+      return 1;
     }
   }
-  sync;
-  freeSet(a);
-  freeSet(t);
-  cilk return 0;
+  return 0;
+}
+
+
+
+int lookupProdSet(Lvar<Customer*>** customers, int custLen, ProductSet* prods) {
+  ActivationSet<Customer*>* a = activationSet(lat, 1){Person(0, prods)};
+  ThresholdSet<Customer*>* t = thresholdSet(lat, 1){a};
+  int ret = 0;
+  for (int i = 0; i < custLen; i++) {
+    ActivationSet<Customer*>* result = get(customers[i], t);
+    if (result != ((void *)0)) {
+      printf("%s\n", showCustomerID(freeze(customers[i])).text);
+      ret = 1;
+    }
+  }
+  return ret;
 }
 
 cilk int main(int argc, char **argv) {
-  if (argc == 1) {
-    cilk return 1;
-  }
-  int cid = atoi(argv[1]);
-  int numProducts = atoi(argv[2]);
-
-  ProductSet* prods = P_Empty();
-  for (int i = 3; i < numProducts + 3; i++) {
-    prods = P_Set(atoi(argv[i]), prods);
-  }
-
   lat = lattice(CustBot(), CustTop(), leqCustomer, lubCustomer, eqCustomer, showCustomer);
-  int numCustomers = 20;
-  int numStore1 = 12;
-  int numStore2 = 20;
-  int numStore3 = 10;
+  int numCustomers = 50;
+  int numStore1 = 2500;
+  int numStore2 = 2500;
+  int numStore3 = 2500;
 
   Lvar<Customer*>** customers = initCustomers(numCustomers);
   int** store1_cs = readStoreData("store1.csv", numStore1);
@@ -5172,12 +5171,19 @@ cilk int main(int argc, char **argv) {
   spawn result1 = addCustData(customers, store1_cs, numCustomers, numStore1);
   spawn result2 = addCustData(customers, store2_cs, numCustomers, numStore2);
   spawn result3 = addCustData(customers, store3_cs, numCustomers, numStore3);
-
-  spawn result4 = checkPurchase(customers, numCustomers, cid, prods);
   sync;
 
-  if (result4) {
-    printf("Customer %d purchased products %s\n", cid, showProducts(prods).text);
-  }
+  freezeCustomers(customers, numCustomers);
+
+  int cid = 42;
+  printf("Looking up customer with ID %d:\n\n", cid);
+  lookupCustomer(customers, numCustomers, cid);
+
+  ProductSet* pset = P_Set(123, P_Empty());
+  printf("\nLooking up customers who have purchased products {%s}:\n\n", showProducts(pset).text);
+  lookupProdSet(customers, numCustomers, pset);
+
+
+
   cilk return 1;
 }

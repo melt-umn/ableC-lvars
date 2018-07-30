@@ -175,6 +175,14 @@ string showCustomer(Customer* c) {
   }
 }
 
+string showCustomerID(Customer* c) {
+  match(c) {
+    CustTop() -> {return str("Top()");}
+    CustBot() -> {return str("Bot()");}
+    Person(name, prods) -> {return show(name);}
+  }
+}
+
 // generate a bunch of customers
 // try to sort the customers at the same time as adding products in?
 // so only get each customer once they have reached a certain threshold (e.g., certain number of products)
@@ -211,13 +219,18 @@ int** readStoreData(char* filename, int num) {
   return customers;
 }
 
+cilk int cilkPut(Lvar<Customer*>* l, Customer* c) {
+  cilk return put(l, c);
+} 
+
 // take data from array read in from file and put it into lvars
 
 cilk int addCustData(Lvar<Customer*>** customers, int** store, int custLen, int storeLen) {
   for (int i = 0; i < storeLen; i++) {
     int matchFound = 0;
     for (int j = 0; j < custLen && !matchFound; j++) {
-      matchFound = put(customers[j], Person(store[i][0], P_Set(store[i][1], P_Empty())));
+      spawn matchFound = cilkPut(customers[j], Person(store[i][0], P_Set(store[i][1], P_Empty())));
+      sync;
     }
     if (!matchFound) {
       printf("No matching customer!\n");
@@ -227,50 +240,52 @@ cilk int addCustData(Lvar<Customer*>** customers, int** store, int custLen, int 
   cilk return 1;
 }
 
-cilk int checkCust(Lvar<Customer*>* c, ThresholdSet<Customer*>* t) {
-  ActivationSet<Customer*>* result = get(c, t);
-  if (result == NULL) {
-    cilk return 0;
+// go through and freeze each customer lvar once finished writing
+
+int freezeCustomers(Lvar<Customer*>** customers, int custLen) {
+  for (int i = 0; i < custLen; i++) {
+    freeze(customers[i]);
   }
-  cilk return 1;
+  return 1;
 }
 
-cilk int checkPurchase(Lvar<Customer*>** customers, int custLen, int cid, ProductSet* p) {
-  Customer* threshPurchase = Person(cid, p);
-  ActivationSet<Customer*>* a = activationSet(lat, 1){threshPurchase};
+// intended to be used *after* freezing of all customers, but if not, will simply block
+
+int lookupCustomer(Lvar<Customer*>** customers, int custLen, int cid) {
+  ActivationSet<Customer*>* a = activationSet(lat, 1){Person(cid, P_Empty())};
   ThresholdSet<Customer*>* t = thresholdSet(lat, 1){a};
   for (int i = 0; i < custLen; i++) {
-    int result;
-    printf("checking next customer, %s\n", showCustomer(customers[i]->_value).text);
-    spawn result = checkCust(customers[i], t);
-    sync;
-    if (result) {
-      cilk return 1;
+    ActivationSet<Customer*>* result = get(customers[i], t);
+    if (result != NULL) {
+      printf("%s\n", show(customers[i]).text);
+      return 1;
     }
-  }
-  sync;
-  freeSet(a);
-  freeSet(t);
-  cilk return 0;
+  }  
+  return 0;
+}
+
+// intended to be used *after* freezing of all customers, but if not, will simply block
+
+int lookupProdSet(Lvar<Customer*>** customers, int custLen, ProductSet* prods) {
+  ActivationSet<Customer*>* a = activationSet(lat, 1){Person(0, prods)};
+  ThresholdSet<Customer*>* t = thresholdSet(lat, 1){a};
+  int ret = 0;
+  for (int i = 0; i < custLen; i++) {
+    ActivationSet<Customer*>* result = get(customers[i], t);
+    if (result != NULL) {
+      printf("%s\n", showCustomerID(freeze(customers[i])).text);
+      ret = 1;
+    }
+  } 
+  return ret;
 }
 
 cilk int main(int argc, char **argv) {
-  if (argc == 1) {
-    cilk return 1;
-  }
-  int cid = atoi(argv[1]);
-  int numProducts = atoi(argv[2]);
-
-  ProductSet* prods = P_Empty();
-  for (int i = 3; i < numProducts + 3; i++) {
-    prods = P_Set(atoi(argv[i]), prods);
-  }
-
   lat = lattice(CustBot(), CustTop(), leqCustomer, lubCustomer, eqCustomer, showCustomer);
-  int numCustomers = 20;
-  int numStore1 = 12;
-  int numStore2 = 20;
-  int numStore3 = 10;
+  int numCustomers = 50;
+  int numStore1 = 2500;
+  int numStore2 = 2500;
+  int numStore3 = 2500;
 
   Lvar<Customer*>** customers = initCustomers(numCustomers);
   int** store1_cs = readStoreData("store1.csv", numStore1);
@@ -282,12 +297,19 @@ cilk int main(int argc, char **argv) {
   spawn result1 = addCustData(customers, store1_cs, numCustomers, numStore1);
   spawn result2 = addCustData(customers, store2_cs, numCustomers, numStore2);
   spawn result3 = addCustData(customers, store3_cs, numCustomers, numStore3);
-
-  spawn result4 = checkPurchase(customers, numCustomers, cid, prods);
   sync;
-  
-  if (result4) {
-    printf("Customer %d purchased products %s\n", cid, showProducts(prods).text);
-  }
+
+  freezeCustomers(customers, numCustomers);
+
+  int cid = 42;
+  printf("Looking up customer with ID %d:\n\n", cid);
+  lookupCustomer(customers, numCustomers, cid);
+
+  ProductSet* pset = P_Set(123, P_Empty());
+  printf("\nLooking up customers who have purchased products {%s}:\n\n", showProducts(pset).text);
+  lookupProdSet(customers, numCustomers, pset);
+
+  // loop that allows user to look up a customer, or a customer and a set of products
+
   cilk return 1;
 }
