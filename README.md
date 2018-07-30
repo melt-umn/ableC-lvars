@@ -6,8 +6,6 @@
 
 #### Big Example:
 
-+ Get rid of dependence on number of customers and number of stores/store data entries
-+ Add frees as needed
 + Timing (with 5000 entries per three stores):
 
 time ./customersForTiming.out -nproc 1
@@ -46,7 +44,6 @@ sys	0m11.552s
 Guarantees of determinism don't hold with side-effects: "We define a program to be deterministic if, given the same inputs, it will always produce the same observable result. Here, inputs are votes, and we define the observable result of a program to be the value to which it evaluates. We’ve therefore cheated a bit with our call to call_for_pizza, since it triggers a side effect, and our determinism guarantee doesn’t say anything about side effects."
 
 + It's hard for me, at least, to see why determinism with sets of integers is important. If you think an example with ADTs is better, go ahead and put it in; we can figure out how to make it look nice later. You can elide code that isn't critical like "... // check that n1/n2 are within acceptable bounds" or something. Even if you have to break it into two figures, that's fine for now.
-+ Think about big example-- maybe reading data from large files into a database-type structure, with Cilk?
 
 #### Other:
 + Implement better cilk examples (Read from different files? Sum random numbers until they reach a certain point? A better set example?) Bitwise or? Check out Cilk paper
