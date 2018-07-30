@@ -270,10 +270,27 @@ cilk int main(int argc, char **argv) {
 
   freezeCustomers(customers, numCustomers);
 
+  // clean up
+
   for (int i = 0; i < numCustomers; i++) {
     free(customers[i]);
   }
   free(customers);
+
+  for (int i = 0; i < numStore1; i++) {
+    free(store1_cs[i]);
+  }
+  free(store1_cs);
+
+  for (int i = 0; i < numStore2; i++) {
+    free(store2_cs[i]);
+  }
+  free(store2_cs);
+
+  for (int i = 0; i < numStore3; i++) {
+    free(store3_cs[i]);
+  }
+  free(store3_cs);
 
   cilk return 1;
 }

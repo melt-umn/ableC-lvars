@@ -5229,9 +5229,9 @@ int userInteraction(Lvar<Customer*>** customers, int custLen) {
 cilk int main(int argc, char **argv) {
   lat = lattice(CustBot(), CustTop(), leqCustomer, lubCustomer, eqCustomer, showCustomer);
   int numCustomers = 50;
-  int numStore1 = 2500;
-  int numStore2 = 2500;
-  int numStore3 = 2500;
+  int numStore1 = 5000;
+  int numStore2 = 5000;
+  int numStore3 = 5000;
 
   Lvar<Customer*>** customers = initCustomers(numCustomers);
   int** store1_cs = readStoreData("store1.csv", numStore1);
@@ -5251,10 +5251,27 @@ cilk int main(int argc, char **argv) {
 
   userInteraction(customers, numCustomers);
 
+
+
   for (int i = 0; i < numCustomers; i++) {
     free(customers[i]);
   }
   free(customers);
+
+  for (int i = 0; i < numStore1; i++) {
+    free(store1_cs[i]);
+  }
+  free(store1_cs);
+
+  for (int i = 0; i < numStore2; i++) {
+    free(store2_cs[i]);
+  }
+  free(store2_cs);
+
+  for (int i = 0; i < numStore3; i++) {
+    free(store3_cs[i]);
+  }
+  free(store3_cs);
 
   cilk return 1;
 }

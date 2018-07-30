@@ -4089,7 +4089,19 @@ struct _cilk_cilk_main_frame {
   struct  {
     signed int i;
     
-  } scope273;
+  } scope275;
+  struct  {
+    signed int i;
+    
+  } scope280;
+  struct  {
+    signed int i;
+    
+  } scope285;
+  struct  {
+    signed int i;
+    
+  } scope290;
   
 };
 struct _cilk_cilk_main_args {
@@ -4102,7 +4114,7 @@ struct _cilk_cilk_main_args {
 #undef CILK_WHERE_AM_I
 #define CILK_WHERE_AM_I IN_SLOW_PROCEDURE
 
-typedef Customer  *_template_param_unused_132;
+typedef Customer  *_template_param_unused_135;
 static struct _template__Lattice__pointer__tag_struct_Customer_51__  *_template__newLattice__pointer__tag_struct_Customer_51__(Customer  * least, Customer  * greatest, signed int ( * leq)(), Customer  *( * lub)(), signed int ( * eq)(), struct _string_s ( * showMethod)())
 {
 
@@ -4168,11 +4180,11 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
     ((((_cilk_frame)->scope264).result1) = (result1));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      signed int __tmp133;
+      signed int __tmp136;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp133) = (result1));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp133)), (sizeof((__tmp133))))))
+        ((__tmp136) = (result1));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp136)), (sizeof((__tmp136))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return ;
@@ -4271,11 +4283,11 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
     ((((_cilk_frame)->scope264).result2) = (result2));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      signed int __tmp134;
+      signed int __tmp137;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp134) = (result2));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp134)), (sizeof((__tmp134))))))
+        ((__tmp137) = (result2));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp137)), (sizeof((__tmp137))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return ;
@@ -4374,11 +4386,11 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
     ((((_cilk_frame)->scope264).result3) = (result3));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      signed int __tmp135;
+      signed int __tmp138;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp135) = (result3));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp135)), (sizeof((__tmp135))))))
+        ((__tmp138) = (result3));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp138)), (sizeof((__tmp138))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return ;
@@ -4508,9 +4520,30 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
       }
     }
     ((free)((customers)));
+    for (signed int i = 0; ((i) < (numStore1)); ((i)++))
     {
-      signed int __tmp136 = 1;
-      ((Cilk_set_result)((_cilk_ws), (&(__tmp136)), (sizeof((__tmp136)))));
+      {
+        ((free)(((store1_cs)[(i)])));
+      }
+    }
+    ((free)((store1_cs)));
+    for (signed int i = 0; ((i) < (numStore2)); ((i)++))
+    {
+      {
+        ((free)(((store2_cs)[(i)])));
+      }
+    }
+    ((free)((store2_cs)));
+    for (signed int i = 0; ((i) < (numStore3)); ((i)++))
+    {
+      {
+        ((free)(((store3_cs)[(i)])));
+      }
+    }
+    ((free)((store3_cs)));
+    {
+      signed int __tmp139 = 1;
+      ((Cilk_set_result)((_cilk_ws), (&(__tmp139)), (sizeof((__tmp139)))));
       /* expand CILK2C_BEFORE_RETURN_SLOW macro */;
       ((Cilk_cilk2c_before_return_slow_cp)((_cilk_ws), (&((_cilk_frame)->header))));
       ((Cilk_cilk2c_before_return_slow)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
@@ -4597,11 +4630,11 @@ signed int cilk_main(CilkWorkerState  *const  _cilk_ws, signed int  argc, char  
     ((result1) = ((addCustData)((_cilk_ws), (customers), (store1_cs), (numCustomers), (numStore1))));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      signed int __tmp148;
+      signed int __tmp151;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp148) = (result1));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp148)), (sizeof((__tmp148))))))
+        ((__tmp151) = (result1));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp151)), (sizeof((__tmp151))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return 0;
@@ -4640,11 +4673,11 @@ signed int cilk_main(CilkWorkerState  *const  _cilk_ws, signed int  argc, char  
     ((result2) = ((addCustData)((_cilk_ws), (customers), (store2_cs), (numCustomers), (numStore2))));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      signed int __tmp149;
+      signed int __tmp152;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp149) = (result2));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp149)), (sizeof((__tmp149))))))
+        ((__tmp152) = (result2));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp152)), (sizeof((__tmp152))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return 0;
@@ -4683,11 +4716,11 @@ signed int cilk_main(CilkWorkerState  *const  _cilk_ws, signed int  argc, char  
     ((result3) = ((addCustData)((_cilk_ws), (customers), (store3_cs), (numCustomers), (numStore3))));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      signed int __tmp150;
+      signed int __tmp153;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp150) = (result3));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp150)), (sizeof((__tmp150))))))
+        ((__tmp153) = (result3));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp153)), (sizeof((__tmp153))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return 0;
@@ -4712,6 +4745,27 @@ signed int cilk_main(CilkWorkerState  *const  _cilk_ws, signed int  argc, char  
       }
     }
     ((free)((customers)));
+    for (signed int i = 0; ((i) < (numStore1)); ((i)++))
+    {
+      {
+        ((free)(((store1_cs)[(i)])));
+      }
+    }
+    ((free)((store1_cs)));
+    for (signed int i = 0; ((i) < (numStore2)); ((i)++))
+    {
+      {
+        ((free)(((store2_cs)[(i)])));
+      }
+    }
+    ((free)((store2_cs)));
+    for (signed int i = 0; ((i) < (numStore3)); ((i)++))
+    {
+      {
+        ((free)(((store3_cs)[(i)])));
+      }
+    }
+    ((free)((store3_cs)));
     {
       signed int _cilk_tmp = 1;
       /* expand CILK2C_BEFORE_RETURN_FAST() macro */;
