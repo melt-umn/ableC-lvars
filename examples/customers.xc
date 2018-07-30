@@ -284,6 +284,8 @@ int lookupProdSet(Lvar<Customer*>** customers, int custLen, ProductSet* prods) {
       ret = 1;
     }
   } 
+  freeSet(a);
+  freeSet(t);
   return ret;
 }
 
@@ -374,6 +376,11 @@ cilk int main(int argc, char **argv) {
   // loop that allows user to look up a customer, or a customer and a set of products
 
   userInteraction(customers, numCustomers);
+
+  for (int i = 0; i < numCustomers; i++) {
+    free(customers[i]);
+  }
+  free(customers);
 
   cilk return 1;
 }

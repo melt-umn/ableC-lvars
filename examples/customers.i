@@ -5158,6 +5158,8 @@ int lookupProdSet(Lvar<Customer*>** customers, int custLen, ProductSet* prods) {
       ret = 1;
     }
   }
+  freeSet(a);
+  freeSet(t);
   return ret;
 }
 
@@ -5248,6 +5250,11 @@ cilk int main(int argc, char **argv) {
 
 
   userInteraction(customers, numCustomers);
+
+  for (int i = 0; i < numCustomers; i++) {
+    free(customers[i]);
+  }
+  free(customers);
 
   cilk return 1;
 }

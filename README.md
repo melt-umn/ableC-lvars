@@ -6,9 +6,35 @@
 
 #### Big Example:
 
-+ Create big array of customers (?) and read through the array
 + Get rid of dependence on number of customers and number of stores/store data entries
 + Add frees as needed
++ Timing (with 5000 entries per three stores):
+
+time ./customersForTiming.out -nproc 1
+
+real	0m13.669s
+user	0m10.355s
+sys	0m3.276s
+time ./customersForTiming.out -nproc 2
+
+real	0m13.009s
+user	0m20.887s
+sys	0m3.479s
+time ./customersForTiming.out -nproc 3
+
+real	0m8.516s
+user	0m12.984s
+sys	0m4.970s
+time ./customersForTiming.out -nproc 4
+
+real	0m8.326s 			// about 0.6 times -nproc 1
+user	0m19.650s
+sys	0m4.591s
+time ./customersForTiming.out -nproc 5
+
+real	0m13.399s
+user	0m31.164s
+sys	0m11.552s
 
 #### POPL Paper:
 

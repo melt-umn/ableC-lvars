@@ -5126,9 +5126,9 @@ int freezeCustomers(Lvar<Customer*>** customers, int custLen) {
 cilk int main(int argc, char **argv) {
   lat = lattice(CustBot(), CustTop(), leqCustomer, lubCustomer, eqCustomer, showCustomer);
   int numCustomers = 50;
-  int numStore1 = 4000;
-  int numStore2 = 4000;
-  int numStore3 = 4000;
+  int numStore1 = 5000;
+  int numStore2 = 5000;
+  int numStore3 = 5000;
 
   Lvar<Customer*>** customers = initCustomers(numCustomers);
   int** store1_cs = readStoreData("store1.csv", numStore1);
@@ -5143,6 +5143,11 @@ cilk int main(int argc, char **argv) {
   sync;
 
   freezeCustomers(customers, numCustomers);
+
+  for (int i = 0; i < numCustomers; i++) {
+    free(customers[i]);
+  }
+  free(customers);
 
   cilk return 1;
 }
