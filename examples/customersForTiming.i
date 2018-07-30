@@ -5037,6 +5037,16 @@ string showProducts(ProductSet* p) {
   }
 }
 
+
+
+string showCustomerID(Customer* c) {
+  match(c) {
+    CustTop() -> {return str("Top()");}
+    CustBot() -> {return str("Bot()");}
+    Person(name, prods) -> {return show(name);}
+  }
+}
+
 string showCustomer(Customer* c) {
   match (c) {
     CustTop() -> {return str("Top()");}
@@ -5048,18 +5058,6 @@ string showCustomer(Customer* c) {
     }
   }
 }
-
-string showCustomerID(Customer* c) {
-  match(c) {
-    CustTop() -> {return str("Top()");}
-    CustBot() -> {return str("Bot()");}
-    Person(name, prods) -> {return show(name);}
-  }
-}
-
-
-
-
 
 
 
@@ -5093,17 +5091,21 @@ int** readStoreData(char* filename, int num) {
   return customers;
 }
 
+
+
 cilk int cilkPut(Lvar<Customer*>* l, Customer* c) {
   cilk return put(l, c);
 }
 
 
 
-cilk int addCustData(Lvar<Customer*>** customers, int** store, int custLen, int storeLen) {
+cilk int addCustData(Lvar<Customer*>** customers, int** store,
+                                                  int custLen, int storeLen) {
   for (int i = 0; i < storeLen; i++) {
     int matchFound = 0;
     for (int j = 0; j < custLen && !matchFound; j++) {
-      spawn matchFound = cilkPut(customers[j], Person(store[i][0], P_Set(store[i][1], P_Empty())));
+      spawn matchFound = cilkPut(customers[j], Person(store[i][0],
+                                               P_Set(store[i][1], P_Empty())));
       sync;
     }
     if (!matchFound) {
@@ -5123,24 +5125,35 @@ int freezeCustomers(Lvar<Customer*>** customers, int custLen) {
   return 1;
 }
 
+
+
+
 cilk int main(int argc, char **argv) {
+
+
+
   lat = lattice(CustBot(), CustTop(), leqCustomer, lubCustomer, eqCustomer, showCustomer);
   int numCustomers = 50;
   int numStore1 = 5000;
   int numStore2 = 5000;
   int numStore3 = 5000;
 
+
+
   Lvar<Customer*>** customers = initCustomers(numCustomers);
   int** store1_cs = readStoreData("store1.csv", numStore1);
   int** store2_cs = readStoreData("store2.csv", numStore2);
   int** store3_cs = readStoreData("store3.csv", numStore3);
 
-  int result1, result2, result3, result4;
 
+
+  int result1, result2, result3;
   spawn result1 = addCustData(customers, store1_cs, numCustomers, numStore1);
   spawn result2 = addCustData(customers, store2_cs, numCustomers, numStore2);
   spawn result3 = addCustData(customers, store3_cs, numCustomers, numStore3);
   sync;
+
+
 
   freezeCustomers(customers, numCustomers);
 

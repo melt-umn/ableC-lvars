@@ -3235,6 +3235,93 @@ struct _string_s showProducts(ProductSet  * p)
     }
   }
 }
+struct _string_s showCustomerID(Customer  * c)
+{
+
+  {
+    {
+      /* match ((c)) ... */;
+      Customer  *_match_scrutinee_val = (c);
+      Customer  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
+      /* matching for pattern CustTop() */;
+      /* ... declarations of pattern variables */;
+      ;
+      Customer  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+      if (({
+        signed int _match = 1;
+        /* matching against a ADT constructor pattern */;
+        /* match against constructor */;
+        if (((((*(_curr_scrutinee_ptr)))->tag) != (Customer_CustTop)))
+        {
+          ((_match) = 0);
+        } else {
+          /* match against sub-patterns, setting _match to 0 on a fail */;
+          Customer  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+          ;
+        }
+        (_match); })
+      )
+      {
+        return ((strCharPointer)("Top()"));
+      } else {
+        /* matching for pattern CustBot() */;
+        /* ... declarations of pattern variables */;
+        ;
+        Customer  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+        if (({
+          signed int _match = 1;
+          /* matching against a ADT constructor pattern */;
+          /* match against constructor */;
+          if (((((*(_curr_scrutinee_ptr)))->tag) != (Customer_CustBot)))
+          {
+            ((_match) = 0);
+          } else {
+            /* match against sub-patterns, setting _match to 0 on a fail */;
+            Customer  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+            ;
+          }
+          (_match); })
+        )
+        {
+          return ((strCharPointer)("Bot()"));
+        } else {
+          /* matching for pattern Person(name,prods) */;
+          /* ... declarations of pattern variables */;
+          signed int name;
+          ProductSet  *prods;
+          Customer  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+          if (({
+            signed int _match = 1;
+            /* matching against a ADT constructor pattern */;
+            /* match against constructor */;
+            if (((((*(_curr_scrutinee_ptr)))->tag) != (Customer_Person)))
+            {
+              ((_match) = 0);
+            } else {
+              /* match against sub-patterns, setting _match to 0 on a fail */;
+              Customer  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+              {
+                signed int  *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Person).f0));
+                ((name) = (*(_curr_scrutinee_ptr)));
+              }
+              {
+                ProductSet  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Person).f1));
+                ((prods) = (*(_curr_scrutinee_ptr)));
+              }
+              ;
+            }
+            (_match); })
+          )
+          {
+            return ((showInt)((name)));
+          } else {
+            /* no match, do nothing. */;
+          }
+        }
+      }
+    }
+  }
+}
 struct _string_s showCustomer(Customer  * c)
 {
 
@@ -3315,93 +3402,6 @@ struct _string_s showCustomer(Customer  * c)
           {
             struct _string_s result = ((_append_string)(((_append_string)(((_append_string)(((_append_string)(((strCharPointer)("Person(")), ((showInt)((name))))), ((strCharPointer)(", {")))), ((showProducts)((prods))))), ((strCharPointer)("})"))));
             return (result);
-          } else {
-            /* no match, do nothing. */;
-          }
-        }
-      }
-    }
-  }
-}
-struct _string_s showCustomerID(Customer  * c)
-{
-
-  {
-    {
-      /* match ((c)) ... */;
-      Customer  *_match_scrutinee_val = (c);
-      Customer  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
-      /* matching for pattern CustTop() */;
-      /* ... declarations of pattern variables */;
-      ;
-      Customer  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
-      if (({
-        signed int _match = 1;
-        /* matching against a ADT constructor pattern */;
-        /* match against constructor */;
-        if (((((*(_curr_scrutinee_ptr)))->tag) != (Customer_CustTop)))
-        {
-          ((_match) = 0);
-        } else {
-          /* match against sub-patterns, setting _match to 0 on a fail */;
-          Customer  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
-          ;
-        }
-        (_match); })
-      )
-      {
-        return ((strCharPointer)("Top()"));
-      } else {
-        /* matching for pattern CustBot() */;
-        /* ... declarations of pattern variables */;
-        ;
-        Customer  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
-        if (({
-          signed int _match = 1;
-          /* matching against a ADT constructor pattern */;
-          /* match against constructor */;
-          if (((((*(_curr_scrutinee_ptr)))->tag) != (Customer_CustBot)))
-          {
-            ((_match) = 0);
-          } else {
-            /* match against sub-patterns, setting _match to 0 on a fail */;
-            Customer  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
-            ;
-          }
-          (_match); })
-        )
-        {
-          return ((strCharPointer)("Bot()"));
-        } else {
-          /* matching for pattern Person(name,prods) */;
-          /* ... declarations of pattern variables */;
-          signed int name;
-          ProductSet  *prods;
-          Customer  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
-          if (({
-            signed int _match = 1;
-            /* matching against a ADT constructor pattern */;
-            /* match against constructor */;
-            if (((((*(_curr_scrutinee_ptr)))->tag) != (Customer_Person)))
-            {
-              ((_match) = 0);
-            } else {
-              /* match against sub-patterns, setting _match to 0 on a fail */;
-              Customer  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
-              {
-                signed int  *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Person).f0));
-                ((name) = (*(_curr_scrutinee_ptr)));
-              }
-              {
-                ProductSet  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Person).f1));
-                ((prods) = (*(_curr_scrutinee_ptr)));
-              }
-              ;
-            }
-            (_match); })
-          )
-          {
-            return ((showInt)((name)));
           } else {
             /* no match, do nothing. */;
           }
@@ -3668,24 +3668,27 @@ signed int mt_cilkPut(CilkContext  *const  context, struct _template__Lvar__poin
 struct _cilk_addCustData_frame {
   CilkStackFrame header;
   struct  {
-    signed int storeLen;
-    signed int custLen;
     signed int  * *store;
     struct _template__Lvar__pointer__tag_struct_Customer_51__  * *customers;
     
   } scope228;
   struct  {
-    signed int i;
+    signed int storeLen;
+    signed int custLen;
     
   } scope229;
   struct  {
-    signed int matchFound;
+    signed int i;
     
   } scope230;
   struct  {
-    signed int j;
+    signed int matchFound;
     
   } scope231;
+  struct  {
+    signed int j;
+    
+  } scope232;
   
 };
 struct _cilk_addCustData_args {
@@ -3726,28 +3729,28 @@ static void _cilk_addCustData_slow(CilkWorkerState  *const  _cilk_ws, struct _ci
           {
             ((((_cilk_frame)->header).entry) = 1);
             /* TODO: save only live, dirty variables */;
-            ((((_cilk_frame)->scope231).j) = (j));
-            ((((_cilk_frame)->scope230).matchFound) = (matchFound));
-            ((((_cilk_frame)->scope229).i) = (i));
+            ((((_cilk_frame)->scope232).j) = (j));
+            ((((_cilk_frame)->scope231).matchFound) = (matchFound));
+            ((((_cilk_frame)->scope230).i) = (i));
             ;
             ;
-            ((((_cilk_frame)->scope228).custLen) = (custLen));
+            ((((_cilk_frame)->scope229).custLen) = (custLen));
             ((((_cilk_frame)->scope228).customers) = (customers));
             ((((_cilk_frame)->scope228).store) = (store));
-            ((((_cilk_frame)->scope228).storeLen) = (storeLen));
+            ((((_cilk_frame)->scope229).storeLen) = (storeLen));
             /* expand CILK2C_BEFORE_SPAWN_SLOW() macro */;
             ((Cilk_cilk2c_before_spawn_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
             /* expand CILK2C_PUSH_FRAME() macro */;
             ((Cilk_cilk2c_push_frame)((_cilk_ws), (&(((_cilk_frame)->header)))));
             ((matchFound) = ((cilkPut)((_cilk_ws), ((customers)[(j)]), ((Person)((((store)[(i)])[0]), ((P_Set)((((store)[(i)])[1]), ((P_Empty)()))))))));
-            ((((_cilk_frame)->scope230).matchFound) = (matchFound));
+            ((((_cilk_frame)->scope231).matchFound) = (matchFound));
             {
               /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-              signed int __tmp95;
+              signed int __tmp96;
               if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
               {
-                ((__tmp95) = (matchFound));
-                if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp95)), (sizeof((__tmp95))))))
+                ((__tmp96) = (matchFound));
+                if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp96)), (sizeof((__tmp96))))))
                 {
                   ((Cilk_cilk2c_pop)((_cilk_ws)));
                   return ;
@@ -3759,40 +3762,40 @@ static void _cilk_addCustData_slow(CilkWorkerState  *const  _cilk_ws, struct _ci
               }
             }
             /* TODO: restore only live variables */;
-            ((j) = (((_cilk_frame)->scope231).j));
-            ((matchFound) = (((_cilk_frame)->scope230).matchFound));
-            ((i) = (((_cilk_frame)->scope229).i));
+            ((j) = (((_cilk_frame)->scope232).j));
+            ((matchFound) = (((_cilk_frame)->scope231).matchFound));
+            ((i) = (((_cilk_frame)->scope230).i));
             ;
             ;
-            ((custLen) = (((_cilk_frame)->scope228).custLen));
+            ((custLen) = (((_cilk_frame)->scope229).custLen));
             ((customers) = (((_cilk_frame)->scope228).customers));
             ((store) = (((_cilk_frame)->scope228).store));
-            ((storeLen) = (((_cilk_frame)->scope228).storeLen));
+            ((storeLen) = (((_cilk_frame)->scope229).storeLen));
             /* expand CILK2C_AFTER_SPAWN_SLOW() macro */;
             ((Cilk_cilk2c_after_spawn_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
             /* TODO: save only live, dirty variables */;
-            ((((_cilk_frame)->scope231).j) = (j));
-            ((((_cilk_frame)->scope230).matchFound) = (matchFound));
-            ((((_cilk_frame)->scope229).i) = (i));
+            ((((_cilk_frame)->scope232).j) = (j));
+            ((((_cilk_frame)->scope231).matchFound) = (matchFound));
+            ((((_cilk_frame)->scope230).i) = (i));
             ;
             ;
-            ((((_cilk_frame)->scope228).custLen) = (custLen));
+            ((((_cilk_frame)->scope229).custLen) = (custLen));
             ((((_cilk_frame)->scope228).customers) = (customers));
             ((((_cilk_frame)->scope228).store) = (store));
-            ((((_cilk_frame)->scope228).storeLen) = (storeLen));
+            ((((_cilk_frame)->scope229).storeLen) = (storeLen));
             if (0)
             {
               _cilk_sync1:;
               /* TODO: restore only live variables */;
-              ((j) = (((_cilk_frame)->scope231).j));
-              ((matchFound) = (((_cilk_frame)->scope230).matchFound));
-              ((i) = (((_cilk_frame)->scope229).i));
+              ((j) = (((_cilk_frame)->scope232).j));
+              ((matchFound) = (((_cilk_frame)->scope231).matchFound));
+              ((i) = (((_cilk_frame)->scope230).i));
               ;
               ;
-              ((custLen) = (((_cilk_frame)->scope228).custLen));
+              ((custLen) = (((_cilk_frame)->scope229).custLen));
               ((customers) = (((_cilk_frame)->scope228).customers));
               ((store) = (((_cilk_frame)->scope228).store));
-              ((storeLen) = (((_cilk_frame)->scope228).storeLen));
+              ((storeLen) = (((_cilk_frame)->scope229).storeLen));
             } else {
               ;
             }
@@ -3803,15 +3806,15 @@ static void _cilk_addCustData_slow(CilkWorkerState  *const  _cilk_ws, struct _ci
             ((Cilk_cilk2c_before_sync_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
             ((((_cilk_frame)->header).entry) = 2);
             /* TODO: save only live, dirty variables */;
-            ((((_cilk_frame)->scope231).j) = (j));
-            ((((_cilk_frame)->scope230).matchFound) = (matchFound));
-            ((((_cilk_frame)->scope229).i) = (i));
+            ((((_cilk_frame)->scope232).j) = (j));
+            ((((_cilk_frame)->scope231).matchFound) = (matchFound));
+            ((((_cilk_frame)->scope230).i) = (i));
             ;
             ;
-            ((((_cilk_frame)->scope228).custLen) = (custLen));
+            ((((_cilk_frame)->scope229).custLen) = (custLen));
             ((((_cilk_frame)->scope228).customers) = (customers));
             ((((_cilk_frame)->scope228).store) = (store));
-            ((((_cilk_frame)->scope228).storeLen) = (storeLen));
+            ((((_cilk_frame)->scope229).storeLen) = (storeLen));
             if (((Cilk_sync)((_cilk_ws))))
             {
               return ;
@@ -3820,15 +3823,15 @@ static void _cilk_addCustData_slow(CilkWorkerState  *const  _cilk_ws, struct _ci
               ;
             }
             /* TODO: restore only live variables */;
-            ((j) = (((_cilk_frame)->scope231).j));
-            ((matchFound) = (((_cilk_frame)->scope230).matchFound));
-            ((i) = (((_cilk_frame)->scope229).i));
+            ((j) = (((_cilk_frame)->scope232).j));
+            ((matchFound) = (((_cilk_frame)->scope231).matchFound));
+            ((i) = (((_cilk_frame)->scope230).i));
             ;
             ;
-            ((custLen) = (((_cilk_frame)->scope228).custLen));
+            ((custLen) = (((_cilk_frame)->scope229).custLen));
             ((customers) = (((_cilk_frame)->scope228).customers));
             ((store) = (((_cilk_frame)->scope228).store));
-            ((storeLen) = (((_cilk_frame)->scope228).storeLen));
+            ((storeLen) = (((_cilk_frame)->scope229).storeLen));
             /* expand CILK2C_AFTER_SYNC_SLOW() macro */;
             ((Cilk_cilk2c_after_sync_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
             /* expand CILK2C_AT_THREAD_BOUNDARY_SLOW() macro */;
@@ -3841,8 +3844,8 @@ static void _cilk_addCustData_slow(CilkWorkerState  *const  _cilk_ws, struct _ci
           {
             ((printf)("No matching customer!\n"));
             {
-              signed int __tmp96 = 0;
-              ((Cilk_set_result)((_cilk_ws), (&(__tmp96)), (sizeof((__tmp96)))));
+              signed int __tmp97 = 0;
+              ((Cilk_set_result)((_cilk_ws), (&(__tmp97)), (sizeof((__tmp97)))));
               /* expand CILK2C_BEFORE_RETURN_SLOW macro */;
               ((Cilk_cilk2c_before_return_slow_cp)((_cilk_ws), (&((_cilk_frame)->header))));
               ((Cilk_cilk2c_before_return_slow)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
@@ -3855,8 +3858,8 @@ static void _cilk_addCustData_slow(CilkWorkerState  *const  _cilk_ws, struct _ci
       }
     }
     {
-      signed int __tmp97 = 1;
-      ((Cilk_set_result)((_cilk_ws), (&(__tmp97)), (sizeof((__tmp97)))));
+      signed int __tmp98 = 1;
+      ((Cilk_set_result)((_cilk_ws), (&(__tmp98)), (sizeof((__tmp98)))));
       /* expand CILK2C_BEFORE_RETURN_SLOW macro */;
       ((Cilk_cilk2c_before_return_slow_cp)((_cilk_ws), (&((_cilk_frame)->header))));
       ((Cilk_cilk2c_before_return_slow)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
@@ -3869,10 +3872,10 @@ static void _cilk_addCustData_slow(CilkWorkerState  *const  _cilk_ws, struct _ci
   /* TODO: save only live, dirty variables */;
   ;
   ;
-  ((((_cilk_frame)->scope228).custLen) = (custLen));
+  ((((_cilk_frame)->scope229).custLen) = (custLen));
   ((((_cilk_frame)->scope228).customers) = (customers));
   ((((_cilk_frame)->scope228).store) = (store));
-  ((((_cilk_frame)->scope228).storeLen) = (storeLen));
+  ((((_cilk_frame)->scope229).storeLen) = (storeLen));
   if (((Cilk_sync)((_cilk_ws))))
   {
     return ;
@@ -3883,10 +3886,10 @@ static void _cilk_addCustData_slow(CilkWorkerState  *const  _cilk_ws, struct _ci
   /* TODO: restore only live variables */;
   ;
   ;
-  ((custLen) = (((_cilk_frame)->scope228).custLen));
+  ((custLen) = (((_cilk_frame)->scope229).custLen));
   ((customers) = (((_cilk_frame)->scope228).customers));
   ((store) = (((_cilk_frame)->scope228).store));
-  ((storeLen) = (((_cilk_frame)->scope228).storeLen));
+  ((storeLen) = (((_cilk_frame)->scope229).storeLen));
   /* expand CILK2C_AFTER_SYNC_SLOW() macro */;
   ((Cilk_cilk2c_after_sync_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
   /* expand CILK2C_AT_THREAD_BOUNDARY_SLOW() macro */;
@@ -3897,7 +3900,7 @@ static void _cilk_addCustData_slow(CilkWorkerState  *const  _cilk_ws, struct _ci
 #undef CILK_WHERE_AM_I
 #define CILK_WHERE_AM_I IN_C_CODE
 
-static CilkProcInfo _cilk_addCustData_sig[] = {{(sizeof(signed int)), (sizeof(struct _cilk_addCustData_frame)), (_cilk_addCustData_slow), 0, 0}, {(sizeof(signed int)), ((size_t)(((char *)(&((((struct _cilk_addCustData_frame *)0)->scope230).matchFound))) - ((char *)((struct _cilk_addCustData_frame *)0)))), 0, 0, 0}, {0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}};
+static CilkProcInfo _cilk_addCustData_sig[] = {{(sizeof(signed int)), (sizeof(struct _cilk_addCustData_frame)), (_cilk_addCustData_slow), 0, 0}, {(sizeof(signed int)), ((size_t)(((char *)(&((((struct _cilk_addCustData_frame *)0)->scope231).matchFound))) - ((char *)((struct _cilk_addCustData_frame *)0)))), 0, 0, 0}, {0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}};
 
 #undef CILK_WHERE_AM_I
 #define CILK_WHERE_AM_I IN_FAST_PROCEDURE
@@ -3921,15 +3924,15 @@ signed int addCustData(CilkWorkerState  *const  _cilk_ws, struct _template__Lvar
           {
             ((((_cilk_frame)->header).entry) = 1);
             /* TODO: save only live, dirty variables */;
-            ((((_cilk_frame)->scope231).j) = (j));
-            ((((_cilk_frame)->scope230).matchFound) = (matchFound));
-            ((((_cilk_frame)->scope229).i) = (i));
+            ((((_cilk_frame)->scope232).j) = (j));
+            ((((_cilk_frame)->scope231).matchFound) = (matchFound));
+            ((((_cilk_frame)->scope230).i) = (i));
             ;
             ;
-            ((((_cilk_frame)->scope228).custLen) = (custLen));
+            ((((_cilk_frame)->scope229).custLen) = (custLen));
             ((((_cilk_frame)->scope228).customers) = (customers));
             ((((_cilk_frame)->scope228).store) = (store));
-            ((((_cilk_frame)->scope228).storeLen) = (storeLen));
+            ((((_cilk_frame)->scope229).storeLen) = (storeLen));
             /* expand CILK2C_BEFORE_SPAWN_FAST() macro */;
             ((Cilk_cilk2c_before_spawn_fast_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
             /* expand CILK2C_PUSH_FRAME() macro */;
@@ -3937,11 +3940,11 @@ signed int addCustData(CilkWorkerState  *const  _cilk_ws, struct _template__Lvar
             ((matchFound) = ((cilkPut)((_cilk_ws), ((customers)[(j)]), ((Person)((((store)[(i)])[0]), ((P_Set)((((store)[(i)])[1]), ((P_Empty)()))))))));
             {
               /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-              signed int __tmp99;
+              signed int __tmp100;
               if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
               {
-                ((__tmp99) = (matchFound));
-                if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp99)), (sizeof((__tmp99))))))
+                ((__tmp100) = (matchFound));
+                if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp100)), (sizeof((__tmp100))))))
                 {
                   ((Cilk_cilk2c_pop)((_cilk_ws)));
                   return 0;
@@ -4018,7 +4021,7 @@ signed int mt_addCustData(CilkContext  *const  context, struct _template__Lvar__
   ((Cilk_free)((_cilk_procargs)));
   return (_cilk_proc_result);
 }
-typedef Customer  *_template_param_unused_103;
+typedef Customer  *_template_param_unused_104;
 static Customer  *_template__freeze__pointer__tag_struct_Customer_51__(struct _template__Lvar__pointer__tag_struct_Customer_51__  * l)
 {
 
@@ -4049,59 +4052,59 @@ struct _cilk_cilk_main_frame {
     char  * *argv;
     signed int argc;
     
-  } scope252;
+  } scope257;
   struct  {
     signed int numCustomers;
     
-  } scope254;
+  } scope262;
   struct  {
     signed int numStore1;
     
-  } scope255;
+  } scope263;
   struct  {
     signed int numStore2;
     
-  } scope256;
+  } scope264;
   struct  {
     signed int numStore3;
     
-  } scope257;
+  } scope265;
   struct  {
     struct _template__Lvar__pointer__tag_struct_Customer_51__  * *customers;
     
-  } scope259;
+  } scope269;
   struct  {
     signed int  * *store1_cs;
     
-  } scope260;
+  } scope270;
   struct  {
     signed int  * *store2_cs;
     
-  } scope261;
+  } scope271;
   struct  {
     signed int  * *store3_cs;
     
-  } scope262;
+  } scope272;
   struct  {
-    signed int result1, result2, result3, result4;
+    signed int result1, result2, result3;
     
-  } scope264;
-  struct  {
-    signed int i;
-    
-  } scope275;
+  } scope276;
   struct  {
     signed int i;
     
-  } scope280;
+  } scope288;
   struct  {
     signed int i;
     
-  } scope285;
+  } scope293;
   struct  {
     signed int i;
     
-  } scope290;
+  } scope298;
+  struct  {
+    signed int i;
+    
+  } scope303;
   
 };
 struct _cilk_cilk_main_args {
@@ -4114,7 +4117,7 @@ struct _cilk_cilk_main_args {
 #undef CILK_WHERE_AM_I
 #define CILK_WHERE_AM_I IN_SLOW_PROCEDURE
 
-typedef Customer  *_template_param_unused_135;
+typedef Customer  *_template_param_unused_136;
 static struct _template__Lattice__pointer__tag_struct_Customer_51__  *_template__newLattice__pointer__tag_struct_Customer_51__(Customer  * least, Customer  * greatest, signed int ( * leq)(), Customer  *( * lub)(), signed int ( * eq)(), struct _string_s ( * showMethod)())
 {
 
@@ -4153,140 +4156,36 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
     signed int  * *store1_cs = ((readStoreData)("store1.csv", (numStore1)));
     signed int  * *store2_cs = ((readStoreData)("store2.csv", (numStore2)));
     signed int  * *store3_cs = ((readStoreData)("store3.csv", (numStore3)));
-    signed int result1, result2, result3, result4;
+    signed int result1, result2, result3;
     ((((_cilk_frame)->header).entry) = 1);
     /* TODO: save only live, dirty variables */;
-    ((((_cilk_frame)->scope259).customers) = (customers));
-    ((((_cilk_frame)->scope254).numCustomers) = (numCustomers));
-    ((((_cilk_frame)->scope255).numStore1) = (numStore1));
-    ((((_cilk_frame)->scope256).numStore2) = (numStore2));
-    ((((_cilk_frame)->scope257).numStore3) = (numStore3));
-    ((((_cilk_frame)->scope264).result1) = (result1));
-    ((((_cilk_frame)->scope264).result2) = (result2));
-    ((((_cilk_frame)->scope264).result3) = (result3));
-    ((((_cilk_frame)->scope264).result4) = (result4));
-    ((((_cilk_frame)->scope260).store1_cs) = (store1_cs));
-    ((((_cilk_frame)->scope261).store2_cs) = (store2_cs));
-    ((((_cilk_frame)->scope262).store3_cs) = (store3_cs));
+    ((((_cilk_frame)->scope269).customers) = (customers));
+    ((((_cilk_frame)->scope262).numCustomers) = (numCustomers));
+    ((((_cilk_frame)->scope263).numStore1) = (numStore1));
+    ((((_cilk_frame)->scope264).numStore2) = (numStore2));
+    ((((_cilk_frame)->scope265).numStore3) = (numStore3));
+    ((((_cilk_frame)->scope276).result1) = (result1));
+    ((((_cilk_frame)->scope276).result2) = (result2));
+    ((((_cilk_frame)->scope276).result3) = (result3));
+    ((((_cilk_frame)->scope270).store1_cs) = (store1_cs));
+    ((((_cilk_frame)->scope271).store2_cs) = (store2_cs));
+    ((((_cilk_frame)->scope272).store3_cs) = (store3_cs));
     ;
     ;
-    ((((_cilk_frame)->scope252).argc) = (argc));
-    ((((_cilk_frame)->scope252).argv) = (argv));
+    ((((_cilk_frame)->scope257).argc) = (argc));
+    ((((_cilk_frame)->scope257).argv) = (argv));
     /* expand CILK2C_BEFORE_SPAWN_SLOW() macro */;
     ((Cilk_cilk2c_before_spawn_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
     /* expand CILK2C_PUSH_FRAME() macro */;
     ((Cilk_cilk2c_push_frame)((_cilk_ws), (&(((_cilk_frame)->header)))));
     ((result1) = ((addCustData)((_cilk_ws), (customers), (store1_cs), (numCustomers), (numStore1))));
-    ((((_cilk_frame)->scope264).result1) = (result1));
-    {
-      /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      signed int __tmp136;
-      if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
-      {
-        ((__tmp136) = (result1));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp136)), (sizeof((__tmp136))))))
-        {
-          ((Cilk_cilk2c_pop)((_cilk_ws)));
-          return ;
-        } else {
-          ;
-        }
-      } else {
-        ;
-      }
-    }
-    /* TODO: restore only live variables */;
-    ((customers) = (((_cilk_frame)->scope259).customers));
-    ((numCustomers) = (((_cilk_frame)->scope254).numCustomers));
-    ((numStore1) = (((_cilk_frame)->scope255).numStore1));
-    ((numStore2) = (((_cilk_frame)->scope256).numStore2));
-    ((numStore3) = (((_cilk_frame)->scope257).numStore3));
-    ((result1) = (((_cilk_frame)->scope264).result1));
-    ((result2) = (((_cilk_frame)->scope264).result2));
-    ((result3) = (((_cilk_frame)->scope264).result3));
-    ((result4) = (((_cilk_frame)->scope264).result4));
-    ((store1_cs) = (((_cilk_frame)->scope260).store1_cs));
-    ((store2_cs) = (((_cilk_frame)->scope261).store2_cs));
-    ((store3_cs) = (((_cilk_frame)->scope262).store3_cs));
-    ;
-    ;
-    ((argc) = (((_cilk_frame)->scope252).argc));
-    ((argv) = (((_cilk_frame)->scope252).argv));
-    /* expand CILK2C_AFTER_SPAWN_SLOW() macro */;
-    ((Cilk_cilk2c_after_spawn_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
-    /* TODO: save only live, dirty variables */;
-    ((((_cilk_frame)->scope259).customers) = (customers));
-    ((((_cilk_frame)->scope254).numCustomers) = (numCustomers));
-    ((((_cilk_frame)->scope255).numStore1) = (numStore1));
-    ((((_cilk_frame)->scope256).numStore2) = (numStore2));
-    ((((_cilk_frame)->scope257).numStore3) = (numStore3));
-    ((((_cilk_frame)->scope264).result1) = (result1));
-    ((((_cilk_frame)->scope264).result2) = (result2));
-    ((((_cilk_frame)->scope264).result3) = (result3));
-    ((((_cilk_frame)->scope264).result4) = (result4));
-    ((((_cilk_frame)->scope260).store1_cs) = (store1_cs));
-    ((((_cilk_frame)->scope261).store2_cs) = (store2_cs));
-    ((((_cilk_frame)->scope262).store3_cs) = (store3_cs));
-    ;
-    ;
-    ((((_cilk_frame)->scope252).argc) = (argc));
-    ((((_cilk_frame)->scope252).argv) = (argv));
-    if (0)
-    {
-      _cilk_sync1:;
-      /* TODO: restore only live variables */;
-      ((customers) = (((_cilk_frame)->scope259).customers));
-      ((numCustomers) = (((_cilk_frame)->scope254).numCustomers));
-      ((numStore1) = (((_cilk_frame)->scope255).numStore1));
-      ((numStore2) = (((_cilk_frame)->scope256).numStore2));
-      ((numStore3) = (((_cilk_frame)->scope257).numStore3));
-      ((result1) = (((_cilk_frame)->scope264).result1));
-      ((result2) = (((_cilk_frame)->scope264).result2));
-      ((result3) = (((_cilk_frame)->scope264).result3));
-      ((result4) = (((_cilk_frame)->scope264).result4));
-      ((store1_cs) = (((_cilk_frame)->scope260).store1_cs));
-      ((store2_cs) = (((_cilk_frame)->scope261).store2_cs));
-      ((store3_cs) = (((_cilk_frame)->scope262).store3_cs));
-      ;
-      ;
-      ((argc) = (((_cilk_frame)->scope252).argc));
-      ((argv) = (((_cilk_frame)->scope252).argv));
-    } else {
-      ;
-    }
-    /* expand CILK2C_AT_THREAD_BOUNDARY_SLOW() macro */;
-    ((Cilk_cilk2c_at_thread_boundary_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
-    ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
-    ((((_cilk_frame)->header).entry) = 2);
-    /* TODO: save only live, dirty variables */;
-    ((((_cilk_frame)->scope259).customers) = (customers));
-    ((((_cilk_frame)->scope254).numCustomers) = (numCustomers));
-    ((((_cilk_frame)->scope255).numStore1) = (numStore1));
-    ((((_cilk_frame)->scope256).numStore2) = (numStore2));
-    ((((_cilk_frame)->scope257).numStore3) = (numStore3));
-    ((((_cilk_frame)->scope264).result1) = (result1));
-    ((((_cilk_frame)->scope264).result2) = (result2));
-    ((((_cilk_frame)->scope264).result3) = (result3));
-    ((((_cilk_frame)->scope264).result4) = (result4));
-    ((((_cilk_frame)->scope260).store1_cs) = (store1_cs));
-    ((((_cilk_frame)->scope261).store2_cs) = (store2_cs));
-    ((((_cilk_frame)->scope262).store3_cs) = (store3_cs));
-    ;
-    ;
-    ((((_cilk_frame)->scope252).argc) = (argc));
-    ((((_cilk_frame)->scope252).argv) = (argv));
-    /* expand CILK2C_BEFORE_SPAWN_SLOW() macro */;
-    ((Cilk_cilk2c_before_spawn_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
-    /* expand CILK2C_PUSH_FRAME() macro */;
-    ((Cilk_cilk2c_push_frame)((_cilk_ws), (&(((_cilk_frame)->header)))));
-    ((result2) = ((addCustData)((_cilk_ws), (customers), (store2_cs), (numCustomers), (numStore2))));
-    ((((_cilk_frame)->scope264).result2) = (result2));
+    ((((_cilk_frame)->scope276).result1) = (result1));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
       signed int __tmp137;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp137) = (result2));
+        ((__tmp137) = (result1));
         if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp137)), (sizeof((__tmp137))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
@@ -4299,97 +4198,93 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
       }
     }
     /* TODO: restore only live variables */;
-    ((customers) = (((_cilk_frame)->scope259).customers));
-    ((numCustomers) = (((_cilk_frame)->scope254).numCustomers));
-    ((numStore1) = (((_cilk_frame)->scope255).numStore1));
-    ((numStore2) = (((_cilk_frame)->scope256).numStore2));
-    ((numStore3) = (((_cilk_frame)->scope257).numStore3));
-    ((result1) = (((_cilk_frame)->scope264).result1));
-    ((result2) = (((_cilk_frame)->scope264).result2));
-    ((result3) = (((_cilk_frame)->scope264).result3));
-    ((result4) = (((_cilk_frame)->scope264).result4));
-    ((store1_cs) = (((_cilk_frame)->scope260).store1_cs));
-    ((store2_cs) = (((_cilk_frame)->scope261).store2_cs));
-    ((store3_cs) = (((_cilk_frame)->scope262).store3_cs));
+    ((customers) = (((_cilk_frame)->scope269).customers));
+    ((numCustomers) = (((_cilk_frame)->scope262).numCustomers));
+    ((numStore1) = (((_cilk_frame)->scope263).numStore1));
+    ((numStore2) = (((_cilk_frame)->scope264).numStore2));
+    ((numStore3) = (((_cilk_frame)->scope265).numStore3));
+    ((result1) = (((_cilk_frame)->scope276).result1));
+    ((result2) = (((_cilk_frame)->scope276).result2));
+    ((result3) = (((_cilk_frame)->scope276).result3));
+    ((store1_cs) = (((_cilk_frame)->scope270).store1_cs));
+    ((store2_cs) = (((_cilk_frame)->scope271).store2_cs));
+    ((store3_cs) = (((_cilk_frame)->scope272).store3_cs));
     ;
     ;
-    ((argc) = (((_cilk_frame)->scope252).argc));
-    ((argv) = (((_cilk_frame)->scope252).argv));
+    ((argc) = (((_cilk_frame)->scope257).argc));
+    ((argv) = (((_cilk_frame)->scope257).argv));
     /* expand CILK2C_AFTER_SPAWN_SLOW() macro */;
     ((Cilk_cilk2c_after_spawn_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
     /* TODO: save only live, dirty variables */;
-    ((((_cilk_frame)->scope259).customers) = (customers));
-    ((((_cilk_frame)->scope254).numCustomers) = (numCustomers));
-    ((((_cilk_frame)->scope255).numStore1) = (numStore1));
-    ((((_cilk_frame)->scope256).numStore2) = (numStore2));
-    ((((_cilk_frame)->scope257).numStore3) = (numStore3));
-    ((((_cilk_frame)->scope264).result1) = (result1));
-    ((((_cilk_frame)->scope264).result2) = (result2));
-    ((((_cilk_frame)->scope264).result3) = (result3));
-    ((((_cilk_frame)->scope264).result4) = (result4));
-    ((((_cilk_frame)->scope260).store1_cs) = (store1_cs));
-    ((((_cilk_frame)->scope261).store2_cs) = (store2_cs));
-    ((((_cilk_frame)->scope262).store3_cs) = (store3_cs));
+    ((((_cilk_frame)->scope269).customers) = (customers));
+    ((((_cilk_frame)->scope262).numCustomers) = (numCustomers));
+    ((((_cilk_frame)->scope263).numStore1) = (numStore1));
+    ((((_cilk_frame)->scope264).numStore2) = (numStore2));
+    ((((_cilk_frame)->scope265).numStore3) = (numStore3));
+    ((((_cilk_frame)->scope276).result1) = (result1));
+    ((((_cilk_frame)->scope276).result2) = (result2));
+    ((((_cilk_frame)->scope276).result3) = (result3));
+    ((((_cilk_frame)->scope270).store1_cs) = (store1_cs));
+    ((((_cilk_frame)->scope271).store2_cs) = (store2_cs));
+    ((((_cilk_frame)->scope272).store3_cs) = (store3_cs));
     ;
     ;
-    ((((_cilk_frame)->scope252).argc) = (argc));
-    ((((_cilk_frame)->scope252).argv) = (argv));
+    ((((_cilk_frame)->scope257).argc) = (argc));
+    ((((_cilk_frame)->scope257).argv) = (argv));
     if (0)
     {
-      _cilk_sync2:;
+      _cilk_sync1:;
       /* TODO: restore only live variables */;
-      ((customers) = (((_cilk_frame)->scope259).customers));
-      ((numCustomers) = (((_cilk_frame)->scope254).numCustomers));
-      ((numStore1) = (((_cilk_frame)->scope255).numStore1));
-      ((numStore2) = (((_cilk_frame)->scope256).numStore2));
-      ((numStore3) = (((_cilk_frame)->scope257).numStore3));
-      ((result1) = (((_cilk_frame)->scope264).result1));
-      ((result2) = (((_cilk_frame)->scope264).result2));
-      ((result3) = (((_cilk_frame)->scope264).result3));
-      ((result4) = (((_cilk_frame)->scope264).result4));
-      ((store1_cs) = (((_cilk_frame)->scope260).store1_cs));
-      ((store2_cs) = (((_cilk_frame)->scope261).store2_cs));
-      ((store3_cs) = (((_cilk_frame)->scope262).store3_cs));
+      ((customers) = (((_cilk_frame)->scope269).customers));
+      ((numCustomers) = (((_cilk_frame)->scope262).numCustomers));
+      ((numStore1) = (((_cilk_frame)->scope263).numStore1));
+      ((numStore2) = (((_cilk_frame)->scope264).numStore2));
+      ((numStore3) = (((_cilk_frame)->scope265).numStore3));
+      ((result1) = (((_cilk_frame)->scope276).result1));
+      ((result2) = (((_cilk_frame)->scope276).result2));
+      ((result3) = (((_cilk_frame)->scope276).result3));
+      ((store1_cs) = (((_cilk_frame)->scope270).store1_cs));
+      ((store2_cs) = (((_cilk_frame)->scope271).store2_cs));
+      ((store3_cs) = (((_cilk_frame)->scope272).store3_cs));
       ;
       ;
-      ((argc) = (((_cilk_frame)->scope252).argc));
-      ((argv) = (((_cilk_frame)->scope252).argv));
+      ((argc) = (((_cilk_frame)->scope257).argc));
+      ((argv) = (((_cilk_frame)->scope257).argv));
     } else {
       ;
     }
     /* expand CILK2C_AT_THREAD_BOUNDARY_SLOW() macro */;
     ((Cilk_cilk2c_at_thread_boundary_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
     ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
-    ((((_cilk_frame)->header).entry) = 3);
+    ((((_cilk_frame)->header).entry) = 2);
     /* TODO: save only live, dirty variables */;
-    ((((_cilk_frame)->scope259).customers) = (customers));
-    ((((_cilk_frame)->scope254).numCustomers) = (numCustomers));
-    ((((_cilk_frame)->scope255).numStore1) = (numStore1));
-    ((((_cilk_frame)->scope256).numStore2) = (numStore2));
-    ((((_cilk_frame)->scope257).numStore3) = (numStore3));
-    ((((_cilk_frame)->scope264).result1) = (result1));
-    ((((_cilk_frame)->scope264).result2) = (result2));
-    ((((_cilk_frame)->scope264).result3) = (result3));
-    ((((_cilk_frame)->scope264).result4) = (result4));
-    ((((_cilk_frame)->scope260).store1_cs) = (store1_cs));
-    ((((_cilk_frame)->scope261).store2_cs) = (store2_cs));
-    ((((_cilk_frame)->scope262).store3_cs) = (store3_cs));
+    ((((_cilk_frame)->scope269).customers) = (customers));
+    ((((_cilk_frame)->scope262).numCustomers) = (numCustomers));
+    ((((_cilk_frame)->scope263).numStore1) = (numStore1));
+    ((((_cilk_frame)->scope264).numStore2) = (numStore2));
+    ((((_cilk_frame)->scope265).numStore3) = (numStore3));
+    ((((_cilk_frame)->scope276).result1) = (result1));
+    ((((_cilk_frame)->scope276).result2) = (result2));
+    ((((_cilk_frame)->scope276).result3) = (result3));
+    ((((_cilk_frame)->scope270).store1_cs) = (store1_cs));
+    ((((_cilk_frame)->scope271).store2_cs) = (store2_cs));
+    ((((_cilk_frame)->scope272).store3_cs) = (store3_cs));
     ;
     ;
-    ((((_cilk_frame)->scope252).argc) = (argc));
-    ((((_cilk_frame)->scope252).argv) = (argv));
+    ((((_cilk_frame)->scope257).argc) = (argc));
+    ((((_cilk_frame)->scope257).argv) = (argv));
     /* expand CILK2C_BEFORE_SPAWN_SLOW() macro */;
     ((Cilk_cilk2c_before_spawn_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
     /* expand CILK2C_PUSH_FRAME() macro */;
     ((Cilk_cilk2c_push_frame)((_cilk_ws), (&(((_cilk_frame)->header)))));
-    ((result3) = ((addCustData)((_cilk_ws), (customers), (store3_cs), (numCustomers), (numStore3))));
-    ((((_cilk_frame)->scope264).result3) = (result3));
+    ((result2) = ((addCustData)((_cilk_ws), (customers), (store2_cs), (numCustomers), (numStore2))));
+    ((((_cilk_frame)->scope276).result2) = (result2));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
       signed int __tmp138;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp138) = (result3));
+        ((__tmp138) = (result2));
         if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp138)), (sizeof((__tmp138))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
@@ -4402,61 +4297,157 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
       }
     }
     /* TODO: restore only live variables */;
-    ((customers) = (((_cilk_frame)->scope259).customers));
-    ((numCustomers) = (((_cilk_frame)->scope254).numCustomers));
-    ((numStore1) = (((_cilk_frame)->scope255).numStore1));
-    ((numStore2) = (((_cilk_frame)->scope256).numStore2));
-    ((numStore3) = (((_cilk_frame)->scope257).numStore3));
-    ((result1) = (((_cilk_frame)->scope264).result1));
-    ((result2) = (((_cilk_frame)->scope264).result2));
-    ((result3) = (((_cilk_frame)->scope264).result3));
-    ((result4) = (((_cilk_frame)->scope264).result4));
-    ((store1_cs) = (((_cilk_frame)->scope260).store1_cs));
-    ((store2_cs) = (((_cilk_frame)->scope261).store2_cs));
-    ((store3_cs) = (((_cilk_frame)->scope262).store3_cs));
+    ((customers) = (((_cilk_frame)->scope269).customers));
+    ((numCustomers) = (((_cilk_frame)->scope262).numCustomers));
+    ((numStore1) = (((_cilk_frame)->scope263).numStore1));
+    ((numStore2) = (((_cilk_frame)->scope264).numStore2));
+    ((numStore3) = (((_cilk_frame)->scope265).numStore3));
+    ((result1) = (((_cilk_frame)->scope276).result1));
+    ((result2) = (((_cilk_frame)->scope276).result2));
+    ((result3) = (((_cilk_frame)->scope276).result3));
+    ((store1_cs) = (((_cilk_frame)->scope270).store1_cs));
+    ((store2_cs) = (((_cilk_frame)->scope271).store2_cs));
+    ((store3_cs) = (((_cilk_frame)->scope272).store3_cs));
     ;
     ;
-    ((argc) = (((_cilk_frame)->scope252).argc));
-    ((argv) = (((_cilk_frame)->scope252).argv));
+    ((argc) = (((_cilk_frame)->scope257).argc));
+    ((argv) = (((_cilk_frame)->scope257).argv));
     /* expand CILK2C_AFTER_SPAWN_SLOW() macro */;
     ((Cilk_cilk2c_after_spawn_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
     /* TODO: save only live, dirty variables */;
-    ((((_cilk_frame)->scope259).customers) = (customers));
-    ((((_cilk_frame)->scope254).numCustomers) = (numCustomers));
-    ((((_cilk_frame)->scope255).numStore1) = (numStore1));
-    ((((_cilk_frame)->scope256).numStore2) = (numStore2));
-    ((((_cilk_frame)->scope257).numStore3) = (numStore3));
-    ((((_cilk_frame)->scope264).result1) = (result1));
-    ((((_cilk_frame)->scope264).result2) = (result2));
-    ((((_cilk_frame)->scope264).result3) = (result3));
-    ((((_cilk_frame)->scope264).result4) = (result4));
-    ((((_cilk_frame)->scope260).store1_cs) = (store1_cs));
-    ((((_cilk_frame)->scope261).store2_cs) = (store2_cs));
-    ((((_cilk_frame)->scope262).store3_cs) = (store3_cs));
+    ((((_cilk_frame)->scope269).customers) = (customers));
+    ((((_cilk_frame)->scope262).numCustomers) = (numCustomers));
+    ((((_cilk_frame)->scope263).numStore1) = (numStore1));
+    ((((_cilk_frame)->scope264).numStore2) = (numStore2));
+    ((((_cilk_frame)->scope265).numStore3) = (numStore3));
+    ((((_cilk_frame)->scope276).result1) = (result1));
+    ((((_cilk_frame)->scope276).result2) = (result2));
+    ((((_cilk_frame)->scope276).result3) = (result3));
+    ((((_cilk_frame)->scope270).store1_cs) = (store1_cs));
+    ((((_cilk_frame)->scope271).store2_cs) = (store2_cs));
+    ((((_cilk_frame)->scope272).store3_cs) = (store3_cs));
     ;
     ;
-    ((((_cilk_frame)->scope252).argc) = (argc));
-    ((((_cilk_frame)->scope252).argv) = (argv));
+    ((((_cilk_frame)->scope257).argc) = (argc));
+    ((((_cilk_frame)->scope257).argv) = (argv));
+    if (0)
+    {
+      _cilk_sync2:;
+      /* TODO: restore only live variables */;
+      ((customers) = (((_cilk_frame)->scope269).customers));
+      ((numCustomers) = (((_cilk_frame)->scope262).numCustomers));
+      ((numStore1) = (((_cilk_frame)->scope263).numStore1));
+      ((numStore2) = (((_cilk_frame)->scope264).numStore2));
+      ((numStore3) = (((_cilk_frame)->scope265).numStore3));
+      ((result1) = (((_cilk_frame)->scope276).result1));
+      ((result2) = (((_cilk_frame)->scope276).result2));
+      ((result3) = (((_cilk_frame)->scope276).result3));
+      ((store1_cs) = (((_cilk_frame)->scope270).store1_cs));
+      ((store2_cs) = (((_cilk_frame)->scope271).store2_cs));
+      ((store3_cs) = (((_cilk_frame)->scope272).store3_cs));
+      ;
+      ;
+      ((argc) = (((_cilk_frame)->scope257).argc));
+      ((argv) = (((_cilk_frame)->scope257).argv));
+    } else {
+      ;
+    }
+    /* expand CILK2C_AT_THREAD_BOUNDARY_SLOW() macro */;
+    ((Cilk_cilk2c_at_thread_boundary_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+    ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
+    ((((_cilk_frame)->header).entry) = 3);
+    /* TODO: save only live, dirty variables */;
+    ((((_cilk_frame)->scope269).customers) = (customers));
+    ((((_cilk_frame)->scope262).numCustomers) = (numCustomers));
+    ((((_cilk_frame)->scope263).numStore1) = (numStore1));
+    ((((_cilk_frame)->scope264).numStore2) = (numStore2));
+    ((((_cilk_frame)->scope265).numStore3) = (numStore3));
+    ((((_cilk_frame)->scope276).result1) = (result1));
+    ((((_cilk_frame)->scope276).result2) = (result2));
+    ((((_cilk_frame)->scope276).result3) = (result3));
+    ((((_cilk_frame)->scope270).store1_cs) = (store1_cs));
+    ((((_cilk_frame)->scope271).store2_cs) = (store2_cs));
+    ((((_cilk_frame)->scope272).store3_cs) = (store3_cs));
+    ;
+    ;
+    ((((_cilk_frame)->scope257).argc) = (argc));
+    ((((_cilk_frame)->scope257).argv) = (argv));
+    /* expand CILK2C_BEFORE_SPAWN_SLOW() macro */;
+    ((Cilk_cilk2c_before_spawn_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+    /* expand CILK2C_PUSH_FRAME() macro */;
+    ((Cilk_cilk2c_push_frame)((_cilk_ws), (&(((_cilk_frame)->header)))));
+    ((result3) = ((addCustData)((_cilk_ws), (customers), (store3_cs), (numCustomers), (numStore3))));
+    ((((_cilk_frame)->scope276).result3) = (result3));
+    {
+      /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
+      signed int __tmp139;
+      if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
+      {
+        ((__tmp139) = (result3));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp139)), (sizeof((__tmp139))))))
+        {
+          ((Cilk_cilk2c_pop)((_cilk_ws)));
+          return ;
+        } else {
+          ;
+        }
+      } else {
+        ;
+      }
+    }
+    /* TODO: restore only live variables */;
+    ((customers) = (((_cilk_frame)->scope269).customers));
+    ((numCustomers) = (((_cilk_frame)->scope262).numCustomers));
+    ((numStore1) = (((_cilk_frame)->scope263).numStore1));
+    ((numStore2) = (((_cilk_frame)->scope264).numStore2));
+    ((numStore3) = (((_cilk_frame)->scope265).numStore3));
+    ((result1) = (((_cilk_frame)->scope276).result1));
+    ((result2) = (((_cilk_frame)->scope276).result2));
+    ((result3) = (((_cilk_frame)->scope276).result3));
+    ((store1_cs) = (((_cilk_frame)->scope270).store1_cs));
+    ((store2_cs) = (((_cilk_frame)->scope271).store2_cs));
+    ((store3_cs) = (((_cilk_frame)->scope272).store3_cs));
+    ;
+    ;
+    ((argc) = (((_cilk_frame)->scope257).argc));
+    ((argv) = (((_cilk_frame)->scope257).argv));
+    /* expand CILK2C_AFTER_SPAWN_SLOW() macro */;
+    ((Cilk_cilk2c_after_spawn_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+    /* TODO: save only live, dirty variables */;
+    ((((_cilk_frame)->scope269).customers) = (customers));
+    ((((_cilk_frame)->scope262).numCustomers) = (numCustomers));
+    ((((_cilk_frame)->scope263).numStore1) = (numStore1));
+    ((((_cilk_frame)->scope264).numStore2) = (numStore2));
+    ((((_cilk_frame)->scope265).numStore3) = (numStore3));
+    ((((_cilk_frame)->scope276).result1) = (result1));
+    ((((_cilk_frame)->scope276).result2) = (result2));
+    ((((_cilk_frame)->scope276).result3) = (result3));
+    ((((_cilk_frame)->scope270).store1_cs) = (store1_cs));
+    ((((_cilk_frame)->scope271).store2_cs) = (store2_cs));
+    ((((_cilk_frame)->scope272).store3_cs) = (store3_cs));
+    ;
+    ;
+    ((((_cilk_frame)->scope257).argc) = (argc));
+    ((((_cilk_frame)->scope257).argv) = (argv));
     if (0)
     {
       _cilk_sync3:;
       /* TODO: restore only live variables */;
-      ((customers) = (((_cilk_frame)->scope259).customers));
-      ((numCustomers) = (((_cilk_frame)->scope254).numCustomers));
-      ((numStore1) = (((_cilk_frame)->scope255).numStore1));
-      ((numStore2) = (((_cilk_frame)->scope256).numStore2));
-      ((numStore3) = (((_cilk_frame)->scope257).numStore3));
-      ((result1) = (((_cilk_frame)->scope264).result1));
-      ((result2) = (((_cilk_frame)->scope264).result2));
-      ((result3) = (((_cilk_frame)->scope264).result3));
-      ((result4) = (((_cilk_frame)->scope264).result4));
-      ((store1_cs) = (((_cilk_frame)->scope260).store1_cs));
-      ((store2_cs) = (((_cilk_frame)->scope261).store2_cs));
-      ((store3_cs) = (((_cilk_frame)->scope262).store3_cs));
+      ((customers) = (((_cilk_frame)->scope269).customers));
+      ((numCustomers) = (((_cilk_frame)->scope262).numCustomers));
+      ((numStore1) = (((_cilk_frame)->scope263).numStore1));
+      ((numStore2) = (((_cilk_frame)->scope264).numStore2));
+      ((numStore3) = (((_cilk_frame)->scope265).numStore3));
+      ((result1) = (((_cilk_frame)->scope276).result1));
+      ((result2) = (((_cilk_frame)->scope276).result2));
+      ((result3) = (((_cilk_frame)->scope276).result3));
+      ((store1_cs) = (((_cilk_frame)->scope270).store1_cs));
+      ((store2_cs) = (((_cilk_frame)->scope271).store2_cs));
+      ((store3_cs) = (((_cilk_frame)->scope272).store3_cs));
       ;
       ;
-      ((argc) = (((_cilk_frame)->scope252).argc));
-      ((argv) = (((_cilk_frame)->scope252).argv));
+      ((argc) = (((_cilk_frame)->scope257).argc));
+      ((argv) = (((_cilk_frame)->scope257).argv));
     } else {
       ;
     }
@@ -4467,22 +4458,21 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
     ((Cilk_cilk2c_before_sync_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
     ((((_cilk_frame)->header).entry) = 4);
     /* TODO: save only live, dirty variables */;
-    ((((_cilk_frame)->scope259).customers) = (customers));
-    ((((_cilk_frame)->scope254).numCustomers) = (numCustomers));
-    ((((_cilk_frame)->scope255).numStore1) = (numStore1));
-    ((((_cilk_frame)->scope256).numStore2) = (numStore2));
-    ((((_cilk_frame)->scope257).numStore3) = (numStore3));
-    ((((_cilk_frame)->scope264).result1) = (result1));
-    ((((_cilk_frame)->scope264).result2) = (result2));
-    ((((_cilk_frame)->scope264).result3) = (result3));
-    ((((_cilk_frame)->scope264).result4) = (result4));
-    ((((_cilk_frame)->scope260).store1_cs) = (store1_cs));
-    ((((_cilk_frame)->scope261).store2_cs) = (store2_cs));
-    ((((_cilk_frame)->scope262).store3_cs) = (store3_cs));
+    ((((_cilk_frame)->scope269).customers) = (customers));
+    ((((_cilk_frame)->scope262).numCustomers) = (numCustomers));
+    ((((_cilk_frame)->scope263).numStore1) = (numStore1));
+    ((((_cilk_frame)->scope264).numStore2) = (numStore2));
+    ((((_cilk_frame)->scope265).numStore3) = (numStore3));
+    ((((_cilk_frame)->scope276).result1) = (result1));
+    ((((_cilk_frame)->scope276).result2) = (result2));
+    ((((_cilk_frame)->scope276).result3) = (result3));
+    ((((_cilk_frame)->scope270).store1_cs) = (store1_cs));
+    ((((_cilk_frame)->scope271).store2_cs) = (store2_cs));
+    ((((_cilk_frame)->scope272).store3_cs) = (store3_cs));
     ;
     ;
-    ((((_cilk_frame)->scope252).argc) = (argc));
-    ((((_cilk_frame)->scope252).argv) = (argv));
+    ((((_cilk_frame)->scope257).argc) = (argc));
+    ((((_cilk_frame)->scope257).argv) = (argv));
     if (((Cilk_sync)((_cilk_ws))))
     {
       return ;
@@ -4491,22 +4481,21 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
       ;
     }
     /* TODO: restore only live variables */;
-    ((customers) = (((_cilk_frame)->scope259).customers));
-    ((numCustomers) = (((_cilk_frame)->scope254).numCustomers));
-    ((numStore1) = (((_cilk_frame)->scope255).numStore1));
-    ((numStore2) = (((_cilk_frame)->scope256).numStore2));
-    ((numStore3) = (((_cilk_frame)->scope257).numStore3));
-    ((result1) = (((_cilk_frame)->scope264).result1));
-    ((result2) = (((_cilk_frame)->scope264).result2));
-    ((result3) = (((_cilk_frame)->scope264).result3));
-    ((result4) = (((_cilk_frame)->scope264).result4));
-    ((store1_cs) = (((_cilk_frame)->scope260).store1_cs));
-    ((store2_cs) = (((_cilk_frame)->scope261).store2_cs));
-    ((store3_cs) = (((_cilk_frame)->scope262).store3_cs));
+    ((customers) = (((_cilk_frame)->scope269).customers));
+    ((numCustomers) = (((_cilk_frame)->scope262).numCustomers));
+    ((numStore1) = (((_cilk_frame)->scope263).numStore1));
+    ((numStore2) = (((_cilk_frame)->scope264).numStore2));
+    ((numStore3) = (((_cilk_frame)->scope265).numStore3));
+    ((result1) = (((_cilk_frame)->scope276).result1));
+    ((result2) = (((_cilk_frame)->scope276).result2));
+    ((result3) = (((_cilk_frame)->scope276).result3));
+    ((store1_cs) = (((_cilk_frame)->scope270).store1_cs));
+    ((store2_cs) = (((_cilk_frame)->scope271).store2_cs));
+    ((store3_cs) = (((_cilk_frame)->scope272).store3_cs));
     ;
     ;
-    ((argc) = (((_cilk_frame)->scope252).argc));
-    ((argv) = (((_cilk_frame)->scope252).argv));
+    ((argc) = (((_cilk_frame)->scope257).argc));
+    ((argv) = (((_cilk_frame)->scope257).argv));
     /* expand CILK2C_AFTER_SYNC_SLOW() macro */;
     ((Cilk_cilk2c_after_sync_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
     /* expand CILK2C_AT_THREAD_BOUNDARY_SLOW() macro */;
@@ -4542,8 +4531,8 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
     }
     ((free)((store3_cs)));
     {
-      signed int __tmp139 = 1;
-      ((Cilk_set_result)((_cilk_ws), (&(__tmp139)), (sizeof((__tmp139)))));
+      signed int __tmp140 = 1;
+      ((Cilk_set_result)((_cilk_ws), (&(__tmp140)), (sizeof((__tmp140)))));
       /* expand CILK2C_BEFORE_RETURN_SLOW macro */;
       ((Cilk_cilk2c_before_return_slow_cp)((_cilk_ws), (&((_cilk_frame)->header))));
       ((Cilk_cilk2c_before_return_slow)((_cilk_ws), (&((_cilk_frame)->header)), (sizeof((*(_cilk_frame))))));
@@ -4556,8 +4545,8 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
   /* TODO: save only live, dirty variables */;
   ;
   ;
-  ((((_cilk_frame)->scope252).argc) = (argc));
-  ((((_cilk_frame)->scope252).argv) = (argv));
+  ((((_cilk_frame)->scope257).argc) = (argc));
+  ((((_cilk_frame)->scope257).argv) = (argv));
   if (((Cilk_sync)((_cilk_ws))))
   {
     return ;
@@ -4568,8 +4557,8 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
   /* TODO: restore only live variables */;
   ;
   ;
-  ((argc) = (((_cilk_frame)->scope252).argc));
-  ((argv) = (((_cilk_frame)->scope252).argv));
+  ((argc) = (((_cilk_frame)->scope257).argc));
+  ((argv) = (((_cilk_frame)->scope257).argv));
   /* expand CILK2C_AFTER_SYNC_SLOW() macro */;
   ((Cilk_cilk2c_after_sync_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
   /* expand CILK2C_AT_THREAD_BOUNDARY_SLOW() macro */;
@@ -4580,7 +4569,7 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
 #undef CILK_WHERE_AM_I
 #define CILK_WHERE_AM_I IN_C_CODE
 
-static CilkProcInfo _cilk_cilk_main_sig[] = {{(sizeof(signed int)), (sizeof(struct _cilk_cilk_main_frame)), (_cilk_cilk_main_slow), 0, 0}, {(sizeof(signed int)), ((size_t)(((char *)(&((((struct _cilk_cilk_main_frame *)0)->scope264).result1))) - ((char *)((struct _cilk_cilk_main_frame *)0)))), 0, 0, 0}, {(sizeof(signed int)), ((size_t)(((char *)(&((((struct _cilk_cilk_main_frame *)0)->scope264).result2))) - ((char *)((struct _cilk_cilk_main_frame *)0)))), 0, 0, 0}, {(sizeof(signed int)), ((size_t)(((char *)(&((((struct _cilk_cilk_main_frame *)0)->scope264).result3))) - ((char *)((struct _cilk_cilk_main_frame *)0)))), 0, 0, 0}, {0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}};
+static CilkProcInfo _cilk_cilk_main_sig[] = {{(sizeof(signed int)), (sizeof(struct _cilk_cilk_main_frame)), (_cilk_cilk_main_slow), 0, 0}, {(sizeof(signed int)), ((size_t)(((char *)(&((((struct _cilk_cilk_main_frame *)0)->scope276).result1))) - ((char *)((struct _cilk_cilk_main_frame *)0)))), 0, 0, 0}, {(sizeof(signed int)), ((size_t)(((char *)(&((((struct _cilk_cilk_main_frame *)0)->scope276).result2))) - ((char *)((struct _cilk_cilk_main_frame *)0)))), 0, 0, 0}, {(sizeof(signed int)), ((size_t)(((char *)(&((((struct _cilk_cilk_main_frame *)0)->scope276).result3))) - ((char *)((struct _cilk_cilk_main_frame *)0)))), 0, 0, 0}, {0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}};
 
 #undef CILK_WHERE_AM_I
 #define CILK_WHERE_AM_I IN_FAST_PROCEDURE
@@ -4604,25 +4593,24 @@ signed int cilk_main(CilkWorkerState  *const  _cilk_ws, signed int  argc, char  
     signed int  * *store1_cs = ((readStoreData)("store1.csv", (numStore1)));
     signed int  * *store2_cs = ((readStoreData)("store2.csv", (numStore2)));
     signed int  * *store3_cs = ((readStoreData)("store3.csv", (numStore3)));
-    signed int result1, result2, result3, result4;
+    signed int result1, result2, result3;
     ((((_cilk_frame)->header).entry) = 1);
     /* TODO: save only live, dirty variables */;
-    ((((_cilk_frame)->scope259).customers) = (customers));
-    ((((_cilk_frame)->scope254).numCustomers) = (numCustomers));
-    ((((_cilk_frame)->scope255).numStore1) = (numStore1));
-    ((((_cilk_frame)->scope256).numStore2) = (numStore2));
-    ((((_cilk_frame)->scope257).numStore3) = (numStore3));
-    ((((_cilk_frame)->scope264).result1) = (result1));
-    ((((_cilk_frame)->scope264).result2) = (result2));
-    ((((_cilk_frame)->scope264).result3) = (result3));
-    ((((_cilk_frame)->scope264).result4) = (result4));
-    ((((_cilk_frame)->scope260).store1_cs) = (store1_cs));
-    ((((_cilk_frame)->scope261).store2_cs) = (store2_cs));
-    ((((_cilk_frame)->scope262).store3_cs) = (store3_cs));
+    ((((_cilk_frame)->scope269).customers) = (customers));
+    ((((_cilk_frame)->scope262).numCustomers) = (numCustomers));
+    ((((_cilk_frame)->scope263).numStore1) = (numStore1));
+    ((((_cilk_frame)->scope264).numStore2) = (numStore2));
+    ((((_cilk_frame)->scope265).numStore3) = (numStore3));
+    ((((_cilk_frame)->scope276).result1) = (result1));
+    ((((_cilk_frame)->scope276).result2) = (result2));
+    ((((_cilk_frame)->scope276).result3) = (result3));
+    ((((_cilk_frame)->scope270).store1_cs) = (store1_cs));
+    ((((_cilk_frame)->scope271).store2_cs) = (store2_cs));
+    ((((_cilk_frame)->scope272).store3_cs) = (store3_cs));
     ;
     ;
-    ((((_cilk_frame)->scope252).argc) = (argc));
-    ((((_cilk_frame)->scope252).argv) = (argv));
+    ((((_cilk_frame)->scope257).argc) = (argc));
+    ((((_cilk_frame)->scope257).argv) = (argv));
     /* expand CILK2C_BEFORE_SPAWN_FAST() macro */;
     ((Cilk_cilk2c_before_spawn_fast_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
     /* expand CILK2C_PUSH_FRAME() macro */;
@@ -4630,11 +4618,11 @@ signed int cilk_main(CilkWorkerState  *const  _cilk_ws, signed int  argc, char  
     ((result1) = ((addCustData)((_cilk_ws), (customers), (store1_cs), (numCustomers), (numStore1))));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      signed int __tmp151;
+      signed int __tmp152;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp151) = (result1));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp151)), (sizeof((__tmp151))))))
+        ((__tmp152) = (result1));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp152)), (sizeof((__tmp152))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return 0;
@@ -4650,22 +4638,21 @@ signed int cilk_main(CilkWorkerState  *const  _cilk_ws, signed int  argc, char  
     ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
     ((((_cilk_frame)->header).entry) = 2);
     /* TODO: save only live, dirty variables */;
-    ((((_cilk_frame)->scope259).customers) = (customers));
-    ((((_cilk_frame)->scope254).numCustomers) = (numCustomers));
-    ((((_cilk_frame)->scope255).numStore1) = (numStore1));
-    ((((_cilk_frame)->scope256).numStore2) = (numStore2));
-    ((((_cilk_frame)->scope257).numStore3) = (numStore3));
-    ((((_cilk_frame)->scope264).result1) = (result1));
-    ((((_cilk_frame)->scope264).result2) = (result2));
-    ((((_cilk_frame)->scope264).result3) = (result3));
-    ((((_cilk_frame)->scope264).result4) = (result4));
-    ((((_cilk_frame)->scope260).store1_cs) = (store1_cs));
-    ((((_cilk_frame)->scope261).store2_cs) = (store2_cs));
-    ((((_cilk_frame)->scope262).store3_cs) = (store3_cs));
+    ((((_cilk_frame)->scope269).customers) = (customers));
+    ((((_cilk_frame)->scope262).numCustomers) = (numCustomers));
+    ((((_cilk_frame)->scope263).numStore1) = (numStore1));
+    ((((_cilk_frame)->scope264).numStore2) = (numStore2));
+    ((((_cilk_frame)->scope265).numStore3) = (numStore3));
+    ((((_cilk_frame)->scope276).result1) = (result1));
+    ((((_cilk_frame)->scope276).result2) = (result2));
+    ((((_cilk_frame)->scope276).result3) = (result3));
+    ((((_cilk_frame)->scope270).store1_cs) = (store1_cs));
+    ((((_cilk_frame)->scope271).store2_cs) = (store2_cs));
+    ((((_cilk_frame)->scope272).store3_cs) = (store3_cs));
     ;
     ;
-    ((((_cilk_frame)->scope252).argc) = (argc));
-    ((((_cilk_frame)->scope252).argv) = (argv));
+    ((((_cilk_frame)->scope257).argc) = (argc));
+    ((((_cilk_frame)->scope257).argv) = (argv));
     /* expand CILK2C_BEFORE_SPAWN_FAST() macro */;
     ((Cilk_cilk2c_before_spawn_fast_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
     /* expand CILK2C_PUSH_FRAME() macro */;
@@ -4673,11 +4660,11 @@ signed int cilk_main(CilkWorkerState  *const  _cilk_ws, signed int  argc, char  
     ((result2) = ((addCustData)((_cilk_ws), (customers), (store2_cs), (numCustomers), (numStore2))));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      signed int __tmp152;
+      signed int __tmp153;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp152) = (result2));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp152)), (sizeof((__tmp152))))))
+        ((__tmp153) = (result2));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp153)), (sizeof((__tmp153))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return 0;
@@ -4693,22 +4680,21 @@ signed int cilk_main(CilkWorkerState  *const  _cilk_ws, signed int  argc, char  
     ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
     ((((_cilk_frame)->header).entry) = 3);
     /* TODO: save only live, dirty variables */;
-    ((((_cilk_frame)->scope259).customers) = (customers));
-    ((((_cilk_frame)->scope254).numCustomers) = (numCustomers));
-    ((((_cilk_frame)->scope255).numStore1) = (numStore1));
-    ((((_cilk_frame)->scope256).numStore2) = (numStore2));
-    ((((_cilk_frame)->scope257).numStore3) = (numStore3));
-    ((((_cilk_frame)->scope264).result1) = (result1));
-    ((((_cilk_frame)->scope264).result2) = (result2));
-    ((((_cilk_frame)->scope264).result3) = (result3));
-    ((((_cilk_frame)->scope264).result4) = (result4));
-    ((((_cilk_frame)->scope260).store1_cs) = (store1_cs));
-    ((((_cilk_frame)->scope261).store2_cs) = (store2_cs));
-    ((((_cilk_frame)->scope262).store3_cs) = (store3_cs));
+    ((((_cilk_frame)->scope269).customers) = (customers));
+    ((((_cilk_frame)->scope262).numCustomers) = (numCustomers));
+    ((((_cilk_frame)->scope263).numStore1) = (numStore1));
+    ((((_cilk_frame)->scope264).numStore2) = (numStore2));
+    ((((_cilk_frame)->scope265).numStore3) = (numStore3));
+    ((((_cilk_frame)->scope276).result1) = (result1));
+    ((((_cilk_frame)->scope276).result2) = (result2));
+    ((((_cilk_frame)->scope276).result3) = (result3));
+    ((((_cilk_frame)->scope270).store1_cs) = (store1_cs));
+    ((((_cilk_frame)->scope271).store2_cs) = (store2_cs));
+    ((((_cilk_frame)->scope272).store3_cs) = (store3_cs));
     ;
     ;
-    ((((_cilk_frame)->scope252).argc) = (argc));
-    ((((_cilk_frame)->scope252).argv) = (argv));
+    ((((_cilk_frame)->scope257).argc) = (argc));
+    ((((_cilk_frame)->scope257).argv) = (argv));
     /* expand CILK2C_BEFORE_SPAWN_FAST() macro */;
     ((Cilk_cilk2c_before_spawn_fast_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
     /* expand CILK2C_PUSH_FRAME() macro */;
@@ -4716,11 +4702,11 @@ signed int cilk_main(CilkWorkerState  *const  _cilk_ws, signed int  argc, char  
     ((result3) = ((addCustData)((_cilk_ws), (customers), (store3_cs), (numCustomers), (numStore3))));
     {
       /* expand CILK2C_XPOP_FRAME_RESULT() macro */;
-      signed int __tmp153;
+      signed int __tmp154;
       if (((Cilk_cilk2c_pop_check)((_cilk_ws))))
       {
-        ((__tmp153) = (result3));
-        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp153)), (sizeof((__tmp153))))))
+        ((__tmp154) = (result3));
+        if (((Cilk_exception_handler)((_cilk_ws), (&(__tmp154)), (sizeof((__tmp154))))))
         {
           ((Cilk_cilk2c_pop)((_cilk_ws)));
           return 0;

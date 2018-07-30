@@ -5037,6 +5037,16 @@ string showProducts(ProductSet* p) {
   }
 }
 
+
+
+string showCustomerID(Customer* c) {
+  match(c) {
+    CustTop() -> {return str("Top()");}
+    CustBot() -> {return str("Bot()");}
+    Person(name, prods) -> {return show(name);}
+  }
+}
+
 string showCustomer(Customer* c) {
   match (c) {
     CustTop() -> {return str("Top()");}
@@ -5048,18 +5058,6 @@ string showCustomer(Customer* c) {
     }
   }
 }
-
-string showCustomerID(Customer* c) {
-  match(c) {
-    CustTop() -> {return str("Top()");}
-    CustBot() -> {return str("Bot()");}
-    Person(name, prods) -> {return show(name);}
-  }
-}
-
-
-
-
 
 
 
@@ -5093,17 +5091,21 @@ int** readStoreData(char* filename, int num) {
   return customers;
 }
 
+
+
 cilk int cilkPut(Lvar<Customer*>* l, Customer* c) {
   cilk return put(l, c);
 }
 
 
 
-cilk int addCustData(Lvar<Customer*>** customers, int** store, int custLen, int storeLen) {
+cilk int addCustData(Lvar<Customer*>** customers, int** store,
+                                                  int custLen, int storeLen) {
   for (int i = 0; i < storeLen; i++) {
     int matchFound = 0;
     for (int j = 0; j < custLen && !matchFound; j++) {
-      spawn matchFound = cilkPut(customers[j], Person(store[i][0], P_Set(store[i][1], P_Empty())));
+      spawn matchFound = cilkPut(customers[j], Person(store[i][0],
+                                               P_Set(store[i][1], P_Empty())));
       sync;
     }
     if (!matchFound) {
@@ -5125,6 +5127,7 @@ int freezeCustomers(Lvar<Customer*>** customers, int custLen) {
 
 
 
+
 int lookupCustomer(Lvar<Customer*>** customers, int custLen, int cid) {
   ActivationSet<Customer*>* a = activationSet(lat, 1){Person(cid, P_Empty())};
   ThresholdSet<Customer*>* t = thresholdSet(lat, 1){a};
@@ -5138,12 +5141,15 @@ int lookupCustomer(Lvar<Customer*>** customers, int custLen, int cid) {
   return 0;
 }
 
+
+
 int printCustomers(Lvar<Customer*>** customers, int custLen) {
   for (int i = 0; i < custLen; i++) {
     printf("%s\n", showCustomer(freeze(customers[i])).text);
   }
   return 1;
 }
+
 
 
 
@@ -5163,20 +5169,27 @@ int lookupProdSet(Lvar<Customer*>** customers, int custLen, ProductSet* prods) {
   return ret;
 }
 
+
+
 int userInteraction(Lvar<Customer*>** customers, int custLen) {
+
+
+
   printf("Commands:\n");
   printf("  print:          display all customer entries\n");
   printf("  exit:           exit the program\n");
-  printf("  show customer <id>:  display the products purchased by a customer with a given id\n");
-  printf("  show products <number of products>: <prod 1> <prod 2> ... <prod n>: display the customer ids of those who purchased all listed products\n");
+  printf("  show customer <id>:  display the products purchased by a customer                                                            with a given id\n");
+
+  printf("  show products <number of products>: <prod 1> <prod 2> ... <prod n>     : display the customer ids of those who purchased all listed products\n");
+
 
   char cmd[128];
   int success;
 
   while (1) {
-
     printf(">>> ");
     success = fscanf(stdin, "%s", cmd);
+
     if (success == (-1)) {
       printf("\n");
       break;
@@ -5193,25 +5206,31 @@ int userInteraction(Lvar<Customer*>** customers, int custLen) {
 
     else if (strcmp("show", cmd) == 0){
       fscanf(stdin, " %s", cmd);
+
       if (strcmp("customer", cmd) == 0) {
         int custID;
         fscanf(stdin, " %d", &custID);
         success = lookupCustomer(customers, custLen, custID);
+
         if (!success) {
           printf("Customer %d not found.\n", custID);
         }
       }
+
       else if (strcmp("products", cmd) == 0) {
         int numProds;
         int nextProd;
         ProductSet* result = P_Empty();
         success = fscanf(stdin, " %d:", &numProds);
+
         for (int i = 0; i < numProds; i++) {
           success = fscanf(stdin, " %d", &nextProd);
           result = P_Set(nextProd, result);
         }
+
         printf("Looking for matching customers...\n");
         success = lookupProdSet(customers, custLen, result);
+
         if (!success) {
           printf("Product Set {%s} not found.\n", showProducts(result).text);
         }
@@ -5226,26 +5245,38 @@ int userInteraction(Lvar<Customer*>** customers, int custLen) {
   return 0;
 }
 
+
+
+
 cilk int main(int argc, char **argv) {
+
+
+
   lat = lattice(CustBot(), CustTop(), leqCustomer, lubCustomer, eqCustomer, showCustomer);
   int numCustomers = 50;
   int numStore1 = 5000;
   int numStore2 = 5000;
   int numStore3 = 5000;
 
+
+
   Lvar<Customer*>** customers = initCustomers(numCustomers);
   int** store1_cs = readStoreData("store1.csv", numStore1);
   int** store2_cs = readStoreData("store2.csv", numStore2);
   int** store3_cs = readStoreData("store3.csv", numStore3);
 
-  int result1, result2, result3, result4;
 
+
+  int result1, result2, result3;
   spawn result1 = addCustData(customers, store1_cs, numCustomers, numStore1);
   spawn result2 = addCustData(customers, store2_cs, numCustomers, numStore2);
   spawn result3 = addCustData(customers, store3_cs, numCustomers, numStore3);
   sync;
 
+
+
   freezeCustomers(customers, numCustomers);
+
 
 
 

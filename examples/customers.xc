@@ -163,6 +163,16 @@ string showProducts(ProductSet* p) {
   }
 }
 
+// helper to show just the ID of a customer
+
+string showCustomerID(Customer* c) {
+  match(c) {
+    CustTop() -> {return str("Top()");}
+    CustBot() -> {return str("Bot()");}
+    Person(name, prods) -> {return show(name);}
+  }
+}
+
 string showCustomer(Customer* c) {
   match (c) {
     CustTop() -> {return str("Top()");}
@@ -175,23 +185,11 @@ string showCustomer(Customer* c) {
   }
 }
 
-string showCustomerID(Customer* c) {
-  match(c) {
-    CustTop() -> {return str("Top()");}
-    CustBot() -> {return str("Bot()");}
-    Person(name, prods) -> {return show(name);}
-  }
-}
+// ****************** end lattice set-up **************************************
 
-// generate a bunch of customers
-// try to sort the customers at the same time as adding products in?
-// so only get each customer once they have reached a certain threshold (e.g., certain number of products)
-// might want a function to generate a threshold for given customer based on their name? 
-// Might have min score for each product, so reached threshold when total score is at or above some amount?
+Lattice<Customer*>* lat; // the underlying lattice set up above
 
-Lattice<Customer*>* lat;
-
-// initialize an array of empty customer lvars
+// to initialize an array (of specified length) of empty customer lvars 
 
 Lvar<Customer*>** initCustomers(int num) {
   Lvar<Customer*>** customers = malloc(num * sizeof(Lvar<Customer*>*));
@@ -201,7 +199,7 @@ Lvar<Customer*>** initCustomers(int num) {
   return customers;
 }
 
-// read customer-product entries from a file into an array
+// to read customer-product entries from a file into an array of integer arrays
 
 int** readStoreData(char* filename, int num) {
   FILE *fp = fopen(filename, "r");
@@ -219,17 +217,21 @@ int** readStoreData(char* filename, int num) {
   return customers;
 }
 
+// to put a value c into an lvar l
+
 cilk int cilkPut(Lvar<Customer*>* l, Customer* c) {
   cilk return put(l, c);
 } 
 
-// take data from array read in from file and put it into lvars
+// to take data from array read in from file and put it into array of lvars
 
-cilk int addCustData(Lvar<Customer*>** customers, int** store, int custLen, int storeLen) {
+cilk int addCustData(Lvar<Customer*>** customers, int** store, 
+                                                  int custLen, int storeLen) {
   for (int i = 0; i < storeLen; i++) {
     int matchFound = 0;
     for (int j = 0; j < custLen && !matchFound; j++) {
-      spawn matchFound = cilkPut(customers[j], Person(store[i][0], P_Set(store[i][1], P_Empty())));
+      spawn matchFound = cilkPut(customers[j], Person(store[i][0], 
+                                               P_Set(store[i][1], P_Empty())));
       sync;
     }
     if (!matchFound) {
@@ -240,7 +242,7 @@ cilk int addCustData(Lvar<Customer*>** customers, int** store, int custLen, int 
   cilk return 1;
 }
 
-// go through and freeze each customer lvar once finished writing
+// to go through and freeze each customer lvar once finished writing
 
 int freezeCustomers(Lvar<Customer*>** customers, int custLen) {
   for (int i = 0; i < custLen; i++) {
@@ -249,7 +251,8 @@ int freezeCustomers(Lvar<Customer*>** customers, int custLen) {
   return 1;
 }
 
-// intended to be used *after* freezing of all customers, but if not, will simply block
+// to find the entry associated with a given customer ID
+// intended to be used *after* freezing of all customers
 
 int lookupCustomer(Lvar<Customer*>** customers, int custLen, int cid) {
   ActivationSet<Customer*>* a = activationSet(lat, 1){Person(cid, P_Empty())};
@@ -264,6 +267,8 @@ int lookupCustomer(Lvar<Customer*>** customers, int custLen, int cid) {
   return 0;
 }
 
+// to print all customer entries
+
 int printCustomers(Lvar<Customer*>** customers, int custLen) {
   for (int i = 0; i < custLen; i++) {
     printf("%s\n", showCustomer(freeze(customers[i])).text);
@@ -271,7 +276,8 @@ int printCustomers(Lvar<Customer*>** customers, int custLen) {
   return 1;
 }
 
-// intended to be used *after* freezing of all customers, but if not, will simply block
+// to display all customer IDs associated with a given set of products
+// intended to be used *after* freezing of all customers
 
 int lookupProdSet(Lvar<Customer*>** customers, int custLen, ProductSet* prods) {
   ActivationSet<Customer*>* a = activationSet(lat, 1){Person(0, prods)};
@@ -289,62 +295,75 @@ int lookupProdSet(Lvar<Customer*>** customers, int custLen, ProductSet* prods) {
   return ret;
 }
 
+// to handle user input
+
 int userInteraction(Lvar<Customer*>** customers, int custLen) {
+
+  // print guide
+
   printf("Commands:\n");
   printf("  print:          display all customer entries\n");
   printf("  exit:           exit the program\n");
-  printf("  show customer <id>:  display the products purchased by a customer with a given id\n");
-  printf("  show products <number of products>: <prod 1> <prod 2> ... <prod n>: display the customer ids of those who purchased all listed products\n");
+  printf("  show customer <id>:  display the products purchased by a customer \
+                                                           with a given id\n");
+  printf("  show products <number of products>: <prod 1> <prod 2> ... <prod n>\
+     : display the customer ids of those who purchased all listed products\n");
   
   char cmd[128];
   int success;
 
   while (1) {
+    printf(">>> ");                 
+    success = fscanf(stdin, "%s", cmd); 
 
-    printf(">>> ");                 // print prompt
-    success = fscanf(stdin, "%s", cmd); // read a command
-    if (success == EOF) {                 // check for end of input
-      printf("\n");                   // found end of input
-      break;                          // break from loop
+    if (success == EOF) {               
+      printf("\n");                  
+      break;                         
     }
 
-    if (strcmp("exit", cmd) == 0){     // check for exit command
+    if (strcmp("exit", cmd) == 0){     
       printf("\n");
-      break;                          // break from loop
+      break;                          
     }
 
-    else if (strcmp("print", cmd) == 0){   // print command
+    else if (strcmp("print", cmd) == 0){  
       printCustomers(customers, custLen);
     }
 
     else if (strcmp("show", cmd) == 0){
       fscanf(stdin, " %s", cmd);
+
       if (strcmp("customer", cmd) == 0) {
         int custID;
         fscanf(stdin, " %d", &custID);
         success = lookupCustomer(customers, custLen, custID);
+
         if (!success) {
           printf("Customer %d not found.\n", custID);
         } 
       }
+
       else if (strcmp("products", cmd) == 0) {
         int numProds;
         int nextProd;
         ProductSet* result = P_Empty();
         success = fscanf(stdin, " %d:", &numProds);
+
         for (int i = 0; i < numProds; i++) {
           success = fscanf(stdin, " %d", &nextProd);
           result = P_Set(nextProd, result);
         }
+
         printf("Looking for matching customers...\n");
         success = lookupProdSet(customers, custLen, result);
+
         if (!success) {
           printf("Product Set {%s} not found.\n", showProducts(result).text);
         }
       }
     }
 
-    else {                                 // unknown command
+    else {                             
       printf("Unknown command. %s\n",cmd);
     }
   }  
@@ -352,28 +371,40 @@ int userInteraction(Lvar<Customer*>** customers, int custLen) {
   return 0;
 }
 
+// main method: creates lattice, reads in data from store files, 
+//              adds data to array of lvars
+
 cilk int main(int argc, char **argv) {
+
+  // set up
+
   lat = lattice(CustBot(), CustTop(), leqCustomer, lubCustomer, eqCustomer, showCustomer);
   int numCustomers = 50;
   int numStore1 = 5000;
   int numStore2 = 5000;
   int numStore3 = 5000;
 
+  // read from file
+
   Lvar<Customer*>** customers = initCustomers(numCustomers);
   int** store1_cs = readStoreData("store1.csv", numStore1);
   int** store2_cs = readStoreData("store2.csv", numStore2);
   int** store3_cs = readStoreData("store3.csv", numStore3);
 
-  int result1, result2, result3, result4;
+  // put data into lvars
 
+  int result1, result2, result3;
   spawn result1 = addCustData(customers, store1_cs, numCustomers, numStore1);
   spawn result2 = addCustData(customers, store2_cs, numCustomers, numStore2);
   spawn result3 = addCustData(customers, store3_cs, numCustomers, numStore3);
   sync;
 
+  // freeze data
+
   freezeCustomers(customers, numCustomers);
 
-  // loop that allows user to look up a customer, or a customer and a set of products
+  // loop that allows user to look up a customer, 
+  // or a customer and a set of products, until done
 
   userInteraction(customers, numCustomers);
 
