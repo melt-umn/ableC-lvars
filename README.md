@@ -14,10 +14,8 @@
 
 + Future work-- way to nicely implement sets for unknown data type for users to access without set-up, other "pre-fab" data structures
 + Add in stuff with running example
-
-"But suppose that we want to concurrently insert two strings that happen to share a prefix — suppose, for instance, that one thread is trying to insert '1100' while another is trying to insert '1111'. Now we have a dilemma. If one thread writes into the topmost IVar for 1, but the other thread has gotten there first and done its insertion, we’ll raise a multiple-put error. So we need to check for emptiness before doing a write — but there’s no way to do so, since the only deterministic way to read from an IVar is to make a get call that will block until the IVar is full. So, each thread will have to block waiting for the other — even though the result of the two writes would be the same regardless of the order in which they occurred. If we were using LVars instead of IVars, then the two inserting threads could happily race to write their shared prefix, with no risk of nondeterminism, since they’d both be writing the same thing!"
-
-+ Need examples with no side effects (yikes) until after syncing
++ Refer to style resources and spiff up writing
++ Need examples with no side effects until after syncing
 
 Guarantees of determinism don't hold with side-effects: "We define a program to be deterministic if, given the same inputs, it will always produce the same observable result. Here, inputs are votes, and we define the observable result of a program to be the value to which it evaluates. We’ve therefore cheated a bit with our call to call_for_pizza, since it triggers a side effect, and our determinism guarantee doesn’t say anything about side effects."
 

@@ -5154,7 +5154,7 @@ int lookupProdSet(Lvar<Customer*>** customers, int custLen, ProductSet* prods) {
   for (int i = 0; i < custLen; i++) {
     ActivationSet<Customer*>* result = get(customers[i], t);
     if (result != ((void *)0)) {
-      printf("%s\n", showCustomerID(freeze(customers[i])).text);
+      printf("Customer #%s\n", showCustomerID(freeze(customers[i])).text);
       ret = 1;
     }
   }
@@ -5166,7 +5166,7 @@ int userInteraction(Lvar<Customer*>** customers, int custLen) {
   printf("  print:          display all customer entries\n");
   printf("  exit:           exit the program\n");
   printf("  show customer <id>:  display the products purchased by a customer with a given id\n");
-  printf("  show products <number of products> <prod 1> <prod 2> ... <prod n>: display the customer ids of those who purchased all listed products\n");
+  printf("  show products <number of products>: <prod 1> <prod 2> ... <prod n>: display the customer ids of those who purchased all listed products\n");
 
   char cmd[128];
   int success;
@@ -5200,7 +5200,19 @@ int userInteraction(Lvar<Customer*>** customers, int custLen) {
         }
       }
       else if (strcmp("products", cmd) == 0) {
-
+        int numProds;
+        int nextProd;
+        ProductSet* result = P_Empty();
+        success = fscanf(stdin, " %d:", &numProds);
+        for (int i = 0; i < numProds; i++) {
+          success = fscanf(stdin, " %d", &nextProd);
+          result = P_Set(nextProd, result);
+        }
+        printf("Looking for matching customers...\n");
+        success = lookupProdSet(customers, custLen, result);
+        if (!success) {
+          printf("Product Set {%s} not found.\n", showProducts(result).text);
+        }
       }
     }
 
