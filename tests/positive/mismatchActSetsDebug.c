@@ -2901,14 +2901,6 @@ static struct _template__ActivationSet__pointer__tag_struct_State_41__  *_templa
 {
 
   {
-    signed int timeInMs = 10000;
-    struct timeval tv;
-    struct timespec ts;
-    ((gettimeofday)((&(tv)), (((void *)0))));
-    (((ts).tv_sec) = (((time)((((void *)0)))) + ((timeInMs) / 1000)));
-    (((ts).tv_nsec) = ((((tv).tv_usec) * 1000) + ((1000 * 1000) * (((timeInMs) % 1000)))));
-    (((ts).tv_sec) += (((ts).tv_nsec) / (((1000 * 1000) * 1000))));
-    (((ts).tv_nsec) %= (((1000 * 1000) * 1000)));
     ((pthread_mutex_lock)((&(((l)->_mutex)))));
     if ((((l)->_lattice) != ((t)->_lattice)))
     {
@@ -2923,17 +2915,16 @@ static struct _template__ActivationSet__pointer__tag_struct_State_41__  *_templa
     while (((actReached) == (((void *)0))))
     {
       {
-        signed int n = ((pthread_cond_timedwait)((&(((l)->_cond))), (&(((l)->_mutex))), (&(ts))));
-        if (((n) == 110))
+        if (((l)->_frozen))
         {
           {
             ((pthread_mutex_unlock)((&(((l)->_mutex)))));
-            ((printf)("Get timed out.\n"));
             return (((void *)0));
           }
         } else {
           ;
         }
+        ((pthread_cond_wait)((&(((l)->_cond))), (&(((l)->_mutex)))));
         ((actReached) = ((_template__thresholdReached__pointer__tag_struct_State_41__)((l), (t))));
       }
     }

@@ -264,6 +264,13 @@ int lookupCustomer(Lvar<Customer*>** customers, int custLen, int cid) {
   return 0;
 }
 
+int printCustomers(Lvar<Customer*>** customers, int custLen) {
+  for (int i = 0; i < custLen; i++) {
+    printf("%s\n", showCustomer(freeze(customers[i])).text);
+  }
+  return 1;
+}
+
 // intended to be used *after* freezing of all customers, but if not, will simply block
 
 int lookupProdSet(Lvar<Customer*>** customers, int custLen, ProductSet* prods) {
@@ -278,6 +285,57 @@ int lookupProdSet(Lvar<Customer*>** customers, int custLen, ProductSet* prods) {
     }
   } 
   return ret;
+}
+
+int userInteraction(Lvar<Customer*>** customers, int custLen) {
+  printf("Commands:\n");
+  printf("  print:          display all customer entries\n");
+  printf("  exit:           exit the program\n");
+  printf("  show customer <id>:  display the products purchased by a customer with a given id\n");
+  printf("  show products <number of products> <prod 1> <prod 2> ... <prod n>: display the customer ids of those who purchased all listed products\n");
+  
+  char cmd[128];
+  int success;
+
+  while (1) {
+
+    printf(">>> ");                 // print prompt
+    success = fscanf(stdin, "%s", cmd); // read a command
+    if (success == EOF) {                 // check for end of input
+      printf("\n");                   // found end of input
+      break;                          // break from loop
+    }
+
+    if (strcmp("exit", cmd) == 0){     // check for exit command
+      printf("\n");
+      break;                          // break from loop
+    }
+
+    else if (strcmp("print", cmd) == 0){   // print command
+      printCustomers(customers, custLen);
+    }
+
+    else if (strcmp("show", cmd) == 0){
+      fscanf(stdin, " %s", cmd);
+      if (strcmp("customer", cmd) == 0) {
+        int custID;
+        fscanf(stdin, " %d", &custID);
+        success = lookupCustomer(customers, custLen, custID);
+        if (!success) {
+          printf("Customer %d not found.\n", custID);
+        } 
+      }
+      else if (strcmp("products", cmd) == 0) {
+        // do lookup products stuff
+      }
+    }
+
+    else {                                 // unknown command
+      printf("Unknown command. %s\n",cmd);
+    }
+  }  
+  // end main while loop
+  return 0;
 }
 
 cilk int main(int argc, char **argv) {
@@ -301,15 +359,9 @@ cilk int main(int argc, char **argv) {
 
   freezeCustomers(customers, numCustomers);
 
-  int cid = 42;
-  printf("Looking up customer with ID %d:\n\n", cid);
-  lookupCustomer(customers, numCustomers, cid);
-
-  ProductSet* pset = P_Set(123, P_Empty());
-  printf("\nLooking up customers who have purchased products {%s}:\n\n", showProducts(pset).text);
-  lookupProdSet(customers, numCustomers, pset);
-
   // loop that allows user to look up a customer, or a customer and a set of products
+
+  userInteraction(customers, numCustomers);
 
   cilk return 1;
 }

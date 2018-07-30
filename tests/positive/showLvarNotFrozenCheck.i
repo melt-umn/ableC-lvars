@@ -3309,6 +3309,10 @@ static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
 
   ActivationSet<a>* actReached = inst _thresholdReached<a>(l, t);
   while (actReached == ((void *)0)) {
+    if (l->_frozen) {
+      pthread_mutex_unlock(&(l->_mutex));
+      return ((void *)0);
+    }
     pthread_cond_wait(&(l->_cond), &(l->_mutex));
     actReached = inst _thresholdReached<a>(l, t);
   }

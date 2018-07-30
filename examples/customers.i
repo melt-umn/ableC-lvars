@@ -5138,6 +5138,13 @@ int lookupCustomer(Lvar<Customer*>** customers, int custLen, int cid) {
   return 0;
 }
 
+int printCustomers(Lvar<Customer*>** customers, int custLen) {
+  for (int i = 0; i < custLen; i++) {
+    printf("%s\n", showCustomer(freeze(customers[i])).text);
+  }
+  return 1;
+}
+
 
 
 int lookupProdSet(Lvar<Customer*>** customers, int custLen, ProductSet* prods) {
@@ -5152,6 +5159,57 @@ int lookupProdSet(Lvar<Customer*>** customers, int custLen, ProductSet* prods) {
     }
   }
   return ret;
+}
+
+int userInteraction(Lvar<Customer*>** customers, int custLen) {
+  printf("Commands:\n");
+  printf("  print:          display all customer entries\n");
+  printf("  exit:           exit the program\n");
+  printf("  show customer <id>:  display the products purchased by a customer with a given id\n");
+  printf("  show products <number of products> <prod 1> <prod 2> ... <prod n>: display the customer ids of those who purchased all listed products\n");
+
+  char cmd[128];
+  int success;
+
+  while (1) {
+
+    printf(">>> ");
+    success = fscanf(stdin, "%s", cmd);
+    if (success == (-1)) {
+      printf("\n");
+      break;
+    }
+
+    if (strcmp("exit", cmd) == 0){
+      printf("\n");
+      break;
+    }
+
+    else if (strcmp("print", cmd) == 0){
+      printCustomers(customers, custLen);
+    }
+
+    else if (strcmp("show", cmd) == 0){
+      fscanf(stdin, " %s", cmd);
+      if (strcmp("customer", cmd) == 0) {
+        int custID;
+        fscanf(stdin, " %d", &custID);
+        success = lookupCustomer(customers, custLen, custID);
+        if (!success) {
+          printf("Customer %d not found.\n", custID);
+        }
+      }
+      else if (strcmp("products", cmd) == 0) {
+
+      }
+    }
+
+    else {
+      printf("Unknown command. %s\n",cmd);
+    }
+  }
+
+  return 0;
 }
 
 cilk int main(int argc, char **argv) {
@@ -5175,15 +5233,9 @@ cilk int main(int argc, char **argv) {
 
   freezeCustomers(customers, numCustomers);
 
-  int cid = 42;
-  printf("Looking up customer with ID %d:\n\n", cid);
-  lookupCustomer(customers, numCustomers, cid);
-
-  ProductSet* pset = P_Set(123, P_Empty());
-  printf("\nLooking up customers who have purchased products {%s}:\n\n", showProducts(pset).text);
-  lookupProdSet(customers, numCustomers, pset);
 
 
+  userInteraction(customers, numCustomers);
 
   cilk return 1;
 }
