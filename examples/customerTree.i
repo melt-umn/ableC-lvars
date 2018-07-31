@@ -4875,77 +4875,7 @@ static inline void Cilk_cilk2c_before_return_slow_cp(
 }
 # 6 "../../../extensions/ableC-cilk/include/cilk.xh" 2
 # 4 "customerTree.xc" 2
-
-
-
-
-
-typedef datatype ProductSet ProductSet;
-datatype ProductSet {
-  P_Empty();
-  P_Set(int, ProductSet*);
-};
-
-
-
-typedef datatype Customer Customer;
-datatype Customer {
-  Person (int, ProductSet*);
-}
-
-
-
-typedef datatype Bit Bit;
-datatype Bit {
-  None();
-  Zero();
-  One();
-}
-
-
-
-typedef datatype CustomerSet CustomerSet;
-datatype CustomerSet {
-  Top();
-  Node(Bit*, CustomerSet*, CustomerSet*);
-  Leaf(Customer*);
-  Bot();
-};
-
-
-
-int isTop(CustomerSet* c) {
-  match (c) {
-    Top() -> {return 1;}
-    _ -> {return 0;}
-  }
-}
-
-
-
-int leq(CustomerSet* c1, CustomerSet* c2) {
-  match (c1) {
-    Top() -> {
-      match (c2) {
-        Top() -> {return 1;}
-        _ -> {return 0;}
-      }
-    }
-    Bot() -> {
-      return 1;
-    }
-    Leaf(cust1) -> {
-      match (c2) {
-        Top() -> {return 1;}
-        Bot() -> {return 0;}
-        Leaf(cust2) -> {
-
-        }
-      }
-    }
-  }
-}
-
+# 220 "customerTree.xc"
 cilk int main(int argc, char **argv) {
   cilk return 1;
 }

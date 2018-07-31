@@ -3626,43 +3626,41 @@ static void _cilk_addCustData_slow(CilkWorkerState  *const  _cilk_ws, struct _ci
             /* expand CILK2C_AT_THREAD_BOUNDARY_SLOW() macro */;
             ((Cilk_cilk2c_at_thread_boundary_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
             ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
-            /* expand CILK2C_BEFORE_SYNC_SLOW() macro */;
-            ((Cilk_cilk2c_before_sync_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
-            ((((_cilk_frame)->header).entry) = 2);
-            /* TODO: save only live, dirty variables */;
-            ((((_cilk_frame)->scope208).j) = (j));
-            ((((_cilk_frame)->scope207).matchFound) = (matchFound));
-            ((((_cilk_frame)->scope206).i) = (i));
-            ;
-            ;
-            ((((_cilk_frame)->scope205).custLen) = (custLen));
-            ((((_cilk_frame)->scope204).customers) = (customers));
-            ((((_cilk_frame)->scope204).store) = (store));
-            ((((_cilk_frame)->scope205).storeLen) = (storeLen));
-            if (((Cilk_sync)((_cilk_ws))))
-            {
-              return ;
-              _cilk_sync2:;
-            } else {
-              ;
-            }
-            /* TODO: restore only live variables */;
-            ((j) = (((_cilk_frame)->scope208).j));
-            ((matchFound) = (((_cilk_frame)->scope207).matchFound));
-            ((i) = (((_cilk_frame)->scope206).i));
-            ;
-            ;
-            ((custLen) = (((_cilk_frame)->scope205).custLen));
-            ((customers) = (((_cilk_frame)->scope204).customers));
-            ((store) = (((_cilk_frame)->scope204).store));
-            ((storeLen) = (((_cilk_frame)->scope205).storeLen));
-            /* expand CILK2C_AFTER_SYNC_SLOW() macro */;
-            ((Cilk_cilk2c_after_sync_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
-            /* expand CILK2C_AT_THREAD_BOUNDARY_SLOW() macro */;
-            ((Cilk_cilk2c_at_thread_boundary_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
-            ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
           }
         }
+        /* expand CILK2C_BEFORE_SYNC_SLOW() macro */;
+        ((Cilk_cilk2c_before_sync_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+        ((((_cilk_frame)->header).entry) = 2);
+        /* TODO: save only live, dirty variables */;
+        ((((_cilk_frame)->scope207).matchFound) = (matchFound));
+        ((((_cilk_frame)->scope206).i) = (i));
+        ;
+        ;
+        ((((_cilk_frame)->scope205).custLen) = (custLen));
+        ((((_cilk_frame)->scope204).customers) = (customers));
+        ((((_cilk_frame)->scope204).store) = (store));
+        ((((_cilk_frame)->scope205).storeLen) = (storeLen));
+        if (((Cilk_sync)((_cilk_ws))))
+        {
+          return ;
+          _cilk_sync2:;
+        } else {
+          ;
+        }
+        /* TODO: restore only live variables */;
+        ((matchFound) = (((_cilk_frame)->scope207).matchFound));
+        ((i) = (((_cilk_frame)->scope206).i));
+        ;
+        ;
+        ((custLen) = (((_cilk_frame)->scope205).custLen));
+        ((customers) = (((_cilk_frame)->scope204).customers));
+        ((store) = (((_cilk_frame)->scope204).store));
+        ((storeLen) = (((_cilk_frame)->scope205).storeLen));
+        /* expand CILK2C_AFTER_SYNC_SLOW() macro */;
+        ((Cilk_cilk2c_after_sync_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+        /* expand CILK2C_AT_THREAD_BOUNDARY_SLOW() macro */;
+        ((Cilk_cilk2c_at_thread_boundary_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+        ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
         if ((!(matchFound)))
         {
           {
@@ -3782,11 +3780,11 @@ signed int addCustData(CilkWorkerState  *const  _cilk_ws, struct _template__Lvar
             /* expand CILK2C_AFTER_SPAWN_FAST() macro */;
             ((Cilk_cilk2c_after_spawn_fast_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
             ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
-            /* expand CILK2C_AT_SYNC_FAST() macro */;
-            ((Cilk_cilk2c_at_sync_fast_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
-            ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
           }
         }
+        /* expand CILK2C_AT_SYNC_FAST() macro */;
+        ((Cilk_cilk2c_at_sync_fast_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
+        ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
         if ((!(matchFound)))
         {
           {

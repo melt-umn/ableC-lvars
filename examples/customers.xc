@@ -208,8 +208,8 @@ cilk int addCustData(Lvar<Customer*>** customers, int** store,
     for (int j = 0; j < custLen && !matchFound; j++) {
       spawn matchFound = cilkPut(customers[j], Person(store[i][0], 
                                                P_Set(store[i][1], P_Empty())));
-      sync;
     }
+    sync;
     if (!matchFound) {
       printf("No matching customer!\n");
       cilk return 0;

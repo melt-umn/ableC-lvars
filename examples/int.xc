@@ -167,25 +167,10 @@ int main(int argc, char **argv) {
   printf("Showing an activation set: %s\n", show(a4).text);
 
   // ****************** Step 5. Attempt to get value(s) of lvar(s) ************
-  
-  printf("before get\n");
+
   ActivationSet<int>*  result = get(x, t);
 
-  if (result == NULL) {
-    printf("Illegal get!\n");
-    free(x);
-    free(y);
-    freeSet(a1);
-    freeSet(a2);
-    freeSet(a3);
-    freeSet(a4);
-    freeSet(t);
-    freeSet(t2);
-    free(D);
-    free(D2);
-    return 0;
-  }
-  else if (result == a1) {;
+  if (result == a1) {;
     printf("Result: 7\n");
   }
   else if (result == a2) {

@@ -2090,48 +2090,8 @@ static struct _template__ActivationSet__builtin_signed_int_  *_template__get__bu
     return (actReached);
   }
 }
-typedef signed int _template_param_unused_2685;
-static signed int _template__freeActivation__builtin_signed_int_(struct _template__ActivationSet__builtin_signed_int_  * act)
-{
-
-  {
-    ((free)(((act)->_set)));
-    ((free)((act)));
-    return 1;
-  }
-}
-typedef double _template_param_unused_2689;
-static signed int _template__freeActivation__builtin_real_double_(struct _template__ActivationSet__builtin_real_double_  * act)
-{
-
-  {
-    ((free)(((act)->_set)));
-    ((free)((act)));
-    return 1;
-  }
-}
-typedef signed int _template_param_unused_2693;
-static signed int _template__freeThreshold__builtin_signed_int_(struct _template__ThresholdSet__builtin_signed_int_  * t)
-{
-
-  {
-    ((free)(((t)->_a_sets)));
-    ((free)((t)));
-    return 1;
-  }
-}
-typedef double _template_param_unused_2697;
-static signed int _template__freeThreshold__builtin_real_double_(struct _template__ThresholdSet__builtin_real_double_  * t)
-{
-
-  {
-    ((free)(((t)->_a_sets)));
-    ((free)((t)));
-    return 1;
-  }
-}
-typedef signed int _template_param_unused_3607;
-typedef signed int _template_param_unused_3906;
+typedef signed int _template_param_unused_3591;
+typedef signed int _template_param_unused_3890;
 static struct _string_s _template__showActivation__builtin_signed_int_(struct _template__ActivationSet__builtin_signed_int_  * act)
 {
 
@@ -2142,8 +2102,8 @@ static struct _string_s _template__showActivation__builtin_signed_int_(struct _t
     {
       {
         ({
-          struct _string_s  *_tmp3907 = (&(result));
-          ((*(_tmp3907)) = ((_append_string)((*(_tmp3907)), ((_append_string)(((((act)->_lattice)->_show)((((act)->_set)[(i)]))), ((strCharPointer)(", "))))))); })
+          struct _string_s  *_tmp3891 = (&(result));
+          ((*(_tmp3891)) = ((_append_string)((*(_tmp3891)), ((_append_string)(((((act)->_lattice)->_show)((((act)->_set)[(i)]))), ((strCharPointer)(", "))))))); })
         ;
       }
     }
@@ -2151,8 +2111,8 @@ static struct _string_s _template__showActivation__builtin_signed_int_(struct _t
     {
       {
         ({
-          struct _string_s  *_tmp3908 = (&(result));
-          ((*(_tmp3908)) = ((_append_string)((*(_tmp3908)), ((((act)->_lattice)->_show)((((act)->_set)[(i)])))))); })
+          struct _string_s  *_tmp3892 = (&(result));
+          ((*(_tmp3892)) = ((_append_string)((*(_tmp3892)), ((((act)->_lattice)->_show)((((act)->_set)[(i)])))))); })
         ;
       }
     }
@@ -2169,8 +2129,8 @@ static struct _string_s _template__showThreshold__builtin_signed_int_(struct _te
     {
       {
         ({
-          struct _string_s  *_tmp3620 = (&(result));
-          ((*(_tmp3620)) = ((_append_string)((*(_tmp3620)), ((_append_string)(((_template__showActivation__builtin_signed_int_)((((t)->_a_sets)[(i)]))), ((strCharPointer)(", "))))))); })
+          struct _string_s  *_tmp3604 = (&(result));
+          ((*(_tmp3604)) = ((_append_string)((*(_tmp3604)), ((_append_string)(((_template__showActivation__builtin_signed_int_)((((t)->_a_sets)[(i)]))), ((strCharPointer)(", "))))))); })
         ;
       }
     }
@@ -2178,12 +2138,52 @@ static struct _string_s _template__showThreshold__builtin_signed_int_(struct _te
     {
       {
         ({
-          struct _string_s  *_tmp3909 = (&(result));
-          ((*(_tmp3909)) = ((_append_string)((*(_tmp3909)), ((_template__showActivation__builtin_signed_int_)((((t)->_a_sets)[(i)])))))); })
+          struct _string_s  *_tmp3893 = (&(result));
+          ((*(_tmp3893)) = ((_append_string)((*(_tmp3893)), ((_template__showActivation__builtin_signed_int_)((((t)->_a_sets)[(i)])))))); })
         ;
       }
     }
     return ((_append_string)((result), ((strCharPointer)("}"))));
+  }
+}
+typedef signed int _template_param_unused_3897;
+static signed int _template__freeActivation__builtin_signed_int_(struct _template__ActivationSet__builtin_signed_int_  * act)
+{
+
+  {
+    ((free)(((act)->_set)));
+    ((free)((act)));
+    return 1;
+  }
+}
+typedef double _template_param_unused_3901;
+static signed int _template__freeActivation__builtin_real_double_(struct _template__ActivationSet__builtin_real_double_  * act)
+{
+
+  {
+    ((free)(((act)->_set)));
+    ((free)((act)));
+    return 1;
+  }
+}
+typedef signed int _template_param_unused_3905;
+static signed int _template__freeThreshold__builtin_signed_int_(struct _template__ThresholdSet__builtin_signed_int_  * t)
+{
+
+  {
+    ((free)(((t)->_a_sets)));
+    ((free)((t)));
+    return 1;
+  }
+}
+typedef double _template_param_unused_3909;
+static signed int _template__freeThreshold__builtin_real_double_(struct _template__ThresholdSet__builtin_real_double_  * t)
+{
+
+  {
+    ((free)(((t)->_a_sets)));
+    ((free)((t)));
+    return 1;
   }
 }
 signed int main(signed int  argc, char  * * argv)
@@ -2233,47 +2233,28 @@ signed int main(signed int  argc, char  * * argv)
     struct _template__ThresholdSet__builtin_real_double_  *t2 = ((_template__addThreshold__builtin_real_double_)(((_template__newThresholdSet__builtin_real_double_)((D2), 1)), (a4)));
     ((printf)("Showing a threshold set: %s\n", (((_template__showThreshold__builtin_real_double_)((t2))).text)));
     ((printf)("Showing an activation set: %s\n", (((_template__showActivation__builtin_real_double_)((a4))).text)));
-    ((printf)("before get\n"));
     struct _template__ActivationSet__builtin_signed_int_  *result = ((_template__get__builtin_signed_int_)((x), (t)));
-    if (((result) == (((void *)0))))
+    if (((result) == (a1)))
     {
       {
-        ((printf)("Illegal get!\n"));
-        ((free)((x)));
-        ((free)((y)));
-        ((_template__freeActivation__builtin_signed_int_)((a1)));
-        ((_template__freeActivation__builtin_signed_int_)((a2)));
-        ((_template__freeActivation__builtin_signed_int_)((a3)));
-        ((_template__freeActivation__builtin_real_double_)((a4)));
-        ((_template__freeThreshold__builtin_signed_int_)((t)));
-        ((_template__freeThreshold__builtin_real_double_)((t2)));
-        ((free)((D)));
-        ((free)((D2)));
-        return 0;
+        ;
+        ((printf)("Result: 7\n"));
       }
     } else {
-      if (((result) == (a1)))
+      if (((result) == (a2)))
       {
         {
-          ;
-          ((printf)("Result: 7\n"));
+          ((printf)("Result: 8\n"));
         }
       } else {
-        if (((result) == (a2)))
+        if (((result) == (a3)))
         {
           {
-            ((printf)("Result: 8\n"));
+            ((printf)("Result: 9\n"));
           }
         } else {
-          if (((result) == (a3)))
           {
-            {
-              ((printf)("Result: 9\n"));
-            }
-          } else {
-            {
-              ((printf)("Error!\n"));
-            }
+            ((printf)("Error!\n"));
           }
         }
       }

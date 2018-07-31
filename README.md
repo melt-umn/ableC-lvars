@@ -6,6 +6,7 @@
 
 #### Big Example:
 
++ Way to increase parallelism
 + Timing (with 5000 entries per three stores):
 
 time ./customersForTiming.out -nproc 1
@@ -36,9 +37,8 @@ sys	0m11.552s
 
 #### POPL Paper:
 
-+ Try syncing after for loop
-+ Try multiple gets, look into what should happen
-+ Future work-- way to nicely implement sets for unknown data type for users to access without set-up, other "pre-fab" data structures
++ mention possible issues with multiple blocked gets and number of threads
++ Future work-- way to nicely implement sets for unknown data type for users to access without set-up, other "pre-fab" data structures so users can just create lattice and lvars without worrying about lub etc.
 + Add in stuff with running example
 + Refer to style resources and spiff up writing
 + Need examples with no side effects until after syncing
@@ -49,11 +49,12 @@ Guarantees of determinism don't hold with side-effects: "We define a program to 
 + It's hard for me, at least, to see why determinism with sets of integers is important. If you think an example with ADTs is better, go ahead and put it in; we can figure out how to make it look nice later. You can elide code that isn't critical like "... // check that n1/n2 are within acceptable bounds" or something. Even if you have to break it into two figures, that's fine for now.
 
 #### Other:
+
 + Implement better cilk examples (Read from different files? Sum random numbers until they reach a certain point? A better set example?) Bitwise or? Check out Cilk paper
 + Look over and tidy up examples and header file (to work better with new set up)
 + Fix top <= top in examples and tests
 + Add locks where needed in header file
-+ Instead of eq, just have "eqTop"?
++ Problem: Need at least one thread for each blocked get, plus one more to handle puts etc. So if have two blocked gets in a single program, won't work unless run with -nproc 3 or higher.
 
 ### Less urgent:
 
