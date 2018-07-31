@@ -2979,7 +2979,7 @@ template<a> struct _Lattice {
   a _top;
   int (*_leq)();
   a (* _lub)();
-  int (*_eq)();
+  int (*_isTop)();
   string (*_show)();
 };
 
@@ -2987,13 +2987,13 @@ template<a> struct _Lattice {
 
 template<a>
 static Lattice<a>* _newLattice(a least, a greatest, int (*leq)(),
-                               a (*lub)(), int (*eq)(), string (*showMethod)()) {
+                               a (*lub)(), int (*isTop)(), string (*showMethod)()) {
   Lattice<a> * l = malloc(sizeof(Lattice<a>));
   l->_bottom = least;
   l->_top = greatest;
   l->_leq = leq;
   l-> _lub = lub;
-  l->_eq = eq;
+  l->_isTop = isTop;
   l->_show = showMethod;
   return l;
 }
@@ -3116,7 +3116,7 @@ static int _incompat(Lattice<a> * l, ActivationSet<a> *Q, ActivationSet<a> *R) {
     for (int j = 0; j < R->_index; j++) {
       a q = Q->_set[i];
       a r = R->_set[j];
-      if (!(l->_eq(l->_lub(q, r), l->_top))) {
+      if (!(l->_isTop(l->_lub(q, r)))) {
 
 
 
@@ -3260,7 +3260,7 @@ static int _put(Lvar<a>* l, a newState) {
   a oldState = l->_value;
   a newValue = l-> _lattice-> _lub(oldState, newState);
 
-  if (l-> _lattice->_eq(l->_lattice->_top, newValue)){
+  if (l-> _lattice->_isTop(newValue)){
 
 
 
@@ -3338,12 +3338,16 @@ static a _freeze(Lvar<a>* l) {
 
 
 
-int eq(int n1, int n2) {
-  return n1 == n2;
+int isTop(int n1) {
+  return n1 == 100;
 }
 
-int eqD(double v1, double v2) {
-  return v1 < v2 + 0.0001 && v1 > v2 - 0.0001;
+int eqD(double d1, double d2) {
+  return d1 < d2 + 0.0001 && d1 > d2 - 0.0001;
+}
+
+int isTopD(double v1) {
+  return eqD(v1, 100);
 }
 
 
@@ -3446,8 +3450,8 @@ int main(int argc, char **argv) {
 
 
 
-  Lattice<int> * D = lattice(0, 100, leq, lub, eq, showInteger);
-  Lattice<double> * D2 = lattice(0.0, 100.0, leqD, lubD, eqD, showDouble);
+  Lattice<int> * D = lattice(0, 100, leq, lub, isTop, showInteger);
+  Lattice<double> * D2 = lattice(0.0, 100.0, leqD, lubD, isTopD, showDouble);
 
 
 

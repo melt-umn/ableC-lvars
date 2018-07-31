@@ -36,6 +36,8 @@ sys	0m11.552s
 
 #### POPL Paper:
 
++ Try syncing after for loop
++ Try multiple gets, look into what should happen
 + Future work-- way to nicely implement sets for unknown data type for users to access without set-up, other "pre-fab" data structures
 + Add in stuff with running example
 + Refer to style resources and spiff up writing
@@ -67,7 +69,7 @@ Guarantees of determinism don't hold with side-effects: "We define a program to 
 + Better positive tests
 + Check on leq with freezing-- do I need to check further?
 + Implement getFst and getSnd to help users avoid creating threshold sets/activation sets
-+ Implement other Lvish features
++ Implement other Lvish features-- incrementable counter
 
 ## Guide:
 

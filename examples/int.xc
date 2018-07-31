@@ -10,8 +10,12 @@ int isTop(int n1) {
   return n1 == 100;
 }
 
+int eqD(double d1, double d2) {
+  return d1 < d2 + 0.0001 && d1 > d2 - 0.0001;
+}
+
 int isTopD(double v1) {
-  return v1 < 100 + 0.0001 && v1 > 100 - 0.0001;
+  return eqD(v1, 100);
 }
 
 

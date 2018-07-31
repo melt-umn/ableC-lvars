@@ -2978,7 +2978,7 @@ template<a> struct _Lattice {
   a _top;
   int (*_leq)();
   a (* _lub)();
-  int (*_eq)();
+  int (*_isTop)();
   string (*_show)();
 };
 
@@ -2986,13 +2986,13 @@ template<a> struct _Lattice {
 
 template<a>
 static Lattice<a>* _newLattice(a least, a greatest, int (*leq)(),
-                               a (*lub)(), int (*eq)(), string (*showMethod)()) {
+                               a (*lub)(), int (*isTop)(), string (*showMethod)()) {
   Lattice<a> * l = malloc(sizeof(Lattice<a>));
   l->_bottom = least;
   l->_top = greatest;
   l->_leq = leq;
   l-> _lub = lub;
-  l->_eq = eq;
+  l->_isTop = isTop;
   l->_show = showMethod;
   return l;
 }
@@ -3105,7 +3105,7 @@ static int _incompat(Lattice<a> * l, ActivationSet<a> *Q, ActivationSet<a> *R) {
     for (int j = 0; j < R->_index; j++) {
       a q = Q->_set[i];
       a r = R->_set[j];
-      if (!(l->_eq(l->_lub(q, r), l->_top))) {
+      if (!(l->_isTop(l->_lub(q, r)))) {
 
 
 
@@ -3236,7 +3236,7 @@ static int _put(Lvar<a>* l, a newState) {
   a oldState = l->_value;
   a newValue = l-> _lattice-> _lub(oldState, newState);
 
-  if (l-> _lattice->_eq(l->_lattice->_top, newValue)){
+  if (l-> _lattice->_isTop(newValue)){
 # 357 "../../../extensions/ableC-lvars/include/lvars.xh"
   }
   l->_value = newValue;
@@ -3429,45 +3429,10 @@ int eqVotes(Vote * v1, Vote * v2) {
   }
 }
 
-
-
-
-VoteSet* removeFromSet(Vote* v, VoteSet* vs) {
-  match (vs) {
-    Empty () -> {return Empty ();}
-    Set (hd, rest) -> {
-      if (eqVotes(hd, v)) {
-        return rest;
-      }
-      return Set (hd, removeFromSet(v, rest));
-    }
-    Top () -> {return Top();}
-  }
-}
-
-
-
-int eq (VoteSet * v1, VoteSet * v2) {
-  match (v1) {
-    Empty () -> {
-      match (v2) {
-        Empty () -> {return 1;}
-        other -> {return 0;}
-      }
-    }
-    Set (head1, rest1) -> {
-      match (v2) {
-        Empty () -> {return 0;}
-        Set (head2, rest2) -> {return eq(rest1, removeFromSet(head1, v2));}
-        Top () -> {return 0;}
-      }
-    }
-    Top () -> {
-      match (v2) {
-        Top () -> {return 1;}
-        other -> {return 0;}
-      }
-    }
+int isTop(VoteSet* v) {
+  match (v) {
+    Top() -> {return 1;}
+    _ -> {return 0;}
   }
 }
 
@@ -3573,7 +3538,7 @@ int main(int argc, char **argv) {
 
 
 
-  Lattice<VoteSet*> * D = lattice(Empty(), Top(), leq, lub, eq, showVoteSet);
+  Lattice<VoteSet*> * D = lattice(Empty(), Top(), leq, lub, isTop, showVoteSet);
 
 
 

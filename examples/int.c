@@ -1058,18 +1058,25 @@ extern signed int getitimer(__itimer_which_t  __which, struct itimerval  * __val
 extern signed int setitimer(__itimer_which_t  __which, const struct itimerval  *__restrict  __new, struct itimerval  *__restrict  __old) __attribute__((__nothrow__, __leaf__));
 extern signed int utimes(const char  * __file, const struct timeval  __tvp[2]) __attribute__((__nothrow__, __leaf__)) __attribute__((__nonnull__(1)));
 signed int _lvarCheckValue = 1;
-signed int eq(signed int  n1, signed int  n2)
+signed int isTop(signed int  n1)
 {
 
   {
-    return ((n1) == (n2));
+    return ((n1) == 100);
   }
 }
-signed int eqD(double  v1, double  v2)
+signed int eqD(double  d1, double  d2)
 {
 
   {
-    return (((v1) < ((v2) + 0.0001)) && ((v1) > ((v2) - 0.0001)));
+    return (((d1) < ((d2) + 0.0001)) && ((d1) > ((d2) - 0.0001)));
+  }
+}
+signed int isTopD(double  v1)
+{
+
+  {
+    return ((eqD)((v1), 100));
   }
 }
 signed int leq(signed int  n1, signed int  n2)
@@ -1428,12 +1435,12 @@ struct _template__Lattice__builtin_signed_int_ {
   signed int _top;
   signed int ( *_leq)();
   signed int ( *_lub)();
-  signed int ( *_eq)();
+  signed int ( *_isTop)();
   struct _string_s ( *_show)();
   
 };
 typedef signed int _template_param_unused_38;
-static struct _template__Lattice__builtin_signed_int_  *_template__newLattice__builtin_signed_int_(signed int  least, signed int  greatest, signed int ( * leq)(), signed int ( * lub)(), signed int ( * eq)(), struct _string_s ( * showMethod)())
+static struct _template__Lattice__builtin_signed_int_  *_template__newLattice__builtin_signed_int_(signed int  least, signed int  greatest, signed int ( * leq)(), signed int ( * lub)(), signed int ( * isTop)(), struct _string_s ( * showMethod)())
 {
 
   {
@@ -1442,7 +1449,7 @@ static struct _template__Lattice__builtin_signed_int_  *_template__newLattice__b
     (((l)->_top) = (greatest));
     (((l)->_leq) = (leq));
     (((l)->_lub) = (lub));
-    (((l)->_eq) = (eq));
+    (((l)->_isTop) = (isTop));
     (((l)->_show) = (showMethod));
     return (l);
   }
@@ -1454,12 +1461,12 @@ struct _template__Lattice__builtin_real_double_ {
   double _top;
   signed int ( *_leq)();
   double ( *_lub)();
-  signed int ( *_eq)();
+  signed int ( *_isTop)();
   struct _string_s ( *_show)();
   
 };
 typedef double _template_param_unused_43;
-static struct _template__Lattice__builtin_real_double_  *_template__newLattice__builtin_real_double_(double  least, double  greatest, signed int ( * leq)(), double ( * lub)(), signed int ( * eq)(), struct _string_s ( * showMethod)())
+static struct _template__Lattice__builtin_real_double_  *_template__newLattice__builtin_real_double_(double  least, double  greatest, signed int ( * leq)(), double ( * lub)(), signed int ( * isTop)(), struct _string_s ( * showMethod)())
 {
 
   {
@@ -1468,7 +1475,7 @@ static struct _template__Lattice__builtin_real_double_  *_template__newLattice__
     (((l)->_top) = (greatest));
     (((l)->_leq) = (leq));
     (((l)->_lub) = (lub));
-    (((l)->_eq) = (eq));
+    (((l)->_isTop) = (isTop));
     (((l)->_show) = (showMethod));
     return (l);
   }
@@ -1576,7 +1583,7 @@ static signed int _template__put__builtin_signed_int_(struct _template__Lvar__bu
     }
     signed int oldState = ((l)->_value);
     signed int newValue = ((((l)->_lattice)->_lub)((oldState), (newState)));
-    if (((((l)->_lattice)->_eq)((((l)->_lattice)->_top), (newValue))))
+    if (((((l)->_lattice)->_isTop)((newValue))))
     {
       {
         ((pthread_mutex_unlock)((&(((l)->_mutex)))));
@@ -1608,7 +1615,7 @@ static signed int _template__put__builtin_real_double_(struct _template__Lvar__b
     }
     double oldState = ((l)->_value);
     double newValue = ((((l)->_lattice)->_lub)((oldState), (newState)));
-    if (((((l)->_lattice)->_eq)((((l)->_lattice)->_top), (newValue))))
+    if (((((l)->_lattice)->_isTop)((newValue))))
     {
       {
         ((pthread_mutex_unlock)((&(((l)->_mutex)))));
@@ -1741,7 +1748,7 @@ static signed int _template__incompat__builtin_signed_int_(struct _template__Lat
           {
             signed int q = (((Q)->_set)[(i)]);
             signed int r = (((R)->_set)[(j)]);
-            if ((!((((l)->_eq)((((l)->_lub)((q), (r))), ((l)->_top))))))
+            if ((!((((l)->_isTop)((((l)->_lub)((q), (r))))))))
             {
               {
                 return 0;
@@ -1891,7 +1898,7 @@ static signed int _template__incompat__builtin_real_double_(struct _template__La
           {
             double q = (((Q)->_set)[(i)]);
             double r = (((R)->_set)[(j)]);
-            if ((!((((l)->_eq)((((l)->_lub)((q), (r))), ((l)->_top))))))
+            if ((!((((l)->_isTop)((((l)->_lub)((q), (r))))))))
             {
               {
                 return 0;
@@ -2183,8 +2190,8 @@ signed int main(signed int  argc, char  * * argv)
 {
 
   {
-    struct _template__Lattice__builtin_signed_int_  *D = ((_template__newLattice__builtin_signed_int_)(0, 100, (leq), (lub), (eq), (showInteger)));
-    struct _template__Lattice__builtin_real_double_  *D2 = ((_template__newLattice__builtin_real_double_)(0.0, 100.0, (leqD), (lubD), (eqD), (showDouble)));
+    struct _template__Lattice__builtin_signed_int_  *D = ((_template__newLattice__builtin_signed_int_)(0, 100, (leq), (lub), (isTop), (showInteger)));
+    struct _template__Lattice__builtin_real_double_  *D2 = ((_template__newLattice__builtin_real_double_)(0.0, 100.0, (leqD), (lubD), (isTopD), (showDouble)));
     struct _template__Lvar__builtin_signed_int_  *x = ((_template__new__builtin_signed_int_)((D)));
     struct _template__Lvar__builtin_real_double_  *y = ((_template__new__builtin_real_double_)((D2)));
     signed int success1 = ((_template__put__builtin_signed_int_)((x), 7));

@@ -82,7 +82,7 @@ runtime_error/%.test: runtime_error/%.out
 	touch $@
 
 %.test: %.out
-	./$<
+	./$< -nproc 2
 	touch $@
 
 clean:

@@ -45,7 +45,7 @@ int isProdSubset(ProductSet* set1, ProductSet* set2) {
   }
 }
 
-int isTop(Customer* c) {
+int isTopCustomer(Customer* c) {
   match (c) {
     CustTop() -> {
       return 1;
@@ -354,7 +354,7 @@ cilk int main(int argc, char **argv) {
 
   // set up
 
-  lat = lattice(CustBot(), CustTop(), leqCustomer, lubCustomer, eqCustomer, showCustomer);
+  lat = lattice(CustBot(), CustTop(), leqCustomer, lubCustomer, isTopCustomer, showCustomer);
   int numCustomers = 50;
   int numStore1 = 5000;
   int numStore2 = 5000;

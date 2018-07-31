@@ -1997,15 +1997,15 @@ signed int eqVotes(Vote  * v1, Vote  * v2)
     }
   }
 }
-VoteSet  *removeFromSet(Vote  * v, VoteSet  * vs)
+signed int isTop(VoteSet  * v)
 {
 
   {
     {
-      /* match ((vs)) ... */;
-      VoteSet  *_match_scrutinee_val = (vs);
+      /* match ((v)) ... */;
+      VoteSet  *_match_scrutinee_val = (v);
       VoteSet  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
-      /* matching for pattern Empty() */;
+      /* matching for pattern Top() */;
       /* ... declarations of pattern variables */;
       ;
       VoteSet  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
@@ -2013,7 +2013,7 @@ VoteSet  *removeFromSet(Vote  * v, VoteSet  * vs)
         signed int _match = 1;
         /* matching against a ADT constructor pattern */;
         /* match against constructor */;
-        if (((((*(_curr_scrutinee_ptr)))->tag) != (VoteSet_Empty)))
+        if (((((*(_curr_scrutinee_ptr)))->tag) != (VoteSet_Top)))
         {
           ((_match) = 0);
         } else {
@@ -2024,316 +2024,21 @@ VoteSet  *removeFromSet(Vote  * v, VoteSet  * vs)
         (_match); })
       )
       {
-        return ((Empty)());
+        return 1;
       } else {
-        /* matching for pattern Set(hd,rest) */;
+        /* matching for pattern _ */;
         /* ... declarations of pattern variables */;
-        Vote  *hd;
-        VoteSet  *rest;
+        ;
         VoteSet  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
         if (({
           signed int _match = 1;
-          /* matching against a ADT constructor pattern */;
-          /* match against constructor */;
-          if (((((*(_curr_scrutinee_ptr)))->tag) != (VoteSet_Set)))
-          {
-            ((_match) = 0);
-          } else {
-            /* match against sub-patterns, setting _match to 0 on a fail */;
-            VoteSet  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
-            {
-              Vote  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Set).f0));
-              ((hd) = (*(_curr_scrutinee_ptr)));
-            }
-            {
-              VoteSet  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Set).f1));
-              ((rest) = (*(_curr_scrutinee_ptr)));
-            }
-            ;
-          }
+          ;
           (_match); })
         )
         {
-          if (((eqVotes)((hd), (v))))
-          {
-            {
-              return (rest);
-            }
-          } else {
-            ;
-          }
-          return ((Set)((hd), ((removeFromSet)((v), (rest)))));
+          return 0;
         } else {
-          /* matching for pattern Top() */;
-          /* ... declarations of pattern variables */;
-          ;
-          VoteSet  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
-          if (({
-            signed int _match = 1;
-            /* matching against a ADT constructor pattern */;
-            /* match against constructor */;
-            if (((((*(_curr_scrutinee_ptr)))->tag) != (VoteSet_Top)))
-            {
-              ((_match) = 0);
-            } else {
-              /* match against sub-patterns, setting _match to 0 on a fail */;
-              VoteSet  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
-              ;
-            }
-            (_match); })
-          )
-          {
-            return ((Top)());
-          } else {
-            /* no match, do nothing. */;
-          }
-        }
-      }
-    }
-  }
-}
-signed int eq(VoteSet  * v1, VoteSet  * v2)
-{
-
-  {
-    {
-      /* match ((v1)) ... */;
-      VoteSet  *_match_scrutinee_val = (v1);
-      VoteSet  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
-      /* matching for pattern Empty() */;
-      /* ... declarations of pattern variables */;
-      ;
-      VoteSet  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
-      if (({
-        signed int _match = 1;
-        /* matching against a ADT constructor pattern */;
-        /* match against constructor */;
-        if (((((*(_curr_scrutinee_ptr)))->tag) != (VoteSet_Empty)))
-        {
-          ((_match) = 0);
-        } else {
-          /* match against sub-patterns, setting _match to 0 on a fail */;
-          VoteSet  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
-          ;
-        }
-        (_match); })
-      )
-      {
-        {
-          /* match ((v2)) ... */;
-          VoteSet  *_match_scrutinee_val = (v2);
-          VoteSet  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
-          /* matching for pattern Empty() */;
-          /* ... declarations of pattern variables */;
-          ;
-          VoteSet  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
-          if (({
-            signed int _match = 1;
-            /* matching against a ADT constructor pattern */;
-            /* match against constructor */;
-            if (((((*(_curr_scrutinee_ptr)))->tag) != (VoteSet_Empty)))
-            {
-              ((_match) = 0);
-            } else {
-              /* match against sub-patterns, setting _match to 0 on a fail */;
-              VoteSet  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
-              ;
-            }
-            (_match); })
-          )
-          {
-            return 1;
-          } else {
-            /* matching for pattern other */;
-            /* ... declarations of pattern variables */;
-            VoteSet  *other;
-            VoteSet  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
-            if (({
-              signed int _match = 1;
-              ((other) = (*(_curr_scrutinee_ptr)));
-              (_match); })
-            )
-            {
-              return 0;
-            } else {
-              /* no match, do nothing. */;
-            }
-          }
-        }
-      } else {
-        /* matching for pattern Set(head1,rest1) */;
-        /* ... declarations of pattern variables */;
-        Vote  *head1;
-        VoteSet  *rest1;
-        VoteSet  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
-        if (({
-          signed int _match = 1;
-          /* matching against a ADT constructor pattern */;
-          /* match against constructor */;
-          if (((((*(_curr_scrutinee_ptr)))->tag) != (VoteSet_Set)))
-          {
-            ((_match) = 0);
-          } else {
-            /* match against sub-patterns, setting _match to 0 on a fail */;
-            VoteSet  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
-            {
-              Vote  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Set).f0));
-              ((head1) = (*(_curr_scrutinee_ptr)));
-            }
-            {
-              VoteSet  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Set).f1));
-              ((rest1) = (*(_curr_scrutinee_ptr)));
-            }
-            ;
-          }
-          (_match); })
-        )
-        {
-          {
-            /* match ((v2)) ... */;
-            VoteSet  *_match_scrutinee_val = (v2);
-            VoteSet  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
-            /* matching for pattern Empty() */;
-            /* ... declarations of pattern variables */;
-            ;
-            VoteSet  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
-            if (({
-              signed int _match = 1;
-              /* matching against a ADT constructor pattern */;
-              /* match against constructor */;
-              if (((((*(_curr_scrutinee_ptr)))->tag) != (VoteSet_Empty)))
-              {
-                ((_match) = 0);
-              } else {
-                /* match against sub-patterns, setting _match to 0 on a fail */;
-                VoteSet  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
-                ;
-              }
-              (_match); })
-            )
-            {
-              return 0;
-            } else {
-              /* matching for pattern Set(head2,rest2) */;
-              /* ... declarations of pattern variables */;
-              Vote  *head2;
-              VoteSet  *rest2;
-              VoteSet  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
-              if (({
-                signed int _match = 1;
-                /* matching against a ADT constructor pattern */;
-                /* match against constructor */;
-                if (((((*(_curr_scrutinee_ptr)))->tag) != (VoteSet_Set)))
-                {
-                  ((_match) = 0);
-                } else {
-                  /* match against sub-patterns, setting _match to 0 on a fail */;
-                  VoteSet  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
-                  {
-                    Vote  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Set).f0));
-                    ((head2) = (*(_curr_scrutinee_ptr)));
-                  }
-                  {
-                    VoteSet  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Set).f1));
-                    ((rest2) = (*(_curr_scrutinee_ptr)));
-                  }
-                  ;
-                }
-                (_match); })
-              )
-              {
-                return ((eq)((rest1), ((removeFromSet)((head1), (v2)))));
-              } else {
-                /* matching for pattern Top() */;
-                /* ... declarations of pattern variables */;
-                ;
-                VoteSet  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
-                if (({
-                  signed int _match = 1;
-                  /* matching against a ADT constructor pattern */;
-                  /* match against constructor */;
-                  if (((((*(_curr_scrutinee_ptr)))->tag) != (VoteSet_Top)))
-                  {
-                    ((_match) = 0);
-                  } else {
-                    /* match against sub-patterns, setting _match to 0 on a fail */;
-                    VoteSet  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
-                    ;
-                  }
-                  (_match); })
-                )
-                {
-                  return 0;
-                } else {
-                  /* no match, do nothing. */;
-                }
-              }
-            }
-          }
-        } else {
-          /* matching for pattern Top() */;
-          /* ... declarations of pattern variables */;
-          ;
-          VoteSet  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
-          if (({
-            signed int _match = 1;
-            /* matching against a ADT constructor pattern */;
-            /* match against constructor */;
-            if (((((*(_curr_scrutinee_ptr)))->tag) != (VoteSet_Top)))
-            {
-              ((_match) = 0);
-            } else {
-              /* match against sub-patterns, setting _match to 0 on a fail */;
-              VoteSet  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
-              ;
-            }
-            (_match); })
-          )
-          {
-            {
-              /* match ((v2)) ... */;
-              VoteSet  *_match_scrutinee_val = (v2);
-              VoteSet  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
-              /* matching for pattern Top() */;
-              /* ... declarations of pattern variables */;
-              ;
-              VoteSet  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
-              if (({
-                signed int _match = 1;
-                /* matching against a ADT constructor pattern */;
-                /* match against constructor */;
-                if (((((*(_curr_scrutinee_ptr)))->tag) != (VoteSet_Top)))
-                {
-                  ((_match) = 0);
-                } else {
-                  /* match against sub-patterns, setting _match to 0 on a fail */;
-                  VoteSet  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
-                  ;
-                }
-                (_match); })
-              )
-              {
-                return 1;
-              } else {
-                /* matching for pattern other */;
-                /* ... declarations of pattern variables */;
-                VoteSet  *other;
-                VoteSet  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
-                if (({
-                  signed int _match = 1;
-                  ((other) = (*(_curr_scrutinee_ptr)));
-                  (_match); })
-                )
-                {
-                  return 0;
-                } else {
-                  /* no match, do nothing. */;
-                }
-              }
-            }
-          } else {
-            /* no match, do nothing. */;
-          }
+          /* no match, do nothing. */;
         }
       }
     }
@@ -3083,12 +2788,12 @@ struct _template__Lattice__pointer__tag_struct_VoteSet_47__ {
   VoteSet  *_top;
   signed int ( *_leq)();
   VoteSet  *( *_lub)();
-  signed int ( *_eq)();
+  signed int ( *_isTop)();
   struct _string_s ( *_show)();
   
 };
 typedef VoteSet  *_template_param_unused_61;
-static struct _template__Lattice__pointer__tag_struct_VoteSet_47__  *_template__newLattice__pointer__tag_struct_VoteSet_47__(VoteSet  * least, VoteSet  * greatest, signed int ( * leq)(), VoteSet  *( * lub)(), signed int ( * eq)(), struct _string_s ( * showMethod)())
+static struct _template__Lattice__pointer__tag_struct_VoteSet_47__  *_template__newLattice__pointer__tag_struct_VoteSet_47__(VoteSet  * least, VoteSet  * greatest, signed int ( * leq)(), VoteSet  *( * lub)(), signed int ( * isTop)(), struct _string_s ( * showMethod)())
 {
 
   {
@@ -3097,7 +2802,7 @@ static struct _template__Lattice__pointer__tag_struct_VoteSet_47__  *_template__
     (((l)->_top) = (greatest));
     (((l)->_leq) = (leq));
     (((l)->_lub) = (lub));
-    (((l)->_eq) = (eq));
+    (((l)->_isTop) = (isTop));
     (((l)->_show) = (showMethod));
     return (l);
   }
@@ -3316,7 +3021,7 @@ static signed int _template__put__pointer__tag_struct_VoteSet_47__(struct _templ
     }
     VoteSet  *oldState = ((l)->_value);
     VoteSet  *newValue = ((((l)->_lattice)->_lub)((oldState), (newState)));
-    if (((((l)->_lattice)->_eq)((((l)->_lattice)->_top), (newValue))))
+    if (((((l)->_lattice)->_isTop)((newValue))))
     {
       ;
     } else {
@@ -3405,7 +3110,7 @@ signed int main(signed int  argc, char  * * argv)
 {
 
   {
-    struct _template__Lattice__pointer__tag_struct_VoteSet_47__  *D = ((_template__newLattice__pointer__tag_struct_VoteSet_47__)(((Empty)()), ((Top)()), (leq), (lub), (eq), (showVoteSet)));
+    struct _template__Lattice__pointer__tag_struct_VoteSet_47__  *D = ((_template__newLattice__pointer__tag_struct_VoteSet_47__)(((Empty)()), ((Top)()), (leq), (lub), (isTop), (showVoteSet)));
     struct _template__Lvar__pointer__tag_struct_VoteSet_47__  *x = ((_template__new__pointer__tag_struct_VoteSet_47__)((D)));
     struct _template__Lvar__pointer__tag_struct_VoteSet_47__  *y = ((_template__new__pointer__tag_struct_VoteSet_47__)((D)));
     struct _template__ActivationSet__pointer__tag_struct_VoteSet_47__  *noPizza = ((_template__newActivationSet__pointer__tag_struct_VoteSet_47__)((D), 1));
