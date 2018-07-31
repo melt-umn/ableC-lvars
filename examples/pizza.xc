@@ -135,45 +135,10 @@ int eqVotes(Vote * v1, Vote * v2) {
   }
 }
 
-// helper function to assist in determining whether sets of
-// votes are the same (set-wise)
-
-VoteSet* removeFromSet(Vote* v, VoteSet* vs) {
-  match (vs) {
-    Empty () -> {return Empty ();}
-    Set (hd, rest) -> {
-      if (eqVotes(hd, v)) {
-        return rest;
-      }
-      return Set (hd, removeFromSet(v, rest));
-    }
-    Top () -> {return Top();}
-  }
-}
-
-// eq method for VoteSets
-
-int eq (VoteSet * v1, VoteSet * v2) {
-  match (v1) {
-    Empty () -> {
-      match (v2) {
-        Empty () -> {return 1;}
-        other -> {return 0;}
-      }
-    }
-    Set (head1, rest1) -> {
-      match (v2) {
-        Empty () -> {return 0;}
-        Set (head2, rest2) -> {return eq(rest1, removeFromSet(head1, v2));}
-        Top () -> {return 0;}
-      }
-    }
-    Top () -> {
-      match (v2) {
-        Top () -> {return 1;}
-        other -> {return 0;}
-      }
-    } 
+int isTop(VoteSet* v) {
+  match (v) {
+    Top() -> {return 1;}
+    _ -> {return 0;}
   }
 }
 
@@ -279,7 +244,7 @@ int main(int argc, char **argv) {
 
   //*********** set up lattice ************************************************
 
-  Lattice<VoteSet*> * D = lattice(Empty(), Top(), leq, lub, eq, showVoteSet);
+  Lattice<VoteSet*> * D = lattice(Empty(), Top(), leq, lub, isTop, showVoteSet);
 
   // **************** create some new lvars ***********************************
 

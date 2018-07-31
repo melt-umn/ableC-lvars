@@ -19,92 +19,12 @@ datatype Color {
   Top();
 };
 
-int eqColor(Color* c1, Color* c2) {
-  match (c1) {
-    Bottom() -> { 
-      match (c2) {
-        Bottom() -> {return 1;}
-        _ -> {return 0;}
-      }
-    }
-    Red() -> { 
-      match (c2) {
-        Red() -> {return 1;}
-        _ -> {return 0;}
-      }
-    }
-    RedOrange() -> { 
-      match (c2) {
-        RedOrange() -> {return 1;}
-        _ -> {return 0;}
-      }
-    }
-    Orange() -> { 
-      match (c2) {
-        Orange() -> {return 1;}
-        _ -> {return 0;}
-      }
-    }
-    YellowOrange() -> { 
-      match (c2) {
-        YellowOrange() -> {return 1;}
-        _ -> {return 0;}
-      }
-    }
-    Yellow() -> { 
-      match (c2) {
-        Yellow() -> {return 1;}
-        _ -> {return 0;}
-      }
-    }
-    YellowGreen() -> { 
-      match (c2) {
-        YellowGreen() -> {return 1;}
-        _ -> {return 0;}
-      }
-    }
-    Green() -> { 
-      match (c2) {
-        Green() -> {return 1;}
-        _ -> {return 0;}
-      }
-    }
-    BlueGreen() -> { 
-      match (c2) {
-        BlueGreen() -> {return 1;}
-        _ -> {return 0;}
-      }
-    }
-    Blue() -> { 
-      match (c2) {
-        Blue() -> {return 1;}
-        _ -> {return 0;}
-      }
-    }
-    BlueViolet() -> { 
-      match (c2) {
-        BlueViolet() -> {return 1;}
-        _ -> {return 0;}
-      }
-    }
-    Violet() -> { 
-      match (c2) {
-        Violet() -> {return 1;}
-        _ -> {return 0;}
-      }
-    }
-    RedViolet() -> { 
-      match (c2) {
-        RedViolet() -> {return 1;}
-        _ -> {return 0;}
-      }
-    }
+int isTop(Color* c) {
+  match (c) {
     Top() -> { 
-      match (c2) {
-        Top() -> {return 1;}
-        _ -> {return 0;}
-      }
+      return 1;
     }
+    _ -> {return 0;}
   }
 }
 
@@ -425,7 +345,7 @@ int main(int argc, char **argv) {
     printf("Must enter two color names\n");
   }
   else {
-    Lattice<Color*> * D = lattice(Bottom(), Top(), leqColor, lubColor, eqColor, showColor);
+    Lattice<Color*> * D = lattice(Bottom(), Top(), leqColor, lubColor, isTop, showColor);
     Color* c1 = getColor(argv[1]);
     Color* c2 = getColor(argv[2]);
     Lvar<Color*>* x = newLvar(D);

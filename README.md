@@ -40,6 +40,7 @@ sys	0m11.552s
 + Add in stuff with running example
 + Refer to style resources and spiff up writing
 + Need examples with no side effects until after syncing
++ Revise "future work" section
 
 Guarantees of determinism don't hold with side-effects: "We define a program to be deterministic if, given the same inputs, it will always produce the same observable result. Here, inputs are votes, and we define the observable result of a program to be the value to which it evaluates. We’ve therefore cheated a bit with our call to call_for_pizza, since it triggers a side effect, and our determinism guarantee doesn’t say anything about side effects."
 
@@ -50,6 +51,7 @@ Guarantees of determinism don't hold with side-effects: "We define a program to 
 + Look over and tidy up examples and header file (to work better with new set up)
 + Fix top <= top in examples and tests
 + Add locks where needed in header file
++ Instead of eq, just have "eqTop"?
 
 ### Less urgent:
 

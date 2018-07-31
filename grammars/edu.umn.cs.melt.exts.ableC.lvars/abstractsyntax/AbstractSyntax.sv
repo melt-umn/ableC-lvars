@@ -18,15 +18,15 @@ imports edu:umn:cs:melt:ableC:abstractsyntax:overloadable as ovrld;
 //************************ Lattice constructor production ********************
 
 abstract production newLattice
-top::Expr ::= bot::Expr topV::Expr leq::Expr lub::Expr eq::Expr disp::Expr
+top::Expr ::= bot::Expr topV::Expr leq::Expr lub::Expr isTop::Expr disp::Expr
 {
   propagate substituted;
   top.pp =
-    pp"lattice(${bot.pp}, ${topV.pp}, ${leq.pp}, ${lub.pp}, ${eq.pp}, ${disp.pp})";
+    pp"lattice(${bot.pp}, ${topV.pp}, ${leq.pp}, ${lub.pp}, ${isTop.pp}, ${disp.pp})";
 
   local childErrors::[Message] =
     bot.errors ++ topV.errors ++ leq.errors ++
-    lub.errors ++ eq.errors ++ disp.errors;  
+    lub.errors ++ isTop.errors ++ disp.errors;  
 
   local localErrors::[Message] =
     checkLvarHeaderDef(top.location, top.env) ++ 
@@ -40,7 +40,7 @@ top::Expr ::= bot::Expr topV::Expr leq::Expr lub::Expr eq::Expr disp::Expr
     mkErrorCheck(childErrors ++ localErrors,
       ableC_Expr{
        inst _newLattice<$directTypeExpr{bot.typerep}>($Expr{bot}, $Expr{topV},    
-       $Expr{leq}, $Expr{lub}, $Expr{eq}, $Expr{disp})
+       $Expr{leq}, $Expr{lub}, $Expr{isTop}, $Expr{disp})
       }
     );
 }

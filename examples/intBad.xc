@@ -5,11 +5,8 @@
 
 // ******************** eq function for our int lattice ***********************
 
-int eqInt(int n1, int n2) {
-  if (n1 > 100 || n2 > 100 || n1 < 0 || n2 < 0) {
-    exit(0);
-  }
-  return n1 == n2;
+int isTop(int n1) {
+  return n1 == 100;
 }
 
 // ******************** leq function for our lattice ************************
@@ -86,7 +83,7 @@ cilk ActivationSet<int> * putGetEx(Lvar<int> *x, ThresholdSet<int>* t) {
 
 cilk int main(int argc, char **argv) {
 
-  Lattice<int> * D = lattice(0, 100, leqInt, lubInt, eqInt, showInteger);
+  Lattice<int> * D = lattice(0, 100, leqInt, lubInt, isTop, showInteger);
   Lvar<int> *x = newLvar(D);
   ActivationSet<int> * a1 = activationSet(D){6};
   ThresholdSet<int> * t = thresholdSet(D){a1};

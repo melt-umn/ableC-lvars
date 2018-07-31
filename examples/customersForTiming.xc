@@ -45,39 +45,14 @@ int isProdSubset(ProductSet* set1, ProductSet* set2) {
   }
 }
 
-// helper that checks if two sets of products are equivalent
-
-int eqProdSets(ProductSet* set1, ProductSet* set2) {
-  return isProdSubset(set1, set2) && isProdSubset(set2, set1);
-}
-
-// set up eq for customer lattice
-
-int eqCustomer(Customer* c1, Customer* c2) {
-  match (c1) {
+int isTopCustomer(Customer* c) {
+  match (c) {
     CustTop() -> {
-      match (c2) {
-        CustTop() -> {return 1;}
-        _ -> {return 0;}
-      }
+      return 1;
     }
-    CustBot() -> {
-      match (c2) {
-        CustBot() -> {return 1;}
-        _ -> {return 0;}
-      }
-    }
-    Person(name1, prods1) -> {
-      match (c2) {
-        Person(name2, prods2) -> {
-          return name1 == name2 && eqProdSets(prods1, prods2);
-        }
-        _ -> {return 0;}
-      }
-    }
+    _ -> {return 0;}
   }   
 }
-
 // **************** set up leq for lattice ************************************
 
 int leqCustomer(Customer* c1, Customer* c2) {
@@ -258,7 +233,7 @@ cilk int main(int argc, char **argv) {
 
   // set up
 
-  lat = lattice(CustBot(), CustTop(), leqCustomer, lubCustomer, eqCustomer, showCustomer);
+  lat = lattice(CustBot(), CustTop(), leqCustomer, lubCustomer, isTopCustomer, showCustomer);
   int numCustomers = 50;
   int numStore1 = 5000;
   int numStore2 = 5000;

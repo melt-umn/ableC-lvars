@@ -59,28 +59,11 @@ Nat* lub(Nat* n1, Nat* n2) {
 
 // ***************************** eq method for our lattice ********************
 
-int eqNat(Nat* n1, Nat* n2) {
-  match (n1) {
-    Top() -> {
-      match (n2) {
-        Top() -> {return 1;}
-        other -> {return 0;}
-      } 
-    }
-    Bottom() -> {
-      match (n2) {
-        Bottom() -> {return 1;}
-        other -> {return 0;}
-      }
-    }
-    Int(i1) -> {
-      match (n2) {
-        Int(i2) -> {return i1 == i2;}
-        other -> {return 0;}
-      } 
-    }
-  } 
-  return 0;
+int isTop(Nat* n) {
+  match(n) {
+    Top() -> {return 1;}
+    _ -> {return 0;}
+  }
 }
 
 // ********************* display method for our lattice ***********************
@@ -99,7 +82,7 @@ int main(int argc, char **argv) {
 
   // set up lattice
 
-  Lattice<Nat*> * D = lattice(Bottom(), Top(), leq, lub, eqNat, showNat);
+  Lattice<Nat*> * D = lattice(Bottom(), Top(), leq, lub, isTop, showNat);
 
   // make some lvars 
 

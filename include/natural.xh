@@ -50,28 +50,13 @@ Nat* lubNat(Nat* n1, Nat* n2) {
 }
 
 
-int eqNat(Nat* n1, Nat* n2) {
-  match (n1) {
+int isTopNat(Nat* n) {
+  match (n) {
     TopNat() -> {
-      match (n2) {
-        TopNat() -> {return 1;}
-        other -> {return 0;}
-      } 
+      return 1;
     }
-    BotNat() -> {
-      match (n2) {
-        BotNat() -> {return 1;}
-        other -> {return 0;}
-      }
-    }
-    Int(i1) -> {
-      match (n2) {
-        Int(i2) -> {return i1 == i2;}
-        other -> {return 0;}
-      } 
-    }
+    _ -> {return 0;}
   } 
-  return 0;
 }
 
 string showNat(Nat* n) {
@@ -85,7 +70,7 @@ string showNat(Nat* n) {
 }
 
 Lattice<Nat*> * natLattice() {
-  return lattice(BotNat(), TopNat(), leqNat, lubNat, eqNat, showNat);
+  return lattice(BotNat(), TopNat(), leqNat, lubNat,isTopNat, showNat);
 }
 
 #endif

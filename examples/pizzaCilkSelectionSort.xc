@@ -149,29 +149,10 @@ VoteSet* removeFromSet(Vote* v, VoteSet* vs) {
   }
 }
 
-// eq method for VoteSets
-
-int eq (VoteSet * v1, VoteSet * v2) {
-  match (v1) {
-    Empty () -> {
-      match (v2) {
-        Empty () -> {return 1;}
-        other -> {return 0;}
-      }
-    }
-    Set (head1, rest1) -> {
-      match (v2) {
-        Empty () -> {return 0;}
-        Set (head2, rest2) -> {return eq(rest1, removeFromSet(head1, v2));}
-        Top () -> {return 0;}
-      }
-    }
-    Top () -> {
-      match (v2) {
-        Top () -> {return 1;}
-        other -> {return 0;}
-      }
-    } 
+int isTop(VoteSet* v) {
+  match (v) {
+    Top() -> {return 1;}
+    _ -> {return 0;}
   }
 }
 
@@ -409,7 +390,7 @@ cilk YN* getVoteSearchCilk(int* arr, int size) {
 
 int nonCilk(int* arr, int size) {
 
-  Lattice<VoteSet*> * D = lattice(Empty(), Top(), leq, lub, eq, showVoteSet);
+  Lattice<VoteSet*> * D = lattice(Empty(), Top(), leq, lub, isTop, showVoteSet);
   Lvar<VoteSet*> *votes = newLvar(D);
 
   ActivationSet<VoteSet*> * noPizza = activationSet(D, 1);
@@ -446,7 +427,7 @@ int nonCilk(int* arr, int size) {
 
 cilk int withCilk(int* arr, int size) {
 
-  Lattice<VoteSet*> * D = lattice(Empty(), Top(), leq, lub, eq, showVoteSet);
+  Lattice<VoteSet*> * D = lattice(Empty(), Top(), leq, lub, isTop, showVoteSet);
   Lvar<VoteSet*> *votes = newLvar(D);
 
   ActivationSet<VoteSet*> * noPizza = activationSet(D, 1);

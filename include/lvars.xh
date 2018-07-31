@@ -32,7 +32,7 @@ template<a> struct _Lattice {
   a _top;
   int (*_leq)();
   a (* _lub)();
-  int (*_eq)(); 
+  int (*_isTop)(); 
   string (*_show)();
 };
 
@@ -40,13 +40,13 @@ template<a> struct _Lattice {
 
 template<a>
 static Lattice<a>* _newLattice(a least, a greatest, int (*leq)(),
-                               a (*lub)(), int (*eq)(), string (*showMethod)()) {
+                               a (*lub)(), int (*isTop)(), string (*showMethod)()) {
   Lattice<a> * l = malloc(sizeof(Lattice<a>)); 
   l->_bottom = least;
   l->_top = greatest;
   l->_leq = leq;
   l-> _lub = lub;
-  l->_eq = eq;
+  l->_isTop = isTop;
   l->_show = showMethod;
   return l;
 }
@@ -191,7 +191,7 @@ static int _incompat(Lattice<a> * l, ActivationSet<a> *Q, ActivationSet<a> *R) {
     for (int j = 0; j < R->_index; j++) {
       a q = Q->_set[i];
       a r = R->_set[j];
-      if (!(l->_eq(l->_lub(q, r), l->_top))) {
+      if (!(l->_isTop(l->_lub(q, r)))) {
         #ifdef DEBUG
           printf("Error: %s and %s are compatible, with lub %s!\n",
                  l->_show(q).text, l->_show(r).text, l->_show(l->_lub(q, r)).text);
@@ -343,7 +343,7 @@ static int _put(Lvar<a>* l, a newState) {
   a oldState = l->_value;
   a newValue = l-> _lattice-> _lub(oldState, newState);
 
-  if (l-> _lattice->_eq(l->_lattice->_top, newValue)){
+  if (l-> _lattice->_isTop(newValue)){
       #ifdef DEBUG
         printf("Error: invalid put of %s into lvar of value %s\n",
                l->_lattice->_show(newState).text, l->_lattice->_show(oldState).text);

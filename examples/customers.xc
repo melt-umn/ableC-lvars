@@ -45,36 +45,12 @@ int isProdSubset(ProductSet* set1, ProductSet* set2) {
   }
 }
 
-// helper that checks if two sets of products are equivalent
-
-int eqProdSets(ProductSet* set1, ProductSet* set2) {
-  return isProdSubset(set1, set2) && isProdSubset(set2, set1);
-}
-
-// set up eq for customer lattice
-
-int eqCustomer(Customer* c1, Customer* c2) {
-  match (c1) {
+int isTop(Customer* c) {
+  match (c) {
     CustTop() -> {
-      match (c2) {
-        CustTop() -> {return 1;}
-        _ -> {return 0;}
-      }
+      return 1;
     }
-    CustBot() -> {
-      match (c2) {
-        CustBot() -> {return 1;}
-        _ -> {return 0;}
-      }
-    }
-    Person(name1, prods1) -> {
-      match (c2) {
-        Person(name2, prods2) -> {
-          return name1 == name2 && eqProdSets(prods1, prods2);
-        }
-        _ -> {return 0;}
-      }
-    }
+    _ -> {return 0;}
   }   
 }
 
