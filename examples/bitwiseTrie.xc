@@ -4,54 +4,10 @@
 
 // set up bit type
 
-typedef datatype Bit Bit;
-datatype Bit {
-  None();
-  Zero();
-  One();
-};
-
-int eqBits(Bit* b1, Bit* b2) {
-  match (b1) {
-    None() -> {
-      match (b2) {
-        None() -> {return 1;}
-        _ -> {return 0;}
-      }
-    }
-    Zero() -> {
-      match (b2) {
-        Zero() -> {return 1;} 
-        _ -> {return 0;}
-      }
-    }
-    One() -> {
-      match (b2) {
-        One() -> {return 1;}
-        _ -> {return 0;}
-      }
-    }
-  }
-}
-
-string showBit(Bit* b) {
-    match (b) {
-    None() -> {
-      return str("None()");
-    }
-    Zero() -> {
-      return str("0");
-    }
-    One() -> {
-      return str("1");
-    }
-  }
-}
-
 typedef datatype BitTrie BitTrie;
 datatype BitTrie {
   Top();
-  Node(Bit*, BitTrie*, BitTrie*);
+  Node(BitTrie*, BitTrie*);
   Bot();
 };
 
@@ -73,12 +29,12 @@ int leq(BitTrie* b1, BitTrie* b2) {
     Bot() -> {
       return 1;
     }
-    Node(bit1, left1, right1) -> {
+    Node(left1, right1) -> {
       match (b2) {
         Top() -> {return 1;}
         Bot() -> {return 0;} 
-        Node(bit2, left2, right2) -> {
-          return eqBits(bit1, bit2) && leq(left1, left2) && leq(right1, right1);
+        Node(left2, right2) -> {
+          return leq(left1, left2) && leq(right1, right1);
         }
       }
     }
@@ -89,15 +45,20 @@ BitTrie* lub(BitTrie* b1, BitTrie* b2) {
   match (b1) {
     Top() -> {return b1;}
     Bot() -> {return b2;}
-    Node(bit1, left1, right1) -> {
+    Node(left1, right1) -> {
       match (b2) {
         Top() -> {return b2;}
         Bot() -> {return b1;} 
-        Node(bit2, left2, right2) -> {
-          if (eqBits(bit1, bit2)) {
-            return Node(bit1, lub(left1, left2), lub(right1, right2));
-          } 
-          return Top();
+        Node(left2, right2) -> {
+            BitTrie* lub1 = lub(left1, left2);
+            if (isTop(lub1)) {
+              return Top();
+            }
+            BitTrie* lub2 = lub(right1, right2);
+            if (isTop(lub2)) {
+              return Top();
+            }
+            return Node(lub1, lub2);
         }
       }
     }
@@ -106,17 +67,57 @@ BitTrie* lub(BitTrie* b1, BitTrie* b2) {
 
 string showBitTrie(BitTrie* b) {
   match (b) {
-    Top() -> {return str("Top()");}
+    Top() -> {return str("Error");}
     Bot() -> {return str("");}
-    Node(bit, left, right) -> {
-      string result = str("[") + showBitTrie(left) + str("] <-") + showBit(bit) +
-                      str("-> [") + showBitTrie(right); 
+    Node(left, right) -> {
+      match (left) {
+        Top() -> {return str("Error");}
+        Bot() -> {
+           match (right) {
+             Top() -> {return str("Error");}
+             Bot() -> {return str("");}
+             Node(_, _) -> {return str("Node(1, _, ") + showBitTrie(right) + str(")");} 
+           }
+        }
+        Node(_, _) -> {
+          match (right) {
+             Top() -> {return str("Error");}
+             Bot() -> {return str("Node(0, ") + showBitTrie(left) + str(", _)");}
+             Node(_, _) -> {return str("Node(1, ") + showBitTrie(left) + str(", ") + showBitTrie(right) + str(")");}
+          }
+        }
+      }
+      string result = str("Node(") + showBitTrie(left) + str(",") + showBitTrie(right) + str(")"); 
       return result;
     }
   }
 }
 
+//ids are 8 bit numbers
+BitTrie* generateBitTrie(int id, int numBits) {
+  if (numBits == 0) {
+    return Bot();
+  }
+  if (id >> (numBits - 1)) {
+    return Node(Bot(), generateBitTrie(id, numBits - 1));
+  }
+  else {
+    return Node(generateBitTrie(id, numBits - 1), Bot());
+  }
+}
+
+int insertCustomer(int id, int numBits, Lvar<BitTrie*>* l) {
+  return put(l, generateBitTrie(id, numBits));
+}
+
 cilk int main(int argc, char **argv) {
+  Lattice<BitTrie*>* D = lattice(Bot(), Top(), leq, lub, isTop, showBitTrie);
+  Lvar<BitTrie*>* l = newLvar(D);
+  for (int i = 0; i < 10; i++) {
+    insertCustomer(i, 8, l);
+  }
+  freeze(l);
+  printf("%s\n", show(l).text);
   cilk return 1;
 }
 

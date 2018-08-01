@@ -38,7 +38,7 @@ sys	0m11.552s
 #### POPL Paper:
 
 + mention possible issues with multiple blocked gets and number of threads
-+ Future work-- way to nicely implement sets for unknown data type for users to access without set-up, other "pre-fab" data structures so users can just create lattice and lvars without worrying about lub etc.
++ Future work-- way to nicely implement sets for unknown data type for users to access without set-up, other "pre-fab" data structures so users can just create lattice and lvars without worrying about lub etc. (avoid complicated set up)
 + Add in stuff with running example
 + Refer to style resources and spiff up writing
 + Need examples with no side effects until after syncing
