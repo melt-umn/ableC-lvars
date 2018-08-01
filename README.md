@@ -54,7 +54,6 @@ Guarantees of determinism don't hold with side-effects: "We define a program to 
 + Look over and tidy up examples and header file (to work better with new set up)
 + Fix top <= top in examples and tests
 + Add locks where needed in header file
-+ Problem: Need at least one thread for each blocked get, plus one more to handle puts etc. So if have two blocked gets in a single program, won't work unless run with -nproc 3 or higher.
 
 ### Less urgent:
 

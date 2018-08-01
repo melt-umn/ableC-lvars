@@ -4876,121 +4876,132 @@ static inline void Cilk_cilk2c_before_return_slow_cp(
 # 6 "../../../extensions/ableC-cilk/include/cilk.xh" 2
 # 4 "bitwiseTrie.xc" 2
 
-
-
-typedef datatype BitTrie BitTrie;
-datatype BitTrie {
+typedef datatype Trie Trie;
+datatype Trie {
   Top();
-  Node(BitTrie*, BitTrie*);
-  Bot();
-};
+  Empty();
+  Leaf(int);
+  Node(Trie*, Trie*);
+}
 
-int isTop(BitTrie* b) {
-  match (b) {
+int isTop(Trie* t) {
+  match (t) {
     Top() -> {return 1;}
     _ -> {return 0;}
   }
 }
 
-int leq(BitTrie* b1, BitTrie* b2) {
-  match (b1) {
+int leq(Trie* t1, Trie* t2) {
+  match (t1) {
     Top() -> {
-      match (b2) {
+      match (t2) {
         Top() -> {return 1;}
         _ -> {return 0;}
       }
     }
-    Bot() -> {
+    Empty() -> {
       return 1;
     }
+    Leaf(n1) -> {
+      match (t2) {
+        Empty() -> {return 0;}
+        Leaf(n2) -> {return n1 == n2;}
+      }
+    }
     Node(left1, right1) -> {
-      match (b2) {
+      match (t2) {
         Top() -> {return 1;}
-        Bot() -> {return 0;}
+        Empty()-> {return 0;}
+        Leaf(n) -> {return 0;}
         Node(left2, right2) -> {
-          return leq(left1, left2) && leq(right1, right1);
+          return leq(left1, left2) && leq(right1, right2);
         }
       }
     }
   }
 }
 
-BitTrie* lub(BitTrie* b1, BitTrie* b2) {
-  match (b1) {
-    Top() -> {return b1;}
-    Bot() -> {return b2;}
+Trie* lub(Trie* t1, Trie* t2) {
+  match (t1) {
+    Top() -> {return t1;}
+    Empty() -> {return t2;}
+    Leaf(n1) -> {
+      match (t2) {
+        Top() -> {return t2;}
+        Empty() -> {return t1;}
+        Leaf(n2) -> {
+          if (n1 == n2) {
+            return t1;
+          }
+          return Top();
+        }
+        Node(left, right) -> {
+          return Top();
+        }
+      }
+    }
     Node(left1, right1) -> {
-      match (b2) {
-        Top() -> {return b2;}
-        Bot() -> {return b1;}
+      match (t2) {
+        Top() -> {return t2;}
+        Empty()-> {return t1;}
+        Leaf(n) -> {return Top();}
         Node(left2, right2) -> {
-            BitTrie* lub1 = lub(left1, left2);
-            if (isTop(lub1)) {
-              return Top();
-            }
-            BitTrie* lub2 = lub(right1, right2);
-            if (isTop(lub2)) {
-              return Top();
-            }
-            return Node(lub1, lub2);
+          return Node(lub(left1, left2), lub(right1, right2));
         }
       }
     }
   }
 }
 
-string showBitTrie(BitTrie* b) {
-  match (b) {
-    Top() -> {return str("Error");}
-    Bot() -> {return str("");}
+string showTrie(Trie* t) {
+  match (t) {
+    Top() -> {return str("Top()");}
+    Empty() -> {return str("Empty()");}
+    Leaf(n) -> {return str("Leaf(") + show(n) + str(")");}
+    Node(left, right) -> {
+      return str("Node(") + showTrie(left) + str(", ") + showTrie(right) + str(")");
+    }
+  }
+}
+
+string getNumber(Trie* path) {
+  match (path) {
+    Empty() -> {return str("");}
+    Leaf(n) -> {return str("");}
     Node(left, right) -> {
       match (left) {
-        Top() -> {return str("Error");}
-        Bot() -> {
-           match (right) {
-             Top() -> {return str("Error");}
-             Bot() -> {return str("");}
-             Node(_, _) -> {return str("Node(1, _, ") + showBitTrie(right) + str(")");}
-           }
-        }
-        Node(_, _) -> {
-          match (right) {
-             Top() -> {return str("Error");}
-             Bot() -> {return str("Node(0, ") + showBitTrie(left) + str(", _)");}
-             Node(_, _) -> {return str("Node(1, ") + showBitTrie(left) + str(", ") + showBitTrie(right) + str(")");}
-          }
-        }
+        Empty() -> {return str("1") + getNumber(right);}
+        Leaf(n) -> {return str("0");}
+        Node(_, _) -> {return str("0") + getNumber(left);}
       }
-      string result = str("Node(") + showBitTrie(left) + str(",") + showBitTrie(right) + str(")");
-      return result;
     }
   }
 }
 
-
-BitTrie* generateBitTrie(int id, int numBits) {
+Trie* makeTrie(int value, int id, int numBits) {
   if (numBits == 0) {
-    return Bot();
+    return Leaf(value);
   }
-  if (id >> (numBits - 1)) {
-    return Node(Bot(), generateBitTrie(id, numBits - 1));
+  if ((id >> (numBits - 1)) & 1) {
+    printf("1");
+    return Node(Empty(), makeTrie(value, id, numBits - 1));
   }
   else {
-    return Node(generateBitTrie(id, numBits - 1), Bot());
+    printf("0");
+    return Node(makeTrie(value, id, numBits - 1), Empty());
   }
 }
 
-int insertCustomer(int id, int numBits, Lvar<BitTrie*>* l) {
-  return put(l, generateBitTrie(id, numBits));
+int insertCustomer(int id, int numBits, Lvar<Trie*>* l) {
+  return put(l, makeTrie(id, id, numBits));
 }
 
 cilk int main(int argc, char **argv) {
-  Lattice<BitTrie*>* D = lattice(Bot(), Top(), leq, lub, isTop, showBitTrie);
-  Lvar<BitTrie*>* l = newLvar(D);
-  for (int i = 0; i < 10; i++) {
-    insertCustomer(i, 8, l);
-  }
-  freeze(l);
+  Lattice<Trie*>* D = lattice(Empty(), Top(), leq, lub, isTop, showTrie);
+  Lvar<Trie*>* l = newLvar(D);
+  insertCustomer(8, 4, l);
+  printf("\n");
+  printf("%s\n", getNumber(freeze(l)).text);
   printf("%s\n", show(l).text);
   cilk return 1;
 }

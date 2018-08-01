@@ -2112,58 +2112,92 @@ static inline void Cilk_cilk2c_before_return_slow_cp(CilkWorkerState  *const  ws
     ;
   }
 }
-typedef struct BitTrie BitTrie;
+typedef struct Trie Trie;
 struct _GenericDatatype {
   unsigned int refId;
   unsigned int tag;
   
 };
-struct BitTrie {
+struct Trie {
   unsigned int refId;
-  enum _BitTrie_types {
-    BitTrie_Top,
-    BitTrie_Node,
-    BitTrie_Bot
+  enum _Trie_types {
+    Trie_Top,
+    Trie_Empty,
+    Trie_Leaf,
+    Trie_Node
   } tag;
-  union _BitTrie_contents {
-    struct BitTrie_Top_s {
+  union _Trie_contents {
+    struct Trie_Top_s {
       
     } Top;
-    struct BitTrie_Node_s {
-      BitTrie  *f0;
-      BitTrie  *f1;
+    struct Trie_Empty_s {
+      
+    } Empty;
+    struct Trie_Leaf_s {
+      signed int f0;
+      
+    } Leaf;
+    struct Trie_Node_s {
+      Trie  *f0;
+      Trie  *f1;
       
     } Node;
-    struct BitTrie_Bot_s {
-      
-    } Bot;
     
   } contents;
   
 };
-static inline BitTrie  *Top(void)
+static inline Trie  *Top(void)
 {
 
-  BitTrie  *temp;
+  Trie  *temp;
   ((temp) = ({
     
-    ((BitTrie *)((malloc)((sizeof(BitTrie))))); })
+    ((Trie *)((malloc)((sizeof(Trie))))); })
   );
-  (((temp)->tag) = (BitTrie_Top));
+  (((temp)->tag) = (Trie_Top));
   (((temp)->refId) = 45);
   ;
   ;
   return (temp);
 }
-static inline BitTrie  *Node(BitTrie  * f0, BitTrie  * f1)
+static inline Trie  *Empty(void)
 {
 
-  BitTrie  *temp;
+  Trie  *temp;
   ((temp) = ({
     
-    ((BitTrie *)((malloc)((sizeof(BitTrie))))); })
+    ((Trie *)((malloc)((sizeof(Trie))))); })
   );
-  (((temp)->tag) = (BitTrie_Node));
+  (((temp)->tag) = (Trie_Empty));
+  (((temp)->refId) = 45);
+  ;
+  ;
+  return (temp);
+}
+static inline Trie  *Leaf(signed int  f0)
+{
+
+  Trie  *temp;
+  ((temp) = ({
+    
+    ((Trie *)((malloc)((sizeof(Trie))))); })
+  );
+  (((temp)->tag) = (Trie_Leaf));
+  (((temp)->refId) = 45);
+  ;
+  (((((temp)->contents).Leaf).f0) = (f0));
+  ;
+  return (temp);
+}
+static inline Trie  *Node(Trie  * f0, Trie  * f1)
+{
+
+  Trie  *temp;
+  ((temp) = ({
+    
+    ((Trie *)((malloc)((sizeof(Trie))))); })
+  );
+  (((temp)->tag) = (Trie_Node));
   (((temp)->refId) = 45);
   ;
   (((((temp)->contents).Node).f0) = (f0));
@@ -2171,42 +2205,28 @@ static inline BitTrie  *Node(BitTrie  * f0, BitTrie  * f1)
   ;
   return (temp);
 }
-static inline BitTrie  *Bot(void)
-{
-
-  BitTrie  *temp;
-  ((temp) = ({
-    
-    ((BitTrie *)((malloc)((sizeof(BitTrie))))); })
-  );
-  (((temp)->tag) = (BitTrie_Bot));
-  (((temp)->refId) = 45);
-  ;
-  ;
-  return (temp);
-}
-signed int isTop(BitTrie  * b)
+signed int isTop(Trie  * t)
 {
 
   {
     {
-      /* match ((b)) ... */;
-      BitTrie  *_match_scrutinee_val = (b);
-      BitTrie  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
+      /* match ((t)) ... */;
+      Trie  *_match_scrutinee_val = (t);
+      Trie  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
       /* matching for pattern Top() */;
       /* ... declarations of pattern variables */;
       ;
-      BitTrie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+      Trie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
       if (({
         signed int _match = 1;
         /* matching against a ADT constructor pattern */;
         /* match against constructor */;
-        if (((((*(_curr_scrutinee_ptr)))->tag) != (BitTrie_Top)))
+        if (((((*(_curr_scrutinee_ptr)))->tag) != (Trie_Top)))
         {
           ((_match) = 0);
         } else {
           /* match against sub-patterns, setting _match to 0 on a fail */;
-          BitTrie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+          Trie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
           ;
         }
         (_match); })
@@ -2217,7 +2237,7 @@ signed int isTop(BitTrie  * b)
         /* matching for pattern _ */;
         /* ... declarations of pattern variables */;
         ;
-        BitTrie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+        Trie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
         if (({
           signed int _match = 1;
           ;
@@ -2232,51 +2252,51 @@ signed int isTop(BitTrie  * b)
     }
   }
 }
-signed int leq(BitTrie  * b1, BitTrie  * b2)
+signed int leq(Trie  * t1, Trie  * t2)
 {
 
   {
     {
-      /* match ((b1)) ... */;
-      BitTrie  *_match_scrutinee_val = (b1);
-      BitTrie  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
+      /* match ((t1)) ... */;
+      Trie  *_match_scrutinee_val = (t1);
+      Trie  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
       /* matching for pattern Top() */;
       /* ... declarations of pattern variables */;
       ;
-      BitTrie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+      Trie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
       if (({
         signed int _match = 1;
         /* matching against a ADT constructor pattern */;
         /* match against constructor */;
-        if (((((*(_curr_scrutinee_ptr)))->tag) != (BitTrie_Top)))
+        if (((((*(_curr_scrutinee_ptr)))->tag) != (Trie_Top)))
         {
           ((_match) = 0);
         } else {
           /* match against sub-patterns, setting _match to 0 on a fail */;
-          BitTrie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+          Trie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
           ;
         }
         (_match); })
       )
       {
         {
-          /* match ((b2)) ... */;
-          BitTrie  *_match_scrutinee_val = (b2);
-          BitTrie  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
+          /* match ((t2)) ... */;
+          Trie  *_match_scrutinee_val = (t2);
+          Trie  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
           /* matching for pattern Top() */;
           /* ... declarations of pattern variables */;
           ;
-          BitTrie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+          Trie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
           if (({
             signed int _match = 1;
             /* matching against a ADT constructor pattern */;
             /* match against constructor */;
-            if (((((*(_curr_scrutinee_ptr)))->tag) != (BitTrie_Top)))
+            if (((((*(_curr_scrutinee_ptr)))->tag) != (Trie_Top)))
             {
               ((_match) = 0);
             } else {
               /* match against sub-patterns, setting _match to 0 on a fail */;
-              BitTrie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+              Trie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
               ;
             }
             (_match); })
@@ -2287,7 +2307,7 @@ signed int leq(BitTrie  * b1, BitTrie  * b2)
             /* matching for pattern _ */;
             /* ... declarations of pattern variables */;
             ;
-            BitTrie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+            Trie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
             if (({
               signed int _match = 1;
               ;
@@ -2301,20 +2321,20 @@ signed int leq(BitTrie  * b1, BitTrie  * b2)
           }
         }
       } else {
-        /* matching for pattern Bot() */;
+        /* matching for pattern Empty() */;
         /* ... declarations of pattern variables */;
         ;
-        BitTrie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+        Trie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
         if (({
           signed int _match = 1;
           /* matching against a ADT constructor pattern */;
           /* match against constructor */;
-          if (((((*(_curr_scrutinee_ptr)))->tag) != (BitTrie_Bot)))
+          if (((((*(_curr_scrutinee_ptr)))->tag) != (Trie_Empty)))
           {
             ((_match) = 0);
           } else {
             /* match against sub-patterns, setting _match to 0 on a fail */;
-            BitTrie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+            Trie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
             ;
           }
           (_match); })
@@ -2322,28 +2342,23 @@ signed int leq(BitTrie  * b1, BitTrie  * b2)
         {
           return 1;
         } else {
-          /* matching for pattern Node(left1,right1) */;
+          /* matching for pattern Leaf(n1) */;
           /* ... declarations of pattern variables */;
-          BitTrie  *left1;
-          BitTrie  *right1;
-          BitTrie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+          signed int n1;
+          Trie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
           if (({
             signed int _match = 1;
             /* matching against a ADT constructor pattern */;
             /* match against constructor */;
-            if (((((*(_curr_scrutinee_ptr)))->tag) != (BitTrie_Node)))
+            if (((((*(_curr_scrutinee_ptr)))->tag) != (Trie_Leaf)))
             {
               ((_match) = 0);
             } else {
               /* match against sub-patterns, setting _match to 0 on a fail */;
-              BitTrie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+              Trie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
               {
-                BitTrie  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Node).f0));
-                ((left1) = (*(_curr_scrutinee_ptr)));
-              }
-              {
-                BitTrie  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Node).f1));
-                ((right1) = (*(_curr_scrutinee_ptr)));
+                signed int  *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Leaf).f0));
+                ((n1) = (*(_curr_scrutinee_ptr)));
               }
               ;
             }
@@ -2351,166 +2366,271 @@ signed int leq(BitTrie  * b1, BitTrie  * b2)
           )
           {
             {
-              /* match ((b2)) ... */;
-              BitTrie  *_match_scrutinee_val = (b2);
-              BitTrie  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
-              /* matching for pattern Top() */;
+              /* match ((t2)) ... */;
+              Trie  *_match_scrutinee_val = (t2);
+              Trie  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
+              /* matching for pattern Empty() */;
               /* ... declarations of pattern variables */;
               ;
-              BitTrie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+              Trie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
               if (({
                 signed int _match = 1;
                 /* matching against a ADT constructor pattern */;
                 /* match against constructor */;
-                if (((((*(_curr_scrutinee_ptr)))->tag) != (BitTrie_Top)))
+                if (((((*(_curr_scrutinee_ptr)))->tag) != (Trie_Empty)))
                 {
                   ((_match) = 0);
                 } else {
                   /* match against sub-patterns, setting _match to 0 on a fail */;
-                  BitTrie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                  Trie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
                   ;
                 }
                 (_match); })
               )
               {
-                return 1;
+                return 0;
               } else {
-                /* matching for pattern Bot() */;
+                /* matching for pattern Leaf(n2) */;
                 /* ... declarations of pattern variables */;
-                ;
-                BitTrie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+                signed int n2;
+                Trie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
                 if (({
                   signed int _match = 1;
                   /* matching against a ADT constructor pattern */;
                   /* match against constructor */;
-                  if (((((*(_curr_scrutinee_ptr)))->tag) != (BitTrie_Bot)))
+                  if (((((*(_curr_scrutinee_ptr)))->tag) != (Trie_Leaf)))
                   {
                     ((_match) = 0);
                   } else {
                     /* match against sub-patterns, setting _match to 0 on a fail */;
-                    BitTrie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                    Trie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                    {
+                      signed int  *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Leaf).f0));
+                      ((n2) = (*(_curr_scrutinee_ptr)));
+                    }
                     ;
                   }
                   (_match); })
                 )
                 {
-                  return 0;
+                  return ((n1) == (n2));
                 } else {
-                  /* matching for pattern Node(left2,right2) */;
+                  /* no match, do nothing. */;
+                }
+              }
+            }
+          } else {
+            /* matching for pattern Node(left1,right1) */;
+            /* ... declarations of pattern variables */;
+            Trie  *left1;
+            Trie  *right1;
+            Trie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+            if (({
+              signed int _match = 1;
+              /* matching against a ADT constructor pattern */;
+              /* match against constructor */;
+              if (((((*(_curr_scrutinee_ptr)))->tag) != (Trie_Node)))
+              {
+                ((_match) = 0);
+              } else {
+                /* match against sub-patterns, setting _match to 0 on a fail */;
+                Trie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                {
+                  Trie  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Node).f0));
+                  ((left1) = (*(_curr_scrutinee_ptr)));
+                }
+                {
+                  Trie  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Node).f1));
+                  ((right1) = (*(_curr_scrutinee_ptr)));
+                }
+                ;
+              }
+              (_match); })
+            )
+            {
+              {
+                /* match ((t2)) ... */;
+                Trie  *_match_scrutinee_val = (t2);
+                Trie  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
+                /* matching for pattern Top() */;
+                /* ... declarations of pattern variables */;
+                ;
+                Trie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+                if (({
+                  signed int _match = 1;
+                  /* matching against a ADT constructor pattern */;
+                  /* match against constructor */;
+                  if (((((*(_curr_scrutinee_ptr)))->tag) != (Trie_Top)))
+                  {
+                    ((_match) = 0);
+                  } else {
+                    /* match against sub-patterns, setting _match to 0 on a fail */;
+                    Trie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                    ;
+                  }
+                  (_match); })
+                )
+                {
+                  return 1;
+                } else {
+                  /* matching for pattern Empty() */;
                   /* ... declarations of pattern variables */;
-                  BitTrie  *left2;
-                  BitTrie  *right2;
-                  BitTrie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+                  ;
+                  Trie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
                   if (({
                     signed int _match = 1;
                     /* matching against a ADT constructor pattern */;
                     /* match against constructor */;
-                    if (((((*(_curr_scrutinee_ptr)))->tag) != (BitTrie_Node)))
+                    if (((((*(_curr_scrutinee_ptr)))->tag) != (Trie_Empty)))
                     {
                       ((_match) = 0);
                     } else {
                       /* match against sub-patterns, setting _match to 0 on a fail */;
-                      BitTrie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
-                      {
-                        BitTrie  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Node).f0));
-                        ((left2) = (*(_curr_scrutinee_ptr)));
-                      }
-                      {
-                        BitTrie  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Node).f1));
-                        ((right2) = (*(_curr_scrutinee_ptr)));
-                      }
+                      Trie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
                       ;
                     }
                     (_match); })
                   )
                   {
-                    return (((leq)((left1), (left2))) && ((leq)((right1), (right1))));
+                    return 0;
                   } else {
-                    /* no match, do nothing. */;
+                    /* matching for pattern Leaf(n) */;
+                    /* ... declarations of pattern variables */;
+                    signed int n;
+                    Trie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+                    if (({
+                      signed int _match = 1;
+                      /* matching against a ADT constructor pattern */;
+                      /* match against constructor */;
+                      if (((((*(_curr_scrutinee_ptr)))->tag) != (Trie_Leaf)))
+                      {
+                        ((_match) = 0);
+                      } else {
+                        /* match against sub-patterns, setting _match to 0 on a fail */;
+                        Trie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                        {
+                          signed int  *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Leaf).f0));
+                          ((n) = (*(_curr_scrutinee_ptr)));
+                        }
+                        ;
+                      }
+                      (_match); })
+                    )
+                    {
+                      return 0;
+                    } else {
+                      /* matching for pattern Node(left2,right2) */;
+                      /* ... declarations of pattern variables */;
+                      Trie  *left2;
+                      Trie  *right2;
+                      Trie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+                      if (({
+                        signed int _match = 1;
+                        /* matching against a ADT constructor pattern */;
+                        /* match against constructor */;
+                        if (((((*(_curr_scrutinee_ptr)))->tag) != (Trie_Node)))
+                        {
+                          ((_match) = 0);
+                        } else {
+                          /* match against sub-patterns, setting _match to 0 on a fail */;
+                          Trie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                          {
+                            Trie  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Node).f0));
+                            ((left2) = (*(_curr_scrutinee_ptr)));
+                          }
+                          {
+                            Trie  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Node).f1));
+                            ((right2) = (*(_curr_scrutinee_ptr)));
+                          }
+                          ;
+                        }
+                        (_match); })
+                      )
+                      {
+                        return (((leq)((left1), (left2))) && ((leq)((right1), (right2))));
+                      } else {
+                        /* no match, do nothing. */;
+                      }
+                    }
                   }
                 }
               }
+            } else {
+              /* no match, do nothing. */;
             }
-          } else {
-            /* no match, do nothing. */;
           }
         }
       }
     }
   }
 }
-BitTrie  *lub(BitTrie  * b1, BitTrie  * b2)
+Trie  *lub(Trie  * t1, Trie  * t2)
 {
 
   {
     {
-      /* match ((b1)) ... */;
-      BitTrie  *_match_scrutinee_val = (b1);
-      BitTrie  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
+      /* match ((t1)) ... */;
+      Trie  *_match_scrutinee_val = (t1);
+      Trie  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
       /* matching for pattern Top() */;
       /* ... declarations of pattern variables */;
       ;
-      BitTrie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+      Trie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
       if (({
         signed int _match = 1;
         /* matching against a ADT constructor pattern */;
         /* match against constructor */;
-        if (((((*(_curr_scrutinee_ptr)))->tag) != (BitTrie_Top)))
+        if (((((*(_curr_scrutinee_ptr)))->tag) != (Trie_Top)))
         {
           ((_match) = 0);
         } else {
           /* match against sub-patterns, setting _match to 0 on a fail */;
-          BitTrie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+          Trie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
           ;
         }
         (_match); })
       )
       {
-        return (b1);
+        return (t1);
       } else {
-        /* matching for pattern Bot() */;
+        /* matching for pattern Empty() */;
         /* ... declarations of pattern variables */;
         ;
-        BitTrie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+        Trie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
         if (({
           signed int _match = 1;
           /* matching against a ADT constructor pattern */;
           /* match against constructor */;
-          if (((((*(_curr_scrutinee_ptr)))->tag) != (BitTrie_Bot)))
+          if (((((*(_curr_scrutinee_ptr)))->tag) != (Trie_Empty)))
           {
             ((_match) = 0);
           } else {
             /* match against sub-patterns, setting _match to 0 on a fail */;
-            BitTrie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+            Trie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
             ;
           }
           (_match); })
         )
         {
-          return (b2);
+          return (t2);
         } else {
-          /* matching for pattern Node(left1,right1) */;
+          /* matching for pattern Leaf(n1) */;
           /* ... declarations of pattern variables */;
-          BitTrie  *left1;
-          BitTrie  *right1;
-          BitTrie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+          signed int n1;
+          Trie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
           if (({
             signed int _match = 1;
             /* matching against a ADT constructor pattern */;
             /* match against constructor */;
-            if (((((*(_curr_scrutinee_ptr)))->tag) != (BitTrie_Node)))
+            if (((((*(_curr_scrutinee_ptr)))->tag) != (Trie_Leaf)))
             {
               ((_match) = 0);
             } else {
               /* match against sub-patterns, setting _match to 0 on a fail */;
-              BitTrie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+              Trie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
               {
-                BitTrie  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Node).f0));
-                ((left1) = (*(_curr_scrutinee_ptr)));
-              }
-              {
-                BitTrie  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Node).f1));
-                ((right1) = (*(_curr_scrutinee_ptr)));
+                signed int  *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Leaf).f0));
+                ((n1) = (*(_curr_scrutinee_ptr)));
               }
               ;
             }
@@ -2518,155 +2638,425 @@ BitTrie  *lub(BitTrie  * b1, BitTrie  * b2)
           )
           {
             {
-              /* match ((b2)) ... */;
-              BitTrie  *_match_scrutinee_val = (b2);
-              BitTrie  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
+              /* match ((t2)) ... */;
+              Trie  *_match_scrutinee_val = (t2);
+              Trie  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
               /* matching for pattern Top() */;
               /* ... declarations of pattern variables */;
               ;
-              BitTrie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+              Trie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
               if (({
                 signed int _match = 1;
                 /* matching against a ADT constructor pattern */;
                 /* match against constructor */;
-                if (((((*(_curr_scrutinee_ptr)))->tag) != (BitTrie_Top)))
+                if (((((*(_curr_scrutinee_ptr)))->tag) != (Trie_Top)))
                 {
                   ((_match) = 0);
                 } else {
                   /* match against sub-patterns, setting _match to 0 on a fail */;
-                  BitTrie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                  Trie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
                   ;
                 }
                 (_match); })
               )
               {
-                return (b2);
+                return (t2);
               } else {
-                /* matching for pattern Bot() */;
+                /* matching for pattern Empty() */;
                 /* ... declarations of pattern variables */;
                 ;
-                BitTrie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+                Trie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
                 if (({
                   signed int _match = 1;
                   /* matching against a ADT constructor pattern */;
                   /* match against constructor */;
-                  if (((((*(_curr_scrutinee_ptr)))->tag) != (BitTrie_Bot)))
+                  if (((((*(_curr_scrutinee_ptr)))->tag) != (Trie_Empty)))
                   {
                     ((_match) = 0);
                   } else {
                     /* match against sub-patterns, setting _match to 0 on a fail */;
-                    BitTrie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                    Trie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
                     ;
                   }
                   (_match); })
                 )
                 {
-                  return (b1);
+                  return (t1);
                 } else {
-                  /* matching for pattern Node(left2,right2) */;
+                  /* matching for pattern Leaf(n2) */;
                   /* ... declarations of pattern variables */;
-                  BitTrie  *left2;
-                  BitTrie  *right2;
-                  BitTrie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+                  signed int n2;
+                  Trie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
                   if (({
                     signed int _match = 1;
                     /* matching against a ADT constructor pattern */;
                     /* match against constructor */;
-                    if (((((*(_curr_scrutinee_ptr)))->tag) != (BitTrie_Node)))
+                    if (((((*(_curr_scrutinee_ptr)))->tag) != (Trie_Leaf)))
                     {
                       ((_match) = 0);
                     } else {
                       /* match against sub-patterns, setting _match to 0 on a fail */;
-                      BitTrie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                      Trie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
                       {
-                        BitTrie  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Node).f0));
-                        ((left2) = (*(_curr_scrutinee_ptr)));
-                      }
-                      {
-                        BitTrie  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Node).f1));
-                        ((right2) = (*(_curr_scrutinee_ptr)));
+                        signed int  *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Leaf).f0));
+                        ((n2) = (*(_curr_scrutinee_ptr)));
                       }
                       ;
                     }
                     (_match); })
                   )
                   {
-                    BitTrie  *lub1 = ((lub)((left1), (left2)));
-                    if (((isTop)((lub1))))
+                    if (((n1) == (n2)))
                     {
                       {
-                        return ((Top)());
+                        return (t1);
                       }
                     } else {
                       ;
                     }
-                    BitTrie  *lub2 = ((lub)((right1), (right2)));
-                    if (((isTop)((lub2))))
-                    {
-                      {
-                        return ((Top)());
-                      }
-                    } else {
-                      ;
-                    }
-                    return ((Node)((lub1), (lub2)));
+                    return ((Top)());
                   } else {
-                    /* no match, do nothing. */;
+                    /* matching for pattern Node(left,right) */;
+                    /* ... declarations of pattern variables */;
+                    Trie  *left;
+                    Trie  *right;
+                    Trie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+                    if (({
+                      signed int _match = 1;
+                      /* matching against a ADT constructor pattern */;
+                      /* match against constructor */;
+                      if (((((*(_curr_scrutinee_ptr)))->tag) != (Trie_Node)))
+                      {
+                        ((_match) = 0);
+                      } else {
+                        /* match against sub-patterns, setting _match to 0 on a fail */;
+                        Trie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                        {
+                          Trie  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Node).f0));
+                          ((left) = (*(_curr_scrutinee_ptr)));
+                        }
+                        {
+                          Trie  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Node).f1));
+                          ((right) = (*(_curr_scrutinee_ptr)));
+                        }
+                        ;
+                      }
+                      (_match); })
+                    )
+                    {
+                      return ((Top)());
+                    } else {
+                      /* no match, do nothing. */;
+                    }
                   }
                 }
               }
             }
           } else {
-            /* no match, do nothing. */;
+            /* matching for pattern Node(left1,right1) */;
+            /* ... declarations of pattern variables */;
+            Trie  *left1;
+            Trie  *right1;
+            Trie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+            if (({
+              signed int _match = 1;
+              /* matching against a ADT constructor pattern */;
+              /* match against constructor */;
+              if (((((*(_curr_scrutinee_ptr)))->tag) != (Trie_Node)))
+              {
+                ((_match) = 0);
+              } else {
+                /* match against sub-patterns, setting _match to 0 on a fail */;
+                Trie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                {
+                  Trie  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Node).f0));
+                  ((left1) = (*(_curr_scrutinee_ptr)));
+                }
+                {
+                  Trie  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Node).f1));
+                  ((right1) = (*(_curr_scrutinee_ptr)));
+                }
+                ;
+              }
+              (_match); })
+            )
+            {
+              {
+                /* match ((t2)) ... */;
+                Trie  *_match_scrutinee_val = (t2);
+                Trie  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
+                /* matching for pattern Top() */;
+                /* ... declarations of pattern variables */;
+                ;
+                Trie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+                if (({
+                  signed int _match = 1;
+                  /* matching against a ADT constructor pattern */;
+                  /* match against constructor */;
+                  if (((((*(_curr_scrutinee_ptr)))->tag) != (Trie_Top)))
+                  {
+                    ((_match) = 0);
+                  } else {
+                    /* match against sub-patterns, setting _match to 0 on a fail */;
+                    Trie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                    ;
+                  }
+                  (_match); })
+                )
+                {
+                  return (t2);
+                } else {
+                  /* matching for pattern Empty() */;
+                  /* ... declarations of pattern variables */;
+                  ;
+                  Trie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+                  if (({
+                    signed int _match = 1;
+                    /* matching against a ADT constructor pattern */;
+                    /* match against constructor */;
+                    if (((((*(_curr_scrutinee_ptr)))->tag) != (Trie_Empty)))
+                    {
+                      ((_match) = 0);
+                    } else {
+                      /* match against sub-patterns, setting _match to 0 on a fail */;
+                      Trie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                      ;
+                    }
+                    (_match); })
+                  )
+                  {
+                    return (t1);
+                  } else {
+                    /* matching for pattern Leaf(n) */;
+                    /* ... declarations of pattern variables */;
+                    signed int n;
+                    Trie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+                    if (({
+                      signed int _match = 1;
+                      /* matching against a ADT constructor pattern */;
+                      /* match against constructor */;
+                      if (((((*(_curr_scrutinee_ptr)))->tag) != (Trie_Leaf)))
+                      {
+                        ((_match) = 0);
+                      } else {
+                        /* match against sub-patterns, setting _match to 0 on a fail */;
+                        Trie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                        {
+                          signed int  *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Leaf).f0));
+                          ((n) = (*(_curr_scrutinee_ptr)));
+                        }
+                        ;
+                      }
+                      (_match); })
+                    )
+                    {
+                      return ((Top)());
+                    } else {
+                      /* matching for pattern Node(left2,right2) */;
+                      /* ... declarations of pattern variables */;
+                      Trie  *left2;
+                      Trie  *right2;
+                      Trie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+                      if (({
+                        signed int _match = 1;
+                        /* matching against a ADT constructor pattern */;
+                        /* match against constructor */;
+                        if (((((*(_curr_scrutinee_ptr)))->tag) != (Trie_Node)))
+                        {
+                          ((_match) = 0);
+                        } else {
+                          /* match against sub-patterns, setting _match to 0 on a fail */;
+                          Trie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                          {
+                            Trie  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Node).f0));
+                            ((left2) = (*(_curr_scrutinee_ptr)));
+                          }
+                          {
+                            Trie  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Node).f1));
+                            ((right2) = (*(_curr_scrutinee_ptr)));
+                          }
+                          ;
+                        }
+                        (_match); })
+                      )
+                      {
+                        return ((Node)(((lub)((left1), (left2))), ((lub)((right1), (right2)))));
+                      } else {
+                        /* no match, do nothing. */;
+                      }
+                    }
+                  }
+                }
+              }
+            } else {
+              /* no match, do nothing. */;
+            }
           }
         }
       }
     }
   }
 }
-struct _string_s showBitTrie(BitTrie  * b)
+struct _string_s showTrie(Trie  * t)
 {
 
   {
     {
-      /* match ((b)) ... */;
-      BitTrie  *_match_scrutinee_val = (b);
-      BitTrie  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
+      /* match ((t)) ... */;
+      Trie  *_match_scrutinee_val = (t);
+      Trie  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
       /* matching for pattern Top() */;
       /* ... declarations of pattern variables */;
       ;
-      BitTrie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+      Trie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
       if (({
         signed int _match = 1;
         /* matching against a ADT constructor pattern */;
         /* match against constructor */;
-        if (((((*(_curr_scrutinee_ptr)))->tag) != (BitTrie_Top)))
+        if (((((*(_curr_scrutinee_ptr)))->tag) != (Trie_Top)))
         {
           ((_match) = 0);
         } else {
           /* match against sub-patterns, setting _match to 0 on a fail */;
-          BitTrie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+          Trie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
           ;
         }
         (_match); })
       )
       {
-        return ((strCharPointer)("Error"));
+        return ((strCharPointer)("Top()"));
       } else {
-        /* matching for pattern Bot() */;
+        /* matching for pattern Empty() */;
         /* ... declarations of pattern variables */;
         ;
-        BitTrie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+        Trie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
         if (({
           signed int _match = 1;
           /* matching against a ADT constructor pattern */;
           /* match against constructor */;
-          if (((((*(_curr_scrutinee_ptr)))->tag) != (BitTrie_Bot)))
+          if (((((*(_curr_scrutinee_ptr)))->tag) != (Trie_Empty)))
           {
             ((_match) = 0);
           } else {
             /* match against sub-patterns, setting _match to 0 on a fail */;
-            BitTrie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+            Trie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+            ;
+          }
+          (_match); })
+        )
+        {
+          return ((strCharPointer)("Empty()"));
+        } else {
+          /* matching for pattern Leaf(n) */;
+          /* ... declarations of pattern variables */;
+          signed int n;
+          Trie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+          if (({
+            signed int _match = 1;
+            /* matching against a ADT constructor pattern */;
+            /* match against constructor */;
+            if (((((*(_curr_scrutinee_ptr)))->tag) != (Trie_Leaf)))
+            {
+              ((_match) = 0);
+            } else {
+              /* match against sub-patterns, setting _match to 0 on a fail */;
+              Trie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+              {
+                signed int  *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Leaf).f0));
+                ((n) = (*(_curr_scrutinee_ptr)));
+              }
+              ;
+            }
+            (_match); })
+          )
+          {
+            return ((_append_string)(((_append_string)(((strCharPointer)("Leaf(")), ((showInt)((n))))), ((strCharPointer)(")"))));
+          } else {
+            /* matching for pattern Node(left,right) */;
+            /* ... declarations of pattern variables */;
+            Trie  *left;
+            Trie  *right;
+            Trie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+            if (({
+              signed int _match = 1;
+              /* matching against a ADT constructor pattern */;
+              /* match against constructor */;
+              if (((((*(_curr_scrutinee_ptr)))->tag) != (Trie_Node)))
+              {
+                ((_match) = 0);
+              } else {
+                /* match against sub-patterns, setting _match to 0 on a fail */;
+                Trie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                {
+                  Trie  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Node).f0));
+                  ((left) = (*(_curr_scrutinee_ptr)));
+                }
+                {
+                  Trie  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Node).f1));
+                  ((right) = (*(_curr_scrutinee_ptr)));
+                }
+                ;
+              }
+              (_match); })
+            )
+            {
+              return ((_append_string)(((_append_string)(((_append_string)(((_append_string)(((strCharPointer)("Node(")), ((showTrie)((left))))), ((strCharPointer)(", ")))), ((showTrie)((right))))), ((strCharPointer)(")"))));
+            } else {
+              /* no match, do nothing. */;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+struct _string_s getNumber(Trie  * path)
+{
+
+  {
+    {
+      /* match ((path)) ... */;
+      Trie  *_match_scrutinee_val = (path);
+      Trie  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
+      /* matching for pattern Empty() */;
+      /* ... declarations of pattern variables */;
+      ;
+      Trie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+      if (({
+        signed int _match = 1;
+        /* matching against a ADT constructor pattern */;
+        /* match against constructor */;
+        if (((((*(_curr_scrutinee_ptr)))->tag) != (Trie_Empty)))
+        {
+          ((_match) = 0);
+        } else {
+          /* match against sub-patterns, setting _match to 0 on a fail */;
+          Trie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+          ;
+        }
+        (_match); })
+      )
+      {
+        return ((strCharPointer)(""));
+      } else {
+        /* matching for pattern Leaf(n) */;
+        /* ... declarations of pattern variables */;
+        signed int n;
+        Trie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+        if (({
+          signed int _match = 1;
+          /* matching against a ADT constructor pattern */;
+          /* match against constructor */;
+          if (((((*(_curr_scrutinee_ptr)))->tag) != (Trie_Leaf)))
+          {
+            ((_match) = 0);
+          } else {
+            /* match against sub-patterns, setting _match to 0 on a fail */;
+            Trie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+            {
+              signed int  *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Leaf).f0));
+              ((n) = (*(_curr_scrutinee_ptr)));
+            }
             ;
           }
           (_match); })
@@ -2676,25 +3066,25 @@ struct _string_s showBitTrie(BitTrie  * b)
         } else {
           /* matching for pattern Node(left,right) */;
           /* ... declarations of pattern variables */;
-          BitTrie  *left;
-          BitTrie  *right;
-          BitTrie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+          Trie  *left;
+          Trie  *right;
+          Trie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
           if (({
             signed int _match = 1;
             /* matching against a ADT constructor pattern */;
             /* match against constructor */;
-            if (((((*(_curr_scrutinee_ptr)))->tag) != (BitTrie_Node)))
+            if (((((*(_curr_scrutinee_ptr)))->tag) != (Trie_Node)))
             {
               ((_match) = 0);
             } else {
               /* match against sub-patterns, setting _match to 0 on a fail */;
-              BitTrie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+              Trie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
               {
-                BitTrie  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Node).f0));
+                Trie  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Node).f0));
                 ((left) = (*(_curr_scrutinee_ptr)));
               }
               {
-                BitTrie  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Node).f1));
+                Trie  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Node).f1));
                 ((right) = (*(_curr_scrutinee_ptr)));
               }
               ;
@@ -2704,149 +3094,74 @@ struct _string_s showBitTrie(BitTrie  * b)
           {
             {
               /* match ((left)) ... */;
-              BitTrie  *_match_scrutinee_val = (left);
-              BitTrie  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
-              /* matching for pattern Top() */;
+              Trie  *_match_scrutinee_val = (left);
+              Trie  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
+              /* matching for pattern Empty() */;
               /* ... declarations of pattern variables */;
               ;
-              BitTrie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+              Trie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
               if (({
                 signed int _match = 1;
                 /* matching against a ADT constructor pattern */;
                 /* match against constructor */;
-                if (((((*(_curr_scrutinee_ptr)))->tag) != (BitTrie_Top)))
+                if (((((*(_curr_scrutinee_ptr)))->tag) != (Trie_Empty)))
                 {
                   ((_match) = 0);
                 } else {
                   /* match against sub-patterns, setting _match to 0 on a fail */;
-                  BitTrie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                  Trie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
                   ;
                 }
                 (_match); })
               )
               {
-                return ((strCharPointer)("Error"));
+                return ((_append_string)(((strCharPointer)("1")), ((getNumber)((right)))));
               } else {
-                /* matching for pattern Bot() */;
+                /* matching for pattern Leaf(n) */;
                 /* ... declarations of pattern variables */;
-                ;
-                BitTrie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+                signed int n;
+                Trie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
                 if (({
                   signed int _match = 1;
                   /* matching against a ADT constructor pattern */;
                   /* match against constructor */;
-                  if (((((*(_curr_scrutinee_ptr)))->tag) != (BitTrie_Bot)))
+                  if (((((*(_curr_scrutinee_ptr)))->tag) != (Trie_Leaf)))
                   {
                     ((_match) = 0);
                   } else {
                     /* match against sub-patterns, setting _match to 0 on a fail */;
-                    BitTrie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                    Trie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                    {
+                      signed int  *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Leaf).f0));
+                      ((n) = (*(_curr_scrutinee_ptr)));
+                    }
                     ;
                   }
                   (_match); })
                 )
                 {
-                  {
-                    /* match ((right)) ... */;
-                    BitTrie  *_match_scrutinee_val = (right);
-                    BitTrie  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
-                    /* matching for pattern Top() */;
-                    /* ... declarations of pattern variables */;
-                    ;
-                    BitTrie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
-                    if (({
-                      signed int _match = 1;
-                      /* matching against a ADT constructor pattern */;
-                      /* match against constructor */;
-                      if (((((*(_curr_scrutinee_ptr)))->tag) != (BitTrie_Top)))
-                      {
-                        ((_match) = 0);
-                      } else {
-                        /* match against sub-patterns, setting _match to 0 on a fail */;
-                        BitTrie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
-                        ;
-                      }
-                      (_match); })
-                    )
-                    {
-                      return ((strCharPointer)("Error"));
-                    } else {
-                      /* matching for pattern Bot() */;
-                      /* ... declarations of pattern variables */;
-                      ;
-                      BitTrie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
-                      if (({
-                        signed int _match = 1;
-                        /* matching against a ADT constructor pattern */;
-                        /* match against constructor */;
-                        if (((((*(_curr_scrutinee_ptr)))->tag) != (BitTrie_Bot)))
-                        {
-                          ((_match) = 0);
-                        } else {
-                          /* match against sub-patterns, setting _match to 0 on a fail */;
-                          BitTrie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
-                          ;
-                        }
-                        (_match); })
-                      )
-                      {
-                        return ((strCharPointer)(""));
-                      } else {
-                        /* matching for pattern Node(_,_) */;
-                        /* ... declarations of pattern variables */;
-                        ;
-                        BitTrie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
-                        if (({
-                          signed int _match = 1;
-                          /* matching against a ADT constructor pattern */;
-                          /* match against constructor */;
-                          if (((((*(_curr_scrutinee_ptr)))->tag) != (BitTrie_Node)))
-                          {
-                            ((_match) = 0);
-                          } else {
-                            /* match against sub-patterns, setting _match to 0 on a fail */;
-                            BitTrie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
-                            {
-                              BitTrie  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Node).f0));
-                              ;
-                            }
-                            {
-                              BitTrie  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Node).f1));
-                              ;
-                            }
-                            ;
-                          }
-                          (_match); })
-                        )
-                        {
-                          return ((_append_string)(((_append_string)(((strCharPointer)("Node(1, _, ")), ((showBitTrie)((right))))), ((strCharPointer)(")"))));
-                        } else {
-                          /* no match, do nothing. */;
-                        }
-                      }
-                    }
-                  }
+                  return ((strCharPointer)("0"));
                 } else {
                   /* matching for pattern Node(_,_) */;
                   /* ... declarations of pattern variables */;
                   ;
-                  BitTrie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
+                  Trie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
                   if (({
                     signed int _match = 1;
                     /* matching against a ADT constructor pattern */;
                     /* match against constructor */;
-                    if (((((*(_curr_scrutinee_ptr)))->tag) != (BitTrie_Node)))
+                    if (((((*(_curr_scrutinee_ptr)))->tag) != (Trie_Node)))
                     {
                       ((_match) = 0);
                     } else {
                       /* match against sub-patterns, setting _match to 0 on a fail */;
-                      BitTrie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
+                      Trie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
                       {
-                        BitTrie  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Node).f0));
+                        Trie  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Node).f0));
                         ;
                       }
                       {
-                        BitTrie  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Node).f1));
+                        Trie  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Node).f1));
                         ;
                       }
                       ;
@@ -2854,94 +3169,13 @@ struct _string_s showBitTrie(BitTrie  * b)
                     (_match); })
                   )
                   {
-                    {
-                      /* match ((right)) ... */;
-                      BitTrie  *_match_scrutinee_val = (right);
-                      BitTrie  * *_match_scrutinee_ptr = (&(_match_scrutinee_val));
-                      /* matching for pattern Top() */;
-                      /* ... declarations of pattern variables */;
-                      ;
-                      BitTrie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
-                      if (({
-                        signed int _match = 1;
-                        /* matching against a ADT constructor pattern */;
-                        /* match against constructor */;
-                        if (((((*(_curr_scrutinee_ptr)))->tag) != (BitTrie_Top)))
-                        {
-                          ((_match) = 0);
-                        } else {
-                          /* match against sub-patterns, setting _match to 0 on a fail */;
-                          BitTrie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
-                          ;
-                        }
-                        (_match); })
-                      )
-                      {
-                        return ((strCharPointer)("Error"));
-                      } else {
-                        /* matching for pattern Bot() */;
-                        /* ... declarations of pattern variables */;
-                        ;
-                        BitTrie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
-                        if (({
-                          signed int _match = 1;
-                          /* matching against a ADT constructor pattern */;
-                          /* match against constructor */;
-                          if (((((*(_curr_scrutinee_ptr)))->tag) != (BitTrie_Bot)))
-                          {
-                            ((_match) = 0);
-                          } else {
-                            /* match against sub-patterns, setting _match to 0 on a fail */;
-                            BitTrie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
-                            ;
-                          }
-                          (_match); })
-                        )
-                        {
-                          return ((_append_string)(((_append_string)(((strCharPointer)("Node(0, ")), ((showBitTrie)((left))))), ((strCharPointer)(", _)"))));
-                        } else {
-                          /* matching for pattern Node(_,_) */;
-                          /* ... declarations of pattern variables */;
-                          ;
-                          BitTrie  * *_curr_scrutinee_ptr = (_match_scrutinee_ptr);
-                          if (({
-                            signed int _match = 1;
-                            /* matching against a ADT constructor pattern */;
-                            /* match against constructor */;
-                            if (((((*(_curr_scrutinee_ptr)))->tag) != (BitTrie_Node)))
-                            {
-                              ((_match) = 0);
-                            } else {
-                              /* match against sub-patterns, setting _match to 0 on a fail */;
-                              BitTrie  * *_cons_scrutinee_ptr = (_curr_scrutinee_ptr);
-                              {
-                                BitTrie  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Node).f0));
-                                ;
-                              }
-                              {
-                                BitTrie  * *_curr_scrutinee_ptr = (&(((((*(_cons_scrutinee_ptr)))->contents).Node).f1));
-                                ;
-                              }
-                              ;
-                            }
-                            (_match); })
-                          )
-                          {
-                            return ((_append_string)(((_append_string)(((_append_string)(((_append_string)(((strCharPointer)("Node(1, ")), ((showBitTrie)((left))))), ((strCharPointer)(", ")))), ((showBitTrie)((right))))), ((strCharPointer)(")"))));
-                          } else {
-                            /* no match, do nothing. */;
-                          }
-                        }
-                      }
-                    }
+                    return ((_append_string)(((strCharPointer)("0")), ((getNumber)((left)))));
                   } else {
                     /* no match, do nothing. */;
                   }
                 }
               }
             }
-            struct _string_s result = ((_append_string)(((_append_string)(((_append_string)(((_append_string)(((strCharPointer)("Node(")), ((showBitTrie)((left))))), ((strCharPointer)(",")))), ((showBitTrie)((right))))), ((strCharPointer)(")"))));
-            return (result);
           } else {
             /* no match, do nothing. */;
           }
@@ -2950,72 +3184,74 @@ struct _string_s showBitTrie(BitTrie  * b)
     }
   }
 }
-BitTrie  *generateBitTrie(signed int  id, signed int  numBits)
+Trie  *makeTrie(signed int  value, signed int  id, signed int  numBits)
 {
 
   {
     if (((numBits) == 0))
     {
       {
-        return ((Bot)());
+        return ((Leaf)((value)));
       }
     } else {
       ;
     }
-    if (((id) >> (((numBits) - 1))))
+    if (((((id) >> (((numBits) - 1)))) & 1))
     {
       {
-        return ((Node)(((Bot)()), ((generateBitTrie)((id), ((numBits) - 1)))));
+        ((printf)("1"));
+        return ((Node)(((Empty)()), ((makeTrie)((value), (id), ((numBits) - 1)))));
       }
     } else {
       {
-        return ((Node)(((generateBitTrie)((id), ((numBits) - 1))), ((Bot)())));
+        ((printf)("0"));
+        return ((Node)(((makeTrie)((value), (id), ((numBits) - 1))), ((Empty)())));
       }
     }
   }
 }
-typedef BitTrie  *_template_param_unused_52;
-typedef __attribute__(()) struct _template__Lvar__pointer__tag_struct_BitTrie_45__ _template__Lvar__pointer__tag_struct_BitTrie_45__;
-typedef BitTrie  *_template_param_unused_53;
-typedef __attribute__(()) struct _template__Lattice__pointer__tag_struct_BitTrie_45__ _template__Lattice__pointer__tag_struct_BitTrie_45__;
-struct _template__Lattice__pointer__tag_struct_BitTrie_45__ {
-  BitTrie  *_bottom;
-  BitTrie  *_top;
+typedef Trie  *_template_param_unused_53;
+typedef __attribute__(()) struct _template__Lvar__pointer__tag_struct_Trie_45__ _template__Lvar__pointer__tag_struct_Trie_45__;
+typedef Trie  *_template_param_unused_54;
+typedef __attribute__(()) struct _template__Lattice__pointer__tag_struct_Trie_45__ _template__Lattice__pointer__tag_struct_Trie_45__;
+struct _template__Lattice__pointer__tag_struct_Trie_45__ {
+  Trie  *_bottom;
+  Trie  *_top;
   signed int ( *_leq)();
-  BitTrie  *( *_lub)();
+  Trie  *( *_lub)();
   signed int ( *_isTop)();
   struct _string_s ( *_show)();
   
 };
-typedef BitTrie  *_template_param_unused_54;
-typedef __attribute__(()) struct _template__ThresholdSet__pointer__tag_struct_BitTrie_45__ _template__ThresholdSet__pointer__tag_struct_BitTrie_45__;
-typedef BitTrie  *_template_param_unused_55;
-typedef __attribute__(()) struct _template__ActivationSet__pointer__tag_struct_BitTrie_45__ _template__ActivationSet__pointer__tag_struct_BitTrie_45__;
-struct _template__ActivationSet__pointer__tag_struct_BitTrie_45__ {
+typedef Trie  *_template_param_unused_55;
+typedef __attribute__(()) struct _template__ThresholdSet__pointer__tag_struct_Trie_45__ _template__ThresholdSet__pointer__tag_struct_Trie_45__;
+typedef Trie  *_template_param_unused_56;
+typedef __attribute__(()) struct _template__ActivationSet__pointer__tag_struct_Trie_45__ _template__ActivationSet__pointer__tag_struct_Trie_45__;
+struct _template__ActivationSet__pointer__tag_struct_Trie_45__ {
   signed int _size;
-  BitTrie  * *_set;
+  Trie  * *_set;
   signed int _index;
-  struct _template__Lattice__pointer__tag_struct_BitTrie_45__  *_lattice;
+  struct _template__Lattice__pointer__tag_struct_Trie_45__  *_lattice;
   
 };
-struct _template__ThresholdSet__pointer__tag_struct_BitTrie_45__ {
-  struct _template__Lattice__pointer__tag_struct_BitTrie_45__  *_lattice;
+struct _template__ThresholdSet__pointer__tag_struct_Trie_45__ {
+  struct _template__Lattice__pointer__tag_struct_Trie_45__  *_lattice;
   signed int _size;
   signed int _index;
-  struct _template__ActivationSet__pointer__tag_struct_BitTrie_45__  * *_a_sets;
+  struct _template__ActivationSet__pointer__tag_struct_Trie_45__  * *_a_sets;
   
 };
-struct _template__Lvar__pointer__tag_struct_BitTrie_45__ {
-  struct _template__Lattice__pointer__tag_struct_BitTrie_45__  *_lattice;
-  BitTrie  *_value;
+struct _template__Lvar__pointer__tag_struct_Trie_45__ {
+  struct _template__Lattice__pointer__tag_struct_Trie_45__  *_lattice;
+  Trie  *_value;
   signed int _frozen;
-  struct _template__ThresholdSet__pointer__tag_struct_BitTrie_45__  *_threshold;
+  struct _template__ThresholdSet__pointer__tag_struct_Trie_45__  *_threshold;
   pthread_mutex_t _mutex;
   pthread_cond_t _cond;
   
 };
-typedef BitTrie  *_template_param_unused_59;
-static signed int _template__put__pointer__tag_struct_BitTrie_45__(struct _template__Lvar__pointer__tag_struct_BitTrie_45__  * l, BitTrie  * newState)
+typedef Trie  *_template_param_unused_60;
+static signed int _template__put__pointer__tag_struct_Trie_45__(struct _template__Lvar__pointer__tag_struct_Trie_45__  * l, Trie  * newState)
 {
 
   {
@@ -3029,8 +3265,8 @@ static signed int _template__put__pointer__tag_struct_BitTrie_45__(struct _templ
     } else {
       ;
     }
-    BitTrie  *oldState = ((l)->_value);
-    BitTrie  *newValue = ((((l)->_lattice)->_lub)((oldState), (newState)));
+    Trie  *oldState = ((l)->_value);
+    Trie  *newValue = ((((l)->_lattice)->_lub)((oldState), (newState)));
     if (((((l)->_lattice)->_isTop)((newValue))))
     {
       {
@@ -3046,11 +3282,11 @@ static signed int _template__put__pointer__tag_struct_BitTrie_45__(struct _templ
     return 1;
   }
 }
-signed int insertCustomer(signed int  id, signed int  numBits, struct _template__Lvar__pointer__tag_struct_BitTrie_45__  * l)
+signed int insertCustomer(signed int  id, signed int  numBits, struct _template__Lvar__pointer__tag_struct_Trie_45__  * l)
 {
 
   {
-    return ((_template__put__pointer__tag_struct_BitTrie_45__)((l), ((generateBitTrie)((id), (numBits)))));
+    return ((_template__put__pointer__tag_struct_Trie_45__)((l), ((makeTrie)((id), (id), (numBits)))));
   }
 }
 struct _cilk_cilk_main_frame {
@@ -3059,19 +3295,15 @@ struct _cilk_cilk_main_frame {
     char  * *argv;
     signed int argc;
     
-  } scope113;
+  } scope125;
   struct  {
-    struct _template__Lattice__pointer__tag_struct_BitTrie_45__  *D;
+    struct _template__Lattice__pointer__tag_struct_Trie_45__  *D;
     
-  } scope114;
+  } scope126;
   struct  {
-    struct _template__Lvar__pointer__tag_struct_BitTrie_45__  *l;
+    struct _template__Lvar__pointer__tag_struct_Trie_45__  *l;
     
-  } scope115;
-  struct  {
-    signed int i;
-    
-  } scope116;
+  } scope127;
   
 };
 struct _cilk_cilk_main_args {
@@ -3084,12 +3316,12 @@ struct _cilk_cilk_main_args {
 #undef CILK_WHERE_AM_I
 #define CILK_WHERE_AM_I IN_SLOW_PROCEDURE
 
-typedef BitTrie  *_template_param_unused_88;
-static struct _template__Lattice__pointer__tag_struct_BitTrie_45__  *_template__newLattice__pointer__tag_struct_BitTrie_45__(BitTrie  * least, BitTrie  * greatest, signed int ( * leq)(), BitTrie  *( * lub)(), signed int ( * isTop)(), struct _string_s ( * showMethod)())
+typedef Trie  *_template_param_unused_88;
+static struct _template__Lattice__pointer__tag_struct_Trie_45__  *_template__newLattice__pointer__tag_struct_Trie_45__(Trie  * least, Trie  * greatest, signed int ( * leq)(), Trie  *( * lub)(), signed int ( * isTop)(), struct _string_s ( * showMethod)())
 {
 
   {
-    struct _template__Lattice__pointer__tag_struct_BitTrie_45__  *l = ((malloc)((sizeof(struct _template__Lattice__pointer__tag_struct_BitTrie_45__))));
+    struct _template__Lattice__pointer__tag_struct_Trie_45__  *l = ((malloc)((sizeof(struct _template__Lattice__pointer__tag_struct_Trie_45__))));
     (((l)->_bottom) = (least));
     (((l)->_top) = (greatest));
     (((l)->_leq) = (leq));
@@ -3099,12 +3331,12 @@ static struct _template__Lattice__pointer__tag_struct_BitTrie_45__  *_template__
     return (l);
   }
 }
-typedef BitTrie  *_template_param_unused_92;
-static struct _template__Lvar__pointer__tag_struct_BitTrie_45__  *_template__new__pointer__tag_struct_BitTrie_45__(struct _template__Lattice__pointer__tag_struct_BitTrie_45__  * l)
+typedef Trie  *_template_param_unused_92;
+static struct _template__Lvar__pointer__tag_struct_Trie_45__  *_template__new__pointer__tag_struct_Trie_45__(struct _template__Lattice__pointer__tag_struct_Trie_45__  * l)
 {
 
   {
-    struct _template__Lvar__pointer__tag_struct_BitTrie_45__  *lvarNew = ((malloc)((sizeof(struct _template__Lvar__pointer__tag_struct_BitTrie_45__))));
+    struct _template__Lvar__pointer__tag_struct_Trie_45__  *lvarNew = ((malloc)((sizeof(struct _template__Lvar__pointer__tag_struct_Trie_45__))));
     (((lvarNew)->_value) = ((l)->_bottom));
     (((lvarNew)->_lattice) = (l));
     (((lvarNew)->_frozen) = 0);
@@ -3113,20 +3345,20 @@ static struct _template__Lvar__pointer__tag_struct_BitTrie_45__  *_template__new
     return (lvarNew);
   }
 }
-typedef BitTrie  *_template_param_unused_96;
-static BitTrie  *_template__freeze__pointer__tag_struct_BitTrie_45__(struct _template__Lvar__pointer__tag_struct_BitTrie_45__  * l)
+typedef Trie  *_template_param_unused_96;
+static Trie  *_template__freeze__pointer__tag_struct_Trie_45__(struct _template__Lvar__pointer__tag_struct_Trie_45__  * l)
 {
 
   {
     ((pthread_mutex_lock)((&(((l)->_mutex)))));
     (((l)->_frozen) = 1);
-    BitTrie  *result = ((l)->_value);
+    Trie  *result = ((l)->_value);
     ((pthread_mutex_unlock)((&(((l)->_mutex)))));
     return (result);
   }
 }
-typedef BitTrie  *_template_param_unused_104;
-static struct _string_s _template__showLvar__pointer__tag_struct_BitTrie_45__(struct _template__Lvar__pointer__tag_struct_BitTrie_45__  * l)
+typedef Trie  *_template_param_unused_104;
+static struct _string_s _template__showLvar__pointer__tag_struct_Trie_45__(struct _template__Lvar__pointer__tag_struct_Trie_45__  * l)
 {
 
   {
@@ -3156,16 +3388,12 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
   ;
   ;
   {
-    struct _template__Lattice__pointer__tag_struct_BitTrie_45__  *D = ((_template__newLattice__pointer__tag_struct_BitTrie_45__)(((Bot)()), ((Top)()), (leq), (lub), (isTop), (showBitTrie)));
-    struct _template__Lvar__pointer__tag_struct_BitTrie_45__  *l = ((_template__new__pointer__tag_struct_BitTrie_45__)((D)));
-    for (signed int i = 0; ((i) < 10); ((i)++))
-    {
-      {
-        ((insertCustomer)((i), 8, (l)));
-      }
-    }
-    ((_template__freeze__pointer__tag_struct_BitTrie_45__)((l)));
-    ((printf)("%s\n", (((_template__showLvar__pointer__tag_struct_BitTrie_45__)((l))).text)));
+    struct _template__Lattice__pointer__tag_struct_Trie_45__  *D = ((_template__newLattice__pointer__tag_struct_Trie_45__)(((Empty)()), ((Top)()), (leq), (lub), (isTop), (showTrie)));
+    struct _template__Lvar__pointer__tag_struct_Trie_45__  *l = ((_template__new__pointer__tag_struct_Trie_45__)((D)));
+    ((insertCustomer)(8, 4, (l)));
+    ((printf)("\n"));
+    ((printf)("%s\n", (((getNumber)(((_template__freeze__pointer__tag_struct_Trie_45__)((l))))).text)));
+    ((printf)("%s\n", (((_template__showLvar__pointer__tag_struct_Trie_45__)((l))).text)));
     {
       signed int __tmp105 = 1;
       ((Cilk_set_result)((_cilk_ws), (&(__tmp105)), (sizeof((__tmp105)))));
@@ -3181,8 +3409,8 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
   /* TODO: save only live, dirty variables */;
   ;
   ;
-  ((((_cilk_frame)->scope113).argc) = (argc));
-  ((((_cilk_frame)->scope113).argv) = (argv));
+  ((((_cilk_frame)->scope125).argc) = (argc));
+  ((((_cilk_frame)->scope125).argv) = (argv));
   if (((Cilk_sync)((_cilk_ws))))
   {
     return ;
@@ -3193,8 +3421,8 @@ static void _cilk_cilk_main_slow(CilkWorkerState  *const  _cilk_ws, struct _cilk
   /* TODO: restore only live variables */;
   ;
   ;
-  ((argc) = (((_cilk_frame)->scope113).argc));
-  ((argv) = (((_cilk_frame)->scope113).argv));
+  ((argc) = (((_cilk_frame)->scope125).argc));
+  ((argv) = (((_cilk_frame)->scope125).argv));
   /* expand CILK2C_AFTER_SYNC_SLOW() macro */;
   ((Cilk_cilk2c_after_sync_slow_cp)((_cilk_ws), (&(((_cilk_frame)->header)))));
   /* expand CILK2C_AT_THREAD_BOUNDARY_SLOW() macro */;
@@ -3220,16 +3448,12 @@ signed int cilk_main(CilkWorkerState  *const  _cilk_ws, signed int  argc, char  
   ((Cilk_cilk2c_start_thread_fast_cp)((_cilk_ws), (&((_cilk_frame)->header))));
   ((Cilk_cilk2c_event_new_thread_maybe)((_cilk_ws)));
   {
-    struct _template__Lattice__pointer__tag_struct_BitTrie_45__  *D = ((_template__newLattice__pointer__tag_struct_BitTrie_45__)(((Bot)()), ((Top)()), (leq), (lub), (isTop), (showBitTrie)));
-    struct _template__Lvar__pointer__tag_struct_BitTrie_45__  *l = ((_template__new__pointer__tag_struct_BitTrie_45__)((D)));
-    for (signed int i = 0; ((i) < 10); ((i)++))
-    {
-      {
-        ((insertCustomer)((i), 8, (l)));
-      }
-    }
-    ((_template__freeze__pointer__tag_struct_BitTrie_45__)((l)));
-    ((printf)("%s\n", (((_template__showLvar__pointer__tag_struct_BitTrie_45__)((l))).text)));
+    struct _template__Lattice__pointer__tag_struct_Trie_45__  *D = ((_template__newLattice__pointer__tag_struct_Trie_45__)(((Empty)()), ((Top)()), (leq), (lub), (isTop), (showTrie)));
+    struct _template__Lvar__pointer__tag_struct_Trie_45__  *l = ((_template__new__pointer__tag_struct_Trie_45__)((D)));
+    ((insertCustomer)(8, 4, (l)));
+    ((printf)("\n"));
+    ((printf)("%s\n", (((getNumber)(((_template__freeze__pointer__tag_struct_Trie_45__)((l))))).text)));
+    ((printf)("%s\n", (((_template__showLvar__pointer__tag_struct_Trie_45__)((l))).text)));
     {
       signed int _cilk_tmp = 1;
       /* expand CILK2C_BEFORE_RETURN_FAST() macro */;
