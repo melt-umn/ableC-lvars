@@ -2,6 +2,9 @@
 
 // Example taken from p. 6 of Kuper's FHPC paper
 
+
+// set up data types
+
 typedef datatype Int Int;
 datatype Int {
   I_Top();
@@ -16,6 +19,7 @@ datatype Pair {
   Bot();
 };
 
+// set up show methods
 
 string showInteger(Int* i) {
   match (i) {
@@ -33,6 +37,8 @@ string showPair(Pair* p) {
   }
 }
 
+// set up isTop() methods
+
 int isTopInt(Int* i) {
   match (i) {
     I_Top() -> {return 1;}
@@ -46,6 +52,8 @@ int isTop(Pair* p) {
     _ -> {return 0;}
   }
 }
+
+// set up leq methods
 
 int leqInt(Int* i1, Int* i2) {
   match (i1) {
@@ -86,6 +94,8 @@ int leq(Pair* p1, Pair* p2) {
     Bot() -> {return 1;}
   }
 }
+
+// set up lub methods
 
 Int* lubInt(Int* i1, Int* i2) {
   match (i1) {
@@ -132,7 +142,11 @@ Pair* lub(Pair* p1, Pair* p2) {
 
 int main(int argc, char **argv) {
 
+  // make lattice for our type
+
   Lattice<Pair*> * D = lattice(Bot(), Top(), leq, lub, isTop, showPair);
+
+  // make threshold set of (some) natural number right-hand pair values
 
   ActivationSet<Pair*>* a1 = activationSet(D){P(I_Bot(), I(1))};
   ActivationSet<Pair*>* a2 = activationSet(D){P(I_Bot(), I(2))};
@@ -142,10 +156,17 @@ int main(int argc, char **argv) {
   ActivationSet<Pair*>* a6 = activationSet(D){P(I_Bot(), I(6))};
   ThresholdSet<Pair*>* t = thresholdSet(D){a1, a2, a3, a4, a5, a6};
 
+  // let p = new in
+  //   let _ = put p {(3, 4)} in
+  //     let v1 = get p {(?, n) | n in natural numbers} in
+  //        ... v1 ...
+
   Lvar<Pair*>* p = newLvar(D);
   put(p, P(I(3), I(4)));
   ActivationSet<Pair*>* v1 = get(p, t);
   printf("v1 = %s\n", show(v1).text);
+
+  // clean up
 
   free(D);
   freeSet(a1);
