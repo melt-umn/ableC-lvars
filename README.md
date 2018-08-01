@@ -70,6 +70,8 @@ Guarantees of determinism don't hold with side-effects: "We define a program to 
 + Check on leq with freezing-- do I need to check further?
 + Implement getFst and getSnd to help users avoid creating threshold sets/activation sets
 + Implement other Lvish features-- incrementable counter
++ Put isTop earlier in order in function call that leq and lub
++ Get lattice method (and possible other getters) for lvars.xh
 
 ## Guide:
 
