@@ -3,8 +3,6 @@
 #include <stdlib.h>
 #include <gc.h>
 #include <pthread.h>
-#include <errno.h>
-#include <sys/time.h>
 
 // Note that many functions are statically checked to see if
 // they are called with NULL arguments, so in many cases

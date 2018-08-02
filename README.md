@@ -54,6 +54,7 @@ Guarantees of determinism don't hold with side-effects: "We define a program to 
 + Look over and tidy up examples and header file (to work better with new set up)
 + Fix top <= top in examples and tests
 + Add locks where needed in header file
++ Get rid of isTop()
 
 ### Less urgent:
 

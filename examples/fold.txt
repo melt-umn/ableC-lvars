@@ -1,0 +1,63 @@
+/*
+#include "lvars.xh"
+#include <cilk.xh>
+
+// parallel fold operation-- must be *associative* operation
+
+// does not use fully valid lvar, since no idempotency from lub operation
+// this means that threshold sets don't really work-- you can't create one that
+// is non-conflicting unless it has a single element
+
+// uses semi-lvar to perform some op on values in arr from index start to index
+// end (inclusive)
+
+template<a>
+cilk int doOpToFrom(Lvar<a>* l, a* arr, int start, int end) {
+  for (int i = start; i <= end; i++) {
+    put(l, arr[i]);
+  }
+  cilk return 1;
+}
+
+template<a>
+cilk int doOpInChunks(Lvar<a>* l, a* arr, int len, int numChunks) {
+  int chunkSize = len / numChunks;
+  int start = 0;
+  int end = chunkSize - 1;
+  int result; 
+  for (int i = 0; i < numChunks; i++) {
+    spawn result = doOpToFrom(l, arr, start, end);
+    start = end + 1;
+    end = start + chunkSize - 1;
+    if (end >= len) {
+      end = len - 1;
+    }
+  }
+  if (len % numChunks != 0) {
+    spawn result = doOpToFrom(l, arr, start, end); 
+  }
+  sync;
+  cilk return 1;
+}
+
+template<a>
+cilk int doOpToFromRec(Lvar<a>* l, a* arr, int start, int end) {
+  int smallLen = end - start + 1;
+  if (smallLen == 0) {
+    cilk return 0;
+  }
+  if (smallLen == 1) {
+    cilk return put(l, arr[start]);
+  }
+  int splitIndex = smallLen / 2 + start;
+  int result1, result2;
+  spawn result1 = doOpToFromRec(l, arr, start, splitIndex - 1);
+  spawn result2 = doOpToFromRec(l, arr, splitIndex, end);
+  sync;
+  cilk return result1 && result2;
+}
+
+cilk int main(int argc, char **argv) {
+  cilk return 1;
+}
+*/
