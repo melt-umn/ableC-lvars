@@ -12,7 +12,7 @@
 typedef datatype Int Int;
 datatype Int {
   I_Top();
-  I(int);
+  I(long int);
   I_Bot();
 };
 
@@ -77,27 +77,46 @@ Int* lubInt(Int* i1, Int* i2) {
 
 // uses semi-lvar to sum the integers in arr from index start to index end (inclusive)
 
-cilk int sumToFrom(Lvar<Int*>* l, int* arr, int start, int end, int minsize);
-cilk int sumToFrom(Lvar<Int*>* l, int* arr, int start, int end, int minsize) {
-  int smallLen = end - start + 1;
-  if (smallLen <= minsize) {
-    int total = 0;
-    for (int i = start; i <= end; i++) {
-      total += arr[i];
-    }
-    cilk return put(l, I(total));
+cilk long int sumToFrom(Lvar<Int*>* l, int* arr, int start, int end) {
+  long int total = 0;
+  for (int i = start; i <= end; i++) {
+    total += arr[i];
   }
-  int splitIndex = smallLen / 2 + start;
-  int result1, result2;
-  spawn result1 = sumToFrom(l, arr, start, splitIndex - 1, minsize);
-  spawn result2 = sumToFrom(l, arr, splitIndex, end, minsize);
+  cilk return put(l, I(total));
+}
+
+cilk int sumInChunks(Lvar<Int*>*l, int* arr, int len, int numChunks) {
+  int chunkSize = len / numChunks;
+  int start = 0;
+  int end = chunkSize - 1;
+  int result; 
+  for (int i = 0; i < numChunks; i++) {
+    spawn result = sumToFrom(l, arr, start, end);
+    start = end + 1;
+    end = start + chunkSize - 1;
+    if (end >= len) {
+      end = len - 1;
+    }
+  }
+  spawn result = sumToFrom(l, arr, start, end); 
   sync;
-  cilk return result1 && result2;
+  cilk return 1;
 }
 
 cilk int main(int argc, char **argv) {
 
-  int size = 100000;
+  if (argc < 3) {
+    printf("Usage: ./sumFold.out <array size> <number of chunks>\n");
+    cilk return 0;
+  }
+
+  int size = atoi(argv[1]);
+  int numChunks = atoi(argv[2]);
+
+  if (size < numChunks) {
+    printf("Can't divide array of length %d into %d chunks.\n", size, numChunks);
+    cilk return 0;
+  }
 
   // set up example array of integers
 
@@ -112,7 +131,7 @@ cilk int main(int argc, char **argv) {
 
   Lvar<Int*>* l = newLvar(D);
   int success;
-  spawn success = sumToFrom(l, exArr, 0, size - 1, 4);
+  spawn success = sumInChunks(l, exArr, size, numChunks);
   sync;
   freeze(l);
   printf("result = %s\n", show(l).text);
