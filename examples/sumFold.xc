@@ -75,22 +75,51 @@ Int* lubInt(Int* i1, Int* i2) {
   }
 }
 
-int main(int argc, char **argv) {
+// uses semi-lvar to sum the integers in arr from index start to index end (inclusive)
+
+cilk int sumToFrom(Lvar<Int*>* l, int* arr, int start, int end);
+cilk int sumToFrom(Lvar<Int*>* l, int* arr, int start, int end) {
+  int smallLen = end - start + 1;
+  if (smallLen == 0) {
+    cilk return 0;
+  }
+  if (smallLen == 1) {
+    cilk return put(l, I(arr[start]));
+  }
+  int splitIndex = smallLen / 2 + start;
+  int result1, result2;
+  spawn result1 = sumToFrom(l, arr, start, splitIndex - 1);
+  spawn result2 = sumToFrom(l, arr, splitIndex, end);
+  sync;
+  cilk return result1 && result2;
+}
+
+cilk int main(int argc, char **argv) {
+
+  int size = 1000;
+
+  // set up example array of integers
+
+  int* exArr = malloc(size * sizeof(int));
+  for (int i = 0; i < size; i++) {
+    exArr[i] = i + 1;
+  }
 
   // make lattice for our type
 
-  Lattice<Int*> * D = lattice(I_Bot(), I_Top(), leqInt, lubInt, isTopInt, showInteger);
+  Lattice<Int*>* D = lattice(I_Bot(), I_Top(), leqInt, lubInt, isTopInt, showInteger);
 
-  Lvar<Int*>* p = newLvar(D);
-  put(p, I(3));
-  put(p, I(7));
-  freeze(p);
-  printf("v1 = %s\n", show(p).text);
+  Lvar<Int*>* l = newLvar(D);
+  int success;
+  spawn success = sumToFrom(l, exArr, 0, size - 1);
+  sync;
+  freeze(l);
+  printf("result = %s\n", show(l).text);
 
   // clean up
 
   free(D);
-  free(p);
+  free(l);
 
-  return 1;
+  cilk return 1;
 }
