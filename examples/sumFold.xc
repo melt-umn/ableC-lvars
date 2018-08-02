@@ -77,26 +77,27 @@ Int* lubInt(Int* i1, Int* i2) {
 
 // uses semi-lvar to sum the integers in arr from index start to index end (inclusive)
 
-cilk int sumToFrom(Lvar<Int*>* l, int* arr, int start, int end);
-cilk int sumToFrom(Lvar<Int*>* l, int* arr, int start, int end) {
+cilk int sumToFrom(Lvar<Int*>* l, int* arr, int start, int end, int minsize);
+cilk int sumToFrom(Lvar<Int*>* l, int* arr, int start, int end, int minsize) {
   int smallLen = end - start + 1;
-  if (smallLen == 0) {
-    cilk return 0;
-  }
-  if (smallLen == 1) {
-    cilk return put(l, I(arr[start]));
+  if (smallLen <= minsize) {
+    int total = 0;
+    for (int i = start; i <= end; i++) {
+      total += arr[i];
+    }
+    cilk return put(l, I(total));
   }
   int splitIndex = smallLen / 2 + start;
   int result1, result2;
-  spawn result1 = sumToFrom(l, arr, start, splitIndex - 1);
-  spawn result2 = sumToFrom(l, arr, splitIndex, end);
+  spawn result1 = sumToFrom(l, arr, start, splitIndex - 1, minsize);
+  spawn result2 = sumToFrom(l, arr, splitIndex, end, minsize);
   sync;
   cilk return result1 && result2;
 }
 
 cilk int main(int argc, char **argv) {
 
-  int size = 1000;
+  int size = 100000;
 
   // set up example array of integers
 
@@ -111,7 +112,7 @@ cilk int main(int argc, char **argv) {
 
   Lvar<Int*>* l = newLvar(D);
   int success;
-  spawn success = sumToFrom(l, exArr, 0, size - 1);
+  spawn success = sumToFrom(l, exArr, 0, size - 1, 4);
   sync;
   freeze(l);
   printf("result = %s\n", show(l).text);
