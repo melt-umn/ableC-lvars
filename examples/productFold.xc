@@ -2,7 +2,7 @@
 #include "lvars.xh"
 #include <cilk.xh>
 
-// parallel sum fold operation
+// parallel product fold operation
 // does not use fully valid lvar, since no idempotency from lub operation
 // this means that threshold sets don't really work-- you can't create one that
 // is non-conflicting unless it has a single element
@@ -43,8 +43,27 @@ int leqInt(Int* i1, Int* i2) {
     I(n1) -> {
       match (i2) {
         I_Bot() -> {return 0;}
-        I(n2) -> {return 1;} // since any int can be reached from any other
-        I_Top() -> {return 1;} 
+        I(n2) -> {
+          if (n2 == 0) {
+            return 1;
+          }
+          if (n1 == 0) {
+            return 0;
+          }
+          if (n1 > 0 && n2 > 0) {
+            return n2 % n1 == 0; // i.e., n2 can be reached by
+          }			 // by multiplying n1 by some int
+          if (n1 > 0 && n2 < 0) {
+            return (-n2) % n1 == 0;
+          }
+          if (n1 < 0 && n2 > 0) {
+            return n2 % (-n1) == 0;
+          }
+          if (n1 < 0 && n2 < 0) {
+            return (-n2) % (-n1) == 0;
+          }
+        }
+        I_Top() -> {return 1;} 		
       }
     }
     I_Top() -> {
@@ -68,30 +87,30 @@ Int* lubInt(Int* i1, Int* i2) {
         I_Top() -> {return i2;}
         I_Bot() -> {return i1;}
         I(n2) -> {
-          return I(n1 + n2);
+          return I(1LL * n1 * n2);
         }
       }
     }
   }
 }
 
-// uses semi-lvar to sum the integers in arr from index start to index end (inclusive)
+// uses semi-lvar to multiply the integers in arr from index start to index end (inclusive)
 
-cilk int sumToFrom(Lvar<Int*>* l, int* arr, int start, int end) {
-  int total = 0;
+cilk int prodToFrom(Lvar<Int*>* l, int* arr, int start, int end) {
+  int total = 1;
   for (int i = start; i <= end; i++) {
-    total = total + arr[i];
+    total = total * arr[i];
   }
   cilk return put(l, I(total));
 }
 
-cilk int sumInChunks(Lvar<Int*>*l, int* arr, int len, int numChunks) {
+cilk int multInChunks(Lvar<Int*>*l, int* arr, int len, int numChunks) {
   int chunkSize = len / numChunks;
   int start = 0;
   int end = chunkSize - 1;
   int result; 
   for (int i = 0; i < numChunks; i++) {
-    spawn result = sumToFrom(l, arr, start, end);
+    spawn result = prodToFrom(l, arr, start, end);
     start = end + 1;
     end = start + chunkSize - 1;
     if (end >= len) {
@@ -99,7 +118,7 @@ cilk int sumInChunks(Lvar<Int*>*l, int* arr, int len, int numChunks) {
     }
   }
   if (len % numChunks != 0) {
-    spawn result = sumToFrom(l, arr, start, end); 
+    spawn result = prodToFrom(l, arr, start, end); 
   }
   sync;
   cilk return 1;
@@ -108,11 +127,11 @@ cilk int sumInChunks(Lvar<Int*>*l, int* arr, int len, int numChunks) {
 cilk int main(int argc, char **argv) {
 
   if (argc < 3) {
-    printf("Usage: ./sumFold.out <array size> <number of chunks>\n");
+    printf("Usage: ./productFold.out <array size> <number of chunks>\n");
     cilk return 0;
   }
 
-  int size = atoi(argv[1]);  // max is around 65500, or get above limits of int
+  int size = atoi(argv[1]); // max is 12, or get above limits of int
   int numChunks = atoi(argv[2]);
 
   if (size < numChunks || numChunks < 1) {
@@ -133,7 +152,7 @@ cilk int main(int argc, char **argv) {
 
   Lvar<Int*>* l = newLvar(D);
   int success;
-  spawn success = sumInChunks(l, exArr, size, numChunks);
+  spawn success = multInChunks(l, exArr, size, numChunks);
   sync;
   freeze(l);
   printf("result = %s\n", show(l).text);
