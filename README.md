@@ -72,6 +72,7 @@ Guarantees of determinism don't hold with side-effects: "We define a program to 
 + Implement other Lvish features-- incrementable counter
 + Put isTop earlier in order in function call that leq and lub
 + Get lattice method (and possible other getters) for lvars.xh
++ Programmer might not need to specify isTop() if we pattern match inside the header
 
 ## Guide:
 

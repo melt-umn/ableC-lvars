@@ -2,7 +2,6 @@
 
 // Example taken from p. 6 of Kuper's FHPC paper
 
-
 // set up data types
 
 typedef datatype Int Int;
