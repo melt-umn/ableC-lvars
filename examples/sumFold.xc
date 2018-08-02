@@ -98,7 +98,9 @@ cilk int sumInChunks(Lvar<Int*>*l, int* arr, int len, int numChunks) {
       end = len - 1;
     }
   }
-  spawn result = sumToFrom(l, arr, start, end); 
+  if (len % numChunks != 0) {
+    spawn result = sumToFrom(l, arr, start, end); 
+  }
   sync;
   cilk return 1;
 }
@@ -110,10 +112,10 @@ cilk int main(int argc, char **argv) {
     cilk return 0;
   }
 
-  int size = atoi(argv[1]);
+  int size = atoi(argv[1]); // max is around 65500, or get above limits of long int
   int numChunks = atoi(argv[2]);
 
-  if (size < numChunks) {
+  if (size < numChunks || numChunks < 1) {
     printf("Can't divide array of length %d into %d chunks.\n", size, numChunks);
     cilk return 0;
   }
