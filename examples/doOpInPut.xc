@@ -177,10 +177,8 @@ NodeSet* nodeSetUnion(NodeSet* set1, NodeSet* set2) {
       Top() -> {return Top();}
       Set(hd, tl) -> {
         if (!isInSet(hd, result)) {
-          printf("adding %d\n", hd);
-          // only print when adding from right
+          // only do when adding from right
           put(resultLvar, I(hd));
-          printf("%s\n", showInteger(resultLvar->_value).text);
           result = Set(hd, result);
         }  
         tempSet2 = tl;
@@ -212,7 +210,7 @@ cilk int main(int argc, char **argv) {
                                  isTopNodeSet, showNodes);
 
   Lattice<Int*>* intLat = lattice(I_Bot(), I_Top(), leqInt, lubInt, 
-                                 isTopInt, showInt);
+                                 isTopInt, showInteger);
   resultLvar = newLvar(intLat);
   Lvar<NodeSet*>* l = newLvar(D);
   int success;
