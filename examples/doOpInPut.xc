@@ -211,10 +211,10 @@ cilk int main(int argc, char **argv) {
   resultLvar = newLvar(intLat);
   Lvar<NodeSet*>* l = newLvar(D);
   int success;
-  for (int i = 0; i < 10; i++) {
+  for (int i = 0; i < 20; i++) {
     spawn success = setPut(l, i);
   }
-  for (int i = 2; i < 4; i++) {
+  for (int i = 2; i < 15; i++) {
     spawn success = setPut(l, i);
   }
   sync;
