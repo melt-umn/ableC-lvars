@@ -10,7 +10,35 @@
 
 // uses semi-lvar to sum the integers in arr from index start to index end (inclusive)
 
-int* generateBits(int num, int numBits) {
+cilk int fib(int n);
+cilk int fib(int n) {
+  if (n < 2) {
+    cilk return n;
+  }
+  int result1, result2;
+  spawn result1 = fib(n-1);
+  spawn result2 = fib(n-2);
+  sync;
+  cilk return result1 + result2;
+}
+
+cilk int processBits(int* bits, int numBits, int sumOnes) {
+  int total = 0;
+  for (int i = 0; i < numBits; i++){
+    int rfib; 
+    spawn rfib = fib(i % 23);
+    sync;
+    if (rfib > 500 && sumOnes) {
+      total += i;
+    }
+    else if (!sumOnes){
+      total += 1;
+    }
+  }
+  cilk return total;
+}
+
+cilk int generateBits(int num, int numBits) {
   int* bits = malloc(numBits * sizeof(int));
   int index = numBits - 1;
   int temp = num;
@@ -22,24 +50,31 @@ int* generateBits(int num, int numBits) {
   for (int i = 0; i <= index; i++) {
     bits[i] = 0;
   }
-  return bits;
+  int result1, result2;
+  spawn result1 = processBits(bits, numBits, 1);
+  spawn result2 = processBits(bits, numBits, 0); 
+  sync;
+  cilk return result1 + result2;
 }
 
-cilk int sumToFrom(Lvar<Int*>* l, int* arr, int start, int end) {
+cilk int sumToFrom(Lvar<Int*>* l, int* arr, int start, int end, int numBits) {
   int total = 0;
+  int nextAmt;
   for (int i = start; i <= end; i++) {
-    total = total + arr[i];
+    spawn nextAmt = generateBits(arr[i], numBits);
+    sync;
+    put(l, I(nextAmt));
   }
-  cilk return put(l, I(total));
+  cilk return 1;
 }
 
-cilk int sumInChunks(Lvar<Int*>*l, int* arr, int len, int numChunks) {
+cilk int sumInChunks(Lvar<Int*>*l, int* arr, int len, int numChunks, int numBits) {
   int chunkSize = len / numChunks;
   int start = 0;
   int end = chunkSize - 1;
   int result; 
   for (int i = 0; i < numChunks; i++) {
-    spawn result = sumToFrom(l, arr, start, end);
+    spawn result = sumToFrom(l, arr, start, end, numBits);
     start = end + 1;
     end = start + chunkSize - 1;
     if (end >= len) {
@@ -47,7 +82,7 @@ cilk int sumInChunks(Lvar<Int*>*l, int* arr, int len, int numChunks) {
     }
   }
   if (len % numChunks != 0) {
-    spawn result = sumToFrom(l, arr, start, end); 
+    spawn result = sumToFrom(l, arr, start, end, numBits); 
   }
   sync;
   cilk return 1;
@@ -63,12 +98,6 @@ cilk int main(int argc, char **argv) {
   int size = atoi(argv[1]);
   int numBits = atoi(argv[2]);
   int numChunks = atoi(argv[3]);
-
-  int* a = generateBits(size, numBits);
-  for (int i = 0; i < numBits; i++) {
-    printf("%d ", a[i]);
-  }
-  printf("\n");
 
   if (size < numChunks || numChunks < 1) {
     printf("Can't divide array of length %d into %d chunks.\n", size, numChunks);
@@ -88,7 +117,7 @@ cilk int main(int argc, char **argv) {
 
   Lvar<Int*>* l = newLvar(D);
   int success;
-  spawn success = sumInChunks(l, exArr, size, numChunks);
+  spawn success = sumInChunks(l, exArr, size, numChunks, numBits);
   sync;
   freeze(l);
   printf("result = %s\n", show(l).text);

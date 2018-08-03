@@ -1,0 +1,108 @@
+#include "lvars.xh"
+
+#ifndef _BITARR_XH
+#define _BITARR_XH
+
+typedef datatype Bits Bits;
+datatype Bits {
+  B_Top();
+  BitArr(int, int*);
+  B_Bot();
+};
+
+string showBitArr(int numBits, int* arr) {
+  string result = str("");
+  for (int i = 0; i < numBits; i++) {
+    if (arr[i]) {
+      result += str("1");
+    }
+    else { 
+      result += str("0"); 
+    }
+  }
+  return result;
+}
+
+string showBits(Bits* b) {
+  match (b) {
+    B_Top() -> {return str("Error!");}
+    B_Bot() -> {return str("?");}
+    BitArr(numBits, arr) -> {showBitArr(numBits, arr);}
+  }
+}
+
+int bitsToInt(int numBits, int* bits) {
+  int total = 0;
+  int powOf2 = 1;
+  for (int i = numBits - 1; i >= 0; i--) {
+    if (bits[i]) {
+      total += powOf2;
+    }
+    powOf2 *= 2;
+  }  
+  return total;
+}
+
+int leqBits(Bits* b1, Bits* b2) {
+  match (b1) {
+    B_Top() -> {
+      match (b2) {
+        B_Top() -> {return 1;}
+        _ -> {return 0;}
+      }
+    }
+    B_Bot() -> {return 1;}
+    BitArr(numBits1, arr1) -> {
+      match (b2) {
+        B_Top() -> {return 1;}
+        B_Bot() -> {return 0;}
+        BitArr(numBits2, arr2) -> {
+          return bitsToInt(numBits1, arr1) + bitsToInt(numBits2, arr2);
+        }
+      }
+    }
+  }
+}
+
+int max(int i1, int i2) {
+  if (i1 > i2) {
+    return i1;
+  }
+  return i2;
+}
+
+int* intToBits(int numBits, int num) {
+  int* arr = malloc(numBits * sizeof(int));
+  for (int i = numBits - 1; i >= 0; i--) {
+    arr[i] = num & 1;
+    num = num >> 1;
+  }
+  return arr;
+}
+
+Bits* lubBits(Bits* b1, Bits* b2) {
+  match (b1) {
+    B_Top() -> {return b1;}
+    B_Bot() -> {return b2;}
+    BitArr(numBits1, arr1) -> {
+      match (b2) {
+        B_Top() -> {return b2;}
+        B_Bot() -> {return b1;}
+        BitArr(numBits2, arr2) -> {
+          int newNumBits = max(numBits1, numBits2);
+          return BitArr(newNumBits, intToBits(newNumBits, bitsToInt(numBits1, arr1) + bitsToInt(numBits2, arr2)));
+        }
+      }
+    }
+  }
+}
+
+int putInt(Lvar<Bits*>* l, int i, int numBits) {
+  return put(l, BitArr(numBits, intToBits(numBits, i)));
+}
+
+Lattice<Bits*>* bitLattice() {
+  return lattice(B_Bot(), B_Top(), leqBits, lubBits, showBits);
+}
+
+#endif
