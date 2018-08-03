@@ -75,15 +75,11 @@ Int* lubInt(Int* i1, Int* i2) {
 
 Lvar<Int*>* resultLvar;
 
-cilk int fib(int n);
-cilk int fib(int n) {
+int fib(int n) {
   if (n < 2) {
-    cilk return n;
+    return n;
   }
-  int result1, result2;
-  spawn result1 = fib(n - 1);
-  spawn result2 = fib(n - 2);
-  cilk return result1 + result2;
+  return fib(n - 1) + fib(n - 2);
 }
 
 typedef datatype NodeSet NodeSet;
@@ -178,7 +174,7 @@ NodeSet* nodeSetUnion(NodeSet* set1, NodeSet* set2) {
       Set(hd, tl) -> {
         if (!isInSet(hd, result)) {
           // only do when adding from right
-          put(resultLvar, I(hd));
+          put(resultLvar, I(fib(hd)));
           result = Set(hd, result);
         }  
         tempSet2 = tl;
@@ -206,6 +202,7 @@ cilk int setPut(Lvar<NodeSet*>* l, int value) {
 }
 
 cilk int main(int argc, char **argv) {
+
   Lattice<NodeSet*>* D = lattice(Empty(), Top(), isNodeSubset, nodeSetUnion, 
                                  isTopNodeSet, showNodes);
 
@@ -214,7 +211,7 @@ cilk int main(int argc, char **argv) {
   resultLvar = newLvar(intLat);
   Lvar<NodeSet*>* l = newLvar(D);
   int success;
-  for (int i = 0; i < 4; i++) {
+  for (int i = 0; i < 10; i++) {
     spawn success = setPut(l, i);
   }
   for (int i = 2; i < 4; i++) {
