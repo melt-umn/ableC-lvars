@@ -9,17 +9,6 @@ datatype Integer {
   Bottom();
 }
 
-// set up eq function for our lattice
-
-int isTop(Integer* n1, Integer* n2) {
-  match (n1) {
-    Top() -> {
-      return 1;
-    }
-    _ -> {return 0;}
-  }
-}
-
 // set up leq function for our lattice
 
 int leqInteger(Integer* n1, Integer* n2) {
@@ -81,7 +70,7 @@ string showInteger(Integer* n) {
 int main(int argc, char **argv) {
 
   // set up lattice
-  Lattice<Integer*> * lat = lattice(Bottom(), Top(), leqInteger, lubInteger, isTop, showInteger);
+  Lattice<Integer*> * lat = lattice(Bottom(), Top(), leqInteger, lubInteger, showInteger);
 
   // make lvar and threshold set for lattice
   Lvar<Integer*> * x = newLvar(lat);

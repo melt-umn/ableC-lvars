@@ -58,9 +58,9 @@ concrete productions top::ThreshInitializer_c
 concrete productions top::PrimaryExpr_c
 | 'lattice' '(' least::AssignExpr_c ',' greatest::AssignExpr_c ','
                 order::AssignExpr_c ',' lub::AssignExpr_c ',' 
-                eq::AssignExpr_c ',' display::AssignExpr_c ')'
+                display::AssignExpr_c ')'
   {
-    top.ast = newLattice(least.ast, greatest.ast, order.ast, lub.ast, eq.ast,
+    top.ast = newLattice(least.ast, greatest.ast, order.ast, lub.ast,
                          display.ast, location=top.location);
   }
 

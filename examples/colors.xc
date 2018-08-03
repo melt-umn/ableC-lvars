@@ -19,15 +19,6 @@ datatype Color {
   Top();
 };
 
-int isTop(Color* c) {
-  match (c) {
-    Top() -> { 
-      return 1;
-    }
-    _ -> {return 0;}
-  }
-}
-
 int leqColor(Color* c1, Color* c2) {
   match (c1) {
     Bottom() -> { 
@@ -345,7 +336,7 @@ int main(int argc, char **argv) {
     printf("Must enter two color names\n");
   }
   else {
-    Lattice<Color*> * D = lattice(Bottom(), Top(), leqColor, lubColor, isTop, showColor);
+    Lattice<Color*> * D = lattice(Bottom(), Top(), leqColor, lubColor, showColor);
     Color* c1 = getColor(argv[1]);
     Color* c2 = getColor(argv[2]);
     Lvar<Color*>* x = newLvar(D);

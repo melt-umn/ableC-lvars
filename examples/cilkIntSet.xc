@@ -60,17 +60,16 @@ int isSubset_int(Set_int* set1, Set_int* set2) {
   }
 }
 
-int isTop_int(Set_int* set) {
-  match (set) {
-    int_Top() -> {
-      return 1;
-    }
-    _ -> {return 0;}
-  } 
-}
-
 int leqSet_int(Set_int* set1, Set_int* set2) {
-  return isSubset_int(set1, set2);
+  match (set1) {
+    int_Top() -> {
+      match (set2) {
+        int_Top() -> {return 1;}
+        _ -> {return 0;}
+      }
+    }
+    _ -> {return isSubset_int(set1, set2);}
+  }
 }
 
 int isInSet_int(int item, Set_int* set) {
@@ -113,7 +112,7 @@ Set_int* lubSet_int(Set_int* set1, Set_int* set2) {
 }
 
 Lattice<Set_int*> * latticeint() {
-  return lattice(int_Empty(), int_Top(), leqSet_int, lubSet_int, isTop_int, showSet_int);
+  return lattice(int_Empty(), int_Top(), leqSet_int, lubSet_int, showSet_int);
 }
 
 cilk int buildSet(int start, int stop, Lvar<Set_int*>* l);

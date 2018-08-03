@@ -1,6 +1,9 @@
 #include "lvars.xh"
 #include "int.xh"
 
+#ifndef _SUMINT_XH
+#define _SUMINT_XH
+
 // set up leq method
 
 int leqSumInt(Int* i1, Int* i2) {
@@ -41,6 +44,7 @@ Int* lubSumInt(Int* i1, Int* i2) {
 }
 
 Lattice<Int*>* sumIntLattice() {
-  return lattice(I_Bot(), I_Top(), leqSumInt, lubSumInt, isTopInt, showInteger);
+  return lattice(I_Bot(), I_Top(), leqSumInt, lubSumInt, showInteger);
 }
 
+#endif

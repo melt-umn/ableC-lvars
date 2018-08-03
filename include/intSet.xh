@@ -1,0 +1,85 @@
+#include "lvars.xh"
+
+// set up data type
+
+typedef datatype intSet intSet;
+datatype intSet {
+  iSet_Empty ();
+  iSet(int, intSet*);
+  iSet_Top();
+};
+
+// helper methods for set
+
+int isEmptyIntSet(intSet* set) {
+  match (set) {
+    iSet_Empty() -> {return 1;}
+    _ -> {return 0;}
+  }
+}
+
+int intSetHead(intSet* set) {
+  match (set) {
+    iSet(h, _) -> { return h; }
+    _ -> { fputs("ERROR: intSetHead() called on non intSet", stderr); exit(255); }
+  }
+}
+
+intSet* intSetHead(intSet* set) {
+  match (set) {
+    iSet(_, tl) -> { return tl; }
+    _ -> { fputs("ERROR: intSetTail() called on non intSet", stderr); exit(255); }
+  }
+}
+
+// returns 1 if set1 is a subset of set2, 0 otherwise
+
+int isIntSubset(intSet* set1, intSet* set2) {
+  match (set1) {
+    iSet_Empty() -> {return 1;}
+    iSet_Top() -> {return 0;}
+    iSet(hd1, tl1) -> {
+      match (set2) {
+        iSet_Empty() -> {return 0;}
+        iSet_Top() -> {return 0;}
+        iSet(hd2, tl2) -> {
+          if (hd1 == hd2) {
+            return isIntSubset(tl1, tl2);
+          }
+          return isIntSubset(iSet(hd1, iSet_Empty()), tl2) &&
+                 isIntSubset(tl1, set2);
+        }
+      }
+    }
+  }
+}
+
+// show method
+
+string showInnerIntSet(intSet* set) {
+  match (s) {
+    iSet_Top() -> {return "Error!";}
+    iSet_Empty() -> {return str("");}
+    iSet(hd, tl) -> {
+      string result = show(hd);
+      match (tl) {
+        iSet_Top() -> {return "Error!";}
+        iSet_Empty() -> {return result;}
+        iSet(_, _) -> {return result + ", " + show(tl);}
+      }
+    }
+  }
+}
+
+string showIntSet(intSet* set) {
+  string result = str("{");
+  return showInnerIntSet(set) + str("}");
+}
+
+// leq method
+
+int leqSet_int(Set_int* set1, Set_int* set2) {
+  return isSubset_int(set1, set2); //need to handle top case correctly
+}
+
+

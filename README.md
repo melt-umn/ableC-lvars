@@ -26,13 +26,14 @@
 + Add locks where needed in header file
 + Get rid of isTop()
 + Have Top() and Bot() automatically generated
++ Could use leq in place of top-- check leq(Top(), whatever): if true, must be top.
 
 ### Less urgent:
 
 + Work on speeding up thread waiting/locking process
 + Add freezing examples
 + Lvars as global variables?
-+ Implement more prefab lattices
++ Implement more prefab lattices/data types
 + Update readme to include new examples and the addition of freezing
 + Could overload get so that if no threshold is specified, defaults to bottom element?
 + Would it be better to create a set "template" based on C arrays instead of algebraic datatypes (more space-efficient)?
@@ -41,8 +42,7 @@
 + Better positive tests
 + Check on leq with freezing-- do I need to check further?
 + Implement getFst and getSnd to help users avoid creating threshold sets/activation sets
-+ Implement other Lvish features-- incrementable counter
-+ Put isTop earlier in order in function call that leq and lub
++ Implement other Lvish features-- incrementable counter, even handlers
 + Get lattice method (and possible other getters) for lvars.xh
 + Programmer might not need to specify isTop() if we pattern match inside the header
 

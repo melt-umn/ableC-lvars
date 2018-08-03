@@ -6,25 +6,21 @@
 
 // ******************** eq function for our int lattice ***********************
 
-int isTop(int n1) {
-  return n1 == 100;
-}
-
 int eqD(double d1, double d2) {
   return d1 < d2 + 0.0001 && d1 > d2 - 0.0001;
 }
-
-int isTopD(double v1) {
-  return eqD(v1, 100);
-}
-
 
 // ******************** leq function for our lattice ************************
 
 int leq(int n1, int n2) {
   match (n1) {
     0 -> {return 1;}
-    100 -> {return 0;}
+    100 -> {
+      match (n2) {
+        100 -> {return 1;}
+        _ -> {return 0;}
+      }
+    }
     v1 -> {
       match (n2) {
         0 -> {return 0;}
@@ -41,6 +37,9 @@ int leqD(double n1, double n2) {
     return 1;
   }
   if (eqD(n1, 100.0)) {
+    if (eqD(n2, 100.0)) {
+      return 1;
+    }
     return 0;
   }
   if (eqD(n2, 0.0)) {
@@ -118,8 +117,8 @@ int main(int argc, char **argv) {
 
   // *************** Step 1. Set up lattice ***********************************
 
-  Lattice<int> * D = lattice(0, 100, leq, lub, isTop, showInteger);
-  Lattice<double> * D2 = lattice(0.0, 100.0, leqD, lubD, isTopD, showDouble);
+  Lattice<int> * D = lattice(0, 100, leq, lub, showInteger);
+  Lattice<double> * D2 = lattice(0.0, 100.0, leqD, lubD, showDouble);
 
   // *************** Step 2. Make some lvars **********************************
 

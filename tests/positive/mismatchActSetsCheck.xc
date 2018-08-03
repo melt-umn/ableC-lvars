@@ -46,18 +46,17 @@ int eqBool(Bl* b1, Bl* b2) {
     }
   }
 }
-int isTop(State* s) {
-  match (s) {
-    Top() -> {return 1;}
-    _ -> {return 0;}
-  } 
-}
 
 //**************** leq function for State ***********************************
 
 int leq(State* s1, State* s2) {
   match (s1) {
-    Top() -> {return 0;}
+    Top() -> {
+      match (s2) {
+        Top() -> {return 1;}
+        _ -> {return 0;}
+      }
+    }
     Pair(Bot(), Bot()) -> {return 1;}
     Pair(b1, Bot()) -> { 
       match (s2) {
@@ -163,9 +162,9 @@ string showState(State* s) {
 int main (int argc, char **argv) {
 
   Lattice<State*>* l = lattice(Pair(Bot(), Bot()), Top(), leq,
-                              lub, isTop, showState);
+                              lub, showState);
 
-  Lattice<State*>* l2 = lattice(Pair(T(), Bot()), Top(), leq, lub, isTop, showState);
+  Lattice<State*>* l2 = lattice(Pair(T(), Bot()), Top(), leq, lub, showState);
 
   ActivationSet<State*>* l2Set = activationSet(l2){Pair(T(), T())};
 

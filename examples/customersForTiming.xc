@@ -45,14 +45,6 @@ int isProdSubset(ProductSet* set1, ProductSet* set2) {
   }
 }
 
-int isTopCustomer(Customer* c) {
-  match (c) {
-    CustTop() -> {
-      return 1;
-    }
-    _ -> {return 0;}
-  }   
-}
 // **************** set up leq for lattice ************************************
 
 int leqCustomer(Customer* c1, Customer* c2) {
@@ -233,7 +225,7 @@ cilk int main(int argc, char **argv) {
 
   // set up
 
-  lat = lattice(CustBot(), CustTop(), leqCustomer, lubCustomer, isTopCustomer, showCustomer);
+  lat = lattice(CustBot(), CustTop(), leqCustomer, lubCustomer, showCustomer);
   int numCustomers = 50;
   int numStore1 = 5000;
   int numStore2 = 5000;

@@ -57,15 +57,6 @@ int isNodeSubset(NodeSet* set1, NodeSet* set2) {
   }
 }
 
-int isTopNodeSet(NodeSet* s) {
-  match (s) {
-    Top() -> {
-      return 1;
-    }
-    _ -> {return 0;}
-  }   
-}
-
 int isInSet(int elem, NodeSet* set) {
   match (set) {
     Top() -> {return 0;}
@@ -137,7 +128,7 @@ cilk int setPut(Lvar<NodeSet*>* l, int value) {
 cilk int main(int argc, char **argv) {
 
   Lattice<NodeSet*>* D = lattice(Empty(), Top(), isNodeSubset, nodeSetUnion, 
-                                 isTopNodeSet, showNodes);
+                                 showNodes);
 
   Lattice<Int*>* intLat = sumIntLattice();
   resultLvar = newLvar(intLat);

@@ -48,18 +48,16 @@ int eqBool(Bl* b1, Bl* b2) {
   }
 }
 
-int isTop(State* s) {
-  match (s) {
-    Top() -> {return 1;}
-    _ -> {return 0;}
-  } 
-}
-
 //**************** leq function for State ***********************************
 
 int leq(State* s1, State* s2) {
   match (s1) {
-    Top() -> {return 0;}
+    Top() -> {
+      match (s2) {
+        Top() -> {return 1;}
+        _ -> {return 0;}
+      }
+    }
     Pair(Bot(), Bot()) -> {return 1;}
     Pair(b1, Bot()) -> { 
       match (s2) {
@@ -173,7 +171,7 @@ cilk int asyncAnd(Bl* b1, Bl* b2) {
   // set-up
 
   Lattice<State*> * D = lattice(Pair(Bot(), Bot()), Top(), leq,
-                                lub, isTop, showState);
+                                lub, showState);
   Lvar<State*> * andResult = newLvar(D);
   ActivationSet<State*> * trueRes = activationSet(D, 1){Pair(T(), T())};
   ActivationSet<State*> * falseRes = activationSet(D, 5)

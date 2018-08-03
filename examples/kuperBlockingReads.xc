@@ -45,13 +45,6 @@ int isTopInt(Int* i) {
   }
 }
 
-int isTop(Pair* p) {
-  match (p) {
-    Top() -> {return 1;}
-    _ -> {return 0;}
-  }
-}
-
 // set up leq methods
 
 int leqInt(Int* i1, Int* i2) {
@@ -143,7 +136,7 @@ int main(int argc, char **argv) {
 
   // make lattice for our type
 
-  Lattice<Pair*> * D = lattice(Bot(), Top(), leq, lub, isTop, showPair);
+  Lattice<Pair*> * D = lattice(Bot(), Top(), leq, lub, showPair);
 
   // make threshold set of (some) natural number right-hand pair values
 

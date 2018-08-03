@@ -1,8 +1,5 @@
 #include "lvars.xh"
-// eq function for our int lattice
-int isTop(int n1) {
-  return n1 == 100;
-}
+
 // leq function for our lattice
 int leqInt(int n1, int n2) {
   if (n1 > 100 || n2 > 100 || n1 < 0 || n2 < 0) {
@@ -27,7 +24,7 @@ string showInteger(int n) {
 int main(int argc, char **argv) {
   // set up lattice
   Lattice<int> * D =
-    lattice(0, 100, leqInt, lubInt, isTop, showInteger);
+    lattice(0, 100, leqInt, lubInt, showInteger);
   // make lvar and threshold set for lattice
   Lvar<int> *x = newLvar(D);
   ActivationSet<int> * a = activationSet(D){6};

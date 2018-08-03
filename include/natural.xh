@@ -13,7 +13,12 @@ datatype Nat {
 int leqNat(Nat* n1, Nat* n2) {
   int result;
   match (n1) {
-    TopNat() -> {result = 0;}
+    TopNat() -> {
+      match (n2) {
+        TopNat() -> {return 1;}
+        _ -> {return 0;}
+      }
+    }
     BotNat() -> {result = 1;}
     Int(i1) ->  {
       match (n2) {
@@ -49,16 +54,6 @@ Nat* lubNat(Nat* n1, Nat* n2) {
   return result;
 }
 
-
-int isTopNat(Nat* n) {
-  match (n) {
-    TopNat() -> {
-      return 1;
-    }
-    _ -> {return 0;}
-  } 
-}
-
 string showNat(Nat* n) {
   string result;
   match (n) {
@@ -70,7 +65,7 @@ string showNat(Nat* n) {
 }
 
 Lattice<Nat*> * natLattice() {
-  return lattice(BotNat(), TopNat(), leqNat, lubNat,isTopNat, showNat);
+  return lattice(BotNat(), TopNat(), leqNat, lubNat, showNat);
 }
 
 #endif

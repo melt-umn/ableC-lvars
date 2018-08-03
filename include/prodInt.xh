@@ -1,6 +1,9 @@
 #include "lvars.xh"
 #include "int.xh"
 
+#ifndef _PRODINT_XH
+#define _PRODINT_XH
+
 // set up leq method
 
 int leqProdInt(Int* i1, Int* i2) {
@@ -61,6 +64,8 @@ Int* lubProdInt(Int* i1, Int* i2) {
 }
 
 Lattice<Int*>* prodIntLattice() {
-  return lattice(I_Bot(), I_Top(), leqProdInt, lubProdInt, isTopInt, showInteger);
+  return lattice(I_Bot(), I_Top(), leqProdInt, lubProdInt, showInteger);
 }
+
+#endif
 

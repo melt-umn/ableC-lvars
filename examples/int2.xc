@@ -4,18 +4,17 @@
 // Example demonstrating that lvars can be used even without
 // fancy user-created data types
 
-// ******************** eq function for our int lattice ***********************
-
-int isTop(int n1) {
-  return n1 == 100;
-}
-
 // ******************** leq function for our lattice ************************
 
 int leq(int n1, int n2) {
   match (n1) {
     0 -> {return 1;}
-    100 -> {return 0;}
+    100 -> {
+      match (n2) {
+        100 -> {return 1;}
+        _ -> {return 0;}
+      }
+    }
     v1 -> {
       match (n2) {
         0 -> {return 0;}
@@ -64,7 +63,7 @@ cilk int putCilk(Lvar<int>* x, int v) {
 }
 
 cilk int main(int argc, char **argv) {
-  Lattice<int> * D = lattice(0, 100, leq, lub, isTop, showInteger);
+  Lattice<int> * D = lattice(0, 100, leq, lub, showInteger);
   Lvar<int>* x = newLvar(D);
   Lvar<int>* y = newLvar(D);
   ThresholdSet<int>* t = thresholdSet(D, 1){activationSet(D, 1){8}};

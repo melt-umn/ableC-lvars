@@ -19,7 +19,12 @@ datatype Nat {
 int leq(Nat* n1, Nat* n2) {
   int result;
   match (n1) {
-    Top() -> {result = 0;}
+    Top() -> {
+      match (n2) {
+        Top() -> {return 1;} 
+        _ -> {return 0;}
+      }
+    }
     Bottom() -> {result = 1;}
     Int(i1) ->  {
       match (n2) {
@@ -57,15 +62,6 @@ Nat* lub(Nat* n1, Nat* n2) {
   return result;
 }
 
-// ***************************** eq method for our lattice ********************
-
-int isTop(Nat* n) {
-  match(n) {
-    Top() -> {return 1;}
-    _ -> {return 0;}
-  }
-}
-
 // ********************* display method for our lattice ***********************
 
 string showNat(Nat* n) {
@@ -82,7 +78,7 @@ int main(int argc, char **argv) {
 
   // set up lattice
 
-  Lattice<Nat*> * D = lattice(Bottom(), Top(), leq, lub, isTop, showNat);
+  Lattice<Nat*> * D = lattice(Bottom(), Top(), leq, lub, showNat);
 
   // make some lvars 
 

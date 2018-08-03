@@ -5,13 +5,6 @@
 
 int ARRSIZE = 15;
 
-int isTop(int* arr) {
-  if (arr == NULL) {
-    return 1;
-  }
-  return 0;
-}
-
 int leqArr(int* arr1, int* arr2) {
   if (arr2 == NULL) {
     return 1;
@@ -84,7 +77,7 @@ cilk int main(int argc, char **argv) {
   int* top = malloc(sizeof(int) * ARRSIZE);
   top = NULL;
 
-  Lattice<int*>* D = lattice(bottom, top, leqArr, lubArr, isTop, showArr);
+  Lattice<int*>* D = lattice(bottom, top, leqArr, lubArr, showArr);
   Lvar<int*> * x = newLvar(D);
 
   int* act1 = malloc(ARRSIZE * sizeof(int));
