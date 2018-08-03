@@ -1,0 +1,66 @@
+#include "lvars.xh"
+#include "int.xh"
+
+// set up leq method
+
+int leqProdInt(Int* i1, Int* i2) {
+  match (i1) {
+    I_Bot() -> {return 1;}
+    I(n1) -> {
+      match (i2) {
+        I_Bot() -> {return 0;}
+        I(n2) -> {
+          if (n2 == 0) {
+            return 1;
+          }
+          if (n1 == 0) {
+            return 0;
+          }
+          if (n1 > 0 && n2 > 0) {
+            return n2 % n1 == 0; // i.e., n2 can be reached by
+          }			 // by multiplying n1 by some int
+          if (n1 > 0 && n2 < 0) {
+            return (-n2) % n1 == 0;
+          }
+          if (n1 < 0 && n2 > 0) {
+            return n2 % (-n1) == 0;
+          }
+          if (n1 < 0 && n2 < 0) {
+            return (-n2) % (-n1) == 0;
+          }
+        }
+        I_Top() -> {return 1;} 		
+      }
+    }
+    I_Top() -> {
+      match(i2) {
+        I_Top() -> {return 1;}
+        _ -> {return 0;}
+      }
+    }
+  }
+}
+
+
+// set up lub method
+
+Int* lubProdInt(Int* i1, Int* i2) {
+  match (i1) {
+    I_Top() -> {return i1;}
+    I_Bot() -> {return i2;}
+    I(n1) -> {
+      match (i2) {
+        I_Top() -> {return i2;}
+        I_Bot() -> {return i1;}
+        I(n2) -> {
+          return I(n1 * n2);
+        }
+      }
+    }
+  }
+}
+
+Lattice<Int*>* prodIntLattice() {
+  return lattice(I_Bot(), I_Top(), leqProdInt, lubProdInt, isTopInt, showInteger);
+}
+

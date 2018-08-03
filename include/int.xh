@@ -1,0 +1,27 @@
+// set up data type
+
+typedef datatype Int Int;
+datatype Int {
+  I_Top();
+  I(int);
+  I_Bot();
+};
+
+// set up show method
+
+string showInteger(Int* i) {
+  match (i) {
+    I_Top() -> {return str("Error!");}
+    I(n) -> {return show(n);}
+    I_Bot() -> {return str("?");}
+  } 
+}
+
+// set up isTop() method
+
+int isTopInt(Int* i) {
+  match (i) {
+    I_Top() -> {return 1;}
+    _ -> {return 0;}
+  }
+}

@@ -6,34 +6,7 @@
 
 #### Big Example:
 
-+ Way to increase parallelism
-+ Timing (with 5000 entries per three stores):
-
-time ./customersForTiming.out -nproc 1
-
-real	0m13.669s
-user	0m10.355s
-sys	0m3.276s
-time ./customersForTiming.out -nproc 2
-
-real	0m13.009s
-user	0m20.887s
-sys	0m3.479s
-time ./customersForTiming.out -nproc 3
-
-real	0m8.516s
-user	0m12.984s
-sys	0m4.970s
-time ./customersForTiming.out -nproc 4
-
-real	0m8.326s 			// about 0.6 times -nproc 1
-user	0m19.650s
-sys	0m4.591s
-time ./customersForTiming.out -nproc 5
-
-real	0m13.399s
-user	0m31.164s
-sys	0m11.552s
++ Increase parallelism in customer example
 
 #### POPL Paper:
 
@@ -43,10 +16,7 @@ sys	0m11.552s
 + Refer to style resources and spiff up writing
 + Need examples with no side effects until after syncing
 + Revise "future work" section
-
-Guarantees of determinism don't hold with side-effects: "We define a program to be deterministic if, given the same inputs, it will always produce the same observable result. Here, inputs are votes, and we define the observable result of a program to be the value to which it evaluates. We’ve therefore cheated a bit with our call to call_for_pizza, since it triggers a side effect, and our determinism guarantee doesn’t say anything about side effects."
-
-+ It's hard for me, at least, to see why determinism with sets of integers is important. If you think an example with ADTs is better, go ahead and put it in; we can figure out how to make it look nice later. You can elide code that isn't critical like "... // check that n1/n2 are within acceptable bounds" or something. Even if you have to break it into two figures, that's fine for now.
++ Talk about limited guarantees of determinism with C vs. functional programming language
 
 #### Other:
 
@@ -55,6 +25,7 @@ Guarantees of determinism don't hold with side-effects: "We define a program to 
 + Fix top <= top in examples and tests
 + Add locks where needed in header file
 + Get rid of isTop()
++ Have Top() and Bot() automatically generated
 
 ### Less urgent:
 
