@@ -10,8 +10,19 @@
 
 // uses semi-lvar to sum the integers in arr from index start to index end (inclusive)
 
-cilk int processNum(int i) {
-  
+int* generateBits(int num, int numBits) {
+  int* bits = malloc(numBits * sizeof(int));
+  int index = numBits - 1;
+  int temp = num;
+  while (temp && index >= 0) {
+    bits[index] = temp & 1;
+    temp = temp >> 1;
+    index = index - 1;
+  }
+  for (int i = 0; i <= index; i++) {
+    bits[i] = 0;
+  }
+  return bits;
 }
 
 cilk int sumToFrom(Lvar<Int*>* l, int* arr, int start, int end) {
@@ -52,6 +63,12 @@ cilk int main(int argc, char **argv) {
   int size = atoi(argv[1]);
   int numBits = atoi(argv[2]);
   int numChunks = atoi(argv[3]);
+
+  int* a = generateBits(size, numBits);
+  for (int i = 0; i < numBits; i++) {
+    printf("%d ", a[i]);
+  }
+  printf("\n");
 
   if (size < numChunks || numChunks < 1) {
     printf("Can't divide array of length %d into %d chunks.\n", size, numChunks);
