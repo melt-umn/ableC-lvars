@@ -16,9 +16,12 @@ cilk int fib(int n) {
 
 cilk int countOnes(int numBits, int* b) {
   int total = 0;
+  int num;
   for (int i = 0; i < numBits; i++) {
     if (b[i]) {
-      total += i % 7;
+      spawn num = fib(i % 10);
+      sync;
+      total += num;
     } 
   }
   cilk return total;
@@ -28,7 +31,7 @@ cilk int sumToFrom(Lvar<Bits*>* l, int* arr, int start, int end, int numBits) {
   int total = 0;
   int fib1, next1, next2;
   for (int i = start; i <= end; i++) { 
-    spawn fib1 = fib(i % 23);
+    spawn fib1 = fib(i % 25);
     sync;    
     spawn next1 = countOnes(numBits, intToBits(numBits, arr[i] + fib1));
     spawn next2 = countOnes(numBits, intToBits(numBits, arr[i] + fib1 + 123456));
