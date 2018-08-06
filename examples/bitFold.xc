@@ -14,16 +14,28 @@ cilk int fib(int n) {
   cilk return result1 + result2;
 }
 
+cilk int countOnes(int numBits, int* b) {
+  int total = 0;
+  for (int i = 0; i < numBits; i++) {
+    if (b[i]) {
+      total += i % 7;
+    } 
+  }
+  cilk return total;
+}
+
 cilk int sumToFrom(Lvar<Bits*>* l, int* arr, int start, int end, int numBits) {
   int total = 0;
-  int next1, next2, next3;
-  for (int i = start; i <= end; i++) {
-    spawn next1 = fib(i % 7);
-    spawn next2 = fib(i % 11);
-    spawn next3 = fib(i % 23);
+  int fib1, next1, next2;
+  for (int i = start; i <= end; i++) { 
+    spawn fib1 = fib(i % 23);
+    sync;    
+    spawn next1 = countOnes(numBits, intToBits(numBits, arr[i] + fib1));
+    spawn next2 = countOnes(numBits, intToBits(numBits, arr[i] + fib1 + 123456));
     sync;
-    putInt(l, next1 + next2 + next3, numBits);
+    total += next1 + next2;
   }
+  putInt(l, total, numBits);
   cilk return 1;
 }
 
@@ -67,7 +79,7 @@ cilk int main(int argc, char **argv) {
 
   int* exArr = malloc(size * sizeof(int));
   for (int i = 0; i < size; i++) {
-    exArr[i] = i + 1;
+    exArr[i] = rand() % 100;
   }
 
   // make lattice for our type
