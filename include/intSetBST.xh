@@ -1,0 +1,199 @@
+#include "lvars.xh"
+
+#ifndef _INTSET_XH
+#define _INTSET_XH
+
+typedef datatype intSet intSet;
+datatype intSet {
+  iSet_Node(int, intSet*, intSet*);
+  iSet_Empty();
+  iSet_Top();
+}
+
+int ltint(int i1, int i2) {
+  return i1 < i2;
+}
+
+int eqint(int i1, int i2) {
+    return i1 == i2;
+}
+
+string showint(int i) {
+    return show(i);
+}
+
+// helper methods for set
+
+int isEmptyIntSet(intSet* set) {
+  match (set) {
+    iSet_Empty() -> {return 1;}
+    _ -> {return 0;}
+  }
+}
+
+int isInSet(int v, intSet* set) {
+  match (set) {
+    iSet_Empty() -> {return 0;}
+    iSet_Top() -> {return 0;}
+    iSet_Node(val, left, right) -> {
+      if (eqint(v, val)) {
+        return 1;
+      } 
+      if (ltint(v, val)) {
+        return isInSet(v, left);
+      }
+      return isInSet(v, right);
+    }
+  }
+}
+
+int isIntSubset(intSet* set1, intSet* set2) {
+  match (set1) {
+    iSet_Empty() -> {return 1;}
+    iSet_Top() -> {return 0;}
+    iSet_Node(v1, left1, right1) -> {
+      match (set2) {
+        iSet_Empty() -> {return 0;}
+        iSet_Top() -> {return 0;}
+        iSet_Node(v2, left2, right2) -> {
+          if (v1 == v2) {
+            return isIntSubset(left1, left2) && isIntSubset(right1, right2);
+          }
+          else if (v1 < v2) {
+            return isInSet(v1, left2) && isIntSubset(left1, left2) && isIntSubset(right1, right2);
+          }
+          else {
+            return isInSet(v1, right2) && isIntSubset(left1, left2) && isIntSubset(right1, right2);
+          }
+        }
+      }
+    }
+  }
+}
+
+string showInnerIntSet(intSet* set) {
+  match (set) {
+    iSet_Top() -> {return str("Error!");}
+    iSet_Empty() -> {return str("");}
+    iSet_Node(v, left, right) -> {
+      string result = show(v);
+      match (left) {
+        iSet_Top() -> {return str("Error!");}
+        iSet_Empty() -> { 
+          match (right) -> {
+            iSet_Top() -> {return str("Error!");}
+            iSet_Empty() -> {return result;}
+            iSet_Node(_,_,_) -> {return result + ", " + showInnerIntSet(right);}
+          }
+        }
+        iSet_Node(_, _, _) -> {
+          match (right) -> {
+            iSet_Top() -> {return str("Error!");}
+            iSet_Empty() -> {return result + ", " + showInnerIntSet(left);}
+            iSet_Node() -> {return result + ", " + showInnerIntSet(left) + ", " + showInnerIntSet(right);}
+          }
+        }
+      }
+    }
+  }
+}
+
+string showIntSet(intSet* set) {
+  string result = str("{");
+  return showInnerIntSet(set) + str("}");
+}
+
+int leqSet_int(intSet* set1, intSet* set2) {
+  match (set1) {
+    iSet_Top() -> {
+      match (set2) {
+        iSet_Top() -> {return 1;}
+        _ -> {return 0;}
+      }
+    }
+    _ -> {return isIntSubset(set1, set2);}
+  }
+}
+
+intSet* insert_int(int val, intSet* set) {
+  match (set) {
+    iSet_Empty() -> {return iSet_Node(val, iSet_Empty(), iSet_Empty());}
+    iSet_Top() -> {return set;}
+    iSet_Node(hd, left, right) -> {
+      if (eqint(val, hd)) {
+        return set;
+      }
+      if (ltint(val, hd)) {
+        return iSet_Node(hd, insert_int(val, left), right);
+      }
+      return iSet_Node(hd, left, insert_int(val, right));
+    }
+  }
+}
+
+intSet* lubSet_int(intSet* set1, intSet* set2) {
+  match (set1) {
+    iSet_Empty() -> {return set2;}
+    iSet_Top() -> {return iSet_Top();}
+    iSet_Node(val1, left1, right1) -> {
+      match (set2) {
+        iSet_Empty() -> {return set1;} 
+        iSet_Top() -> {return set2;}
+        iSet_Node(val2,_,_) -> {
+           return lubSet_int(left1, lubSet_int(right1, insert_int(val1, set2)));
+        }
+      }
+    }
+  }
+}
+
+intSet* intSetUnion(intSet* set1, intSet* set2) {
+  match (set1) {
+    iSet_Empty() -> {return set2;}
+    iSet_Node(val1, left1, right1) -> {
+      match (set2) {
+        iSet_Empty() -> {return set1;} 
+        iSet_Node(val2,_,_) -> {
+           return intSetUnion(left1, intSetUnion(right1, insert_int(val1, set2)));
+        }
+      }
+    }
+  }
+}
+
+intSet* intSetDelete(int v, intSet* set) {
+  match (set) {
+    iSet_Empty() -> {return set;}
+    iSet_Node(hd, left, right) -> {
+      if (eqint(v, hd)) {
+        return intSetUnion(left, right);
+      }
+      if (ltint(v, hd)) {
+        return iSet_Node(hd, intSetDelete(v, left), right);
+      }
+     return iSet_Node(hd, left, intSetDelete(v, right));
+    }
+  }
+}
+
+intSet* intSetMinus(intSet* set1, intSet* set2) {
+  match (set1) {
+    iSet_Empty() -> {return set1;}
+    iSet(hd1, left1, right1) -> {
+      if (isInSet(hd1, set2)) {
+         return intSetMinus(tl1, set2);
+      } else {
+         return iSet(hd1, intSetMinus(tl1, set2));
+      }
+    }
+  }
+}
+
+
+Lattice<intSet*> * latticeint() {
+  return lattice(iSet_Empty(), iSet_Top(), leqSet_int, lubSet_int, showIntSet);
+}
+
+#endif
+
+
