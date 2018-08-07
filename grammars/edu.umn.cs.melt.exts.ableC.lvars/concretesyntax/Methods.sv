@@ -5,6 +5,7 @@ marking terminal Put_t 'put' lexer classes {Ckeyword};
 marking terminal Get_t 'get' lexer classes {Ckeyword};
 marking terminal Add_t 'add' lexer classes {Ckeyword};
 marking terminal FreeSet_t 'freeSet' lexer classes {Ckeyword};
+marking terminal FreeLvar_t 'freeLvar' lexer classes {Ckeyword};
 marking terminal Freeze_t 'freeze' lexer classes {Ckeyword};
 
 closed nonterminal LvarInitializer_c with location, ast<Expr>, lattice;
@@ -36,6 +37,10 @@ concrete productions top::PrimaryExpr_c
 | 'freeSet' '(' s::AssignExpr_c ')'
   {
     top.ast = freeSet(s.ast, location=top.location);
+  }
+| 'freeLvar' '(' s::AssignExpr_c ')'
+  {
+    top.ast = freeLvar(s.ast, location=top.location);
   }
 | 'freeze' '(' s::AssignExpr_c ')'
   {

@@ -31,19 +31,21 @@ template<a> struct _Lattice {
   int (*_leq)();
   a (* _lub)();
   string (*_show)();
+  void (*_free)();
 };
 
 // to create a new lattice with the fields specified by the user
 
 template<a>
 static Lattice<a>* _newLattice(a least, a greatest, int (*leq)(),
-                               a (*lub)(), string (*showMethod)()) {
+                               a (*lub)(), string (*showMethod)(), void (*freeMethod)()) {
   Lattice<a> * l = malloc(sizeof(Lattice<a>)); 
   l->_bottom = least;
   l->_top = greatest;
   l->_leq = leq;
   l-> _lub = lub;
   l->_show = showMethod;
+  l->_free = freeMethod;
   return l;
 }
 
@@ -282,7 +284,6 @@ template<a> struct _Lvar {
   Lattice<a> * _lattice;
   a _value;
   int _frozen; // if 0, lvar is not frozen; if 1, lvar is frozen
-  ThresholdSet<a> * _threshold;
   pthread_mutex_t _mutex;
   pthread_cond_t _cond;
 };
@@ -299,6 +300,20 @@ static string _showLvar(Lvar<a>* l) {
   #endif
 
   return str("<Lvar Value Unavailable>");
+}
+
+// must be used only after completely done with lvar (synced, etc)
+
+template<a>
+static void _defaultFree(a val) {
+  return;
+}
+
+template<a>
+static void _freeLvar(Lvar<a>* l) {
+  l->_lattice->_free(l->_value);
+  free(l);
+  return;
 }
 
 // returns pointer to a new lvar for a given lattice
@@ -351,6 +366,7 @@ static int _put(Lvar<a>* l, a newState) {
         return 0;
       #endif
   }
+  l->_lattice->_free(oldState);
   l->_value = newValue;
 
   pthread_mutex_unlock(&(l->_mutex));
