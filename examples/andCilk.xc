@@ -138,25 +138,23 @@ State* lub (State* s1, State* s2) {
 
 //************** display function for State ***********************************
 
-string showState(State* s) {
-  string result;
+void showState(State* s) {
   match (s) {
-    Top() -> {result = str("Top()");}
+    Top() -> {printf("Top()");}
     Pair(b1, b2) -> {
-      result = str("Pair(");
+      printf("Pair(");
       match (b1) {
-        T() -> {result += "T(), ";}
-        F() -> {result += "F(), ";}
-        Bot() -> {result += "Bot(), ";}
+        T() -> {printf("T(), ");}
+        F() -> {printf("F(), ");}
+        Bot() -> {printf("Bot(), ");}
       }
       match (b2) {
-        T() -> {result += "T())";}
-        F() -> {result += "F())";}
-        Bot() -> {result += "Bot())";}
+        T() -> {printf("T())");}
+        F() -> {printf("F())");}
+        Bot() -> {printf("Bot())");}
       }
     }
   }
-  return result;
 }
 
 // since templating and cilk extensions don't seem to fit together, user defines
@@ -184,14 +182,19 @@ cilk int asyncAnd(Bl* b1, Bl* b2) {
   printf("Threshold set: %s\n", show(threshold).text);
   printf("True activation set: %s\n", show(trueRes).text);
   printf("False activation set: %s\n", show(falseRes).text);
+
+  printf("here\n");
   
   // starting the parallel part
+
+  printf("here\n");
 
   int success1, success2;
   spawn success1 = putCilk(andResult, Pair(b1, Bot()));
   spawn success2 = putCilk(andResult, Pair(Bot(), b2));
   sync;
 
+  printf("here\n");
   ActivationSet<State*> * andSet = get(andResult, threshold);
  
   int result;
@@ -219,6 +222,7 @@ cilk int asyncAnd(Bl* b1, Bl* b2) {
 
 cilk int main(int argc, char **argv) {
   int trueRes, falseRes;
+  printf("here\n");
   spawn trueRes = asyncAnd(T(), T());
   spawn falseRes = asyncAnd(T(), F());
   sync;

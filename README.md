@@ -7,7 +7,7 @@
 #### Big Example:
 
 + Increase parallelism in customer example
-+ Make free() optional argument via concrete syntax (if not specified for lattice, default to regular function that does nothing (e.g., for integers or algebraic data types)?)-- free within put, as well
++ Use new free functionality within activation, threshold, etc. if helpful
 
 #### POPL Paper:
 

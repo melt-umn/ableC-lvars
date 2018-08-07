@@ -1,7 +1,5 @@
-#include <string.xh>
 #include <stdio.h>
 #include <stdlib.h>
-#include <gc.h>
 #include <pthread.h>
 
 // Note that many functions are statically checked to see if
@@ -30,7 +28,7 @@ template<a> struct _Lattice {
   a _top;
   int (*_leq)();
   a (* _lub)();
-  string (*_show)();
+  void (*_show)();
   void (*_free)();
 };
 
@@ -38,7 +36,7 @@ template<a> struct _Lattice {
 
 template<a>
 static Lattice<a>* _newLattice(a least, a greatest, int (*leq)(),
-                               a (*lub)(), string (*showMethod)(), void (*freeMethod)()) {
+                               a (*lub)(), void (*showMethod)(), void (*freeMethod)()) {
   Lattice<a> * l = malloc(sizeof(Lattice<a>)); 
   l->_bottom = least;
   l->_top = greatest;
@@ -87,18 +85,18 @@ static ActivationSet<a>* _newActivationSet(Lattice<a>* l, int size) {
 // to print out a given activation set (using the lattice's show method)
 
 template<a>
-static string _showActivation(ActivationSet<a>* act){
-  string result = str("{");  
-
+static void _showActivation(ActivationSet<a>* act){
+  printf("{");  
   int i = 0;
   for (; i < act->_index - 1; i++) {
-    result += act ->_lattice->_show(act->_set[i]) + ", ";
+    act ->_lattice->_show(act->_set[i]);
+    printf(", ");
   }
   for (; i < act->_index; i++) {
-    result += act ->_lattice->_show(act->_set[i]);
+    act ->_lattice->_show(act->_set[i]);
   }
 
-  return result + "}";
+  printf("}");
 }
 
 // to add a single element to an activation set
@@ -266,16 +264,17 @@ static int _freeThreshold(ThresholdSet<a> *t) {
 // to print a threshold set, using the show method of the lattice
 
 template<a>
-static string _showThreshold(ThresholdSet<a>* t){
-  string result = str("{");
+static void _showThreshold(ThresholdSet<a>* t){
+  printf("{");
   int i = 0;
   for (; i < t->_index - 1; i++) {
-    result += show(t->_a_sets[i]) + ", ";
+    show(t->_a_sets[i]);
+    printf(", ");
   }
   for (; i < t->_index; i++) {
-    result += show(t->_a_sets[i]);
+    show(t->_a_sets[i]);
   }
-  return result + "}";
+  printf("}");
 }
 
 //********************************* Lvar **************************************
@@ -289,17 +288,19 @@ template<a> struct _Lvar {
 };
 
 template<a>
-static string _showLvar(Lvar<a>* l) {
+static void _showLvar(Lvar<a>* l) {
   if (l->_frozen) {
-    return l->_lattice->_show(l->_value);
+    l->_lattice->_show(l->_value);
   }
+  else {
 
-  #ifdef DEBUG
-    printf("Error: Can't show a lvar before it is frozen!\n");
-    exit(0);
-  #endif
+    #ifdef DEBUG
+      printf("Error: Can't show a lvar before it is frozen!\n");
+      exit(0);
+    #endif
 
-  return str("<Lvar Value Unavailable>");
+    printf("<Lvar Value Unavailable>");
+  }
 }
 
 // must be used only after completely done with lvar (synced, etc)

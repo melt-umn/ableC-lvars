@@ -182,6 +182,14 @@ bool intset_is_empty(const IntSet *self)
     return !self->negative_one_exists && intsetnode_is_empty(self->root);
 }
 
+// to copy the values in an IntSet
+IntSet* copyIntSet(IntSet* set) {
+  IntSet* copy = malloc(sizeof(IntSet));
+  copy -> root = dup_intsetnode(set->root);
+  copy -> negative_one_exists = set->negative_one_exists;
+  return copy;
+}
+
 typedef enum {
     INIT, CUR, LEFT, RIGHT, END
 } NodePos;
