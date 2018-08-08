@@ -377,11 +377,16 @@ static int _put(Lvar<a>* l, a newState) {
       #endif
 
       #ifdef CHECK
+        l->_lattice->_free(newValue);
         pthread_mutex_unlock(&(l->_mutex));
         return 0;
       #endif
   }
-  l->_lattice->_free(oldState);
+  // might want to remove and leave up to programmer to free
+  // in case this frees something that they didn't want to free
+  if (oldState != l->_lattice->_bottom && oldState != l->_lattice->_top) {
+    l->_lattice->_free(oldState);
+  }
   l->_value = newValue;
 
   pthread_mutex_unlock(&(l->_mutex));

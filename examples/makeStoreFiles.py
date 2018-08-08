@@ -1,6 +1,6 @@
 import random
 
-NUMLINES = 5000
+NUMLINES = 1000
 MIN_ID = 1
 MAX_ID = 50
 MIN_PROD = 0

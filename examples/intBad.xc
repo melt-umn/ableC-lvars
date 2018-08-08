@@ -84,7 +84,7 @@ cilk int main(int argc, char **argv) {
   spawn result = putGetEx(x, t);
   sync;
   freeze(x);
-  printf("Value of x: %s");
+  printf("Value of x: ");
   show(x);
   printf("\n");
   if (result != NULL) {

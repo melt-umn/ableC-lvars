@@ -69,7 +69,7 @@ cilk int main(int argc, char **argv) {
   spawn success = multInChunks(l, exArr, size, numChunks);
   sync;
   freeze(l);
-  printf("result = %s");
+  printf("result = ");
   show(l);
 
   // clean up

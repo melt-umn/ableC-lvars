@@ -120,7 +120,7 @@ cilk int main(int argc, char **argv) {
   spawn success = sumInChunks(l, exArr, size, numChunks, numBits);
   sync;
   freeze(l);
-  printf("result = %s");
+  printf("result = ");
   show(l);  
   printf("\n");
 

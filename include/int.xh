@@ -21,4 +21,8 @@ void showInteger(Int* i) {
   }
 }
 
+void freeInteger(Int* i) {
+  free(i);
+}
+
 #endif // INT_H_

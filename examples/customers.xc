@@ -1,6 +1,7 @@
 #define CHECK
 #include "lvars.xh"
 #include <cilk.xh>
+#include <string.h>
 
 // ****************** type set up *********************************************
 
@@ -21,6 +22,26 @@ datatype Customer {
   // id of 0 is customer of unknown id
   Person (int, ProductSet*);
   CustBot();
+}
+
+void freeProducts(ProductSet* p) {
+  match (p) {
+    P_Empty() -> {free(p);}
+    P_Set(_, pset) -> {
+      freeProducts(pset);
+      free(p);
+    } 
+  }
+}
+
+void freeCustomer(Customer* c) {
+  match (c) {
+    Person(_, pset) -> {
+      freeProducts(pset); 
+      free(c);
+    }
+    _ -> {free(c);}
+  }
 }
 
 // ****************** set up eq for lattice ***********************************
@@ -119,7 +140,7 @@ Customer* lubCustomer (Customer* c1, Customer* c2) {
 
 void showProducts(ProductSet* p) {
   match (p) {
-    P_Empty() -> {printf("");}
+    P_Empty() -> {}
     P_Set(hd, tl) -> {
       printf("%d", hd);
       match (tl) {
@@ -354,11 +375,11 @@ cilk int main(int argc, char **argv) {
 
   // set up
 
-  lat = lattice(CustBot(), CustTop(), leqCustomer, lubCustomer, showCustomer);
+  lat = lattice(CustBot(), CustTop(), leqCustomer, lubCustomer, showCustomer, freeCustomer);
   int numCustomers = 50;
-  int numStore1 = 5000;
-  int numStore2 = 5000;
-  int numStore3 = 5000;
+  int numStore1 = 1000;
+  int numStore2 = 1000;
+  int numStore3 = 1000;
 
   // read from file
 

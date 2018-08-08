@@ -30,13 +30,6 @@ int isEmptyIntSet(intSet* set) {
   }
 }
 
-int isTopIntSet(intSet* set) {
-  match (set) {
-    iSet_Top() -> {return 1;}
-    _ -> {return 0;}
-  }
-}
-
 int intSetHead(intSet* set) {
   match (set) {
     iSet(h, _) -> { return h; }
@@ -75,28 +68,24 @@ int isIntSubset(intSet* set1, intSet* set2) {
 
 // show method
 
-void showInnerIntSet(intSet* set) {
+string showInnerIntSet(intSet* set) {
   match (set) {
-    iSet_Top() -> {printf("Error!");}
-    iSet_Empty() -> {}
+    iSet_Top() -> {return str("Error!");}
+    iSet_Empty() -> {return str("");}
     iSet(hd, tl) -> {
-      show(hd);
+      string result = show(hd);
       match (tl) {
-        iSet_Top() -> {printf("Error!");}
-        iSet_Empty() -> {}
-        iSet(_, _) -> {
-          printf(", ");
-          show(tl);
-        }
+        iSet_Top() -> {return str("Error!");}
+        iSet_Empty() -> {return result;}
+        iSet(_, _) -> {return result + ", " + show(tl);}
       }
     }
   }
 }
 
-void showIntSet(intSet* set) {
-  printf("{");
-  showInnerIntSet(set);
-  printf("}");
+string showIntSet(intSet* set) {
+  string result = str("{");
+  return showInnerIntSet(set) + str("}");
 }
 
 // leq method
@@ -218,17 +207,8 @@ intSet* intSetMinus(intSet* set1, intSet* set2) {
   }
 }
 
-int isTop_int(intSet* set) {
-  match (set) {
-    iSet_Top() -> {
-      return 1;
-    }
-    _ -> {return 0;}
-  } 
-}
-
 Lattice<intSet*> * latticeint() {
-  return lattice(iSet_Empty(), iSet_Top(), leqSet_int, lubSet_int, isTop_int, showIntSet);
+  return lattice(iSet_Empty(), iSet_Top(), leqSet_int, lubSet_int, showIntSet);
 }
 
 #endif

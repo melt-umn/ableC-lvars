@@ -119,7 +119,7 @@ Customer* lubCustomer (Customer* c1, Customer* c2) {
 
 void showProducts(ProductSet* p) {
   match (p) {
-    P_Empty() -> {printf("");}
+    P_Empty() -> {}
     P_Set(hd, tl) -> {
       printf("%d", hd);
       match (tl) {

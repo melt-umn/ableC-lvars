@@ -1,5 +1,6 @@
 #define DEBUG
 #include "lvars.xh"
+#include <string.h>
 
 typedef datatype Color Color;
 datatype Color {
