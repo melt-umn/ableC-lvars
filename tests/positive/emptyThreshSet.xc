@@ -136,25 +136,23 @@ State* lub (State* s1, State* s2) {
 
 //************** display function for State ***********************************
 
-string showState(State* s) {
-  string result;
+void showState(State* s) {
   match (s) {
-    Top() -> {result = str("Top()");}
+    Top() -> {printf("Top()");}
     Pair(b1, b2) -> {
-      result = str("Pair(");
+      printf("Pair(");
       match (b1) {
-        T() -> {result += "T(), ";}
-        F() -> {result += "F(), ";}
-        Bot() -> {result += "Bot(), ";}
+        T() -> {printf("T(), ");}
+        F() -> {printf("F(), ");}
+        Bot() -> {printf("Bot(), ");}
       }
       match (b2) {
-        T() -> {result += "T())";}
-        F() -> {result += "F())";}
-        Bot() -> {result += "Bot())";}
+        T() -> {printf("T())");}
+        F() -> {printf("F())");}
+        Bot() -> {printf("Bot())");}
       }
     }
   }
-  return result;
 }
 
 
@@ -164,7 +162,6 @@ int main (int argc, char **argv) {
                               lub, showState);
 
   ThresholdSet<State*>* thresh = thresholdSet(l);
-  printf("thresh: %s\n", show(thresh).text);
   
   free(l); 
   freeSet(thresh);

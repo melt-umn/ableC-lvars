@@ -136,28 +136,24 @@ State* lub (State* s1, State* s2) {
 
 //************** display function for State ***********************************
 
-string showState(State* s) {
-  string result;
+void showState(State* s) {
   match (s) {
-    Top() -> {result = str("Top()");}
+    Top() -> {printf("Top()");}
     Pair(b1, b2) -> {
-      result = str("Pair(");
+      printf("Pair(");
       match (b1) {
-        T() -> {result += "T(), ";}
-        F() -> {result += "F(), ";}
-        Bot() -> {result += "Bot(), ";}
+        T() -> {printf("T(), ");}
+        F() -> {printf("F(), ");}
+        Bot() -> {printf("Bot(), ");}
       }
       match (b2) {
-        T() -> {result += "T())";}
-        F() -> {result += "F())";}
-        Bot() -> {result += "Bot())";}
+        T() -> {printf("T())");}
+        F() -> {printf("F())");}
+        Bot() -> {printf("Bot())");}
       }
     }
   }
-  return result;
 }
-
-
 int main (int argc, char **argv) {
 
   Lattice<State*>* l = lattice(Pair(Bot(), Bot()), Top(), leq,
@@ -166,7 +162,6 @@ int main (int argc, char **argv) {
   ActivationSet<State*>* fSet = activationSet(l){Pair(F(), F()), Pair(F(), T()),
                                              Pair(T(), F()), Pair(F(), Bot()),
                                              Pair(Bot(), F())};
-  printf("fSet: %s\n", show(fSet).text);
 
   ActivationSet<State*>* tSet = activationSet(l, 45.6);
   return 0;

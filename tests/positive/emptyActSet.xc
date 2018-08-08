@@ -136,47 +136,42 @@ State* lub (State* s1, State* s2) {
 
 //************** display function for State ***********************************
 
-string showState(State* s) {
-  string result;
+void showState(State* s) {
   match (s) {
-    Top() -> {result = str("Top()");}
+    Top() -> {printf("Top()");}
     Pair(b1, b2) -> {
-      result = str("Pair(");
+      printf("Pair(");
       match (b1) {
-        T() -> {result += "T(), ";}
-        F() -> {result += "F(), ";}
-        Bot() -> {result += "Bot(), ";}
+        T() -> {printf("T(), ");}
+        F() -> {printf("F(), ");}
+        Bot() -> {printf("Bot(), ");}
       }
       match (b2) {
-        T() -> {result += "T())";}
-        F() -> {result += "F())";}
-        Bot() -> {result += "Bot())";}
+        T() -> {printf("T())");}
+        F() -> {printf("F())");}
+        Bot() -> {printf("Bot())");}
       }
     }
   }
-  return result;
 }
-
 
 int main (int argc, char **argv) {
 
   Lattice<State*>* l = lattice(Pair(Bot(), Bot()), Top(), leq,
                               lub, showState);
 
-  ActivationSet<State*>* fSet = activationSet(l)
-;
-  printf("fSet: %s\n", show(fSet).text);
+  ActivationSet<State*>* fSet = activationSet(l);
 
   ActivationSet<State*>* tSet = activationSet(l, 1);
-  printf("tSet (before adding): %s\n", show(tSet).text);
+
 
   add(tSet, Pair(T(), T()));
-  printf("tSet: %s\n", show(tSet).text);
+
 
   ThresholdSet<State*>* thresh = thresholdSet(l, 2){fSet};
-  printf("thresh (before adding): %s\n", show(thresh).text);
+
   add(thresh, tSet);
-  printf("thresh: %s\n", show(thresh).text);
+
   
   Lvar<State*>* boolPair1 = newLvar(l);
   put(boolPair1, Pair(T(), Bot()));
@@ -184,7 +179,6 @@ int main (int argc, char **argv) {
   ActivationSet<State*>* result1 = get(boolPair1, thresh);
   
   if (result1 != NULL) {
-    printf("result1: %s\n", show(result1).text);
   }
   else {
     printf("result1: NULL\n");
