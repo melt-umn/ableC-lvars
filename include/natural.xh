@@ -54,14 +54,14 @@ Nat* lubNat(Nat* n1, Nat* n2) {
   return result;
 }
 
-string showNat(Nat* n) {
-  string result;
+void showNat(Nat* n) {
   match (n) {
-    TopNat() -> {result = str("TopNat()");}
-    BotNat() -> {result = str("BotNat()");}
-    Int(i) -> {result = "Int(" + show(i) + ")";}
+    TopNat() -> {printf("TopNat()");}
+    BotNat() -> {printf("BotNat()");}
+    Int(i) -> {
+      printf("Int(%d)", i);
+    }
   }
-  return result;
 }
 
 Lattice<Nat*> * natLattice() {

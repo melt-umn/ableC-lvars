@@ -25,8 +25,8 @@ int lubInt(int n1, int n2) {
 
 // ************************* display function for our lattice *****************
 
-string showInteger(int n) {
-  return show(n);
+void showInteger(int n) {
+  printf("%d", n);
 }
 
 cilk int putCilk(Lvar<int>* x, int val, int count);
@@ -76,9 +76,13 @@ cilk int main(int argc, char **argv) {
   spawn result = putGetEx(x, t);
   sync;
   freeze(x);
-  printf("Value of x: %s\n", show(x).text);
+  printf("Value of x: ");
+  show(x);
+  printf("\n");
   if (result != NULL) {
-    printf("Result of get(): %s\n", show(result).text);
+    printf("Result of get(): ");
+    show(result);
+    printf("\n");
   }
   else {
     printf("Result of get(): NULL\n");

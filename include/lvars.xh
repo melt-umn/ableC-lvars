@@ -173,8 +173,11 @@ template<a>
 static int _incompat(Lattice<a> * l, ActivationSet<a> *Q, ActivationSet<a> *R) {
   #ifdef DEBUG
     if (Q -> _lattice != l || R -> _lattice != l) {
-      printf("Error: The activation sets %s and %s don't belong to the same lattice!\n",
-              show(Q).text, show(R).text);
+      printf("Error: The activation sets ");
+      show(Q);
+      printf(" and ");
+      show(R);
+      printf(" don't belong to the same lattice!\n");
       exit(0);
     }
   #endif
@@ -189,8 +192,13 @@ static int _incompat(Lattice<a> * l, ActivationSet<a> *Q, ActivationSet<a> *R) {
       a r = R->_set[j];
       if (!(l->_leq(l->_top, l->_lub(q, r)))) {
         #ifdef DEBUG
-          printf("Error: %s and %s are compatible, with lub %s!\n",
-                 l->_show(q).text, l->_show(r).text, l->_show(l->_lub(q, r)).text);
+          printf("Error: ");
+          l->_show(q);
+          printf(" and ");
+          l->_show(r);
+          printf(" are compatible, with lub ");
+          l->_show(l->_lub(q, r));
+          printf("!\n");
           exit(0);
         #endif
         return 0;
@@ -208,8 +216,11 @@ template<a>
 static ThresholdSet<a>* _addThreshold(ThresholdSet<a>* t, ActivationSet<a>* act) {
   #ifdef DEBUG
     if (t->_lattice != act->_lattice) {
-      printf("Error: activation set %s and threshold set %s do not have the same lattice. \n",
-             show(act).text, show(t).text);
+      printf("Error: activation set ");
+      show(act);
+      printf(" and threshold set ");
+      show(t);
+      printf(" do not have the same lattice. \n");
       exit(0);
     }
   #endif
@@ -357,8 +368,11 @@ static int _put(Lvar<a>* l, a newState) {
 
   if (l->_lattice->_leq(l->_lattice->_top, newValue)){
       #ifdef DEBUG
-        printf("Error: invalid put of %s into lvar of value %s\n",
-               l->_lattice->_show(newState).text, l->_lattice->_show(oldState).text);
+        printf("Error: invalid put of ");
+        l->_lattice->_show(newState);
+        printf(" into lvar of value ");
+        l->_lattice->_show(oldState);
+        printf("\n");
         exit(0);
       #endif
 

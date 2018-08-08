@@ -179,11 +179,13 @@ cilk int asyncAnd(Bl* b1, Bl* b2) {
                                                          Pair(T(), F()),
                                                          Pair(F(), T())};
   ThresholdSet<State*> * threshold = thresholdSet(D, 2){trueRes, falseRes};
-  printf("Threshold set: %s\n", show(threshold).text);
-  printf("True activation set: %s\n", show(trueRes).text);
-  printf("False activation set: %s\n", show(falseRes).text);
-
-  printf("here\n");
+  printf("Threshold set: ");
+  show(threshold);
+  printf("\n");
+  printf("True activation set: ");
+  show(trueRes);
+  printf("False activation set: ");
+  show(falseRes);
   
   // starting the parallel part
 
@@ -194,7 +196,6 @@ cilk int asyncAnd(Bl* b1, Bl* b2) {
   spawn success2 = putCilk(andResult, Pair(Bot(), b2));
   sync;
 
-  printf("here\n");
   ActivationSet<State*> * andSet = get(andResult, threshold);
  
   int result;

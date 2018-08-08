@@ -50,8 +50,8 @@ int lub(int n1, int n2) {
   return 100;
 }
 
-string showInteger(int n) {
-  return show(n);
+void showInteger(int n) {
+  printf("%d", n);
 }
 
 cilk ActivationSet<int>* getCilk(Lvar<int>* x, ThresholdSet<int>* t) {
@@ -76,7 +76,9 @@ cilk int main(int argc, char **argv) {
   spawn putres = putCilk(x, 8);	// if this line is commented out, get blocks forever
   //spawn putres = putCilk(y, 42); 
   sync;
-  printf("result: %s\n", show(result).text);
+  printf("result: ");
+  show(result);
+  printf("\n");
   cilk return 1;
 }
 

@@ -28,59 +28,63 @@ datatype VoteSet {
 
 // ******************* display method for our lattice *************************
 
-string showYN(YN* yn) {
-  string result;
+void showYN(YN* yn) {
   match (yn) {
     Yes () -> {
-      result = str("Yes()");
+      printf("Yes()");
     }
     No () -> {
-      result = str("No()");
+      printf("No()");
     }
     Undecided () -> {
-      result = str("Undecided()");
+      printf("Undecided()");
     }
   }
-  return result;
 }
 
-string showVote(Vote* v) {
-  string result;
+void showVote(Vote* v) {
   match (v) {
     Horace(yn1) -> {
-      result = "Horace(" + showYN(yn1) + ")";
+      printf("Horace(");
+      showYN(yn1);
+      printf(")");
     }
     Franz(yn1) -> {
-      result = "Franz(" + showYN(yn1) + ")";
+      printf("Franz(");
+      showYN(yn1);
+      printf(")");
     }
     Kat(yn1) -> {
-      result = "Kat(" + showYN(yn1) + ")";
+      printf("Kat(");
+      showYN(yn1);
+      printf(")");
     }
   }
-  return result;
 }
 
-string showInner(VoteSet* v) {
-  string result = str("");
+void showInner(VoteSet* v) {
   match (v) {
     Empty () -> {}
     Set (hd, tl) -> {
-      result = showVote(hd);
+      showVote(hd);
       match (tl) {
         Empty () -> {}
         other -> { 
-          result += ", " + showInner(tl);
+          printf(", ");
+          showInner(tl);
         }
       }
     }
-    Top () -> {result = str("Top()");}
+    Top () -> {printf("Top()");}
   }
-  return result;
 }
 
-string showVoteSet(VoteSet* v) {
-  return "{" + showInner(v) + "}";
+void showVoteSet(VoteSet* v) {
+  printf("{");
+  showInner(v);
+  printf("}");
 }
+
 
 
 // *********************** eq method for our lattice **************************
@@ -253,7 +257,9 @@ int main(int argc, char **argv) {
 
   ActivationSet<VoteSet*> * noPizza = activationSet(D, 1);
   add(noPizza, Set(Horace(No()), Set(Kat(No()), Set(Franz(No()), Empty()))));
-  printf("Activation Set noPizza: %s\n", show(noPizza).text);
+  printf("Activation Set noPizza: ");
+  show(noPizza);
+  printf("\n");
 
   // *** build activation set that indicates at least one person want pizza ***
 
@@ -261,12 +267,16 @@ int main(int argc, char **argv) {
   add(yesPizza, Set(Horace(Yes()), Empty()));
   add(yesPizza, Set(Kat(Yes()), Empty()));
   add(yesPizza, Set(Franz(Yes()), Empty()));
-  printf("Activation Set yesPizza: %s\n", show(yesPizza).text);
+  printf("Activation Set yesPizza: ");
+  show(yesPizza);
+  printf("\n");
 
   // ******** put together threshold set **************************************
 
   ThresholdSet<VoteSet*> *t = thresholdSet(D, 2){yesPizza, noPizza};
-  printf("Threshold set: %s\n", show(t).text);
+  printf("Threshold set: ");
+  show(t);
+  printf("\n");
 
   // ************* try collecting some votes **********************************
 
@@ -318,7 +328,8 @@ int main(int argc, char **argv) {
   }
 
   add(result, Set(Horace(Undecided()), Set(Franz(Yes()), Empty())));
-  printf("%s\n", show(result).text);
+  show(result);
+  printf("\n");
 
   // ********************* clean up *******************************************
   

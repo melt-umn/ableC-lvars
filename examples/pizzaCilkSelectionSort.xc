@@ -29,55 +29,58 @@ datatype VoteSet {
 
 // ******************* display method for our lattice *************************
 
-string showYN(YN* yn) {
-  string result;
+void showYN(YN* yn) {
   match (yn) {
     Yes () -> {
-      result = str("Yes()");
+      printf("Yes()");
     }
     No () -> {
-      result = str("No()");
+      printf("No()");
     }
   }
-  return result;
 }
 
-string showVote(Vote* v) {
-  string result;
+void showVote(Vote* v) {
   match (v) {
     Horace(yn1) -> {
-      result = "Horace(" + showYN(yn1) + ")";
+      printf("Horace(");
+      showYN(yn1);
+      printf(")");
     }
     Franz(yn1) -> {
-      result = "Franz(" + showYN(yn1) + ")";
+      printf("Franz(");
+      showYN(yn1);
+      printf(")");
     }
     Kat(yn1) -> {
-      result = "Kat(" + showYN(yn1) + ")";
+      printf("Kat(");
+      showYN(yn1);
+      printf(")");
     }
   }
-  return result;
 }
 
-string showInner(VoteSet* v) {
-  string result = str("");
+void showInner(VoteSet* v) {
   match (v) {
     Empty () -> {}
     Set (hd, tl) -> {
-      result = showVote(hd);
+      showVote(hd);
       match (tl) {
         Empty () -> {}
         other -> { 
-          result += ", " + showInner(tl);
+          printf(", ");
+          showInner(tl);
         }
       }
     }
-    Top () -> {result = str("Top()");}
+    Top () -> {printf("Top()");}
   }
-  return result;
 }
 
-string showVoteSet(VoteSet* v) {
-  return "{" + showInner(v) + "}";
+void showVoteSet(VoteSet* v) {
+  printf("{");
+  showInner(v);
+  printf("}");
 }
 
 

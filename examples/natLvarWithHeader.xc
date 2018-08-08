@@ -64,7 +64,8 @@ int main(int argc, char **argv) {
     printf("Error.");
   }
 
-  printf("Threshold set: %s\n", show(t).text);
+  printf("Threshold set: ");
+  show(t);
 
   // clean up
   

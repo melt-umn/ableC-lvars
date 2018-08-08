@@ -13,12 +13,12 @@ datatype Int {
 
 // set up show method
 
-string showInteger(Int* i) {
+void showInteger(Int* i) {
   match (i) {
-    I_Top() -> {return str("Error!");}
-    I(n) -> {return show(n);}
-    I_Bot() -> {return str("?");}
-  } 
+    I_Top() -> {printf("Error!");}
+    I_Bot() -> {printf("?");}
+    I(n) -> {printf("%d", n);}
+  }
 }
 
 #endif // INT_H_

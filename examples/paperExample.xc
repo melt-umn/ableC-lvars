@@ -59,11 +59,11 @@ Integer* lubInteger(Integer* n1, Integer* n2) {
 
 // set up show function for our lattice
 
-string showInteger(Integer* n) {
+void showInteger(Integer* n) {
   match (n) {
-     Top() -> {return str("Top");}
-     Int(i) -> {return show(i);}
-     Bottom() -> {return str("Bottom");}
+     Top() -> {printf("Top");}
+     Int(i) -> {printf("%d", i);}
+     Bottom() -> {printf("Bottom");}
   }
 }
 
@@ -86,9 +86,13 @@ int main(int argc, char **argv) {
     printf("Activation Set Reached: NULL\n");
   }
   else {
-    printf("Activation Set Reached: %s\n", show(a).text);
+    printf("Activation Set Reached: ");
+    show(a);
+    printf("\n");
   }
-  printf("Actual Value of LVar: %s\n", show(x).text);
+  printf("Actual Value of LVar: ");
+  show(x);
+  printf("\n");
 
   // clean up
 

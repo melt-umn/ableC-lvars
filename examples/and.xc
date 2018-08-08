@@ -137,25 +137,23 @@ State* lub (State* s1, State* s2) {
 
 //************** display function for State ***********************************
 
-string showState(State* s) {
-  string result;
+void showState(State* s) {
   match (s) {
-    Top() -> {result = str("Top()");}
+    Top() -> {printf("Top()");}
     Pair(b1, b2) -> {
-      result = str("Pair(");
+      printf("Pair(");
       match (b1) {
-        T() -> {result += "T(), ";}
-        F() -> {result += "F(), ";}
-        Bot() -> {result += "Bot(), ";}
+        T() -> {printf("T(), ");}
+        F() -> {printf("F(), ");}
+        Bot() -> {printf("Bot(), ");}
       }
       match (b2) {
-        T() -> {result += "T())";}
-        F() -> {result += "F())";}
-        Bot() -> {result += "Bot())";}
+        T() -> {printf("T())");}
+        F() -> {printf("F())");}
+        Bot() -> {printf("Bot())");}
       }
     }
   }
-  return result;
 }
 
 int main(int argc, char **argv) {
@@ -197,7 +195,8 @@ int main(int argc, char **argv) {
   ActivationSet<State*> * a2 = activationSet(D, 1){Pair(T(), T())};
   ThresholdSet<State*> *t = thresholdSet(D){a1, a2};
 
-  printf("The actual threshold set being used: \n%s\n", show(t).text);
+  printf("The actual threshold set being used: \n");
+  show(t);
 
   // create bad threshold set-- elements from different activation sets are
   // compatible with each other, so will reject second activation set
@@ -208,7 +207,8 @@ int main(int argc, char **argv) {
                                  {Pair(T(), Bot()), Pair(Bot(), T())};
   ThresholdSet<State*> *tBad = thresholdSet(D, 2){a3, a4, a1};
 
-  printf("After trying invalid addition to threshold: \n%s\n", show(tBad).text);
+  printf("After trying invalid addition to threshold: \n");
+  show(tBad);
 
   //************ Step 5. Try get()-ing the values of lvars ********************
   

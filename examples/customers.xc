@@ -117,14 +117,17 @@ Customer* lubCustomer (Customer* c1, Customer* c2) {
 
 // helper to generate string for product set
 
-string showProducts(ProductSet* p) {
+void showProducts(ProductSet* p) {
   match (p) {
-    P_Empty() -> {return str("");}
+    P_Empty() -> {printf("");}
     P_Set(hd, tl) -> {
-      string result = show(hd);
+      printf("%d", hd);
       match (tl) {
-        P_Empty() -> {return result;}
-        P_Set(_, _) -> {return result + ", " + showProducts(tl);}
+        P_Empty() -> {}
+        P_Set(_, _) -> {
+          printf(", ");
+          showProducts(tl);
+        }
       }
     }
   }
@@ -132,22 +135,22 @@ string showProducts(ProductSet* p) {
 
 // helper to show just the ID of a customer
 
-string showCustomerID(Customer* c) {
+void showCustomerID(Customer* c) {
   match(c) {
-    CustTop() -> {return str("Top()");}
-    CustBot() -> {return str("Bot()");}
-    Person(name, prods) -> {return show(name);}
+    CustTop() -> {printf("Top()");}
+    CustBot() -> {printf("Bot()");}
+    Person(name, prods) -> {printf("%d", name);}
   }
 }
 
-string showCustomer(Customer* c) {
+void showCustomer(Customer* c) {
   match (c) {
-    CustTop() -> {return str("Top()");}
-    CustBot() -> {return str("Bot()");}
+    CustTop() -> {printf("Top()");}
+    CustBot() -> {printf("Bot()");}
     Person(name, prods) -> {
-      string result = str("Person(") + show(name) + str(", {") +
-                      showProducts(prods) + str("})");
-      return result;
+      printf("Person(%d, {", name);
+      showProducts(prods);
+      printf("})");
     }
   }
 }
@@ -227,7 +230,8 @@ int lookupCustomer(Lvar<Customer*>** customers, int custLen, int cid) {
   for (int i = 0; i < custLen; i++) {
     ActivationSet<Customer*>* result = get(customers[i], t);
     if (result != NULL) {
-      printf("%s\n", show(customers[i]).text);
+      show(customers[i]);
+      printf("\n");
       return 1;
     }
   }  
@@ -238,7 +242,8 @@ int lookupCustomer(Lvar<Customer*>** customers, int custLen, int cid) {
 
 int printCustomers(Lvar<Customer*>** customers, int custLen) {
   for (int i = 0; i < custLen; i++) {
-    printf("%s\n", showCustomer(freeze(customers[i])).text);
+    showCustomer(freeze(customers[i]));
+    printf("\n");
   }
   return 1;
 }
@@ -253,7 +258,9 @@ int lookupProdSet(Lvar<Customer*>** customers, int custLen, ProductSet* prods) {
   for (int i = 0; i < custLen; i++) {
     ActivationSet<Customer*>* result = get(customers[i], t);
     if (result != NULL) {
-      printf("Customer #%s\n", showCustomerID(freeze(customers[i])).text);
+      printf("Customer #");
+      showCustomerID(freeze(customers[i]));
+      printf("\n");
       ret = 1;
     }
   } 
@@ -325,7 +332,9 @@ int userInteraction(Lvar<Customer*>** customers, int custLen) {
         success = lookupProdSet(customers, custLen, result);
 
         if (!success) {
-          printf("Product Set {%s} not found.\n", showProducts(result).text);
+          printf("Product Set {");
+          showProducts(result);
+          printf("} not found.\n");
         }
       }
     }

@@ -26,8 +26,8 @@ int eqNodes(int n1, int n2) {
   return n1 == n2;
 }
 
-string showNode(int n) {
-  return show(n);
+void showNode(int n) {
+  printf("%d", n);
 }
 
 // helper that checks if set1 is a subset of set2
@@ -108,14 +108,17 @@ NodeSet* nodeSetUnion(NodeSet* set1, NodeSet* set2) {
   return result;
 }
 
-string showNodes(NodeSet* s) {
+void showNodes(NodeSet* s) {
   match (s) {
-    Empty() -> {return str("");}
+    Empty() -> {}
     Set(hd, tl) -> {
-      string result = showNode(hd);
+      showNode(hd);
       match (tl) {
-        Empty() -> {return result;}
-        Set(_, _) -> {return result + ", " + showNodes(tl);}
+        Empty() -> {}
+        Set(_, _) -> {
+          printf(", ");
+          showNodes(tl);
+        }
       }
     }
   }
@@ -143,7 +146,11 @@ cilk int main(int argc, char **argv) {
   sync;
   freeze(l);
   freeze(resultLvar);
-  printf("result = {%s}\n", show(l).text);
-  printf("result = {%s}\n", show(resultLvar).text);
+  printf("result = {");
+  show(l);
+  printf("}\n");
+  printf("result = {");
+  show(resultLvar);
+  printf("}\n");
   cilk return 1;
 }

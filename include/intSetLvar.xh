@@ -79,28 +79,32 @@ int leqSet_int(intSetLat* set1, intSetLat* set2) {
 
 // iterates through a set to get string representing all members
 
-string showSet_helper(IntSetItr* itr) {
+void showSet_helper(IntSetItr* itr) {
   if (intsetitr_has_next(itr)) {
     int next = intsetitr_next(itr);
     if (intsetitr_has_next(itr)) {
-      return show(next) + ", " + showSet_helper(itr);
+      show(next);
+      printf(", ");
+      showSet_helper(itr);
     }
-    return show(next);
+    else {
+      show(next);
+    }
   }
-  return str("");
 }
 
 // shows an element of the lattice
 
-string showSet_int(intSetLat* set) {
+void showSet_int(intSetLat* set) {
   match (set) {
-    iSet_Empty() -> {return str("");}
-    iSet_Top() -> {return str("Error!");}
+    iSet_Empty() -> {printf("");}
+    iSet_Top() -> {printf("Error!");}
     iSet(s) -> {
+      printf("{");
       IntSetItr* newitr = new_intsetitr(s);
-      string result = showSet_helper(newitr);
+      showSet_helper(newitr);
       delete_intsetitr(newitr);
-      return str("{") + result + str("}");
+      printf("}");
     }
   }
 }

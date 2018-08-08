@@ -1,5 +1,4 @@
 #define DEBUG
-#define GC_THREADS
 #include "lvars.xh"
 #include <cilk.xh>
 
@@ -20,20 +19,20 @@ int leqArr(int* arr1, int* arr2) {
   return 1;
 }
 
-string showArr(int* arr) {
-  string result = str("[");
+void showArr(int* arr) {
+  printf("[");
   int i = 0;
   for (; i < ARRSIZE - 1; i++) {
-    result += show(arr[i]) + ", ";
+    printf("%d, ", arr[i]);
   }
-  return result + show(arr[i]) + "]";
+  printf("%d]", arr[i]);
 }
 
 int* lubArr(int* arr1, int* arr2) {
   if (arr1 == NULL || arr2 == NULL) {
     return NULL;
   }
-  int* newArr = GC_MALLOC(ARRSIZE * sizeof(int));
+  int* newArr = malloc(ARRSIZE * sizeof(int));
   for (int i = 0; i < ARRSIZE; i++) {
     newArr[i] = 0;
   }
@@ -95,7 +94,11 @@ cilk int main(int argc, char **argv) {
   sync;
 
   freeze(x);
-  printf("Result is: %s, act set matched: %s\n", show(x).text, show(get(x, t)).text);
+  printf("Result is: ");
+  show(x);
+  printf(", act set matched: ");
+  show(get(x, t));
+  printf("\n");
   free(D);
   free(x);
   freeSet(a1);

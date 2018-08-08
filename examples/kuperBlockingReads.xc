@@ -20,19 +20,25 @@ datatype Pair {
 
 // set up show methods
 
-string showInteger(Int* i) {
+void showInteger(Int* i) {
   match (i) {
-    I_Top() -> {return str("Error!");}
-    I(n) -> {return show(n);}
-    I_Bot() -> {return str("?");}
+    I_Top() -> {printf("Error!");}
+    I(n) -> {printf("%d", n);}
+    I_Bot() -> {printf("?");}
   } 
 }
 
-string showPair(Pair* p) {
+void showPair(Pair* p) {
   match (p) {
-    Top() -> {return str("Error!");}
-    P(i1, i2) -> {return str("(") + showInteger(i1) + str(", ") + showInteger(i2) + str(")");}
-    Bot() -> {return str("?");}
+    Top() -> {printf("Error!");}
+    P(i1, i2) -> {
+      printf("(");
+      showInteger(i1);
+      printf(", ");
+      showInteger(i2);
+      printf(")");
+    }
+    Bot() -> {printf("?");}
   }
 }
 
@@ -156,7 +162,9 @@ int main(int argc, char **argv) {
   Lvar<Pair*>* p = newLvar(D);
   put(p, P(I(3), I(4)));
   ActivationSet<Pair*>* v1 = get(p, t);
-  printf("v1 = %s\n", show(v1).text);
+  printf("v1 = ");
+  show(v1);
+  printf("\n");
 
   // clean up
 

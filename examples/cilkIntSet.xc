@@ -6,8 +6,8 @@ int eqint(int i1, int i2) {
   return i1 == i2;
 }
 
-string showint(int i) {
-  return show(i);
+void showint(int i) {
+  printf("%d", i);
 }
 
 typedef datatype Set_int Set_int;
@@ -17,26 +17,27 @@ datatype Set_int {
   int_Top();
 };
 
-string showInner_int(Set_int* set) {
-  string result = str("");
+void showInner_int(Set_int* set) {
   match (set) {
     int_Empty() -> {}
     int_Set(hd, tl) -> {
-      result = showint(hd);
+      showint(hd);
       match (tl) {
         int_Empty() -> {} 
         _ -> {
-          result += ", " + showInner_int(tl);
+          printf(", ");
+          showInner_int(tl);
         }
       }
     }
-    int_Top() -> {result = str("Top()");}
+    int_Top() -> {printf("Top()");}
   }
-  return result;
 }
 
-string showSet_int(Set_int* set) {
-  return "{" + showInner_int(set) + "}";
+void showSet_int(Set_int* set) {
+  printf("{");
+  showInner_int(set);
+  printf("}");
 }
 
 // returns 1 if set1 is a subset of set2, 0 otherwise
@@ -141,9 +142,13 @@ cilk int main(int argc, char **argv) {
 
   ThresholdSet<Set_int*> *t = thresholdSet(D, 1){activationSet(D){int_Empty()}};
   ActivationSet<Set_int*>*  result = get(set, t);
-  printf("Act Set: %s\n", show(result).text);
+  printf("Act Set: ");
+  show(result);
+  printf("\n");
   Set_int* frozen = freeze(set);
-  printf("Frozen Lvar: %s\n", show(set).text);
+  printf("Frozen Lvar: ");
+  show(set);
+  printf("\n");
   //put(set, int_Empty());
   free(D);
   free(set);

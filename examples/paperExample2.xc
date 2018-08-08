@@ -18,8 +18,8 @@ int lubInt(int n1, int n2) {
   return n2;
 }
 // display function for our lattice
-string showInteger(int n) {
-  return show(n);
+void showInteger(int n) {
+  printf("%d", n);
 }
 int main(int argc, char **argv) {
   // set up lattice
@@ -33,9 +33,13 @@ int main(int argc, char **argv) {
   put(x, 42);
   ActivationSet<int> * result = get(x, t);
   freeze(x);
-  printf("Value of x: %s\n", show(x).text);
+  printf("Value of x: ");
+  show(x); 
+  printf("\n");
   if (result != NULL) {
-    printf("Result of get: %s\n", show(result).text);
+    printf("Result of get: ");
+    show(result);
+    printf("\n");
   }
   else {
     printf("Result of get: NULL\n");

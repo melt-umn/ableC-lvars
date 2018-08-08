@@ -69,7 +69,9 @@ cilk int main(int argc, char **argv) {
   spawn success = sumInChunks(l, exArr, size, numChunks);
   sync;
   freeze(l);
-  printf("result = %s\n", show(l).text);
+  printf("result = ");
+  show(l);
+  printf("\n");
 
   // clean up
 

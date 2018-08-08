@@ -260,49 +260,49 @@ Color* lubColor(Color* c1, Color* c2) {
   }
 }
 
-string showColor(Color* c) {
+void showColor(Color* c) {
   match (c) {
     Bottom() -> { 
-      return str("Uncolored");
+      printf("Uncolored");
     }
     Red() -> { 
-      return str("Red");
+      printf("Red");
     }
     RedOrange() -> { 
-      return str("Red-Orange");
+      printf("Red-Orange");
     }
     Orange() -> { 
-      return str("Orange");
+      printf("Orange");
     }
     YellowOrange() -> { 
-      return str("Yellow-Orange");
+      printf("Yellow-Orange");
     }
     Yellow() -> { 
-      return str("Yellow");
+      printf("Yellow");
     }
     YellowGreen() -> { 
-      return str("Yellow-Green");
+      printf("Yellow-Green");
     }
     Green() -> { 
-      return str("Green");
+      printf("Green");
     }
     BlueGreen() -> { 
-      return str("Blue-Green");
+      printf("Blue-Green");
     }
     Blue() -> { 
-      return str("Blue");
+      printf("Blue");
     }
     BlueViolet() -> { 
-      return str("Blue-Violet");
+      printf("Blue-Violet");
     }
     Violet() -> { 
-      return str("Violet");
+      printf("Violet");
     }
     RedViolet() -> { 
-      return str("Red-Violet");
+      printf("Red-Violet");
     }
     Top() -> { 
-      return str("Invalid Color");
+      printf("Invalid Color");
     }
   }
 }
@@ -351,9 +351,13 @@ int main(int argc, char **argv) {
       printf("Invalid get.\n");
     }
     else {
-      printf("Activation Set Matched: %s\n", show(result).text);
+      printf("Activation Set Matched: ");
+      show(result);
+      printf("\n");
       freeze(x);
-      printf("Actual value: %s\n", show(x).text);
+      printf("Actual value: ");
+      show(x);
+      printf("\n");
     }
     free(D);
     free(c1);

@@ -10,23 +10,21 @@ datatype Bits {
   B_Bot();
 };
 
-string showBitArr(int numBits, int* arr) {
-  string result = str("");
+void showBitArr(int numBits, int* arr) {
   for (int i = 0; i < numBits; i++) {
     if (arr[i]) {
-      result += str("1");
+      printf("1");
     }
     else { 
-      result += str("0"); 
+      printf("0"); 
     }
   }
-  return result;
 }
 
-string showBits(Bits* b) {
+void showBits(Bits* b) {
   match (b) {
-    B_Top() -> {return str("Error!");}
-    B_Bot() -> {return str("?");}
+    B_Top() -> {printf("Error!");}
+    B_Bot() -> {printf("?");}
     BitArr(numBits, arr) -> {showBitArr(numBits, arr);}
   }
 }

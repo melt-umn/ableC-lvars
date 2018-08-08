@@ -75,24 +75,28 @@ int isIntSubset(intSet* set1, intSet* set2) {
 
 // show method
 
-string showInnerIntSet(intSet* set) {
+void showInnerIntSet(intSet* set) {
   match (set) {
-    iSet_Top() -> {return str("Error!");}
-    iSet_Empty() -> {return str("");}
+    iSet_Top() -> {printf("Error!");}
+    iSet_Empty() -> {}
     iSet(hd, tl) -> {
-      string result = show(hd);
+      show(hd);
       match (tl) {
-        iSet_Top() -> {return str("Error!");}
-        iSet_Empty() -> {return result;}
-        iSet(_, _) -> {return result + ", " + show(tl);}
+        iSet_Top() -> {printf("Error!");}
+        iSet_Empty() -> {}
+        iSet(_, _) -> {
+          printf(", ");
+          show(tl);
+        }
       }
     }
   }
 }
 
-string showIntSet(intSet* set) {
-  string result = str("{");
-  return showInnerIntSet(set) + str("}");
+void showIntSet(intSet* set) {
+  printf("{");
+  showInnerIntSet(set);
+  printf("}");
 }
 
 // leq method

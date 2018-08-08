@@ -105,12 +105,12 @@ double lubD(double n1, double n2) {
 // note that we still need to include these, since we can't directly pass in
 // show() to our lattice constructor
 
-string showInteger(int n) {
-  return show(n);
+void showInteger(int n) {
+  printf("%d", n);
 }
 
-string showDouble(double n) {
-  return show(n);
+void showDouble(double n) {
+  printf("%f", n);
 }
 
 int main(int argc, char **argv) {
@@ -162,8 +162,11 @@ int main(int argc, char **argv) {
   // try to add activation set from another lattice to a threshold set
   ActivationSet<double> * a4 = activationSet(D2){8.5};
   ThresholdSet<double> *t2 = thresholdSet(D2, 1){a4};
-  printf("Showing a threshold set: %s\n", show(t2).text);
-  printf("Showing an activation set: %s\n", show(a4).text);
+  printf("Showing a threshold set: ");
+  show(t2);
+  printf("\nShowing an activation set: ");
+  show(a4);
+  printf("\n");
 
   // ****************** Step 5. Attempt to get value(s) of lvar(s) ************
 
