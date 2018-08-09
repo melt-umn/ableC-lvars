@@ -464,7 +464,7 @@ static a _freeze(Lvar<a>* l) {
   return result;
 }
 
-// testing functions
+// ***************************** testing functions ****************************
 
 // must specify two example elements such that the first precedes
 // the second in the lattice

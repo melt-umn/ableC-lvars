@@ -4,41 +4,43 @@
 
 #### POPL Paper:
 
-+ Future work-- way to nicely implement sets for unknown data type for users to access without set-up, other "pre-fab" data structures so users can just create lattice and lvars without worrying about lub etc. (avoid complicated set up)
-+ Add in stuff with running example
-+ Refer to style resources and spiff up writing
++ Add references to big examples
++ Talk about removing top and bot in future work
++ Look at style resources and spiff up writing
 
-#### Other:
+#### LVars Functionality:
+
++ Use new free functionality within activation, threshold, etc. if helpful to free individual elements
++ Add freeLattice functionality (to free top and bottom)
++ "free all acts" function for threshold set?
++ Have Top() and Bot() automatically generated
++ Add checkLattice() to concrete/abstract syntax, with type checking
++ Work on speeding up thread waiting/locking process
++ Could overload get so that if no threshold is specified, defaults to bottom element?
++ Implement other Lvish features-- incrementable counter, event handlers
++ Getter methods
+
+#### Examples:
 
 + Increase parallelism in customer example (go through in chunks?)
-+ Use new free functionality within activation, threshold, etc. if helpful
-+ Add freeLattice functionality
-+ Add functions to check lattice leq and lub
-+ "free all acts" function for threshold set?
-+ Manually free in examples (run with valgrind?)
-+ Think about freeing in put
-+ Try GC patch
-+ Implement better cilk examples (Read from different files? Sum random numbers until they reach a certain point? A better set example?) Bitwise or? Check out Cilk paper
-+ Look over and tidy up examples and header file (to work better with new set up)
-+ Add locks where needed in header file
-+ Have Top() and Bot() automatically generated
-+ Provide "check lattice" function to check lub and leq
-
-### Less urgent:
-
-+ Work on speeding up thread waiting/locking process
++ Add frees
++ Check out Cilk paper for good examples
 + Add freezing examples
-+ Implement more prefab lattices/data types
-+ Update readme to include new examples and the addition of freezing
-+ Could overload get so that if no threshold is specified, defaults to bottom element?
-+ Would it be better to create a set "template" based on C arrays instead of algebraic datatypes (more space-efficient)?
-+ If an update would take the state of an lvar to top(), should the update just not be performed, or should the program error out? Or should this depend on the debug mode? Does this affect determinism?
-+ Is there a way to error out only on the first missing include of a header?
 + Better positive tests
-+ Check on leq with freezing-- do I need to check further?
-+ Implement getFst and getSnd, etc.
-+ Implement other Lvish features-- incrementable counter, event handlers
-+ Get lattice method (and possible other getters) for lvars.xh
++ Add tests for new features
+
+#### Usability:
+
++ Look over and tidy up examples and header file
++ Implement more prefab lattices/data types
++ See if int_set.h lattice can be generalized to other base types to create a more flexible set lattice
++ Update readme guide to include new examples, the addition of freezing and freeing, other updates
++ Is there a way to error out only on the first missing include of a header?
+
+### Things to think about:
+
++ Does it make sense to free old value in put?
++ If an update would take the state of an lvar to top(), should the update just not be performed, or should the program error out? Or should this depend on the debug mode? Does this affect determinism?
 
 ## Guide:
 
