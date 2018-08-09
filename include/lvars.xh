@@ -47,6 +47,13 @@ static Lattice<a>* _newLattice(a least, a greatest, int (*leq)(),
   return l;
 }
 
+template<a>
+static void freeLattice(Lattice<a>* lat) {
+  lat->_free(lat->_bottom);
+  lat->_free(lat->_top);
+  free(lat);
+}
+
 //*************************** Activation set **********************************
 
 template<a> struct _ActivationSet {
@@ -128,6 +135,9 @@ static int _resizeActSet(ActivationSet<a>* act, int newSize) {
 // to free an activation set and its components
 template<a>
 static int _freeActivation(ActivationSet<a>* act) {
+  for (int i = 0; i < act->_index; i++) {
+    act->_lattice->_free(act->_set[i]);
+  }
   free(act->_set);
   free(act);
   return 1;
@@ -263,7 +273,7 @@ static int _resizeThresholdSet(ThresholdSet<a>* t, int newSize) {
  return 1;
 }
 
-// to free a threshold set and all of its activation sets
+// to free a threshold set
 
 template<a>
 static int _freeThreshold(ThresholdSet<a> *t) {
@@ -271,6 +281,17 @@ static int _freeThreshold(ThresholdSet<a> *t) {
   free(t);
   return 1;
 }
+
+// to free all of the activation sets in a threshold set
+// note that this only makes sense if the activation sets will
+// not be needed again and are not shared with other threshold sets
+
+template<a>
+void freeActSets(ThresholdSet<a>* t) {
+  for (int i = 0; i < t->_index; i++) {
+    freeSet(t->_a_sets[i]);
+  }
+} 
 
 // to print a threshold set, using the show method of the lattice
 
@@ -327,8 +348,8 @@ template<a>
 static void _freeLvar(Lvar<a>* l) {
   pthread_mutex_lock(&(l->_mutex));
   l->_lattice->_free(l->_value);
-  free(l);
   pthread_mutex_unlock(&(l->_mutex));
+  free(l);
   return;
 }
 
@@ -397,6 +418,31 @@ static int _put(Lvar<a>* l, a newState) {
     l->_lattice->_free(oldState);
   }
   l->_value = newValue;
+
+  pthread_mutex_unlock(&(l->_mutex));
+  pthread_cond_broadcast(&(l->_cond));
+
+  return 1;
+}
+
+// destructive version of put
+
+template<a>
+static int _put_destructive(Lvar<a>* l, a newState) {
+
+  pthread_mutex_lock(&(l->_mutex));
+
+  if (l->_frozen) {
+     #ifdef DEBUG 
+        printf("Error: can't write to a frozen lvar.\n");
+        exit(0);
+     #endif
+    pthread_mutex_unlock(&(l->_mutex));
+    return 0;
+  }
+
+  a oldState = l->_value;
+  l->_value = l-> _lattice-> _lub(oldState, newState);
 
   pthread_mutex_unlock(&(l->_mutex));
   pthread_cond_broadcast(&(l->_cond));

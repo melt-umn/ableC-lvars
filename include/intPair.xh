@@ -144,32 +144,19 @@ int eqIntPair(Pair* p1, Pair* p2) {
   }
 }
 
-ActivationSet<Pair*>* getFst(Lvar<Pair*>* l, int start, int end) {
-  Lattice<Pair*>* D = inst getLattice<Pair*>(l);
-  ThresholdSet<Pair*>* t = thresholdSet(D, end - start + 1);
-  for (int i = start; i < end; i++) {
-    ActivationSet<Pair*>* a = activationSet(D, 1){IP(I(i), I_Bot())}; 
-    add(t, a);
+void free_intPair(Pair* p) {
+  match (p) {
+    IP(i1, i2) -> {
+      freeInteger(i1);
+      freeInteger(i2);
+      free(p);
+    }
+    _ -> {free(p);}
   }
-  ActivationSet<Pair*>* result = get(l, t); // how to handle freeing of act sets here?
-  freeSet(t);
-  return result;
-}
-
-ActivationSet<Pair*>* getSnd(Lvar<Pair*>* l, int start, int end) {
-  Lattice<Pair*>* D = inst getLattice<Pair*>(l);
-  ThresholdSet<Pair*>* t = thresholdSet(D, end - start + 1);
-  for (int i = start; i < end; i++) {
-    ActivationSet<Pair*>* a = activationSet(D, 1){IP(I_Bot(), I(i))}; 
-    add(t, a);
-  }
-  ActivationSet<Pair*>* result = get(l, t);
-  freeSet(t);
-  return result;
 }
 
 Lattice<Pair*>* intPairLattice() {
-  return lattice(IP_Bot(), IP_Top(), leq_intPair, lub_intPair, show_intPair);
+  return lattice(IP_Bot(), IP_Top(), leq_intPair, lub_intPair, show_intPair, free_intPair);
 }
 
 #endif

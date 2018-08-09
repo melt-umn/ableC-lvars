@@ -5,20 +5,27 @@
 #### POPL Paper:
 
 + Add references to big examples
-+ Talk about removing top and bot in future work
++ Discuss future work
 + Look at style resources and spiff up writing
++ Update lvars + go example to use run/channels instead, and update paper to not discuss Go?
++ Rather than syncing with channels, use get operation w/in lvars
++ Use destructive version in big graph example
++ Talk about problems with freeing in drawbacks sections
++ Fix freeing in graph example
 
 #### LVars Functionality:
 
 + Use new free functionality within activation, threshold, etc. if helpful to free individual elements
-+ Add freeLattice functionality (to free top and bottom)
 + "free all acts" function for threshold set?
 + Have Top() and Bot() automatically generated
 + Add checkLattice() to concrete/abstract syntax, with type checking
++ Add freeActSets() to concrete/abstract syntax, with type checking
++ Add freeLattice() to concrete/abstract syntax, with type checking
 + Work on speeding up thread waiting/locking process
 + Could overload get so that if no threshold is specified, defaults to bottom element?
 + Implement other Lvish features-- incrementable counter, event handlers
 + Getter methods
++ Add destructive put to concrete/abstract syntax, with type checking
 
 #### Examples:
 
@@ -36,6 +43,7 @@
 + See if int_set.h lattice can be generalized to other base types to create a more flexible set lattice
 + Update readme guide to include new examples, the addition of freezing and freeing, other updates
 + Is there a way to error out only on the first missing include of a header?
++ Should lub always create a new copy instead of referencing old ones so that programmer can free without messing up lvar, instead of sometimes returning the original and sometimes making a new one? Otherwise can't safely free lub taken in passing, since might be freeing a value you need.
 
 ### Things to think about:
 
