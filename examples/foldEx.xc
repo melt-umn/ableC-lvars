@@ -47,28 +47,45 @@ int leqInt(Int* i1, Int* i2) {
   }
 }
 
-/*
+// lvar<int> accum = make_lvar(g, leq);
+// note that we can't initialize globally, since "initializer element is not constant"
 
-lvar<int> accum = make_lvar(g, leq);
+int TASK_SIZE = 4;
+int NUM_THREADS = 1;
+int N = 4;
+Lattice<Int*>* lat;
+Lvar<Int*>* accum;
 
-cilk int task(int *xs)
-{ for (int i = 0; i < TASK_SIZE; ++i) { 
-    put f(xs[i]) in accum;
+cilk int task(int *xs) {
+  for (int i = 0; i < TASK_SIZE; ++i) { 
+    //put f(xs[i]) in accum;
+    put(accum, I(f(xs[i])));
   }
   cilk return 0;
 }
 
-*/
-
 cilk int main (int argc, char **argv) {
-/*
+  lat = lattice(I_Bot(), I_Top(), leqInt, lubInt, showInteger, freeInteger);
+  accum = newLvar(lat);
+
+  int* arr = malloc(N * sizeof(int));
+  for (int i = 0; i < N; i++) {
+    arr[i] = i + 1;
+  }
+
   // declare, allocate and fill array `arr` with 
   // `NUM_THREADS * TASK_SIZE` values 
+
+  int v;
   for (int i = 0; i < NUM_THREADS; ++i) {
-    spawn v = task (&arr[i * TASK_SIZE])
+    spawn v = task (&arr[i * TASK_SIZE]);
   }
   sync;
-  freeze accum;
-  printf ("Result: %d\n", get accum);*/
+  // freeze accum
+  freeze(accum);
+  //printf("Result: %d\n", get accum);
+  printf("Result: ");
+  show(accum);
+  printf("\n");
   cilk return 1;
 }

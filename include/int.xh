@@ -25,4 +25,27 @@ void freeInteger(Int* i) {
   free(i);
 }
 
+int eqInt(Int* i1, Int* i2) {
+  match (i1) {
+    I_Top() -> {
+      match (i2) {
+        I_Top() -> {return 1;}
+        _ -> {return 0;}
+      }
+    }
+    I_Bot() -> {
+      match (i2) {
+        I_Bot() -> {return 1;}
+        _ -> {return 0;}
+      }
+    }
+    I(n1) -> {
+      match (i2) {
+        I(n2) -> {return n1 == n2;}
+        _ -> {return 0;}
+      }
+    }
+  }
+}
+
 #endif // INT_H_

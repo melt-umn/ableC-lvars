@@ -2,38 +2,32 @@
 
 ## To-do:
 
-### Urgent:
-
-#### Big Example:
-
-+ Increase parallelism in customer example
-+ Use new free functionality within activation, threshold, etc. if helpful
-
 #### POPL Paper:
 
-+ mention possible issues with multiple blocked gets and number of threads
 + Future work-- way to nicely implement sets for unknown data type for users to access without set-up, other "pre-fab" data structures so users can just create lattice and lvars without worrying about lub etc. (avoid complicated set up)
 + Add in stuff with running example
 + Refer to style resources and spiff up writing
-+ Need examples with no side effects until after syncing
-+ Revise "future work" section
-+ Talk about limited guarantees of determinism with C vs. functional programming language
 
 #### Other:
 
++ Increase parallelism in customer example (go through in chunks?)
++ Use new free functionality within activation, threshold, etc. if helpful
++ Add freeLattice functionality
++ Add functions to check lattice leq and lub
++ "free all acts" function for threshold set?
++ Manually free in examples (run with valgrind?)
++ Think about freeing in put
++ Try GC patch
 + Implement better cilk examples (Read from different files? Sum random numbers until they reach a certain point? A better set example?) Bitwise or? Check out Cilk paper
 + Look over and tidy up examples and header file (to work better with new set up)
-+ Fix top <= top in examples and tests
 + Add locks where needed in header file
-+ Get rid of isTop()
 + Have Top() and Bot() automatically generated
-+ Could use leq in place of top-- check leq(Top(), whatever): if true, must be top.
++ Provide "check lattice" function to check lub and leq
 
 ### Less urgent:
 
 + Work on speeding up thread waiting/locking process
 + Add freezing examples
-+ Lvars as global variables?
 + Implement more prefab lattices/data types
 + Update readme to include new examples and the addition of freezing
 + Could overload get so that if no threshold is specified, defaults to bottom element?
@@ -42,10 +36,9 @@
 + Is there a way to error out only on the first missing include of a header?
 + Better positive tests
 + Check on leq with freezing-- do I need to check further?
-+ Implement getFst and getSnd to help users avoid creating threshold sets/activation sets
-+ Implement other Lvish features-- incrementable counter, even handlers
++ Implement getFst and getSnd, etc.
++ Implement other Lvish features-- incrementable counter, event handlers
 + Get lattice method (and possible other getters) for lvars.xh
-+ Programmer might not need to specify isTop() if we pattern match inside the header
 
 ## Guide:
 

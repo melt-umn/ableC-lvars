@@ -300,6 +300,7 @@ template<a> struct _Lvar {
 
 template<a>
 static void _showLvar(Lvar<a>* l) {
+  pthread_mutex_lock(&(l->_mutex));
   if (l->_frozen) {
     l->_lattice->_show(l->_value);
   }
@@ -312,6 +313,7 @@ static void _showLvar(Lvar<a>* l) {
 
     printf("<Lvar Value Unavailable>");
   }
+  pthread_mutex_unlock(&(l->_mutex));
 }
 
 // must be used only after completely done with lvar (synced, etc)
@@ -323,8 +325,10 @@ static void _defaultFree(a val) {
 
 template<a>
 static void _freeLvar(Lvar<a>* l) {
+  pthread_mutex_lock(&(l->_mutex));
   l->_lattice->_free(l->_value);
   free(l);
+  pthread_mutex_unlock(&(l->_mutex));
   return;
 }
 
@@ -341,6 +345,11 @@ static Lvar<a>* _new(Lattice<a>* l) {
   lvarNew->_cond = (pthread_cond_t) PTHREAD_COND_INITIALIZER;
   lvarNew->_mutex = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
   return lvarNew;
+}
+
+template<a>
+static Lattice<a>* getLattice(Lvar<a>* l) {
+  return l->_lattice;
 }
 
 //*********************** put and get methods ***************************
@@ -453,6 +462,147 @@ static a _freeze(Lvar<a>* l) {
   a result = l->_value;
   pthread_mutex_unlock(&(l->_mutex));
   return result;
+}
+
+// testing functions
+
+// must specify two example elements such that the first precedes
+// the second in the lattice
+
+template<a>
+int checkLeq(Lattice<a>* D, a repElemSmall, a repElemBig) { 
+  int result = 1;
+  if (!D->_leq(D->_bottom, D->_bottom)) {
+    printf("leq(bottom, bottom) should return 1\n");
+    result = 0;
+  }
+  if (!D->_leq(D->_top, D->_top)) {
+    printf("leq(top, top) should return 1\n");
+    result = 0;
+  } 
+  if (!D->_leq(D->_bottom, D->_top)) {
+    printf("leq(bottom, top) should return 1\n");
+    result = 0;
+  }
+  if (D->_leq(D->_top, D->_bottom)) {
+    printf("leq(top, bottom) should return 0\n");
+    result = 0;
+  }
+  if (!D->_leq(repElemSmall, repElemBig)) {
+    printf("according to specified test values, leq(");
+    D->_show(repElemSmall);
+    printf(", ");
+    D->_show(repElemBig);
+    printf(") should return 1\n");
+    result = 0;
+  }
+  return result;
+}
+
+// must specify two representative elements and their least upper bound,
+// along with an equality function for the base type of the lattice
+
+template<a>
+int checkLub(Lattice<a>* D, a rep1, a rep2, a expLub, int (*eq)()) {
+  int result = 1;
+  if (!eq(D->_lub(D->_top, D->_top), D->_top)) {
+    printf("lub(top, top) should return top\n");
+    result = 0;
+  }
+  if (!eq(D->_lub(D->_bottom, D->_bottom), D->_bottom)) {
+    printf("lub(bottom, bottom) should return bottom\n");
+    result = 0;
+  }
+  if (!eq(D->_lub(D->_top, D->_bottom), D->_top)) {
+    printf("lub(top, bottom) should return top\n");
+    result = 0;
+  }
+  if (!eq(D->_lub(D->_bottom, D->_top), D->_top)) {
+    printf("lub(bottom, top) should return top\n");
+    result = 0;
+  }
+  if (!eq(D->_lub(rep1, D->_bottom), rep1)) {
+    printf("lub(");
+    D->_show(rep1);
+    printf(", bottom) should return ");
+    D->_show(rep1);
+    printf("\n");
+    result = 0;
+  }
+  if (!eq(D->_lub(D->_bottom, rep1), rep1)) {
+    printf("lub(bottom, ");
+    D->_show(rep1);
+    printf(") should return ");
+    D->_show(rep1);
+    printf("\n");
+    result = 0;
+  }
+  if (!eq(D->_lub(rep1, D->_top), D->_top)) {
+    printf("lub(");
+    D->_show(rep1);
+    printf(", top) should return top\n");
+    result = 0;
+  }
+  if (!eq(D->_lub(D->_top, rep1), D->_top)) {
+    printf("lub(top, ");
+    D->_show(rep1);
+    printf(") should return top\n");
+    result = 0;
+  }
+  if (!eq(D->_lub(rep2, D->_bottom), rep2)) {
+    printf("lub(");
+    D->_show(rep2);
+    printf(", bottom) should return ");
+    D->_show(rep2);
+    printf("\n");
+    result = 0;
+  }
+  if (!eq(D->_lub(D->_bottom, rep2), rep2)) {
+    printf("lub(bottom, ");
+    D->_show(rep2);
+    printf(") should return ");
+    D->_show(rep2);
+    printf("\n");
+    result = 0;
+  }
+  if (!eq(D->_lub(rep2, D->_top), D->_top)) {
+    printf("lub(");
+    D->_show(rep2);
+    printf(", top) should return top\n");
+    result = 0;
+  }
+  if (!eq(D->_lub(D->_top, rep2), D->_top)) {
+    printf("lub(top, ");
+    D->_show(rep2);
+    printf(") should return top\n");
+    result = 0;
+  } 
+  if (!eq(D->_lub(rep2, rep1), expLub)) {
+    printf("lub(");
+    D->_show(rep2);
+    printf(", "); 
+    D->_show(rep1);
+    printf(") should return ");
+    D->_show(expLub);
+    printf("\n");
+    result = 0;
+  }
+  if (!eq(D->_lub(rep1, rep2), expLub)) {
+    printf("lub(");
+    D->_show(rep1);
+    printf(", "); 
+    D->_show(rep2);
+    printf(") should return ");
+    D->_show(expLub);
+    printf("\n");
+    result = 0;
+  }
+  return result;
+}
+
+template<a>
+int checkLattice(Lattice<a>* D, a repSmall, a repBig, a expLub, int (*eq)()) {
+  return inst checkLeq<a>(D, repSmall, repBig) && inst checkLub<a>(D, repSmall, repBig, expLub, eq);
 }
 
 #endif // LVARS_H_
