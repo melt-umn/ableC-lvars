@@ -1,0 +1,106 @@
+#ifndef _INTSETLVAR_H
+#define _INTSETLVAR_H
+
+#include "int_set.h"
+
+// leq methods
+
+int leqSetItr_int(IntSetItr* itr1, IntSet* set2) {
+  if (intsetitr_has_next(itr1)) {
+    return intset_member(set2, intsetitr_next(itr1)) && leqSetItr_int(itr1, set2);
+  }
+  return 1;
+}
+
+int leqSet_int(IntSet* set1, IntSet* set2) {
+  if (set1 == NULL && set2 == NULL) {
+    return 1;
+  }
+  if (set1 == NULL) {
+    return 0;
+  }
+  if (set2 == NULL) {
+    return 1;
+  }
+  if (intset_is_empty(set1)) {
+    return 1;
+  }
+  if (intset_is_empty(set2)) {
+    return 0;
+  }
+  IntSetItr* newitr = new_intsetitr(set1);
+  int result = leqSetItr_int(newitr, set2);
+  delete_intsetitr(newitr);
+  return result;
+}
+
+// show methods
+
+void showSet_helper(IntSetItr* itr) {
+  if (intsetitr_has_next(itr)) {
+    int next = intsetitr_next(itr);
+    if (intsetitr_has_next(itr)) {
+      printf("%d, ", next);
+      showSet_helper(itr);
+    }
+    printf("%d", next);
+  }
+}
+
+void showSet_int(IntSet* set) {
+  if (set == NULL) {
+    printf("Error!");
+  }
+  else {
+    printf("{");
+    IntSetItr* newitr = new_intsetitr(set);
+    showSet_helper(newitr);
+    delete_intsetitr(newitr);
+    printf("}");
+  }
+}
+
+// free method
+
+void freeSet_int(IntSet* set) {
+  if (set != NULL) {
+    delete_intset(set);
+  }
+}
+
+
+// lub methods
+
+IntSet* lubSet_int(IntSet* set1, IntSet* set2) {
+  if (set1 == NULL || set2 == NULL) {
+    freeSet_int(set1);
+    freeSet_int(set2);
+    return NULL;
+  }
+  if (intset_is_empty(set1)) {
+    return set2;
+  }
+  if (intset_is_empty(set2)) {
+    freeSet_int(set2);
+    return set1;
+  }
+  intset_union(set1, set2);
+  freeSet_int(set2);
+  return set1;
+}
+
+
+// other methods
+
+int putIntSet(Lvar<IntSet*>* l, int val) {
+  IntSet* new = new_intset();
+  intset_insert(new, val);
+  int result = inst _put_destructive<IntSet*>(l, new); 
+  return result;
+}
+
+Lattice<IntSet*> * latticeint() {
+  return lattice(new_intset(), (IntSet*) NULL, leqSet_int, lubSet_int, showSet_int, freeSet_int);
+}
+
+#endif

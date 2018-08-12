@@ -109,6 +109,7 @@ int putIntSet(Lvar<intSetLat*>* l, int val) {
   intset_insert(new, val);
   intSetLat* next = iSet(new);
   int result = inst _put_destructive<intSetLat*>(l, next); 
+  //free(next);
   return result;
 }
 

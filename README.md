@@ -4,19 +4,18 @@
 
 #### POPL Paper:
 
++ Add freeing to fold examples
++ Put better put in generic fold header
++ Provide examples of handy concrete/abstract syntax things
 + Add references to big examples
 + Discuss future work
 + Look at style resources and spiff up writing
-+ Update lvars + go example to use run/channels instead, and update paper to not discuss Go?
-+ Rather than syncing with channels, use get operation w/in lvars
-+ Use destructive version in big graph example
 + Talk about problems with freeing in drawbacks sections
-+ Fix freeing in graph example
++ Fix freeing in graph example (still some new int sets that are unfreed)
 
 #### LVars Functionality:
 
 + Use new free functionality within activation, threshold, etc. if helpful to free individual elements
-+ "free all acts" function for threshold set?
 + Have Top() and Bot() automatically generated
 + Add checkLattice() to concrete/abstract syntax, with type checking
 + Add freeActSets() to concrete/abstract syntax, with type checking

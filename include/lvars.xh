@@ -414,7 +414,8 @@ static int _put(Lvar<a>* l, a newState) {
   }
   // might want to remove and leave up to programmer to free
   // in case this frees something that they didn't want to free
-  if (oldState != l->_lattice->_bottom && oldState != l->_lattice->_top) {
+  if (!(l->_lattice->_leq(oldState, l->_lattice->_bottom))
+      && !(l->_lattice->_leq(l->_lattice->_top, oldState))) {
     l->_lattice->_free(oldState);
   }
   l->_value = newValue;
