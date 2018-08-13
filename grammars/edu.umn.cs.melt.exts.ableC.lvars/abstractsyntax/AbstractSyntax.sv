@@ -177,6 +177,30 @@ top::Expr ::= lat::Expr
   forwards to mkErrorCheck(localErrors, fwrd);
 }
 
+abstract production freeActSets
+top::Expr ::= thresh::Expr
+{
+  propagate substituted;
+  top.pp = pp"freeActSets(${thresh.pp})";
+
+  local localErrors::[Message] =
+    checkLvarHeaderDef(top.location, top.env) ++ thresh.errors;
+
+  local fwrd::Expr =
+    case thresh.typerep of
+      pointerType(_, threshType(_, t)) -> 
+        ableC_Expr {
+          inst _freeActSets<$directTypeExpr{t}>($Expr{thresh})
+        }
+    | _ ->
+        errorExpr([err(top.location, 
+        "Can't use freeActSets() with <" ++ showType(thresh.typerep) ++ ">")],
+        location=top.location)
+    end;
+
+  forwards to mkErrorCheck(localErrors, fwrd);
+}
+
 // ************************* show productions *********************************
 
 aspect function getShowOverloadProd
@@ -464,6 +488,87 @@ top::Expr ::= lvar::Expr
 
   forwards to 
     mkErrorCheck(localErrors, fwrd);
+}
+
+//**************************** check productions *******************************
+
+abstract production checkLeq
+top::Expr ::= lat::Expr smallElem::Expr bigElem::Expr
+{
+  propagate substituted;
+  top.pp = pp"checkLeq(${lat.pp}, ${smallElem.pp}, ${bigElem.pp})";
+
+  local localErrors::[Message] = 
+    checkLvarHeaderDef(top.location, top.env) ++ lat.errors
+    ++ smallElem.errors ++ bigElem.errors;
+
+  local fwrd::Expr =
+    case lat.typerep of
+      pointerType(_, latticeType(_, l_t)) ->
+        if compatibleTypes(l_t, smallElem.typerep, false, true) &&
+           compatibleTypes(l_t, bigElem.typerep, false, true)
+        then 
+          ableC_Expr{
+            inst _checkLeq<$directTypeExpr{l_t}>($Expr{lat}, 
+                            $Expr{smallElem}, $Expr{bigElem})
+          }
+        else errorExpr([err(top.location, 
+          "Sample lattice elements in checkLeq() must match base type "
+          ++ " of lattice (should be type <"
+          ++ showType(lat.typerep) ++ ">)")], location=top.location)
+    | _ -> errorExpr([err(top.location, 
+          "checkLeq() expected first argument of type Lattice*, got type <"
+          ++ showType(lat.typerep) ++ ">")], location=top.location)
+    end;
+
+  forwards to 
+    mkErrorCheck(localErrors, fwrd);
+}
+
+abstract production checkLub
+top::Expr ::= lat::Expr rep1::Expr rep2::Expr expLub::Expr eqFunc::Expr
+{
+  propagate substituted;
+  top.pp = pp"checkLub(${lat.pp}, ${rep1.pp}, ${rep2.pp}, ${expLub.pp}, ${eqFunc.pp})";
+
+  local localErrors::[Message] = 
+    checkLvarHeaderDef(top.location, top.env) ++ lat.errors
+    ++ rep1.errors ++ rep2.errors ++ expLub.errors ++ eqFunc.errors;
+
+  local fwrd::Expr =
+    case lat.typerep of
+      pointerType(_, latticeType(_, l_t)) ->
+        if compatibleTypes(l_t, rep1.typerep, false, true) &&
+           compatibleTypes(l_t, rep2.typerep, false, true) &&
+           compatibleTypes(l_t, expLub.typerep, false, true)
+        then 
+          ableC_Expr{
+            inst _checkLub<$directTypeExpr{l_t}>($Expr{lat}, 
+            $Expr{rep1}, $Expr{rep2}, $Expr{expLub}, $Expr{eqFunc})
+          }
+        else errorExpr([err(top.location, 
+          "Sample lattice elements in checkLub() must match base type "
+          ++ " of lattice (should be type <"
+          ++ showType(lat.typerep) ++ ">)")], location=top.location)
+    | _ -> errorExpr([err(top.location, 
+          "checkLub() expected first argument of type Lattice*, got type <"
+          ++ showType(lat.typerep) ++ ">")], location=top.location)
+    end;
+
+  forwards to 
+    mkErrorCheck(localErrors, fwrd);
+}
+
+abstract production checkLattice
+top::Expr ::= lat::Expr rep1::Expr rep2::Expr expLub::Expr eqFunc::Expr
+{
+  propagate substituted;
+  top.pp = pp"checkLattice(${lat.pp}, ${rep1.pp}, ${rep2.pp}, ${expLub.pp}, ${eqFunc.pp})";
+
+  forwards to 
+    andExpr(checkLeq(lat, rep1, rep2, location=top.location),
+    checkLub(lat, rep1, rep2, expLub, eqFunc, location=top.location),
+    location=top.location);
 }
 
 global builtin::Location = builtinLoc("lvars");

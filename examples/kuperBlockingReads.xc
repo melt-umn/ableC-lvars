@@ -10,7 +10,7 @@ int main(int argc, char **argv) {
   Lattice<Pair*> * D = intPairLattice(); 
   Pair* testP1 = IP(I_Bot(), I(3));
   Pair* testP2 = IP(I(4), I(3));
-  inst checkLattice<Pair*>(D, testP1, testP2, testP2, eqIntPair);
+  checkLattice(D, testP1, testP2, testP2, eqIntPair);
   free_intPair(testP1);
   free_intPair(testP2);
 
@@ -36,7 +36,7 @@ int main(int argc, char **argv) {
 
   // clean up
 
-  inst freeActSets<Pair*>(t);
+  freeActSets(t);
   freeSet(t);
   freeLvar(p);
   freeLattice(D);

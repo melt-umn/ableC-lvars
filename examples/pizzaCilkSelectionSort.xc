@@ -406,11 +406,11 @@ int nonCilk(int* arr, int size) {
   YN* hresult;
   YN* fresult;
   kresult = getVoteSearch(arr, size);
-  put(votes, Set(Kat(kresult), Empty()));
+  put Set(Kat(kresult), Empty()) in (votes);
   hresult = getVoteSearch(arr, size);
-  put(votes, Set(Horace(hresult), Empty()));
+  put Set(Horace(hresult), Empty()) in (votes);
   fresult = getVoteSearch(arr, size);
-  put(votes, Set(Franz(fresult), Empty()));
+  put Set(Franz(fresult), Empty()) in (votes);
 
   ActivationSet<VoteSet*>* getPiz = get(votes, t);
   if (getPiz == yesPizza) {

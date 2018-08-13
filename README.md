@@ -4,20 +4,17 @@
 
 #### PPOPP Paper:
 
-+ Figure out bug in colors example
++ Syntax: more like "put (n) in accum", "get accum t" "freeze accum," etc.
 + Add references to big examples
 + Discuss future work
 + Look at style resources and spiff up writing
 + Talk about problems with freeing in drawbacks sections
-+ Tidy up examples in parallel-examples
-+ Problem: if do get and value is top, will automatically match first activation set
++ Tidy up examples in parallel-examples, tidy up header file
 
 #### LVars Functionality:
 
 + Use new free functionality within activation, threshold, etc. if helpful to free individual elements
-+ Have Top() and Bot() automatically generated
-+ Add checkLattice() to concrete/abstract syntax, with type checking
-+ Add freeActSets() to concrete/abstract syntax, with type checking
++ Have Top() and Bot() automatically generated-- since test these in put, would it work to get rid of top and bottom entirely (just have bot be a starting state, and top an error state, but the user cannot manually put in either value?)
 + Work on speeding up thread waiting/locking process
 + Implement other Lvish features-- incrementable counter, event handlers
 + Getter methods

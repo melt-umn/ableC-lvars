@@ -287,7 +287,7 @@ static int _freeThreshold(ThresholdSet<a> *t) {
 // not be needed again and are not shared with other threshold sets
 
 template<a>
-void freeActSets(ThresholdSet<a>* t) {
+static void _freeActSets(ThresholdSet<a>* t) {
   for (int i = 0; i < t->_index; i++) {
     freeSet(t->_a_sets[i]);
   }
@@ -625,7 +625,7 @@ static a _freeze(Lvar<a>* l) {
 // the second in the lattice
 
 template<a>
-int checkLeq(Lattice<a>* D, a repElemSmall, a repElemBig) { 
+int _checkLeq(Lattice<a>* D, a repElemSmall, a repElemBig) { 
   int result = 1;
   if (!D->_leq(D->_bottom, D->_bottom)) {
     printf("leq(bottom, bottom) should return 1\n");
@@ -658,7 +658,7 @@ int checkLeq(Lattice<a>* D, a repElemSmall, a repElemBig) {
 // along with an equality function for the base type of the lattice
 
 template<a>
-int checkLub(Lattice<a>* D, a rep1, a rep2, a expLub, int (*eq)()) {
+int _checkLub(Lattice<a>* D, a rep1, a rep2, a expLub, int (*eq)()) {
   int result = 1;
   if (!eq(D->_lub(D->_top, D->_top), D->_top)) {
     printf("lub(top, top) should return top\n");
@@ -753,11 +753,6 @@ int checkLub(Lattice<a>* D, a rep1, a rep2, a expLub, int (*eq)()) {
     result = 0;
   }
   return result;
-}
-
-template<a>
-int checkLattice(Lattice<a>* D, a repSmall, a repBig, a expLub, int (*eq)()) {
-  return inst checkLeq<a>(D, repSmall, repBig) && inst checkLub<a>(D, repSmall, repBig, expLub, eq);
 }
 
 #endif // LVARS_H_

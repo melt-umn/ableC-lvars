@@ -18,7 +18,7 @@ int main(int argc, char **argv) {
 
   // try putting in a value
 
-  int success = put(x, Int(7));
+  int success = put Int(7) in (x);
   if (!success) {
     free(D);
     return 0;
