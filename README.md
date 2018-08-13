@@ -5,8 +5,6 @@
 #### POPL Paper:
 
 + Add freeing to fold examples
-+ Put better put in generic fold header
-+ Provide examples of handy concrete/abstract syntax things
 + Add references to big examples
 + Discuss future work
 + Look at style resources and spiff up writing
