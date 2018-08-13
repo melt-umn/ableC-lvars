@@ -18,7 +18,7 @@ int main(int argc, char **argv) {
 
   // try putting in a value
 
-  int success = put (Int(7)) in (x);
+  int success = put (Int(7)) in x;
   if (!success) {
     free(D);
     return 0;
@@ -39,7 +39,7 @@ int main(int argc, char **argv) {
   
   // try getting from lvar
   
-  ActivationSet<Nat*>*  result = get(x, t);
+  ActivationSet<Nat*>*  result = get (x) with t;
 
   if (result == NULL) {
     free(x);

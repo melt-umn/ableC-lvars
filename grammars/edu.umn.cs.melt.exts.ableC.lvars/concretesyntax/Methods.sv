@@ -14,67 +14,51 @@ marking terminal CheckLeq_t 'checkLeq' lexer classes {Ckeyword};
 marking terminal CheckLub_t 'checkLub' lexer classes {Ckeyword};
 marking terminal CheckLat_t 'checkLattice' lexer classes {Ckeyword};
 
-//closed nonterminal LvarInitializer_c with location, ast<Expr>, lattice;
-//closed nonterminal Lvar_c with location, ast<Expr>;
 terminal In_t 'in' lexer classes {Ckeyword};
-
-/*concrete productions top::LvarInitializer_c
-| ')'
-  { 
-    top.ast = newCall(top.lattice, location=top.location);
-  }
-
-concrete productions top::UnaryExpr_c
-| 'newLvar' '(' lattice::AssignExpr_c init::LvarInitializer_c
-  {
-    top.ast = init.ast;
-    init.lattice = lattice.ast;
-  }
-
-*/
+terminal With_t 'with' lexer classes {Ckeyword};
 
 concrete productions top::UnaryOp_c
 | 'newLvar' 
   {
     top.ast = newCall(top.expr, location=top.location);
   }
+| 'put' '(' value::AssignExpr_c ')' 'in'
+  {
+    top.ast = putCall(top.expr, value.ast, location=top.location);
+  }
+| 'putD' '(' value::AssignExpr_c ')' 'in'
+  {
+    top.ast = destrPutCall(top.expr, value.ast, location=top.location);
+  }
+| 'get' '(' lvar::AssignExpr_c ')' 'with'
+  {
+    top.ast = getCall(lvar.ast, top.expr, location=top.location);
+  }
+| 'freeze'
+  {
+    top.ast = freeze(top.expr, location=top.location);
+  }
+| 'freeSet'
+  {
+    top.ast = freeSet(top.expr, location=top.location);
+  }
+| 'freeLvar'
+  {
+    top.ast = freeSet(top.expr, location=top.location);
+  }
+| 'freeLattice'
+  {
+    top.ast = freeLattice(top.expr, location=top.location);
+  }
+| 'freeActSets'
+  {
+    top.ast = freeActSets(top.expr, location=top.location);
+  }
 
 concrete productions top::PrimaryExpr_c
-| 'put' '(' value::AssignExpr_c ')' 'in' '(' lvar::AssignExpr_c ')'
-  {
-    top.ast = putCall(lvar.ast, value.ast, location=top.location);
-  }
-| 'putD' '(' lvar::AssignExpr_c ',' value::AssignExpr_c ')'
-  {
-    top.ast = destrPutCall(lvar.ast, value.ast, location=top.location);
-  }
-| 'get' '(' lvar::AssignExpr_c ',' threshold::AssignExpr_c ')'
-  {
-    top.ast = getCall(lvar.ast, threshold.ast, location=top.location);
-  }
 | 'add' '(' set::AssignExpr_c ',' item::AssignExpr_c ')'
   {
     top.ast = add(set.ast, item.ast, location=top.location);
-  }
-| 'freeSet' '(' s::AssignExpr_c ')'
-  {
-    top.ast = freeSet(s.ast, location=top.location);
-  }
-| 'freeLvar' '(' s::AssignExpr_c ')'
-  {
-    top.ast = freeLvar(s.ast, location=top.location);
-  }
-| 'freeLattice' '(' s::AssignExpr_c ')'
-  {
-    top.ast = freeLattice(s.ast, location=top.location);
-  }
-| 'freeActSets' '(' s::AssignExpr_c ')'
-  {
-    top.ast = freeActSets(s.ast, location=top.location);
-  }
-| 'freeze' '(' s::AssignExpr_c ')'
-  {
-    top.ast = freeze(s.ast, location=top.location);
   }
 | 'checkLeq' '(' lat::AssignExpr_c ',' smallE::AssignExpr_c ',' bigE::AssignExpr_c ')'
   {
