@@ -39,7 +39,7 @@ int main(int argc, char **argv) {
   inst freeActSets<Pair*>(t);
   freeSet(t);
   freeLvar(p);
-  inst freeLattice<Pair*>(D);
+  freeLattice(D);
 
   return 1;
 }

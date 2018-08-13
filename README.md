@@ -4,10 +4,13 @@
 
 #### PPOPP Paper:
 
++ Figure out bug in colors example
 + Add references to big examples
 + Discuss future work
 + Look at style resources and spiff up writing
 + Talk about problems with freeing in drawbacks sections
++ Tidy up examples in parallel-examples
++ Problem: if do get and value is top, will automatically match first activation set
 
 #### LVars Functionality:
 
@@ -15,12 +18,9 @@
 + Have Top() and Bot() automatically generated
 + Add checkLattice() to concrete/abstract syntax, with type checking
 + Add freeActSets() to concrete/abstract syntax, with type checking
-+ Add freeLattice() to concrete/abstract syntax, with type checking
 + Work on speeding up thread waiting/locking process
-+ Could overload get so that if no threshold is specified, defaults to bottom element?
 + Implement other Lvish features-- incrementable counter, event handlers
 + Getter methods
-+ Add destructive put to concrete/abstract syntax, with type checking
 
 #### Examples:
 
@@ -39,12 +39,14 @@
 + Update readme guide to include new examples, the addition of freezing and freeing, other updates
 + Is there a way to error out only on the first missing include of a header?
 + Should lub always create a new copy instead of referencing old ones so that programmer can free without messing up lvar, instead of sometimes returning the original and sometimes making a new one? Otherwise can't safely free lub taken in passing, since might be freeing a value you need.
++ Overload free instead of having separate free for each thing
 
 ### Things to think about:
 
 + Does it make sense to free old value in put?
 + If an update would take the state of an lvar to top(), should the update just not be performed, or should the program error out? Or should this depend on the debug mode? Does this affect determinism?
 + If put fails, should still free values, or not?
++ If the current value is top(), should we freeze the lvar (since no further writes can change anything?)? And what should happen when trying to match activation sets to top (since the first one will automatically match, even though top represents an error)?
 
 ## Guide:
 

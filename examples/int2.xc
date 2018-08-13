@@ -1,3 +1,4 @@
+#define CHECK
 #include "lvars.xh"
 #include <cilk.xh>
 

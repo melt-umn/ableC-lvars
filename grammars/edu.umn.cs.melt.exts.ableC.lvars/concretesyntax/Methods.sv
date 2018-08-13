@@ -2,10 +2,12 @@ grammar edu:umn:cs:melt:exts:ableC:lvars:concretesyntax;
 
 marking terminal New_t 'newLvar' lexer classes {Ckeyword};
 marking terminal Put_t 'put' lexer classes {Ckeyword};
+marking terminal DestrPut_t 'putD' lexer classes {Ckeyword};
 marking terminal Get_t 'get' lexer classes {Ckeyword};
 marking terminal Add_t 'add' lexer classes {Ckeyword};
 marking terminal FreeSet_t 'freeSet' lexer classes {Ckeyword};
 marking terminal FreeLvar_t 'freeLvar' lexer classes {Ckeyword};
+marking terminal FreeLattice_t 'freeLattice' lexer classes {Ckeyword};
 marking terminal Freeze_t 'freeze' lexer classes {Ckeyword};
 
 closed nonterminal LvarInitializer_c with location, ast<Expr>, lattice;
@@ -26,6 +28,10 @@ concrete productions top::PrimaryExpr_c
   {
     top.ast = putCall(lvar.ast, value.ast, location=top.location);
   }
+| 'putD' '(' lvar::AssignExpr_c ',' value::AssignExpr_c ')'
+  {
+    top.ast = destrPutCall(lvar.ast, value.ast, location=top.location);
+  }
 | 'get' '(' lvar::AssignExpr_c ',' threshold::AssignExpr_c ')'
   {
     top.ast = getCall(lvar.ast, threshold.ast, location=top.location);
@@ -41,6 +47,10 @@ concrete productions top::PrimaryExpr_c
 | 'freeLvar' '(' s::AssignExpr_c ')'
   {
     top.ast = freeLvar(s.ast, location=top.location);
+  }
+| 'freeLattice' '(' s::AssignExpr_c ')'
+  {
+    top.ast = freeLattice(s.ast, location=top.location);
   }
 | 'freeze' '(' s::AssignExpr_c ')'
   {

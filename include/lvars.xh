@@ -48,7 +48,7 @@ static Lattice<a>* _newLattice(a least, a greatest, int (*leq)(),
 }
 
 template<a>
-static void freeLattice(Lattice<a>* lat) {
+static void _freeLattice(Lattice<a>* lat) {
   lat->_free(lat->_bottom);
   lat->_free(lat->_top);
   free(lat);
@@ -462,6 +462,7 @@ static int _put(Lvar<a>* l, a newState) {
       // if neither check nor debug mode are selected, operation does nothing
       // and returns 0
       pthread_mutex_unlock(&(l->_mutex));
+      pthread_cond_broadcast(&(l->_cond));
       return 0;
     }
 
@@ -528,6 +529,8 @@ static int _put_destructive(Lvar<a>* l, a newState) {
       if (newState != l->_lattice->_bottom && newState != l->_lattice->_top) {
         l->_lattice->_free(newState); 
       }  
+      pthread_mutex_unlock(&(l->_mutex));
+      pthread_cond_broadcast(&(l->_cond));
       return 0;
     #endif
 
@@ -536,6 +539,7 @@ static int _put_destructive(Lvar<a>* l, a newState) {
       l->_lattice->_free(newValue);
     }
     pthread_mutex_unlock(&(l->_mutex));
+    pthread_cond_broadcast(&(l->_cond));
     return 0;
   }
 
@@ -581,6 +585,15 @@ static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
     }
   #endif
 
+  if (l->_lattice->_leq(l->_lattice->_top, l->_value)){
+    #ifdef DEBUG
+      printf("Error: value in lvar is top!\n");
+      exit(0);
+    #endif
+    pthread_mutex_unlock(&(l->_mutex));
+    return NULL;
+  }
+    
   ActivationSet<a>* actReached = inst _thresholdReached<a>(l, t);
   while (actReached == NULL) {
     if (l->_frozen) {

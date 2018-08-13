@@ -153,6 +153,30 @@ top::Expr ::= lvar::Expr
   forwards to mkErrorCheck(localErrors, fwrd);
 }
 
+abstract production freeLattice
+top::Expr ::= lat::Expr
+{
+  propagate substituted;
+  top.pp = pp"freeLattice(${lat.pp})";
+
+  local localErrors::[Message] =
+    checkLvarHeaderDef(top.location, top.env) ++ lat.errors;
+
+  local fwrd::Expr =
+    case lat.typerep of
+      pointerType(_, latticeType(_, t)) -> 
+        ableC_Expr {
+          inst _freeLattice<$directTypeExpr{t}>($Expr{lat})
+        }
+    | _ ->
+        errorExpr([err(top.location, 
+        "Can't use freeLattice() with <" ++ showType(lat.typerep) ++ ">")],
+        location=top.location)
+    end;
+
+  forwards to mkErrorCheck(localErrors, fwrd);
+}
+
 // ************************* show productions *********************************
 
 aspect function getShowOverloadProd
@@ -322,6 +346,58 @@ top::Expr ::= lvarBaseType::Type lvar::Expr value::Expr
     mkErrorCheck(localErrors ++ childErrors,
     ableC_Expr{
       inst _put<$directTypeExpr{lvarBaseType}>($Expr{lvar}, $Expr{value})
+    });
+}
+
+// to check for errors in a call to putD(), and forward onward as appropriate
+
+abstract production destrPutCall
+top::Expr ::= lvar::Expr value::Expr
+{
+  propagate substituted;
+  top.pp = pp"putD(${lvar.pp}, ${value.pp})";
+
+  local localErrors::[Message] = 
+    checkLvarHeaderDef(top.location, top.env) ++ lvar.errors ++ value.errors;
+
+  local fwrd::Expr =
+    case lvar.typerep of
+      pointerType(_, lvarType(_, l_t)) ->
+        putDCallHelper(l_t, lvar, value, location=top.location)
+    | _ -> errorExpr([err(top.location, 
+          "putD() expected first argument of type Lvar*, got type <"
+          ++ showType(lvar.typerep) ++ ">")], location=top.location)
+    end;
+
+  forwards to 
+    mkErrorCheck(localErrors, fwrd);
+}
+
+// to put a value into an lvar
+// lvarBaseType helps determine the base type of the lvar
+
+abstract production putDCallHelper
+top::Expr ::= lvarBaseType::Type lvar::Expr value::Expr
+{
+  propagate substituted;
+  top.pp = pp"putD(${lvar.pp}, ${value.pp})";
+
+  local childErrors::[Message] = lvarBaseType.errors ++ lvar.errors ++
+                                value.errors;
+
+  local localErrors::[Message] =
+    checkLvarHeaderDef(top.location, top.env) ++
+    if compatibleTypes(lvarBaseType, value.typerep, false, true)
+    then []
+    else [err(top.location, 
+          "Can't put value of type <" ++
+          showType(value.typerep) ++ "> in an Lvar of type <"
+          ++ showType(lvarBaseType) ++ ">")];
+
+  forwards to 
+    mkErrorCheck(localErrors ++ childErrors,
+    ableC_Expr{
+      inst _put_destructive<$directTypeExpr{lvarBaseType}>($Expr{lvar}, $Expr{value})
     });
 }
 
