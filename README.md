@@ -2,14 +2,12 @@
 
 ## To-do:
 
-#### POPL Paper:
+#### PPOPP Paper:
 
-+ Add freeing to fold examples
 + Add references to big examples
 + Discuss future work
 + Look at style resources and spiff up writing
 + Talk about problems with freeing in drawbacks sections
-+ Fix freeing in graph example (still some new int sets that are unfreed)
 
 #### LVars Functionality:
 
@@ -46,6 +44,7 @@
 
 + Does it make sense to free old value in put?
 + If an update would take the state of an lvar to top(), should the update just not be performed, or should the program error out? Or should this depend on the debug mode? Does this affect determinism?
++ If put fails, should still free values, or not?
 
 ## Guide:
 

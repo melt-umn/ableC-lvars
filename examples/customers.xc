@@ -1,4 +1,3 @@
-#define CHECK
 #include "lvars.xh"
 #include <cilk.xh>
 #include <string.h>
@@ -58,8 +57,10 @@ int isProdSubset(ProductSet* set1, ProductSet* set2) {
           if (hd1 == hd2) {
             return isProdSubset(tl1, tl2);
           }
-          return isProdSubset(P_Set(hd1, P_Empty()), tl2) &&
-                 isProdSubset(tl1, set2);
+          ProductSet* partial1 = P_Set(hd1, P_Empty());
+          int result = isProdSubset(partial1, tl2) && isProdSubset(tl1, set2);
+          freeProducts(partial1);
+          return result;
         }
       }
     }
@@ -101,9 +102,12 @@ ProductSet* prodSetUnion(ProductSet* prods1, ProductSet* prods2) {
         P_Empty() -> {return prods1;}
         P_Set(hd2, tl2) -> {
           ProductSet* partial = prodSetUnion(tl1, prods2);
-          if (isProdSubset(P_Set(hd1, P_Empty()), partial)) {
+          ProductSet* temp = P_Set(hd1, P_Empty());
+          if (isProdSubset(temp, partial)) {
+            freeProducts(temp);
             return partial;
           }
+          freeProducts(temp);
           return P_Set(hd1, partial);
         }
       }
@@ -125,8 +129,10 @@ Customer* lubCustomer (Customer* c1, Customer* c2) {
           }
           ProductSet* totalProds = prodSetUnion(prods1, prods2);
           if (name1 == 0) {
+            freeCustomer(c1);
             return Person(name2, totalProds);
-          }
+          } 
+          freeCustomer(c1);
           return Person(name1, totalProds);  
         }
       }
@@ -211,7 +217,7 @@ int** readStoreData(char* filename, int num) {
 // to put a value c into an lvar l
 
 cilk int cilkPut(Lvar<Customer*>* l, Customer* c) {
-  cilk return put(l, c);
+  cilk return inst _put_destructive<Customer*>(l, c);
 } 
 
 // to take data from array read in from file and put it into array of lvars
@@ -220,12 +226,13 @@ cilk int addCustData(Lvar<Customer*>** customers, int** store,
                                                   int custLen, int storeLen) {
   for (int i = 0; i < storeLen; i++) {
     int matchFound = 0;
+    Customer* toPut = Person(store[i][0], P_Set(store[i][1], P_Empty()));
     for (int j = 0; j < custLen && !matchFound; j++) {
-      spawn matchFound = cilkPut(customers[j], Person(store[i][0], 
-                                               P_Set(store[i][1], P_Empty())));
+      spawn matchFound = cilkPut(customers[j], toPut);
     }
     sync;
     if (!matchFound) {
+      freeCustomer(toPut);
       printf("No matching customer!\n");
       cilk return 0;
     }

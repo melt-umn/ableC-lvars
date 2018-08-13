@@ -347,7 +347,10 @@ static void _defaultFree(a val) {
 template<a>
 static void _freeLvar(Lvar<a>* l) {
   pthread_mutex_lock(&(l->_mutex));
-  l->_lattice->_free(l->_value);
+  // note that top and bottom will be freed with lattice, not lvar
+  if (l->_value != l->_lattice->_bottom && l->_value != l->_lattice->_top) {
+      l->_lattice->_free(l->_value); 
+  }  
   pthread_mutex_unlock(&(l->_mutex));
   free(l);
   return;
@@ -427,6 +430,8 @@ static int _put(Lvar<a>* l, a newState) {
     a newValue = l-> _lattice-> _lub(oldState, newState);
     // if the lub is top, we have an invalid put
     if (l->_lattice->_leq(l->_lattice->_top, newValue)){
+
+      // debug mode errors out upon invalid put
       #ifdef DEBUG
         printf("Error: invalid put of ");
         l->_lattice->_show(newState);
@@ -436,31 +441,42 @@ static int _put(Lvar<a>* l, a newState) {
         exit(0);
       #endif
 
-      l->_value = l->_lattice->_top;
-      // if the old state does not match our top or bottom pointer, we can free
-      if (oldState != l->_lattice->_bottom && oldState != l->_lattice->_top) {
-        l->_lattice->_free(oldState); 
-      } 
-      // if the new state does not match our top or bottom pointer, we can free
-      if (newState != l->_lattice->_bottom && newState != l->_lattice->_top) {
-        l->_lattice->_free(newState); 
-      }  
+      // check mode sets value of lvar to top upon invalid put
+      #ifdef CHECK
+        l->_value = l->_lattice->_top;
+        // if the old state does not match our top or bottom pointer, we can free
+        if (oldState != l->_lattice->_bottom && oldState != l->_lattice->_top) {
+          l->_lattice->_free(oldState); 
+        } 
+        // if the new state does not match our top or bottom pointer, we can free
+        if (newState != l->_lattice->_bottom && newState != l->_lattice->_top) {
+          l->_lattice->_free(newState); 
+        }  
+      #endif
+  
       // if the new value does not match our top or bottom pointer, we can free
       if (newValue != l->_lattice->_bottom && newValue != l->_lattice->_top) {
         l->_lattice->_free(newValue); 
       }  
+
+      // if neither check nor debug mode are selected, operation does nothing
+      // and returns 0
       pthread_mutex_unlock(&(l->_mutex));
       return 0;
     }
 
     // otherwise, we can update the value and free the old and new states
     l->_value = newValue;
-    // if the old state does not match our top or bottom pointer, we can free
-    if (oldState != l->_lattice->_bottom && oldState != l->_lattice->_top) {
+    // if the old state does not match our top or bottom pointer
+    // (or the new value), we can free
+    if (oldState != l->_lattice->_bottom && oldState != l->_lattice->_top
+        && oldState != newValue) {
       l->_lattice->_free(oldState); 
     } 
-    // if the new state does not match our top or bottom pointer, we can free
-    if (newState != l->_lattice->_bottom && newState != l->_lattice->_top) {
+    // if the new state does not match our top or bottom pointer
+    // (or the new value), we can free
+    if (newState != l->_lattice->_bottom && newState != l->_lattice->_top
+        && newState != newValue) {
       l->_lattice->_free(newState); 
     }  
     
@@ -488,8 +504,42 @@ static int _put_destructive(Lvar<a>* l, a newState) {
   }
 
   a oldState = l->_value;
-  l->_value = l-> _lattice-> _lub(oldState, newState);
+  a newValue = l-> _lattice-> _lub(oldState, newState);
 
+  if (l->_lattice->_leq(l->_lattice->_top, newValue)){
+    // debug mode errors out upon invalid put
+    #ifdef DEBUG
+      printf("Error: invalid put of ");
+      l->_lattice->_show(newState);
+      printf(" into lvar of value ");
+      l->_lattice->_show(oldState);
+      printf("\n");
+      exit(0);
+    #endif
+
+    // check mode sets value of lvar to top upon invalid put
+    #ifdef CHECK
+      l->_value = l->_lattice->_top;
+      // if the old state does not match our top or bottom pointer, we can free
+      if (oldState != l->_lattice->_bottom && oldState != l->_lattice->_top) {
+        l->_lattice->_free(oldState); 
+      } 
+      // if the new state does not match our top or bottom pointer, we can free
+      if (newState != l->_lattice->_bottom && newState != l->_lattice->_top) {
+        l->_lattice->_free(newState); 
+      }  
+      return 0;
+    #endif
+
+    if (newState != l->_lattice->_bottom && newState != l->_lattice->_top
+        && newState != newValue) {
+      l->_lattice->_free(newValue);
+    }
+    pthread_mutex_unlock(&(l->_mutex));
+    return 0;
+  }
+
+  l->_value = newValue;
   pthread_mutex_unlock(&(l->_mutex));
   pthread_cond_broadcast(&(l->_cond));
 
