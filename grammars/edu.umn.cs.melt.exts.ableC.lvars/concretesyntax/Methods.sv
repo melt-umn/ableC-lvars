@@ -44,7 +44,7 @@ concrete productions top::UnaryOp_c
   }
 | 'freeLvar'
   {
-    top.ast = freeSet(top.expr, location=top.location);
+    top.ast = freeLvar(top.expr, location=top.location);
   }
 | 'freeLattice'
   {
