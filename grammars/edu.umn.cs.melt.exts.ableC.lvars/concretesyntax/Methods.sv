@@ -9,26 +9,37 @@ marking terminal FreeSet_t 'freeSet' lexer classes {Ckeyword};
 marking terminal FreeLvar_t 'freeLvar' lexer classes {Ckeyword};
 marking terminal FreeLattice_t 'freeLattice' lexer classes {Ckeyword};
 marking terminal FreeActSets_t 'freeActSets' lexer classes {Ckeyword};
-marking terminal Freeze_t 'freeze' lexer classes {Ckeyword};
+marking terminal Freeze_t 'freeze' lexer classes {Ckeyword}, precedence = 1;
 marking terminal CheckLeq_t 'checkLeq' lexer classes {Ckeyword};
 marking terminal CheckLub_t 'checkLub' lexer classes {Ckeyword};
 marking terminal CheckLat_t 'checkLattice' lexer classes {Ckeyword};
 
-closed nonterminal LvarInitializer_c with location, ast<Expr>, lattice;
+//closed nonterminal LvarInitializer_c with location, ast<Expr>, lattice;
+//closed nonterminal Lvar_c with location, ast<Expr>;
 terminal In_t 'in' lexer classes {Ckeyword};
 
-concrete productions top::LvarInitializer_c
+/*concrete productions top::LvarInitializer_c
 | ')'
-  {
+  { 
     top.ast = newCall(top.lattice, location=top.location);
   }
 
-concrete productions top::PrimaryExpr_c
+concrete productions top::UnaryExpr_c
 | 'newLvar' '(' lattice::AssignExpr_c init::LvarInitializer_c
-  { 
+  {
     top.ast = init.ast;
     init.lattice = lattice.ast;
   }
+
+*/
+
+concrete productions top::UnaryOp_c
+| 'newLvar' 
+  {
+    top.ast = newCall(top.expr, location=top.location);
+  }
+
+concrete productions top::PrimaryExpr_c
 | 'put' '(' value::AssignExpr_c ')' 'in' '(' lvar::AssignExpr_c ')'
   {
     top.ast = putCall(lvar.ast, value.ast, location=top.location);

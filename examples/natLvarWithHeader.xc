@@ -13,12 +13,12 @@ int main(int argc, char **argv) {
 
   // make some lvars 
 
-  Lvar<Nat*> *x = newLvar(D);
+  Lvar<Nat*> *x = newLvar D;
   Lvar<Nat*> *y = newLvar(D);
 
   // try putting in a value
 
-  int success = put Int(7) in (x);
+  int success = put (Int(7)) in (x);
   if (!success) {
     free(D);
     return 0;
@@ -65,7 +65,9 @@ int main(int argc, char **argv) {
   }
 
   printf("Threshold set: ");
-  show(t);
+  show (t);
+
+  freeze(x);
 
   // clean up
   

@@ -5,6 +5,7 @@
 #### PPOPP Paper:
 
 + Syntax: more like "put (n) in accum", "get accum t" "freeze accum," etc.
++ Way to remove parentheses in put (n) in (accum)?
 + Add references to big examples
 + Discuss future work
 + Look at style resources and spiff up writing

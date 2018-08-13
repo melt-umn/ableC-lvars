@@ -44,7 +44,7 @@ int leqFoldInt(Int* i1, Int* i2) {
 }
 
 int intFoldPut(Lvar<Int*>* l, int val) {
-  return put(l, I(map_f(val)));
+  return put (I(map_f(val))) in (l);
 }
 
 Lattice<Int*>* intFoldLattice(int (*mapFunc)(), int (*foldFunc)()) {
