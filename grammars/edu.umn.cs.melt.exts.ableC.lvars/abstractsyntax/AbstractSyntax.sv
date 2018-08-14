@@ -280,6 +280,32 @@ top::Expr ::= lvar::Expr threshold::Expr
     mkErrorCheck(localErrors, fwrd);
 }
 
+// if no threshold set specified
+
+abstract production getCallNoThresh
+top::Expr ::= lvar::Expr
+{
+  propagate substituted;
+  top.pp = pp"get(${lvar.pp})";
+
+  local localErrors::[Message] =
+    checkLvarHeaderDef(top.location, top.env) ++ lvar.errors;
+
+  local fwrd::Expr =
+    case lvar.typerep of
+      pointerType(_, lvarType(_, l_t)) ->
+        getCallHelperNoThresh(l_t, lvar, location=top.location)
+    | _ ->
+       errorExpr([err(top.location, 
+       "get() expected first argument of type Lvar*, got type "
+        ++ showType(lvar.typerep))], location=top.location)
+    end;
+
+  forwards to 
+    mkErrorCheck(localErrors, fwrd);
+}
+
+
 // to get a value from an lvar
 // lvarBaseType helps determine the base type of the lvar
 // thresholdBaseType helps determine the base type of the threshold set
@@ -306,6 +332,27 @@ top::Expr ::=  lvarBaseType::Type lvar::Expr threshBaseType::Type threshold::Exp
     mkErrorCheck(localErrors ++ childErrors,
     ableC_Expr{
       inst _get<$directTypeExpr{lvarBaseType}>($Expr{lvar}, $Expr{threshold})
+    });
+}
+
+// to get a value from an lvar
+// lvarBaseType helps determine the base type of the lvar
+
+abstract production getCallHelperNoThresh
+top::Expr ::=  lvarBaseType::Type lvar::Expr
+{
+  propagate substituted;
+  top.pp = pp"get(${lvar.pp})";
+
+  local childErrors::[Message] = lvarBaseType.errors ++ lvar.errors;
+
+  local localErrors::[Message] =
+    checkLvarHeaderDef(top.location, top.env);
+
+  forwards to 
+    mkErrorCheck(localErrors ++ childErrors,
+    ableC_Expr{
+      inst _frozenGet<$directTypeExpr{lvarBaseType}>($Expr{lvar})
     });
 }
 

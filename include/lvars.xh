@@ -493,6 +493,22 @@ static ActivationSet<a>* _thresholdReached(Lvar<a>* l, ThresholdSet<a> * t) {
 }
 
 template<a>
+static ActivationSet<a>* _frozenGet(Lvar<a>* l) {
+  pthread_mutex_lock(&(l->_mutex));
+  if (!l->_frozen) {
+    printf("Error: must specify threshold set when getting from an lvar\n");
+    exit(0);
+  }
+  if (!l->_bot) {
+    pthread_mutex_unlock(&(l->_mutex));
+    return activationSet(l->_lattice, 1){l->_value}; 
+  }
+  pthread_mutex_unlock(&(l->_mutex));
+  return NULL;
+}
+  
+
+template<a>
 static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
   pthread_mutex_lock(&(l->_mutex));
 

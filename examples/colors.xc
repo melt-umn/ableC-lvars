@@ -347,7 +347,7 @@ int main(int argc, char **argv) {
     ActivationSet<Color*> * green = activationSet(D){Green()};
     ActivationSet<Color*> * violet = activationSet(D){Violet()};
     ThresholdSet<Color*> * t = thresholdSet(D){orange, green, violet};
-    ActivationSet<Color*> * result = get (x) with t;  
+    ActivationSet<Color*> * result = get x with t;  
     if (result == NULL) {
       printf("Invalid get.\n");
     }
@@ -357,7 +357,8 @@ int main(int argc, char **argv) {
       printf("\n");
       freeze(x);
       printf("Actual value: ");
-      show(get (x) with t);
+      show(get x);
+      printf("\n");
       show(x);
       printf("\n");
     }

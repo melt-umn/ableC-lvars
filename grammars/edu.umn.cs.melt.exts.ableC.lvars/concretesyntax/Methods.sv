@@ -40,6 +40,11 @@ concrete productions top::UnaryOp_c
   {
     top.ast = destrPutCall(top.expr, value.ast, location=top.location);
   }
+| 'get' id::Identifier_t 'with'
+  {
+    top.ast = getCall(declRefExpr(fromId(id), location=top.location),
+              top.expr, location=top.location);
+  }
 | 'get' '(' lvar::AssignExpr_c ')' 'with'
   {
     top.ast = getCall(lvar.ast, top.expr, location=top.location);
@@ -66,6 +71,15 @@ concrete productions top::UnaryOp_c
   }
 
 concrete productions top::PrimaryExpr_c
+| 'get' '(' lvar::AssignExpr_c ')'
+  {
+    top.ast = getCallNoThresh(lvar.ast, location=top.location);
+  }
+| 'get' id::Identifier_t 
+  {
+    top.ast = getCallNoThresh(declRefExpr(fromId(id), location=top.location),
+              location=top.location);
+  }
 | 'add' '(' set::AssignExpr_c ',' item::AssignExpr_c ')'
   {
     top.ast = add(set.ast, item.ast, location=top.location);
