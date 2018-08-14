@@ -341,8 +341,8 @@ int main(int argc, char **argv) {
     Color* c1 = getColor(argv[1]);
     Color* c2 = getColor(argv[2]);
     Lvar<Color*>* x = newLvar(D);
-    put (c1) in x;
-    put (c2) in x;
+    put c1 in x;
+    put c2 in x;
     ActivationSet<Color*> * orange = activationSet(D){Orange()};     
     ActivationSet<Color*> * green = activationSet(D){Green()};
     ActivationSet<Color*> * violet = activationSet(D){Violet()};
@@ -357,6 +357,7 @@ int main(int argc, char **argv) {
       printf("\n");
       freeze(x);
       printf("Actual value: ");
+      show(get (x) with t);
       show(x);
       printf("\n");
     }

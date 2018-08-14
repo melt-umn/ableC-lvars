@@ -4,6 +4,7 @@
 
 #### PPOPP Paper:
 
++ Add more on concrete/abstract syntax with put operation
 + Add references to big examples
 + Discuss future work
 + Look at style resources and spiff up writing
@@ -13,6 +14,8 @@
 + Way to have get return actual value instead of activation set when frozen?
 + Check that arguments to lattice() are function pointers?
 + Fix customer examples with erroring out on top (maybe use lub directly?)
++ Re-time graph and fold examples
++ Possibly re-add to paper small example showing threshold/activation/get
 
 #### LVars Functionality:
 
@@ -46,8 +49,7 @@
 ### Things to think about:
 
 + Does it make sense to free old value in put?
-+ If put fails, should still free values, or not?
-+ If the current value is top(), should we freeze the lvar (since no further writes can change anything?)? And what should happen when trying to match activation sets to top (since the first one will automatically match, even though top represents an error)?
++ Is it okay to only check threshold set compatibility in debug mode, since it affects determinism?
 
 ## Guide:
 

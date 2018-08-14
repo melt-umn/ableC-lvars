@@ -22,9 +22,19 @@ concrete productions top::UnaryOp_c
   {
     top.ast = newCall(top.expr, location=top.location);
   }
+| 'put' id::Identifier_t 'in'
+  {
+    top.ast = putCall(top.expr, declRefExpr(fromId(id), location=top.location),
+              location=top.location);
+  }
 | 'put' '(' value::AssignExpr_c ')' 'in'
   {
     top.ast = putCall(top.expr, value.ast, location=top.location);
+  }
+| 'putD' id::Identifier_t 'in'
+  {
+    top.ast = destrPutCall(top.expr, declRefExpr(fromId(id), location=top.location),
+              location=top.location);
   }
 | 'putD' '(' value::AssignExpr_c ')' 'in'
   {

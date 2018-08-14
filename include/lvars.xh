@@ -386,13 +386,9 @@ static int _put(Lvar<a>* l, a newState) {
 
   pthread_mutex_lock(&(l->_mutex));
 
-  if (l->_frozen) {
-     #ifdef DEBUG 
-        printf("Error: can't write to a frozen lvar.\n");
-        exit(0);
-     #endif
-    pthread_mutex_unlock(&(l->_mutex));
-    return 0;
+  if (l->_frozen) { 
+    printf("Error: can't write to a frozen lvar.\n");
+    exit(0);
   }
 
   if (l->_lattice->_leq(l->_lattice->_top, newState)) {
@@ -445,11 +441,8 @@ static int _put_destructive(Lvar<a>* l, a newState) {
   pthread_mutex_lock(&(l->_mutex));
 
   if (l->_frozen) {
-     #ifdef DEBUG 
-        printf("Error: can't write to a frozen lvar.\n");
-        exit(0);
-     #endif
-    pthread_mutex_unlock(&(l->_mutex));
+    printf("Error: can't write to a frozen lvar.\n");
+    exit(0);
     return 0;
   }
 
@@ -516,10 +509,23 @@ static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
       return NULL;
     }
   #endif
+
+  if (l->_frozen) {
+    if (!l->_bot) {
+      pthread_mutex_unlock(&(l->_mutex));
+      return activationSet(l->_lattice, 1){l->_value}; 
+    }
+    pthread_mutex_unlock(&(l->_mutex));
+    return NULL;
+  }
     
   ActivationSet<a>* actReached = inst _thresholdReached<a>(l, t);
   while (actReached == NULL) {
     if (l->_frozen) {
+      if (!l->_bot) {
+        pthread_mutex_unlock(&(l->_mutex));
+        return activationSet(l->_lattice, 1){l->_value}; 
+      }
       pthread_mutex_unlock(&(l->_mutex));
       return NULL;
     }
