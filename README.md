@@ -12,8 +12,7 @@
 + Change "show" back to "display"?
 + Way to have get return actual value instead of activation set when frozen?
 + Check that arguments to lattice() are function pointers?
-+ Error out upon top instead of allowing to continue
-+ (Will need to fix customer example accordingly, maybe based on lub)?
++ Fix customer examples with erroring out on top (maybe use lub directly?)
 
 #### LVars Functionality:
 
@@ -47,7 +46,6 @@
 ### Things to think about:
 
 + Does it make sense to free old value in put?
-+ If an update would take the state of an lvar to top(), should the update just not be performed, or should the program error out? Or should this depend on the debug mode? Does this affect determinism?
 + If put fails, should still free values, or not?
 + If the current value is top(), should we freeze the lvar (since no further writes can change anything?)? And what should happen when trying to match activation sets to top (since the first one will automatically match, even though top represents an error)?
 

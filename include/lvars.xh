@@ -398,8 +398,6 @@ static int _put(Lvar<a>* l, a newState) {
   if (l->_lattice->_leq(l->_lattice->_top, newState)) {
     printf("Error: invalid put of ");
     l->_lattice->_show(newState);
-    printf(" into lvar of value ");
-    l->_lattice->_show(oldState);
     printf("\n");
     exit(0);
   }
