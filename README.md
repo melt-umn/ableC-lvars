@@ -4,13 +4,13 @@
 
 #### PPOPP Paper:
 
-+ Syntax: more like "put (n) in accum", "get accum t" "freeze accum," etc.
-+ Way to remove parentheses in put (n) in (accum)?
 + Add references to big examples
 + Discuss future work
 + Look at style resources and spiff up writing
 + Talk about problems with freeing in drawbacks sections
 + Tidy up examples in parallel-examples, tidy up header file
++ Change "show" back to "display"?
++ Way to have get return actual value instead of activation set when frozen?
 
 #### LVars Functionality:
 
@@ -22,6 +22,7 @@
 
 #### Examples:
 
++ Fix tests to match new syntax
 + Increase parallelism in customer example (go through in chunks?)
 + Add frees
 + Check out Cilk paper for good examples

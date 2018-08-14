@@ -406,13 +406,13 @@ int nonCilk(int* arr, int size) {
   YN* hresult;
   YN* fresult;
   kresult = getVoteSearch(arr, size);
-  put Set(Kat(kresult), Empty()) in (votes);
+  put (Set(Kat(kresult), Empty())) in votes;
   hresult = getVoteSearch(arr, size);
-  put Set(Horace(hresult), Empty()) in (votes);
+  put (Set(Horace(hresult), Empty())) in votes;
   fresult = getVoteSearch(arr, size);
-  put Set(Franz(fresult), Empty()) in (votes);
+  put (Set(Franz(fresult), Empty())) in votes;
 
-  ActivationSet<VoteSet*>* getPiz = get(votes, t);
+  ActivationSet<VoteSet*>* getPiz = get (votes) with t;
   if (getPiz == yesPizza) {
     printf("Get pizza! At least one person will eat some.\n");
     return 1;
@@ -446,10 +446,10 @@ cilk int withCilk(int* arr, int size) {
   spawn hresult = getVoteSearchCilk(arr, size);
   spawn fresult = getVoteSearchCilk(arr, size);
   sync;
-  put(votes, Set(Kat(kresult), Empty()));
-  put(votes, Set(Horace(hresult), Empty()));
-  put(votes, Set(Franz(fresult), Empty()));
-  ActivationSet<VoteSet*>* getPiz = get(votes, t);
+  put (Set(Kat(kresult), Empty())) in votes;
+  put (Set(Horace(hresult), Empty())) in votes;
+  put (Set(Franz(fresult), Empty())) in votes;
+  ActivationSet<VoteSet*>* getPiz = get (votes) with t;
   if (getPiz == yesPizza) {
     printf("Get pizza! At least one person will eat some.\n");
     cilk return 1;

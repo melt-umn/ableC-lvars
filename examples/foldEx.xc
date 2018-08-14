@@ -59,7 +59,7 @@ Lvar<Int*>* accum;
 cilk int task(int *xs) {
   for (int i = 0; i < TASK_SIZE; ++i) { 
     //put f(xs[i]) in accum;
-    put(accum, I(f(xs[i])));
+    put (I(f(xs[i]))) in accum;
   }
   cilk return 0;
 }

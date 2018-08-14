@@ -161,7 +161,7 @@ void showState(State* s) {
 // their cilk version of the various library functions as desired as a workaround?
 
 cilk int putCilk(Lvar<State*>* l, State* newState) {
-  cilk return put(l, newState);
+  cilk return put (newState) in l;
 }
 
 cilk int asyncAnd(Bl* b1, Bl* b2) {
@@ -196,7 +196,7 @@ cilk int asyncAnd(Bl* b1, Bl* b2) {
   spawn success2 = putCilk(andResult, Pair(Bot(), b2));
   sync;
 
-  ActivationSet<State*> * andSet = get(andResult, threshold);
+  ActivationSet<State*> * andSet = get (andResult) with threshold;
  
   int result;
   if (andSet == NULL) {

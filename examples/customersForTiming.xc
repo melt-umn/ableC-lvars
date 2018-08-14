@@ -190,7 +190,7 @@ int** readStoreData(char* filename, int num) {
 // to put a value c into an lvar l
 
 cilk int cilkPut(Lvar<Customer*>* l, Customer* c) {
-  cilk return put(l, c);
+  cilk return put (c) in l;
 } 
 
 // to take data from array read in from file and put it into array of lvars

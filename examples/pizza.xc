@@ -280,7 +280,7 @@ int main(int argc, char **argv) {
 
   // ************* try collecting some votes **********************************
 
-  int success = put(x, Set(Kat(No()), Empty()));
+  int success = put (Set(Kat(No()), Empty())) in x;
   if (!success) {
     printf("Invalid put operation of Set(Kat(No()), Empty())!\n");
     freeSet(t);
@@ -288,7 +288,7 @@ int main(int argc, char **argv) {
     return 0;
   }
 
-  success = put(x, Set(Franz(No()), Empty()));
+  success = put (Set(Franz(No()), Empty())) in x;
   if (!success) {
     printf("Invalid put operation of Set(Franz(No()), Empty())!\n");
     freeSet(t);
@@ -296,7 +296,7 @@ int main(int argc, char **argv) {
     return 0;
   }
 
-  success = put(x, Set(Horace(Yes()), Empty()));
+  success = put (Set(Horace(Yes()), Empty())) in x;
   if (!success) {
     printf("Invalid put operation of Set(Horace(Yes()), Empty())!\n");
     freeSet(t);
@@ -306,7 +306,7 @@ int main(int argc, char **argv) {
 
   // ***************** try getting result *************************************
 
-  ActivationSet<VoteSet*>*  result = get(x, t);
+  ActivationSet<VoteSet*>*  result = get (x) with t;
   if (result == NULL) {
     printf("Invalid get operation.\n");
     free(x);

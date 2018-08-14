@@ -341,13 +341,13 @@ int main(int argc, char **argv) {
     Color* c1 = getColor(argv[1]);
     Color* c2 = getColor(argv[2]);
     Lvar<Color*>* x = newLvar(D);
-    put(x, c1);
-    put(x, c2);
+    put (c1) in x;
+    put (c2) in x;
     ActivationSet<Color*> * orange = activationSet(D){Orange()};     
     ActivationSet<Color*> * green = activationSet(D){Green()};
     ActivationSet<Color*> * violet = activationSet(D){Violet()};
     ThresholdSet<Color*> * t = thresholdSet(D){orange, green, violet};
-    ActivationSet<Color*> * result = get(x, t);  
+    ActivationSet<Color*> * result = get (x) with t;  
     if (result == NULL) {
       printf("Invalid get.\n");
     }

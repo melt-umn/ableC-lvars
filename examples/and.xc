@@ -170,14 +170,14 @@ int main(int argc, char **argv) {
 
   //************* Step 3. put() value(s) into lvar(s) ***************************
 
-  int success = put(x, Pair(Bot(), T())); //returns 0 if fails, 1 otherwise
+  int success = put (Pair(Bot(), T())) in x; //returns 0 if fails, 1 otherwise
   if (!success) {
     printf("Invalid put!\n");
     free(D);
     return 0;
   }
 
-  success = put(x, Pair(T(), Bot()));
+  success = put (Pair(T(), Bot())) in x;
   if (!success) {
     printf("Invalid put!\n");
     free(D);
@@ -212,7 +212,7 @@ int main(int argc, char **argv) {
 
   //************ Step 5. Try get()-ing the values of lvars ********************
   
-  ActivationSet<State*>*  result = get(x, t); // return NULL if fails,
+  ActivationSet<State*>*  result = get (x) with t; // return NULL if fails,
                    // otherwise the matched activation set in the threshold set
 
   printf("The value of x after putting (T(), Bot()) and (Bot(), T()) is ");

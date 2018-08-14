@@ -24,6 +24,7 @@ int _lvarCheckValue = 1;
 //******************************** Lattice ************************************
 
 template<a> struct _Lattice {
+  a _bottom;         // these elements are all specified by the user
   a _top;
   int (*_leq)();
   a (* _lub)();
@@ -34,9 +35,10 @@ template<a> struct _Lattice {
 // to create a new lattice with the fields specified by the user
 
 template<a>
-static Lattice<a>* _newLattice(a greatest, int (*leq)(),
-                   a (*lub)(), void (*showMethod)(), void (*freeMethod)()) {
+static Lattice<a>* _newLattice(a least, a greatest, int (*leq)(),
+                               a (*lub)(), void (*showMethod)(), void (*freeMethod)()) {
   Lattice<a> * l = malloc(sizeof(Lattice<a>)); 
+  l->_bottom = least;
   l->_top = greatest;
   l->_leq = leq;
   l-> _lub = lub;
@@ -47,6 +49,7 @@ static Lattice<a>* _newLattice(a greatest, int (*leq)(),
 
 template<a>
 static void _freeLattice(Lattice<a>* lat) {
+  lat->_free(lat->_bottom);
   lat->_free(lat->_top);
   free(lat);
 }
@@ -312,7 +315,6 @@ template<a> struct _Lvar {
   Lattice<a> * _lattice;
   a _value;
   int _frozen; // if 0, lvar is not frozen; if 1, lvar is frozen
-  int _bot; //if 1, Lvar has value "bottom"
   pthread_mutex_t _mutex;
   pthread_cond_t _cond;
 };
@@ -321,11 +323,10 @@ template<a>
 static void _showLvar(Lvar<a>* l) {
   pthread_mutex_lock(&(l->_mutex));
   if (l->_frozen) {
-    if (!l->_bot) {
-      l->_lattice->_show(l->_value);
-    }
+    l->_lattice->_show(l->_value);
   }
   else {
+
     #ifdef DEBUG
       printf("Error: Can't show a lvar before it is frozen!\n");
       exit(0);
@@ -347,11 +348,9 @@ template<a>
 static void _freeLvar(Lvar<a>* l) {
   pthread_mutex_lock(&(l->_mutex));
   // note that top and bottom will be freed with lattice, not lvar
-  if (!l->_bot) {
-    if (l->_value != l->_lattice->_top) {
+  if (l->_value != l->_lattice->_bottom && l->_value != l->_lattice->_top) {
       l->_lattice->_free(l->_value); 
-    }  
-  }
+  }  
   pthread_mutex_unlock(&(l->_mutex));
   free(l);
   return;
@@ -364,9 +363,9 @@ static void _freeLvar(Lvar<a>* l) {
 template<a>
 static Lvar<a>* _new(Lattice<a>* l) {
   Lvar<a>* lvarNew = malloc(sizeof(Lvar<a>));
+  lvarNew->_value = l-> _bottom;
   lvarNew-> _lattice = l;
   lvarNew-> _frozen = 0;
-  lvarNew->_bot = 1;
   lvarNew->_cond = (pthread_cond_t) PTHREAD_COND_INITIALIZER;
   lvarNew->_mutex = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
   return lvarNew;
@@ -397,29 +396,32 @@ static int _put(Lvar<a>* l, a newState) {
     return 0;
   }
 
-  if (l->_bot) {
-    l->_value = newState;
-    l->_bot = 0;
-    pthread_mutex_unlock(&(l->_mutex));
-    pthread_cond_broadcast(&(l->_cond));
-    return 1;
-  } 
-
   a oldState = l->_value;
 
+  // if old value is bottom, new value is newState
+  if (l->_lattice->_leq(oldState, l->_lattice->_bottom)) {
+    l->_value = newState;
+  }
   // if the old value is top, new value is also top, and nothing changes
-  if (l->_lattice->_leq(l->_lattice->_top, oldState)) {
+  else if (l->_lattice->_leq(l->_lattice->_top, oldState)) {
     // if the new state does not match our top or bottom pointer, we can free
-    if (newState != l->_lattice->_top) {
+    if (newState != l->_lattice->_bottom && newState != l->_lattice->_top) {
       l->_lattice->_free(newState); 
     }     
+  }
+  // if newState is bottom, new value is old value, and nothing changes
+  else if (l->_lattice->_leq(newState, l->_lattice->_bottom)) {
+    // if the new state does not match our top or bottom pointer, we can free
+    if (newState != l->_lattice->_bottom && newState != l->_lattice->_top) {
+      l->_lattice->_free(newState); 
+    }  
   }
   // if newState is top, new value is also top
   else if (l->_lattice->_leq(l->_lattice->_top, newState)) {
     l->_value = l->_lattice->_top;
     l->_lattice->_free(oldState);
     // if the new state does not match our top or bottom pointer, we can free
-    if (newState != l->_lattice->_top) {
+    if (newState != l->_lattice->_bottom && newState != l->_lattice->_top) {
       l->_lattice->_free(newState); 
     }  
   }
@@ -443,17 +445,17 @@ static int _put(Lvar<a>* l, a newState) {
       #ifdef CHECK
         l->_value = l->_lattice->_top;
         // if the old state does not match our top or bottom pointer, we can free
-        if (oldState != l->_lattice->_top) {
+        if (oldState != l->_lattice->_bottom && oldState != l->_lattice->_top) {
           l->_lattice->_free(oldState); 
         } 
         // if the new state does not match our top or bottom pointer, we can free
-        if (newState != l->_lattice->_top) {
+        if (newState != l->_lattice->_bottom && newState != l->_lattice->_top) {
           l->_lattice->_free(newState); 
         }  
       #endif
   
       // if the new value does not match our top or bottom pointer, we can free
-      if (newValue != l->_lattice->_top) {
+      if (newValue != l->_lattice->_bottom && newValue != l->_lattice->_top) {
         l->_lattice->_free(newValue); 
       }  
 
@@ -468,12 +470,14 @@ static int _put(Lvar<a>* l, a newState) {
     l->_value = newValue;
     // if the old state does not match our top or bottom pointer
     // (or the new value), we can free
-    if (oldState != l->_lattice->_top && oldState != newValue) {
+    if (oldState != l->_lattice->_bottom && oldState != l->_lattice->_top
+        && oldState != newValue) {
       l->_lattice->_free(oldState); 
     } 
     // if the new state does not match our top or bottom pointer
     // (or the new value), we can free
-    if (newState != l->_lattice->_top && newState != newValue) {
+    if (newState != l->_lattice->_bottom && newState != l->_lattice->_top
+        && newState != newValue) {
       l->_lattice->_free(newState); 
     }  
     
@@ -500,14 +504,6 @@ static int _put_destructive(Lvar<a>* l, a newState) {
     return 0;
   }
 
-  if (l->_bot) {
-    l->_value = newState;
-    l->_bot = 0;
-    pthread_mutex_unlock(&(l->_mutex));
-    pthread_cond_broadcast(&(l->_cond));
-    return 1;
-  } 
-
   a oldState = l->_value;
   a newValue = l-> _lattice-> _lub(oldState, newState);
 
@@ -526,11 +522,11 @@ static int _put_destructive(Lvar<a>* l, a newState) {
     #ifdef CHECK
       l->_value = l->_lattice->_top;
       // if the old state does not match our top or bottom pointer, we can free
-      if (oldState != l->_lattice->_top) {
+      if (oldState != l->_lattice->_bottom && oldState != l->_lattice->_top) {
         l->_lattice->_free(oldState); 
       } 
       // if the new state does not match our top or bottom pointer, we can free
-      if (newState != l->_lattice->_top) {
+      if (newState != l->_lattice->_bottom && newState != l->_lattice->_top) {
         l->_lattice->_free(newState); 
       }  
       pthread_mutex_unlock(&(l->_mutex));
@@ -538,7 +534,8 @@ static int _put_destructive(Lvar<a>* l, a newState) {
       return 0;
     #endif
 
-    if (newState != l->_lattice->_top && newState != newValue) {
+    if (newState != l->_lattice->_bottom && newState != l->_lattice->_top
+        && newState != newValue) {
       l->_lattice->_free(newValue);
     }
     pthread_mutex_unlock(&(l->_mutex));
@@ -559,13 +556,6 @@ static int _put_destructive(Lvar<a>* l, a newState) {
 
 template<a>
 static ActivationSet<a>* _thresholdReached(Lvar<a>* l, ThresholdSet<a> * t) {
-  if (l->_lattice->_leq(l->_lattice->_top, l->_value)){
-    #ifdef DEBUG
-      printf("Error: value in lvar is top!\n");
-      exit(0);
-    #endif
-    return NULL;
-  }
   for (int i = 0; i < t->_index; i++) {
     for (int j = 0; j < t->_a_sets[i]->_index; j++) {
       if (l-> _lattice->_leq(t->_a_sets[i]->_set[j], l->_value)) {
@@ -594,11 +584,6 @@ static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
       return NULL;
     }
   #endif
-
-  if (l->_bot) {
-    pthread_mutex_unlock(&(l->_mutex));
-    return NULL;
-  }
 
   if (l->_lattice->_leq(l->_lattice->_top, l->_value)){
     #ifdef DEBUG
@@ -629,10 +614,6 @@ template<a>
 static a _freeze(Lvar<a>* l) {
   pthread_mutex_lock(&(l->_mutex));
   l->_frozen = 1;
-  if (l->_bot) {
-    pthread_mutex_unlock(&(l->_mutex));
-    return NULL;
-  } 
   a result = l->_value;
   pthread_mutex_unlock(&(l->_mutex));
   return result;
@@ -646,10 +627,22 @@ static a _freeze(Lvar<a>* l) {
 template<a>
 int _checkLeq(Lattice<a>* D, a repElemSmall, a repElemBig) { 
   int result = 1;
+  if (!D->_leq(D->_bottom, D->_bottom)) {
+    printf("leq(bottom, bottom) should return 1\n");
+    result = 0;
+  }
   if (!D->_leq(D->_top, D->_top)) {
     printf("leq(top, top) should return 1\n");
     result = 0;
   } 
+  if (!D->_leq(D->_bottom, D->_top)) {
+    printf("leq(bottom, top) should return 1\n");
+    result = 0;
+  }
+  if (D->_leq(D->_top, D->_bottom)) {
+    printf("leq(top, bottom) should return 0\n");
+    result = 0;
+  }
   if (!D->_leq(repElemSmall, repElemBig)) {
     printf("according to specified test values, leq(");
     D->_show(repElemSmall);
@@ -671,6 +664,34 @@ int _checkLub(Lattice<a>* D, a rep1, a rep2, a expLub, int (*eq)()) {
     printf("lub(top, top) should return top\n");
     result = 0;
   }
+  if (!eq(D->_lub(D->_bottom, D->_bottom), D->_bottom)) {
+    printf("lub(bottom, bottom) should return bottom\n");
+    result = 0;
+  }
+  if (!eq(D->_lub(D->_top, D->_bottom), D->_top)) {
+    printf("lub(top, bottom) should return top\n");
+    result = 0;
+  }
+  if (!eq(D->_lub(D->_bottom, D->_top), D->_top)) {
+    printf("lub(bottom, top) should return top\n");
+    result = 0;
+  }
+  if (!eq(D->_lub(rep1, D->_bottom), rep1)) {
+    printf("lub(");
+    D->_show(rep1);
+    printf(", bottom) should return ");
+    D->_show(rep1);
+    printf("\n");
+    result = 0;
+  }
+  if (!eq(D->_lub(D->_bottom, rep1), rep1)) {
+    printf("lub(bottom, ");
+    D->_show(rep1);
+    printf(") should return ");
+    D->_show(rep1);
+    printf("\n");
+    result = 0;
+  }
   if (!eq(D->_lub(rep1, D->_top), D->_top)) {
     printf("lub(");
     D->_show(rep1);
@@ -681,6 +702,22 @@ int _checkLub(Lattice<a>* D, a rep1, a rep2, a expLub, int (*eq)()) {
     printf("lub(top, ");
     D->_show(rep1);
     printf(") should return top\n");
+    result = 0;
+  }
+  if (!eq(D->_lub(rep2, D->_bottom), rep2)) {
+    printf("lub(");
+    D->_show(rep2);
+    printf(", bottom) should return ");
+    D->_show(rep2);
+    printf("\n");
+    result = 0;
+  }
+  if (!eq(D->_lub(D->_bottom, rep2), rep2)) {
+    printf("lub(bottom, ");
+    D->_show(rep2);
+    printf(") should return ");
+    D->_show(rep2);
+    printf("\n");
     result = 0;
   }
   if (!eq(D->_lub(rep2, D->_top), D->_top)) {

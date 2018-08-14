@@ -96,7 +96,7 @@ Bits* lubBits(Bits* b1, Bits* b2) {
 }
 
 int putInt(Lvar<Bits*>* l, int i, int numBits) {
-  return put(l, BitArr(numBits, intToBits(numBits, i)));
+  return put (BitArr(numBits, intToBits(numBits, i))) in l;
 }
 
 Lattice<Bits*>* bitLattice() {

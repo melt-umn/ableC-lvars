@@ -78,8 +78,8 @@ int main(int argc, char **argv) {
   ThresholdSet<Integer*> * t = thresholdSet(lat){a};
 
   // try writing, reading, and freezing the lvar
-  int success = put(x, Int(13));
-  ActivationSet<Integer*> * result = get(x, t);
+  int success = put (Int(13)) in x;
+  ActivationSet<Integer*> * result = get (x) with t;
   freeze(x);
 
   if (result == NULL) {

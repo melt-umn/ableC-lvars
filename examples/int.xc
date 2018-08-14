@@ -127,7 +127,7 @@ int main(int argc, char **argv) {
 
   // *************** Step 3. Try putting some things in the lvars *************
 
-  int success1 = put(x, 7);
+  int success1 = put (7) in x;
   if (!success1) {
     printf("Int put failed!\n");
     free(x);
@@ -137,7 +137,7 @@ int main(int argc, char **argv) {
     return 0;
   }
 
-  int success2 = put(y, 1.2345);
+  int success2 = put (1.2345) in y;
   if (!success2) {
     printf("Double put failed!\n");
     free(x);
@@ -170,7 +170,7 @@ int main(int argc, char **argv) {
 
   // ****************** Step 5. Attempt to get value(s) of lvar(s) ************
 
-  ActivationSet<int>*  result = get(x, t);
+  ActivationSet<int>*  result = get (x) with t;
 
   if (result == a1) {;
     printf("Result: 7\n");

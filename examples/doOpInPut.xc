@@ -98,7 +98,7 @@ NodeSet* nodeSetUnion(NodeSet* set1, NodeSet* set2) {
       Set(hd, tl) -> {
         if (!isInSet(hd, result)) {
           // only do when adding from right
-          put(resultLvar, I(fib(hd)));
+          put (I(fib(hd))) in resultLvar;
           result = Set(hd, result);
         }  
         tempSet2 = tl;
@@ -125,7 +125,7 @@ void showNodes(NodeSet* s) {
 }
 
 cilk int setPut(Lvar<NodeSet*>* l, int value) {
-  cilk return put(l, Set(value, Empty()));
+  cilk return put (Set(value, Empty())) in l;
 }
 
 cilk int main(int argc, char **argv) {

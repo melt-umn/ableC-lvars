@@ -217,7 +217,7 @@ int** readStoreData(char* filename, int num) {
 // to put a value c into an lvar l
 
 cilk int cilkPut(Lvar<Customer*>* l, Customer* c) {
-  cilk return putD(l, c);
+  cilk return putD (c) in l;
 } 
 
 // to take data from array read in from file and put it into array of lvars
@@ -256,7 +256,7 @@ int lookupCustomer(Lvar<Customer*>** customers, int custLen, int cid) {
   ActivationSet<Customer*>* a = activationSet(lat, 1){Person(cid, P_Empty())};
   ThresholdSet<Customer*>* t = thresholdSet(lat, 1){a};
   for (int i = 0; i < custLen; i++) {
-    ActivationSet<Customer*>* result = get(customers[i], t);
+    ActivationSet<Customer*>* result = get (customers[i]) with t;
     if (result != NULL) {
       show(customers[i]);
       printf("\n");
@@ -284,7 +284,7 @@ int lookupProdSet(Lvar<Customer*>** customers, int custLen, ProductSet* prods) {
   ThresholdSet<Customer*>* t = thresholdSet(lat, 1){a};
   int ret = 0;
   for (int i = 0; i < custLen; i++) {
-    ActivationSet<Customer*>* result = get(customers[i], t);
+    ActivationSet<Customer*>* result = get (customers[i]) with t;
     if (result != NULL) {
       printf("Customer #");
       showCustomerID(freeze(customers[i]));

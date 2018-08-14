@@ -56,11 +56,11 @@ void showInteger(int n) {
 }
 
 cilk ActivationSet<int>* getCilk(Lvar<int>* x, ThresholdSet<int>* t) {
-  cilk return get(x, t);
+  cilk return get (x) with t;
 }
 
 cilk int putCilk(Lvar<int>* x, int v) {
-  cilk return put(x, v);
+  cilk return put (v) in x;
 }
 
 cilk int main(int argc, char **argv) {

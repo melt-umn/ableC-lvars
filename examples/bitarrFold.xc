@@ -63,7 +63,7 @@ cilk int sumToFrom(Lvar<Int*>* l, int* arr, int start, int end, int numBits) {
   for (int i = start; i <= end; i++) {
     spawn nextAmt = generateBits(arr[i], numBits);
     sync;
-    put(l, I(nextAmt));
+    put (I(nextAmt)) in l;
   }
   cilk return 1;
 }

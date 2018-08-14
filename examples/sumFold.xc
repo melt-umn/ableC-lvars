@@ -15,7 +15,7 @@ cilk int sumToFrom(Lvar<Int*>* l, int* arr, int start, int end) {
   for (int i = start; i <= end; i++) {
     total = total + arr[i];
   }
-  cilk return put(l, I(total));
+  cilk return put (I(total)) in l;
 }
 
 cilk int sumInChunks(Lvar<Int*>*l, int* arr, int len, int numChunks) {
@@ -68,7 +68,7 @@ cilk int main(int argc, char **argv) {
   int success;
   spawn success = sumInChunks(l, exArr, size, numChunks);
   sync;
-  freeze(l);
+  freeze l;
   printf("result = ");
   show(l);
   printf("\n");

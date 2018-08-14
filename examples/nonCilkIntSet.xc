@@ -118,10 +118,10 @@ int buildSet(int start, int stop, Lvar<Set_int*>* l);
 
 int buildSet(int start, int stop, Lvar<Set_int*>* l) {
   if (stop < start) {
-    put(l, int_Empty());
+    put (int_Empty()) in l;
     return 1;
   }
-  put(l, int_Set(start,int_Empty()));
+  put (int_Set(start,int_Empty())) in l;
   int res1, res2, res3;
   res1 = buildSet(start + 2, stop - 2, l);
   res3 = buildSet(start + 2, stop - 2, l);
@@ -137,7 +137,7 @@ int main(int argc, char **argv) {
   res = buildSet(0, 35, set); // 40 is too high
 
   ThresholdSet<Set_int*> *t = thresholdSet(D, 1){activationSet(D){int_Empty()}};
-  ActivationSet<Set_int*>*  result = get(set, t);
+  ActivationSet<Set_int*>*  result = get (set) with t;
   printf("Act Set: ");
   show(result);
   printf("\n");
@@ -145,7 +145,6 @@ int main(int argc, char **argv) {
   printf("Frozen Lvar: ");
   show(set);
   printf("\n");
-  //put(set, int_Empty());
   free(D);
   free(set);
   freeSet(t);

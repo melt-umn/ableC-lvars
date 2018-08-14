@@ -54,7 +54,7 @@ cilk int putOnes(Lvar<int*>* x, int index, ThresholdSet<int*>* t) {
     newArr[i] = 0;
   }
   newArr[index] = 1;
-  put(x, newArr);
+  put (newArr) in x;
   int result1, result2;
   spawn result1 = putOnes(x, index - 2, t);
   spawn result2 = putOnes(x, index - 1, t);
@@ -63,7 +63,7 @@ cilk int putOnes(Lvar<int*>* x, int index, ThresholdSet<int*>* t) {
 }
 
 cilk ActivationSet<int*>* getCilk(Lvar<int*>* l, ThresholdSet<int*>* t) {
-  cilk return get(l, t);
+  cilk return get (l) with t;
 }
         
 
@@ -97,7 +97,7 @@ cilk int main(int argc, char **argv) {
   printf("Result is: ");
   show(x);
   printf(", act set matched: ");
-  show(get(x, t));
+  show(get (x) with t);
   printf("\n");
   free(D);
   free(x);

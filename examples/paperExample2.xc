@@ -30,8 +30,8 @@ int main(int argc, char **argv) {
   ActivationSet<int> * a = activationSet(D){6};
   ThresholdSet<int> * t = thresholdSet(D){a};
   // write, read, and freeze lvar
-  put(x, 42);
-  ActivationSet<int> * result = get(x, t);
+  put (42) in x;
+  ActivationSet<int> * result = get (x) with t;
   freeze(x);
   printf("Value of x: ");
   show(x); 

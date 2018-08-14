@@ -28,18 +28,18 @@ int main(int argc, char **argv) {
   }
 
   Lvar<Pair*>* p = newLvar(D);
-  put(p, IP(I(3), I(4)));
-  ActivationSet<Pair*>* v1 = get(p, t); // have to specify range
+  put (IP(I(3), I(4))) in p;
+  ActivationSet<Pair*>* v1 = get (p) with t; // have to specify range
   printf("v1 = ");
   show(v1);
   printf("\n");
 
   // clean up
 
-  freeActSets(t);
-  freeSet(t);
-  freeLvar(p);
-  freeLattice(D);
+  freeActSets t;
+  freeSet t;
+  freeLvar p;
+  freeLattice D;
 
   return 1;
 }

@@ -38,7 +38,7 @@ cilk int putCilk(Lvar<int>* x, int val, int count) {
     cilk return result;
   }
   printf("put\n");
-  cilk return put(x, val);
+  cilk return put (val) in x;
 }
 
 cilk ActivationSet<int> * getCilk(Lvar<int>* x, ThresholdSet<int>* t, int count);
@@ -51,7 +51,7 @@ cilk ActivationSet<int> * getCilk(Lvar<int>* x, ThresholdSet<int>* t, int count)
   }
   else {
     printf("get\n");
-    cilk return get(x, t);
+    cilk return get (x) with t;
   }
 }
 cilk ActivationSet<int> * putGetEx(Lvar<int> *x, ThresholdSet<int>* t) {
