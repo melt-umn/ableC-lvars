@@ -12,6 +12,8 @@
 + Change "show" back to "display"?
 + Way to have get return actual value instead of activation set when frozen?
 + Check that arguments to lattice() are function pointers?
++ Error out upon top instead of allowing to continue
++ (Will need to fix customer example accordingly, maybe based on lub)?
 
 #### LVars Functionality:
 
@@ -40,6 +42,7 @@
 + Is there a way to error out only on the first missing include of a header?
 + Should lub always create a new copy instead of referencing old ones so that programmer can free without messing up lvar, instead of sometimes returning the original and sometimes making a new one? Otherwise can't safely free lub taken in passing, since might be freeing a value you need.
 + Overload free instead of having separate free for each thing
++ Make get binary prefix operator, and have get lvar {{a1}, {a2}} automatically create threshold set?
 
 ### Things to think about:
 

@@ -63,7 +63,7 @@ cilk int main(int argc, char **argv) {
   Lattice<int> * D = lattice(100, leq, lub, showInteger);
   Lvar<int>* x = newLvar(D);
   Lvar<int>* y = newLvar(D);
-  ThresholdSet<int>* t = thresholdSet(D, 1){activationSet(D, 1){8}};
+  ThresholdSet<int>* t = thresholdSet(D, 1){activationSet(D,1){7}, activationSet(D, 1){8}};
   ActivationSet<int>* result;
   int putres;
   spawn result = getCilk(x, t);
