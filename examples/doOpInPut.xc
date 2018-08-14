@@ -130,7 +130,7 @@ cilk int setPut(Lvar<NodeSet*>* l, int value) {
 
 cilk int main(int argc, char **argv) {
 
-  Lattice<NodeSet*>* D = lattice(Empty(), Top(), isNodeSubset, nodeSetUnion, 
+  Lattice<NodeSet*>* D = lattice(Top(), isNodeSubset, nodeSetUnion, 
                                  showNodes);
 
   Lattice<Int*>* intLat = sumIntLattice();

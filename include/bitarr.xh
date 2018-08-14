@@ -100,7 +100,7 @@ int putInt(Lvar<Bits*>* l, int i, int numBits) {
 }
 
 Lattice<Bits*>* bitLattice() {
-  return lattice(B_Bot(), B_Top(), leqBits, lubBits, showBits);
+  return lattice(B_Top(), leqBits, lubBits, showBits);
 }
 
 #endif

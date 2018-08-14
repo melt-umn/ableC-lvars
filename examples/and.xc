@@ -160,8 +160,7 @@ int main(int argc, char **argv) {
 
   //************* Step 1. set up lattice **************************************
 
-  Lattice<State*> * D = lattice(Pair(Bot(), Bot()), Top(), leq,
-                                lub, showState);
+  Lattice<State*> * D = lattice(Top(), leq, lub, showState);
 
   //************* Step 2. create lvar(s) **************************************
 

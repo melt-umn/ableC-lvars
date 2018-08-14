@@ -65,7 +65,7 @@ cilk int task(int *xs) {
 }
 
 cilk int main (int argc, char **argv) {
-  lat = lattice(I_Bot(), I_Top(), leqInt, lubInt, showInteger, freeInteger);
+  lat = lattice(I_Top(), leqInt, lubInt, showInteger, freeInteger);
   accum = newLvar(lat);
 
   int* arr = malloc(N * sizeof(int));

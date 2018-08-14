@@ -65,7 +65,7 @@ void showNat(Nat* n) {
 }
 
 Lattice<Nat*> * natLattice() {
-  return lattice(BotNat(), TopNat(), leqNat, lubNat, showNat);
+  return lattice(TopNat(), leqNat, lubNat, showNat);
 }
 
 #endif

@@ -70,7 +70,7 @@ void showInteger(Integer* n) {
 int main(int argc, char **argv) {
 
   // set up lattice
-  Lattice<Integer*> * lat = lattice(Bottom(), Top(), leqInteger, lubInteger, showInteger);
+  Lattice<Integer*> * lat = lattice(Top(), leqInteger, lubInteger, showInteger);
 
   // make lvar and threshold set for lattice
   Lvar<Integer*> * x = newLvar(lat);

@@ -64,7 +64,7 @@ Int* lubProdInt(Int* i1, Int* i2) {
 }
 
 Lattice<Int*>* prodIntLattice() {
-  return lattice(I_Bot(), I_Top(), leqProdInt, lubProdInt, showInteger);
+  return lattice(I_Top(), leqProdInt, lubProdInt, showInteger);
 }
 
 #endif

@@ -50,7 +50,7 @@ int intFoldPut(Lvar<Int*>* l, int val) {
 Lattice<Int*>* intFoldLattice(int (*mapFunc)(), int (*foldFunc)()) {
   map_f = mapFunc;
   fold_g = foldFunc;
-  return lattice(I_Bot(), I_Top(), leqFoldInt, lubFoldInt, showInteger, freeInteger);
+  return lattice(I_Top(), leqFoldInt, lubFoldInt, showInteger, freeInteger);
 }
 
 #endif

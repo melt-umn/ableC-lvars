@@ -44,7 +44,7 @@ Int* lubSumInt(Int* i1, Int* i2) {
 }
 
 Lattice<Int*>* sumIntLattice() {
-  return lattice(I_Bot(), I_Top(), leqSumInt, lubSumInt, showInteger, freeInteger);
+  return lattice(I_Top(), leqSumInt, lubSumInt, showInteger, freeInteger);
 }
 
 #endif

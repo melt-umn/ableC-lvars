@@ -56,19 +56,19 @@ concrete productions top::ThreshInitializer_c
   }
 
 concrete productions top::PrimaryExpr_c
-| 'lattice' '(' least::AssignExpr_c ',' greatest::AssignExpr_c ','
+| 'lattice' '(' greatest::AssignExpr_c ','
                 order::AssignExpr_c ',' lub::AssignExpr_c ',' 
                 display::AssignExpr_c ',' freeMeth::AssignExpr_c ')'
   {
-    top.ast = newLattice(least.ast, greatest.ast, order.ast, lub.ast,
+    top.ast = newLattice(greatest.ast, order.ast, lub.ast,
                          display.ast, freeMeth.ast, location=top.location);
   }
 
-| 'lattice' '(' least::AssignExpr_c ',' greatest::AssignExpr_c ','
+| 'lattice' '(' greatest::AssignExpr_c ','
                 order::AssignExpr_c ',' lub::AssignExpr_c ',' 
                 display::AssignExpr_c ')'
   {
-    top.ast = newLatticeNoFree(least.ast, greatest.ast, order.ast, lub.ast,
+    top.ast = newLatticeNoFree(greatest.ast, order.ast, lub.ast,
                          display.ast, location=top.location);
   }
 

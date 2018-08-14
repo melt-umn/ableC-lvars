@@ -24,7 +24,7 @@ void showInteger(int n) {
 int main(int argc, char **argv) {
   // set up lattice
   Lattice<int> * D =
-    lattice(0, 100, leqInt, lubInt, showInteger);
+    lattice(100, leqInt, lubInt, showInteger);
   // make lvar and threshold set for lattice
   Lvar<int> *x = newLvar(D);
   ActivationSet<int> * a = activationSet(D){6};

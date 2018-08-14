@@ -76,7 +76,7 @@ cilk int main(int argc, char **argv) {
   int* top = malloc(sizeof(int) * ARRSIZE);
   top = NULL;
 
-  Lattice<int*>* D = lattice(bottom, top, leqArr, lubArr, showArr);
+  Lattice<int*>* D = lattice(top, leqArr, lubArr, showArr);
   Lvar<int*> * x = newLvar(D);
 
   int* act1 = malloc(ARRSIZE * sizeof(int));

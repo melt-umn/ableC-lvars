@@ -156,7 +156,7 @@ void free_intPair(Pair* p) {
 }
 
 Lattice<Pair*>* intPairLattice() {
-  return lattice(IP_Bot(), IP_Top(), leq_intPair, lub_intPair, show_intPair, free_intPair);
+  return lattice(IP_Top(), leq_intPair, lub_intPair, show_intPair, free_intPair);
 }
 
 #endif

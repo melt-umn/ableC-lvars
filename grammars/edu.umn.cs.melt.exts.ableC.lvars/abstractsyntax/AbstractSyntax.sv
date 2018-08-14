@@ -18,57 +18,47 @@ imports edu:umn:cs:melt:ableC:abstractsyntax:overloadable as ovrld;
 //************************ Lattice constructor production ********************
 
 abstract production newLattice
-top::Expr ::= bot::Expr topV::Expr leq::Expr lub::Expr disp::Expr free::Expr
+top::Expr ::= topV::Expr leq::Expr lub::Expr disp::Expr free::Expr
 {
   propagate substituted;
   top.pp =
-    pp"lattice(${bot.pp}, ${topV.pp}, ${leq.pp}, ${lub.pp}, ${disp.pp}, ${free.pp})";
+    pp"lattice(${topV.pp}, ${leq.pp}, ${lub.pp}, ${disp.pp}, ${free.pp})";
 
   local childErrors::[Message] =
-    bot.errors ++ topV.errors ++ leq.errors ++
+    topV.errors ++ leq.errors ++
     lub.errors ++ disp.errors ++ free.errors;  
 
   local localErrors::[Message] =
-    checkLvarHeaderDef(top.location, top.env) ++ 
-    if compatibleTypes(bot.typerep, topV.typerep, false, true)
-    then []
-    else
-      [err(top.location, "Got " ++ showType(topV.typerep) ++
-      " for Top, but Bottom has type " ++ showType(bot.typerep))];
+    checkLvarHeaderDef(top.location, top.env);
 
   forwards to
     mkErrorCheck(childErrors ++ localErrors,
       ableC_Expr{
-       inst _newLattice<$directTypeExpr{bot.typerep}>($Expr{bot}, $Expr{topV},    
+       inst _newLattice<$directTypeExpr{topV.typerep}>($Expr{topV},    
        $Expr{leq}, $Expr{lub}, $Expr{disp}, $Expr{free})
       }
     );
 }
 
 abstract production newLatticeNoFree
-top::Expr ::= bot::Expr topV::Expr leq::Expr lub::Expr disp::Expr
+top::Expr ::= topV::Expr leq::Expr lub::Expr disp::Expr
 {
   propagate substituted;
   top.pp =
-    pp"lattice(${bot.pp}, ${topV.pp}, ${leq.pp}, ${lub.pp}, ${disp.pp})";
+    pp"lattice(${topV.pp}, ${leq.pp}, ${lub.pp}, ${disp.pp})";
 
   local childErrors::[Message] =
-    bot.errors ++ topV.errors ++ leq.errors ++
+    topV.errors ++ leq.errors ++
     lub.errors ++ disp.errors;  
 
   local localErrors::[Message] =
-    checkLvarHeaderDef(top.location, top.env) ++ 
-    if compatibleTypes(bot.typerep, topV.typerep, false, true)
-    then []
-    else
-      [err(top.location, "Got " ++ showType(topV.typerep) ++
-      " for Top, but Bottom has type " ++ showType(bot.typerep))];
+    checkLvarHeaderDef(top.location, top.env);
 
   forwards to
     mkErrorCheck(childErrors ++ localErrors,
       ableC_Expr{
-       inst _newLattice<$directTypeExpr{bot.typerep}>($Expr{bot}, $Expr{topV},    
-       $Expr{leq}, $Expr{lub}, $Expr{disp}, inst _defaultFree<$directTypeExpr{bot.typerep}>)
+       inst _newLattice<$directTypeExpr{topV.typerep}>($Expr{topV},    
+       $Expr{leq}, $Expr{lub}, $Expr{disp}, inst _defaultFree<$directTypeExpr{topV.typerep}>)
       }
     );
 }

@@ -246,7 +246,7 @@ int main(int argc, char **argv) {
 
   //*********** set up lattice ************************************************
 
-  Lattice<VoteSet*> * D = lattice(Empty(), Top(), leq, lub, showVoteSet);
+  Lattice<VoteSet*> * D = lattice(Top(), leq, lub, showVoteSet);
 
   // **************** create some new lvars ***********************************
 

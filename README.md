@@ -11,6 +11,7 @@
 + Tidy up examples in parallel-examples, tidy up header file
 + Change "show" back to "display"?
 + Way to have get return actual value instead of activation set when frozen?
++ Check that arguments to lattice() are function pointers?
 
 #### LVars Functionality:
 

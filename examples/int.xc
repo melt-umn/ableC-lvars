@@ -117,8 +117,8 @@ int main(int argc, char **argv) {
 
   // *************** Step 1. Set up lattice ***********************************
 
-  Lattice<int> * D = lattice(0, 100, leq, lub, showInteger);
-  Lattice<double> * D2 = lattice(0.0, 100.0, leqD, lubD, showDouble);
+  Lattice<int> * D = lattice(100, leq, lub, showInteger);
+  Lattice<double> * D2 = lattice(100.0, leqD, lubD, showDouble);
 
   // *************** Step 2. Make some lvars **********************************
 

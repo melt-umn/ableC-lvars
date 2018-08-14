@@ -168,7 +168,7 @@ cilk int asyncAnd(Bl* b1, Bl* b2) {
 
   // set-up
 
-  Lattice<State*> * D = lattice(Pair(Bot(), Bot()), Top(), leq,
+  Lattice<State*> * D = lattice(Top(), leq,
                                 lub, showState);
   Lvar<State*> * andResult = newLvar(D);
   ActivationSet<State*> * trueRes = activationSet(D, 1){Pair(T(), T())};

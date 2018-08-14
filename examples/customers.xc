@@ -382,7 +382,7 @@ cilk int main(int argc, char **argv) {
 
   // set up
 
-  lat = lattice(CustBot(), CustTop(), leqCustomer, lubCustomer, showCustomer, freeCustomer);
+  lat = lattice(CustTop(), leqCustomer, lubCustomer, showCustomer, freeCustomer);
   int numCustomers = 50;
   int numStore1 = 1000;
   int numStore2 = 1000;

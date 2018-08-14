@@ -113,7 +113,7 @@ Set_int* lubSet_int(Set_int* set1, Set_int* set2) {
 }
 
 Lattice<Set_int*> * latticeint() {
-  return lattice(int_Empty(), int_Top(), leqSet_int, lubSet_int, showSet_int);
+  return lattice(int_Top(), leqSet_int, lubSet_int, showSet_int);
 }
 
 cilk int buildSet(int start, int stop, Lvar<Set_int*>* l);

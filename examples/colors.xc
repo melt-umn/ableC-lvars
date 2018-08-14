@@ -337,7 +337,7 @@ int main(int argc, char **argv) {
     printf("Must enter two color names\n");
   }
   else {
-    Lattice<Color*> * D = lattice(Bottom(), Top(), leqColor, lubColor, showColor);
+    Lattice<Color*> * D = lattice(Top(), leqColor, lubColor, showColor);
     Color* c1 = getColor(argv[1]);
     Color* c2 = getColor(argv[2]);
     Lvar<Color*>* x = newLvar(D);

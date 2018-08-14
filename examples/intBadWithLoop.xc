@@ -68,7 +68,7 @@ cilk ActivationSet<int> * putGetEx(Lvar<int> *x, ThresholdSet<int>* t) {
 
 cilk int main(int argc, char **argv) {
 
-  Lattice<int> * D = lattice(0, 100, leqInt, lubInt, showInteger);
+  Lattice<int> * D = lattice(100, leqInt, lubInt, showInteger);
   Lvar<int> *x = newLvar(D);
   ActivationSet<int> * a1 = activationSet(D){6};
   ThresholdSet<int> * t = thresholdSet(D){a1};

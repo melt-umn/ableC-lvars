@@ -391,7 +391,7 @@ cilk YN* getVoteSearchCilk(int* arr, int size) {
 
 int nonCilk(int* arr, int size) {
 
-  Lattice<VoteSet*> * D = lattice(Empty(), Top(), leq, lub, showVoteSet);
+  Lattice<VoteSet*> * D = lattice(Top(), leq, lub, showVoteSet);
   Lvar<VoteSet*> *votes = newLvar(D);
 
   ActivationSet<VoteSet*> * noPizza = activationSet(D, 1);
@@ -428,7 +428,7 @@ int nonCilk(int* arr, int size) {
 
 cilk int withCilk(int* arr, int size) {
 
-  Lattice<VoteSet*> * D = lattice(Empty(), Top(), leq, lub, showVoteSet);
+  Lattice<VoteSet*> * D = lattice(Top(), leq, lub, showVoteSet);
   Lvar<VoteSet*> *votes = newLvar(D);
 
   ActivationSet<VoteSet*> * noPizza = activationSet(D, 1);
