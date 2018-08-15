@@ -18,16 +18,16 @@ int isTopInt(Int* i) {
   }
 }
 
-// show method
+// display method
 
-void show_intPair(Pair* p) {
+void display_intPair(Pair* p) {
   match (p) {
     IP_Top() -> {printf("Error!");}
     IP(i1, i2) -> {
       printf("(");
-      showInteger(i1);
+      displayInteger(i1);
       printf(", ");
-      showInteger(i2);
+      displayInteger(i2);
       printf(")");
     }
     IP_Bot() -> {printf("?");}
@@ -156,7 +156,7 @@ void free_intPair(Pair* p) {
 }
 
 Lattice<Pair*>* intPairLattice() {
-  return lattice(IP_Top(), leq_intPair, lub_intPair, show_intPair, free_intPair);
+  return lattice(IP_Top(), leq_intPair, lub_intPair, display_intPair, free_intPair);
 }
 
 #endif

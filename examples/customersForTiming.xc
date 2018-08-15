@@ -113,11 +113,11 @@ Customer* lubCustomer (Customer* c1, Customer* c2) {
   }
 }
 
-// ************* set up show for customer lattice *****************************
+// ************* set up display for customer lattice *****************************
 
 // helper to generate string for product set
 
-void showProducts(ProductSet* p) {
+void displayProducts(ProductSet* p) {
   match (p) {
     P_Empty() -> {}
     P_Set(hd, tl) -> {
@@ -126,16 +126,16 @@ void showProducts(ProductSet* p) {
         P_Empty() -> {}
         P_Set(_, _) -> {
           printf(", ");
-          showProducts(tl);
+          displayProducts(tl);
         }
       }
     }
   }
 }
 
-// helper to show just the ID of a customer
+// helper to display just the ID of a customer
 
-void showCustomerID(Customer* c) {
+void displayCustomerID(Customer* c) {
   match(c) {
     CustTop() -> {printf("Top()");}
     CustBot() -> {printf("Bot()");}
@@ -143,13 +143,13 @@ void showCustomerID(Customer* c) {
   }
 }
 
-void showCustomer(Customer* c) {
+void displayCustomer(Customer* c) {
   match (c) {
     CustTop() -> {printf("Top()");}
     CustBot() -> {printf("Bot()");}
     Person(name, prods) -> {
       printf("Person(%d, {", name);
-      showProducts(prods);
+      displayProducts(prods);
       printf("})");
     }
   }
@@ -228,7 +228,7 @@ cilk int main(int argc, char **argv) {
 
   // set up
 
-  lat = lattice(CustTop(), leqCustomer, lubCustomer, showCustomer);
+  lat = lattice(CustTop(), leqCustomer, lubCustomer, displayCustomer);
   int numCustomers = 50;
   int numStore1 = 5000;
   int numStore2 = 5000;

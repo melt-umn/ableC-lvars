@@ -17,8 +17,8 @@ int eqint(int i1, int i2) {
     return i1 == i2;
 }
 
-string showint(int i) {
-    return show(i);
+string displayint(int i) {
+    return display(i);
 }
 
 // helper methods for set
@@ -66,26 +66,26 @@ int isIntSubset(intSet* set1, intSet* set2) {
   }
 }
 
-// show method
+// display method
 
-string showInnerIntSet(intSet* set) {
+string displayInnerIntSet(intSet* set) {
   match (set) {
     iSet_Top() -> {return str("Error!");}
     iSet_Empty() -> {return str("");}
     iSet(hd, tl) -> {
-      string result = show(hd);
+      string result = display(hd);
       match (tl) {
         iSet_Top() -> {return str("Error!");}
         iSet_Empty() -> {return result;}
-        iSet(_, _) -> {return result + ", " + show(tl);}
+        iSet(_, _) -> {return result + ", " + display(tl);}
       }
     }
   }
 }
 
-string showIntSet(intSet* set) {
+string displayIntSet(intSet* set) {
   string result = str("{");
-  return showInnerIntSet(set) + str("}");
+  return displayInnerIntSet(set) + str("}");
 }
 
 // leq method
@@ -208,7 +208,7 @@ intSet* intSetMinus(intSet* set1, intSet* set2) {
 }
 
 Lattice<intSet*> * latticeint() {
-  return lattice(iSet_Empty(), iSet_Top(), leqSet_int, lubSet_int, showIntSet);
+  return lattice(iSet_Empty(), iSet_Top(), leqSet_int, lubSet_int, displayIntSet);
 }
 
 #endif

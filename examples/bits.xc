@@ -19,7 +19,7 @@ int leqArr(int* arr1, int* arr2) {
   return 1;
 }
 
-void showArr(int* arr) {
+void displayArr(int* arr) {
   printf("[");
   int i = 0;
   for (; i < ARRSIZE - 1; i++) {
@@ -76,7 +76,7 @@ cilk int main(int argc, char **argv) {
   int* top = malloc(sizeof(int) * ARRSIZE);
   top = NULL;
 
-  Lattice<int*>* D = lattice(top, leqArr, lubArr, showArr);
+  Lattice<int*>* D = lattice(top, leqArr, lubArr, displayArr);
   Lvar<int*> * x = newLvar(D);
 
   int* act1 = malloc(ARRSIZE * sizeof(int));
@@ -95,9 +95,9 @@ cilk int main(int argc, char **argv) {
 
   freeze(x);
   printf("Result is: ");
-  show(x);
+  display(x);
   printf(", act set matched: ");
-  show(get (x) with t);
+  display(get (x) with t);
   printf("\n");
   free(D);
   free(x);

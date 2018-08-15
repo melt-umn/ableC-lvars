@@ -98,7 +98,7 @@ cilk int main (int argc, char **argv) {
   freeze(accum);
   //printf("Result: %d\n", get accum);
   printf("Result: ");
-  show(accum);
+  display(accum);
   printf("\n");
   cilk return 1;
 }

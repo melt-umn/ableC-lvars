@@ -95,7 +95,7 @@ cilk int main(int argc, char **argv) {
   sync;
   freeze(l);
   printf("result = ");
-  show(l);
+  display(l);
 
   // clean up
 

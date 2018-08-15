@@ -11,9 +11,9 @@ datatype Int {
   I_Bot();
 };
 
-// set up show method
+// set up display method
 
-void showInteger(Int* i) {
+void displayInteger(Int* i) {
   match (i) {
     I_Top() -> {printf("Error!");}
     I_Bot() -> {printf("?");}

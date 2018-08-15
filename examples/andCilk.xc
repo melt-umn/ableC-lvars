@@ -138,7 +138,7 @@ State* lub (State* s1, State* s2) {
 
 //************** display function for State ***********************************
 
-void showState(State* s) {
+void displayState(State* s) {
   match (s) {
     Top() -> {printf("Top()");}
     Pair(b1, b2) -> {
@@ -169,7 +169,7 @@ cilk int asyncAnd(Bl* b1, Bl* b2) {
   // set-up
 
   Lattice<State*> * D = lattice(Top(), leq,
-                                lub, showState);
+                                lub, displayState);
   Lvar<State*> * andResult = newLvar(D);
   ActivationSet<State*> * trueRes = activationSet(D, 1){Pair(T(), T())};
   ActivationSet<State*> * falseRes = activationSet(D, 5)
@@ -180,12 +180,12 @@ cilk int asyncAnd(Bl* b1, Bl* b2) {
                                                          Pair(F(), T())};
   ThresholdSet<State*> * threshold = thresholdSet(D, 2){trueRes, falseRes};
   printf("Threshold set: ");
-  show(threshold);
+  display(threshold);
   printf("\n");
   printf("True activation set: ");
-  show(trueRes);
+  display(trueRes);
   printf("False activation set: ");
-  show(falseRes);
+  display(falseRes);
   
   // starting the parallel part
 

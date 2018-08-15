@@ -103,13 +103,13 @@ double lubD(double n1, double n2) {
 // ************************* display function for our lattice *****************
 
 // note that we still need to include these, since we can't directly pass in
-// show() to our lattice constructor
+// display() to our lattice constructor
 
-void showInteger(int n) {
+void displayInteger(int n) {
   printf("%d", n);
 }
 
-void showDouble(double n) {
+void displayDouble(double n) {
   printf("%f", n);
 }
 
@@ -117,8 +117,8 @@ int main(int argc, char **argv) {
 
   // *************** Step 1. Set up lattice ***********************************
 
-  Lattice<int> * D = lattice(100, leq, lub, showInteger);
-  Lattice<double> * D2 = lattice(100.0, leqD, lubD, showDouble);
+  Lattice<int> * D = lattice(100, leq, lub, displayInteger);
+  Lattice<double> * D2 = lattice(100.0, leqD, lubD, displayDouble);
 
   // *************** Step 2. Make some lvars **********************************
 
@@ -162,10 +162,10 @@ int main(int argc, char **argv) {
   // try to add activation set from another lattice to a threshold set
   ActivationSet<double> * a4 = activationSet(D2){8.5};
   ThresholdSet<double> *t2 = thresholdSet(D2, 1){a4};
-  printf("Showing a threshold set: ");
-  show(t2);
-  printf("\nShowing an activation set: ");
-  show(a4);
+  printf("displaying a threshold set: ");
+  display(t2);
+  printf("\ndisplaying an activation set: ");
+  display(a4);
   printf("\n");
 
   // ****************** Step 5. Attempt to get value(s) of lvar(s) ************
@@ -185,7 +185,7 @@ int main(int argc, char **argv) {
     printf("Error!\n");
   }
 
-  show(t);
+  display(t);
   
   // *********** Step 6. Clean up *********************************************
 

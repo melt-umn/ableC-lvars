@@ -34,7 +34,7 @@ Int* intId(Int* i1, Int* i2) {
 }
 
 int main(int argc, char **argv) {
-  Lattice<Int*>* lat = lattice(I_Top(), intEq, intId, showInteger);
+  Lattice<Int*>* lat = lattice(I_Top(), intEq, intId, displayInteger);
   ActivationSet<Int*>* a1 = activationSet(lat){I(1), I(2)};
   ActivationSet<Int*>* a2 = activationSet(lat){I(3), I(4)};
   // lub of any element from a1 and any element from a2 
@@ -42,7 +42,7 @@ int main(int argc, char **argv) {
   ThresholdSet<Int*>* t = thresholdSet(lat){a1, a2};
   Lvar<Int*>* l = newLvar lat;
   put (I(2)) in l;
-  show(get l with t);
+  display(get l with t);
   // displays the activation set {I(1), I(2)}
   // since value of l is at or above I(2)
 }

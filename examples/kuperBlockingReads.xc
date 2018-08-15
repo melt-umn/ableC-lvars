@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
   put (IP(I(3), I(4))) in p;
   ActivationSet<Pair*>* v1 = get (p) with t; // have to specify range
   printf("v1 = ");
-  show(v1);
+  display(v1);
   printf("\n");
 
   // clean up

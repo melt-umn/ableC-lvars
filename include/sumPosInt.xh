@@ -29,7 +29,7 @@ int lubSumInt(int i1, int i2) {
 }
 
 Lattice<int>* sumIntLattice() {
-  return lattice(0, -1, leqSumInt, lubSumInt, showInteger);
+  return lattice(0, -1, leqSumInt, lubSumInt, displayInteger);
 }
 
 #endif

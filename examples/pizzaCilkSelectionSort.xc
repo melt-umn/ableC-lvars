@@ -29,7 +29,7 @@ datatype VoteSet {
 
 // ******************* display method for our lattice *************************
 
-void showYN(YN* yn) {
+void displayYN(YN* yn) {
   match (yn) {
     Yes () -> {
       printf("Yes()");
@@ -40,36 +40,36 @@ void showYN(YN* yn) {
   }
 }
 
-void showVote(Vote* v) {
+void displayVote(Vote* v) {
   match (v) {
     Horace(yn1) -> {
       printf("Horace(");
-      showYN(yn1);
+      displayYN(yn1);
       printf(")");
     }
     Franz(yn1) -> {
       printf("Franz(");
-      showYN(yn1);
+      displayYN(yn1);
       printf(")");
     }
     Kat(yn1) -> {
       printf("Kat(");
-      showYN(yn1);
+      displayYN(yn1);
       printf(")");
     }
   }
 }
 
-void showInner(VoteSet* v) {
+void displayInner(VoteSet* v) {
   match (v) {
     Empty () -> {}
     Set (hd, tl) -> {
-      showVote(hd);
+      displayVote(hd);
       match (tl) {
         Empty () -> {}
         other -> { 
           printf(", ");
-          showInner(tl);
+          displayInner(tl);
         }
       }
     }
@@ -77,9 +77,9 @@ void showInner(VoteSet* v) {
   }
 }
 
-void showVoteSet(VoteSet* v) {
+void displayVoteSet(VoteSet* v) {
   printf("{");
-  showInner(v);
+  displayInner(v);
   printf("}");
 }
 
@@ -391,7 +391,7 @@ cilk YN* getVoteSearchCilk(int* arr, int size) {
 
 int nonCilk(int* arr, int size) {
 
-  Lattice<VoteSet*> * D = lattice(Top(), leq, lub, showVoteSet);
+  Lattice<VoteSet*> * D = lattice(Top(), leq, lub, displayVoteSet);
   Lvar<VoteSet*> *votes = newLvar(D);
 
   ActivationSet<VoteSet*> * noPizza = activationSet(D, 1);
@@ -428,7 +428,7 @@ int nonCilk(int* arr, int size) {
 
 cilk int withCilk(int* arr, int size) {
 
-  Lattice<VoteSet*> * D = lattice(Top(), leq, lub, showVoteSet);
+  Lattice<VoteSet*> * D = lattice(Top(), leq, lub, displayVoteSet);
   Lvar<VoteSet*> *votes = newLvar(D);
 
   ActivationSet<VoteSet*> * noPizza = activationSet(D, 1);

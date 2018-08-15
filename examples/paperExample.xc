@@ -57,9 +57,9 @@ Integer* lubInteger(Integer* n1, Integer* n2) {
   }
 }
 
-// set up show function for our lattice
+// set up display function for our lattice
 
-void showInteger(Integer* n) {
+void displayInteger(Integer* n) {
   match (n) {
      Top() -> {printf("Top");}
      Int(i) -> {printf("%d", i);}
@@ -70,7 +70,7 @@ void showInteger(Integer* n) {
 int main(int argc, char **argv) {
 
   // set up lattice
-  Lattice<Integer*> * lat = lattice(Top(), leqInteger, lubInteger, showInteger);
+  Lattice<Integer*> * lat = lattice(Top(), leqInteger, lubInteger, displayInteger);
 
   // make lvar and threshold set for lattice
   Lvar<Integer*> * x = newLvar(lat);
@@ -87,11 +87,11 @@ int main(int argc, char **argv) {
   }
   else {
     printf("Activation Set Reached: ");
-    show(a);
+    display(a);
     printf("\n");
   }
   printf("Actual Value of LVar: ");
-  show(x);
+  display(x);
   printf("\n");
 
   // clean up

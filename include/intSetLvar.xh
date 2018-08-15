@@ -43,27 +43,27 @@ int leqSet_int(intSetLat* set1, intSetLat* set2) {
   }
 }
 
-// show methods
+// display methods
 
-void showSet_helper(IntSetItr* itr) {
+void displaySet_helper(IntSetItr* itr) {
   if (intsetitr_has_next(itr)) {
     int next = intsetitr_next(itr);
     if (intsetitr_has_next(itr)) {
       printf("%d, ", next);
-      showSet_helper(itr);
+      displaySet_helper(itr);
     }
     printf("%d", next);
   }
 }
 
-void showSet_int(intSetLat* set) {
+void displaySet_int(intSetLat* set) {
   match (set) {
     iSet_Empty() -> {printf("");}
     iSet_Top() -> {printf("Error!");}
     iSet(s) -> {
       printf("{");
       IntSetItr* newitr = new_intsetitr(s);
-      showSet_helper(newitr);
+      displaySet_helper(newitr);
       delete_intsetitr(newitr);
       printf("}");
     }
@@ -133,7 +133,7 @@ IntSet* intSetMinus(intSetLat* set1, intSetLat* set2) {
 }
 
 Lattice<intSetLat*> * latticeint() {
-  return lattice(iSet_Empty(), iSet_Top(), leqSet_int, lubSet_int, showSet_int, freeSet_int);
+  return lattice(iSet_Empty(), iSet_Top(), leqSet_int, lubSet_int, displaySet_int, freeSet_int);
 }
 
 #endif

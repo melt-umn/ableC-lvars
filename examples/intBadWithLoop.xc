@@ -25,7 +25,7 @@ int lubInt(int n1, int n2) {
 
 // ************************* display function for our lattice *****************
 
-void showInteger(int n) {
+void displayInteger(int n) {
   printf("%d", n);
 }
 
@@ -68,7 +68,7 @@ cilk ActivationSet<int> * putGetEx(Lvar<int> *x, ThresholdSet<int>* t) {
 
 cilk int main(int argc, char **argv) {
 
-  Lattice<int> * D = lattice(100, leqInt, lubInt, showInteger);
+  Lattice<int> * D = lattice(100, leqInt, lubInt, displayInteger);
   Lvar<int> *x = newLvar(D);
   ActivationSet<int> * a1 = activationSet(D){6};
   ThresholdSet<int> * t = thresholdSet(D){a1};
@@ -77,11 +77,11 @@ cilk int main(int argc, char **argv) {
   sync;
   freeze(x);
   printf("Value of x: ");
-  show(x);
+  display(x);
   printf("\n");
   if (result != NULL) {
     printf("Result of get(): ");
-    show(result);
+    display(result);
     printf("\n");
   }
   else {

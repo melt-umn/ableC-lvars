@@ -54,7 +54,7 @@ Nat* lubNat(Nat* n1, Nat* n2) {
   return result;
 }
 
-void showNat(Nat* n) {
+void displayNat(Nat* n) {
   match (n) {
     TopNat() -> {printf("TopNat()");}
     BotNat() -> {printf("BotNat()");}
@@ -65,7 +65,7 @@ void showNat(Nat* n) {
 }
 
 Lattice<Nat*> * natLattice() {
-  return lattice(TopNat(), leqNat, lubNat, showNat);
+  return lattice(TopNat(), leqNat, lubNat, displayNat);
 }
 
 #endif

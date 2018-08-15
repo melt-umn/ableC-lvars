@@ -10,7 +10,7 @@ datatype Bits {
   B_Bot();
 };
 
-void showBitArr(int numBits, int* arr) {
+void displayBitArr(int numBits, int* arr) {
   for (int i = 0; i < numBits; i++) {
     if (arr[i]) {
       printf("1");
@@ -21,11 +21,11 @@ void showBitArr(int numBits, int* arr) {
   }
 }
 
-void showBits(Bits* b) {
+void displayBits(Bits* b) {
   match (b) {
     B_Top() -> {printf("Error!");}
     B_Bot() -> {printf("?");}
-    BitArr(numBits, arr) -> {showBitArr(numBits, arr);}
+    BitArr(numBits, arr) -> {displayBitArr(numBits, arr);}
   }
 }
 
@@ -100,7 +100,7 @@ int putInt(Lvar<Bits*>* l, int i, int numBits) {
 }
 
 Lattice<Bits*>* bitLattice() {
-  return lattice(B_Top(), leqBits, lubBits, showBits);
+  return lattice(B_Top(), leqBits, lubBits, displayBits);
 }
 
 #endif

@@ -26,7 +26,7 @@ int eqNodes(int n1, int n2) {
   return n1 == n2;
 }
 
-void showNode(int n) {
+void displayNode(int n) {
   printf("%d", n);
 }
 
@@ -108,16 +108,16 @@ NodeSet* nodeSetUnion(NodeSet* set1, NodeSet* set2) {
   return result;
 }
 
-void showNodes(NodeSet* s) {
+void displayNodes(NodeSet* s) {
   match (s) {
     Empty() -> {}
     Set(hd, tl) -> {
-      showNode(hd);
+      displayNode(hd);
       match (tl) {
         Empty() -> {}
         Set(_, _) -> {
           printf(", ");
-          showNodes(tl);
+          displayNodes(tl);
         }
       }
     }
@@ -131,7 +131,7 @@ cilk int setPut(Lvar<NodeSet*>* l, int value) {
 cilk int main(int argc, char **argv) {
 
   Lattice<NodeSet*>* D = lattice(Top(), isNodeSubset, nodeSetUnion, 
-                                 showNodes);
+                                 displayNodes);
 
   Lattice<Int*>* intLat = sumIntLattice();
   resultLvar = newLvar(intLat);
@@ -147,10 +147,10 @@ cilk int main(int argc, char **argv) {
   freeze(l);
   freeze(resultLvar);
   printf("result = {");
-  show(l);
+  display(l);
   printf("}\n");
   printf("result = {");
-  show(resultLvar);
+  display(resultLvar);
   printf("}\n");
   cilk return 1;
 }

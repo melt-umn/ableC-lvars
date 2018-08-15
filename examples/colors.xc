@@ -261,7 +261,7 @@ Color* lubColor(Color* c1, Color* c2) {
   }
 }
 
-void showColor(Color* c) {
+void displayColor(Color* c) {
   match (c) {
     Bottom() -> { 
       printf("Uncolored");
@@ -337,7 +337,7 @@ int main(int argc, char **argv) {
     printf("Must enter two color names\n");
   }
   else {
-    Lattice<Color*> * D = lattice(Top(), leqColor, lubColor, showColor);
+    Lattice<Color*> * D = lattice(Top(), leqColor, lubColor, displayColor);
     Color* c1 = getColor(argv[1]);
     Color* c2 = getColor(argv[2]);
     Lvar<Color*>* x = newLvar(D);
@@ -353,13 +353,13 @@ int main(int argc, char **argv) {
     }
     else {
       printf("Activation Set Matched: ");
-      show(result);
+      display(result);
       printf("\n");
       freeze(x);
       printf("Actual value: ");
-      show(get x);
+      display(get x);
 
-      show(x);
+      display(x);
       printf("\n");
     }
     free(D);

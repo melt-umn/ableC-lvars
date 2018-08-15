@@ -18,13 +18,13 @@ int lubInt(int n1, int n2) {
   return n2;
 }
 // display function for our lattice
-void showInteger(int n) {
+void displayInteger(int n) {
   printf("%d", n);
 }
 int main(int argc, char **argv) {
   // set up lattice
   Lattice<int> * D =
-    lattice(100, leqInt, lubInt, showInteger);
+    lattice(100, leqInt, lubInt, displayInteger);
   // make lvar and threshold set for lattice
   Lvar<int> *x = newLvar(D);
   ActivationSet<int> * a = activationSet(D){6};
@@ -34,11 +34,11 @@ int main(int argc, char **argv) {
   ActivationSet<int> * result = get (x) with t;
   freeze(x);
   printf("Value of x: ");
-  show(x); 
+  display(x); 
   printf("\n");
   if (result != NULL) {
     printf("Result of get: ");
-    show(result);
+    display(result);
     printf("\n");
   }
   else {

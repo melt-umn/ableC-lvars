@@ -65,7 +65,7 @@ int main(int argc, char **argv) {
   }
 
   printf("Threshold set: ");
-  show (t);
+  display (t);
 
   freeze(x);
 

@@ -28,7 +28,7 @@ datatype VoteSet {
 
 // ******************* display method for our lattice *************************
 
-void showYN(YN* yn) {
+void displayYN(YN* yn) {
   match (yn) {
     Yes () -> {
       printf("Yes()");
@@ -42,36 +42,36 @@ void showYN(YN* yn) {
   }
 }
 
-void showVote(Vote* v) {
+void displayVote(Vote* v) {
   match (v) {
     Horace(yn1) -> {
       printf("Horace(");
-      showYN(yn1);
+      displayYN(yn1);
       printf(")");
     }
     Franz(yn1) -> {
       printf("Franz(");
-      showYN(yn1);
+      displayYN(yn1);
       printf(")");
     }
     Kat(yn1) -> {
       printf("Kat(");
-      showYN(yn1);
+      displayYN(yn1);
       printf(")");
     }
   }
 }
 
-void showInner(VoteSet* v) {
+void displayInner(VoteSet* v) {
   match (v) {
     Empty () -> {}
     Set (hd, tl) -> {
-      showVote(hd);
+      displayVote(hd);
       match (tl) {
         Empty () -> {}
         other -> { 
           printf(", ");
-          showInner(tl);
+          displayInner(tl);
         }
       }
     }
@@ -79,9 +79,9 @@ void showInner(VoteSet* v) {
   }
 }
 
-void showVoteSet(VoteSet* v) {
+void displayVoteSet(VoteSet* v) {
   printf("{");
-  showInner(v);
+  displayInner(v);
   printf("}");
 }
 
@@ -246,7 +246,7 @@ int main(int argc, char **argv) {
 
   //*********** set up lattice ************************************************
 
-  Lattice<VoteSet*> * D = lattice(Top(), leq, lub, showVoteSet);
+  Lattice<VoteSet*> * D = lattice(Top(), leq, lub, displayVoteSet);
 
   // **************** create some new lvars ***********************************
 
@@ -258,7 +258,7 @@ int main(int argc, char **argv) {
   ActivationSet<VoteSet*> * noPizza = activationSet(D, 1);
   add(noPizza, Set(Horace(No()), Set(Kat(No()), Set(Franz(No()), Empty()))));
   printf("Activation Set noPizza: ");
-  show(noPizza);
+  display(noPizza);
   printf("\n");
 
   // *** build activation set that indicates at least one person want pizza ***
@@ -268,14 +268,14 @@ int main(int argc, char **argv) {
   add(yesPizza, Set(Kat(Yes()), Empty()));
   add(yesPizza, Set(Franz(Yes()), Empty()));
   printf("Activation Set yesPizza: ");
-  show(yesPizza);
+  display(yesPizza);
   printf("\n");
 
   // ******** put together threshold set **************************************
 
   ThresholdSet<VoteSet*> *t = thresholdSet(D, 2){yesPizza, noPizza};
   printf("Threshold set: ");
-  show(t);
+  display(t);
   printf("\n");
 
   // ************* try collecting some votes **********************************
@@ -328,7 +328,7 @@ int main(int argc, char **argv) {
   }
 
   add(result, Set(Horace(Undecided()), Set(Franz(Yes()), Empty())));
-  show(result);
+  display(result);
   printf("\n");
 
   // ********************* clean up *******************************************

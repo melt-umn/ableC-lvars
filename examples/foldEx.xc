@@ -65,7 +65,7 @@ cilk int task(int *xs) {
 }
 
 cilk int main (int argc, char **argv) {
-  lat = lattice(I_Top(), leqInt, lubInt, showInteger, freeInteger);
+  lat = lattice(I_Top(), leqInt, lubInt, displayInteger, freeInteger);
   accum = newLvar(lat);
 
   int* arr = malloc(N * sizeof(int));
@@ -85,7 +85,7 @@ cilk int main (int argc, char **argv) {
   freeze(accum);
   //printf("Result: %d\n", get accum);
   printf("Result: ");
-  show(accum);
+  display(accum);
   printf("\n");
   cilk return 1;
 }

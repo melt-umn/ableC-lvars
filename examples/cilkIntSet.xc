@@ -6,7 +6,7 @@ int eqint(int i1, int i2) {
   return i1 == i2;
 }
 
-void showint(int i) {
+void displayint(int i) {
   printf("%d", i);
 }
 
@@ -17,16 +17,16 @@ datatype Set_int {
   int_Top();
 };
 
-void showInner_int(Set_int* set) {
+void displayInner_int(Set_int* set) {
   match (set) {
     int_Empty() -> {}
     int_Set(hd, tl) -> {
-      showint(hd);
+      displayint(hd);
       match (tl) {
         int_Empty() -> {} 
         _ -> {
           printf(", ");
-          showInner_int(tl);
+          displayInner_int(tl);
         }
       }
     }
@@ -34,9 +34,9 @@ void showInner_int(Set_int* set) {
   }
 }
 
-void showSet_int(Set_int* set) {
+void displaySet_int(Set_int* set) {
   printf("{");
-  showInner_int(set);
+  displayInner_int(set);
   printf("}");
 }
 
@@ -113,7 +113,7 @@ Set_int* lubSet_int(Set_int* set1, Set_int* set2) {
 }
 
 Lattice<Set_int*> * latticeint() {
-  return lattice(int_Top(), leqSet_int, lubSet_int, showSet_int);
+  return lattice(int_Top(), leqSet_int, lubSet_int, displaySet_int);
 }
 
 cilk int buildSet(int start, int stop, Lvar<Set_int*>* l);
@@ -143,11 +143,11 @@ cilk int main(int argc, char **argv) {
   ThresholdSet<Set_int*> *t = thresholdSet(D, 1){activationSet(D){int_Empty()}};
   ActivationSet<Set_int*>*  result = get (set) with t;
   printf("Act Set: ");
-  show(result);
+  display(result);
   printf("\n");
   Set_int* frozen = freeze set;
   printf("Frozen Lvar: ");
-  show(set);
+  display(set);
   printf("\n");
   free(D);
   free(set);

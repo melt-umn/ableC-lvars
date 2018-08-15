@@ -140,11 +140,11 @@ Customer* lubCustomer (Customer* c1, Customer* c2) {
   }
 }
 
-// ************* set up show for customer lattice *****************************
+// ************* set up display for customer lattice *****************************
 
 // helper to generate string for product set
 
-void showProducts(ProductSet* p) {
+void displayProducts(ProductSet* p) {
   match (p) {
     P_Empty() -> {}
     P_Set(hd, tl) -> {
@@ -153,16 +153,16 @@ void showProducts(ProductSet* p) {
         P_Empty() -> {}
         P_Set(_, _) -> {
           printf(", ");
-          showProducts(tl);
+          displayProducts(tl);
         }
       }
     }
   }
 }
 
-// helper to show just the ID of a customer
+// helper to display just the ID of a customer
 
-void showCustomerID(Customer* c) {
+void displayCustomerID(Customer* c) {
   match(c) {
     CustTop() -> {printf("Top()");}
     CustBot() -> {printf("Bot()");}
@@ -170,13 +170,13 @@ void showCustomerID(Customer* c) {
   }
 }
 
-void showCustomer(Customer* c) {
+void displayCustomer(Customer* c) {
   match (c) {
     CustTop() -> {printf("Top()");}
     CustBot() -> {printf("Bot()");}
     Person(name, prods) -> {
       printf("Person(%d, {", name);
-      showProducts(prods);
+      displayProducts(prods);
       printf("})");
     }
   }
@@ -258,7 +258,7 @@ int lookupCustomer(Lvar<Customer*>** customers, int custLen, int cid) {
   for (int i = 0; i < custLen; i++) {
     ActivationSet<Customer*>* result = get (customers[i]) with t;
     if (result != NULL) {
-      show(customers[i]);
+      display(customers[i]);
       printf("\n");
       return 1;
     }
@@ -270,7 +270,7 @@ int lookupCustomer(Lvar<Customer*>** customers, int custLen, int cid) {
 
 int printCustomers(Lvar<Customer*>** customers, int custLen) {
   for (int i = 0; i < custLen; i++) {
-    showCustomer(freeze(customers[i]));
+    displayCustomer(freeze(customers[i]));
     printf("\n");
   }
   return 1;
@@ -287,7 +287,7 @@ int lookupProdSet(Lvar<Customer*>** customers, int custLen, ProductSet* prods) {
     ActivationSet<Customer*>* result = get (customers[i]) with t;
     if (result != NULL) {
       printf("Customer #");
-      showCustomerID(freeze(customers[i]));
+      displayCustomerID(freeze(customers[i]));
       printf("\n");
       ret = 1;
     }
@@ -306,9 +306,9 @@ int userInteraction(Lvar<Customer*>** customers, int custLen) {
   printf("Commands:\n");
   printf("  print:          display all customer entries\n");
   printf("  exit:           exit the program\n");
-  printf("  show customer <id>:  display the products purchased by a customer \
+  printf("  display customer <id>:  display the products purchased by a customer \
                                                            with a given id\n");
-  printf("  show products <number of products>: <prod 1> <prod 2> ... <prod n>\
+  printf("  display products <number of products>: <prod 1> <prod 2> ... <prod n>\
      : display the customer ids of those who purchased all listed products\n");
   
   char cmd[128];
@@ -332,7 +332,7 @@ int userInteraction(Lvar<Customer*>** customers, int custLen) {
       printCustomers(customers, custLen);
     }
 
-    else if (strcmp("show", cmd) == 0){
+    else if (strcmp("display", cmd) == 0){
       fscanf(stdin, " %s", cmd);
 
       if (strcmp("customer", cmd) == 0) {
@@ -361,7 +361,7 @@ int userInteraction(Lvar<Customer*>** customers, int custLen) {
 
         if (!success) {
           printf("Product Set {");
-          showProducts(result);
+          displayProducts(result);
           printf("} not found.\n");
         }
       }
@@ -382,7 +382,7 @@ cilk int main(int argc, char **argv) {
 
   // set up
 
-  lat = lattice(CustTop(), leqCustomer, lubCustomer, showCustomer, freeCustomer);
+  lat = lattice(CustTop(), leqCustomer, lubCustomer, displayCustomer, freeCustomer);
   int numCustomers = 50;
   int numStore1 = 1000;
   int numStore2 = 1000;

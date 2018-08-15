@@ -47,7 +47,7 @@ int lub(int n1, int n2) {
   return 100;
 }
 
-void showInteger(int n) {
+void displayInteger(int n) {
   printf("%d", n);
 }
 
@@ -60,7 +60,7 @@ cilk int putCilk(Lvar<int>* x, int v) {
 }
 
 cilk int main(int argc, char **argv) {
-  Lattice<int> * D = lattice(100, leq, lub, showInteger);
+  Lattice<int> * D = lattice(100, leq, lub, displayInteger);
   Lvar<int>* x = newLvar(D);
   Lvar<int>* y = newLvar(D);
   ThresholdSet<int>* t = thresholdSet(D, 1){activationSet(D,1){7}, activationSet(D, 1){8}};
@@ -74,7 +74,7 @@ cilk int main(int argc, char **argv) {
   //spawn putres = putCilk(y, 42); 
   sync;
   printf("result: ");
-  show(result);
+  display(result);
   printf("\n");
   cilk return 1;
 }

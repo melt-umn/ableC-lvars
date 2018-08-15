@@ -137,7 +137,7 @@ State* lub (State* s1, State* s2) {
 
 //************** display function for State ***********************************
 
-void showState(State* s) {
+void displayState(State* s) {
   match (s) {
     Top() -> {printf("Top()");}
     Pair(b1, b2) -> {
@@ -160,7 +160,7 @@ int main(int argc, char **argv) {
 
   //************* Step 1. set up lattice **************************************
 
-  Lattice<State*> * D = lattice(Top(), leq, lub, showState);
+  Lattice<State*> * D = lattice(Top(), leq, lub, displayState);
 
   //************* Step 2. create lvar(s) **************************************
 
@@ -195,7 +195,7 @@ int main(int argc, char **argv) {
   ThresholdSet<State*> *t = thresholdSet(D){a1, a2};
 
   printf("The actual threshold set being used: \n");
-  show(t);
+  display(t);
 
   // create bad threshold set-- elements from different activation sets are
   // compatible with each other, so will reject second activation set
@@ -207,7 +207,7 @@ int main(int argc, char **argv) {
   ThresholdSet<State*> *tBad = thresholdSet(D, 2){a3, a4, a1};
 
   printf("After trying invalid addition to threshold: \n");
-  show(tBad);
+  display(tBad);
 
   //************ Step 5. Try get()-ing the values of lvars ********************
   
