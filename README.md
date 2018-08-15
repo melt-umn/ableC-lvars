@@ -10,12 +10,12 @@
 + Talk about problems with freeing in drawbacks sections
 + Tidy up examples in parallel-examples, tidy up header file
 + Change "show" back to "display"?
-+ Check that arguments to lattice() are function pointers?
 + Fix customer examples with erroring out on top (maybe use lub directly?)
 + Re-time graph and fold examples
 + getFst from act set function (to process result of get) or getFrozen()?
-+ Fix types to remove bottom element
++ Fix types to remove unnecessary bottom element
 + Consider making show function optional (like with free)
++ Add precedence level nonterminal to ableC for -> operator at same precedence as ==
 
 #### LVars Functionality:
 

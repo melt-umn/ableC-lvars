@@ -28,9 +28,73 @@ top::Expr ::= topV::Expr leq::Expr lub::Expr disp::Expr free::Expr
     topV.errors ++ leq.errors ++
     lub.errors ++ disp.errors ++ free.errors;  
 
-  local localErrors::[Message] =
-    checkLvarHeaderDef(top.location, top.env);
-
+  local localErrors::[Message] = 
+    checkLvarHeaderDef(top.location, top.env)
+    ++
+    case leq.typerep of
+      functionType(builtinType(nilQualifier(), signedType(intType())),
+      protoFunctionType([t1, t2], false),_) -> 
+        if compatibleTypes(t1, topV.typerep, false, true)
+           && compatibleTypes(t2, topV.typerep, false, true)
+        then []
+        else [err(top.location, 
+           "leq must be function of type int(" ++ showType(topV.typerep) ++
+           ", " ++ showType(topV.typerep) ++ "), not " ++ 
+           showType(leq.typerep))]
+     | _ -> [err(top.location, 
+            "leq must be function of type int(" ++ showType(topV.typerep) ++
+            ", " ++ showType(topV.typerep) ++ "), not " ++ 
+            showType(leq.typerep))]
+    end
+    ++
+    case lub.typerep of
+      functionType(outType, protoFunctionType([t1, t2], false),_) -> 
+        if compatibleTypes(outType, topV.typerep, false, true)
+          && compatibleTypes(t1, topV.typerep, false, true)
+          && compatibleTypes(t2, topV.typerep, false, true)
+        then [] 
+        else [err(top.location, 
+               "lub must be function of type " ++
+               showType(topV.typerep) ++ "(" ++ showType(topV.typerep) ++
+               ", " ++ showType(topV.typerep) ++ "), not " ++ 
+               showType(lub.typerep))]
+    | _ -> [err(top.location, 
+           "lub must be function of type " ++
+           showType(topV.typerep) ++ "(" ++ showType(topV.typerep) ++
+           ", " ++ showType(topV.typerep) ++ "), not " ++ 
+           showType(lub.typerep))]
+    end
+    ++ 
+    case disp.typerep of 
+      functionType(builtinType(nilQualifier(), voidType()),
+      protoFunctionType([t], false),_) -> 
+        if compatibleTypes(t, topV.typerep, false, true)
+        then []
+        else [err(top.location, 
+             "disp must be function of type void(" ++
+             showType(topV.typerep) ++ "), not " ++ 
+              showType(disp.typerep))]
+    | _ -> [err(top.location, 
+           "disp must be function of type void(" ++
+           showType(topV.typerep) ++ "), not " ++ 
+           showType(disp.typerep))]
+    end
+    ++
+    case free.typerep of
+      functionType(builtinType(nilQualifier(), voidType()),
+      protoFunctionType([t], false),_) -> 
+        if compatibleTypes(t, topV.typerep, false, true)
+        then []
+        else [err(top.location, 
+             "free must be function of type void(" ++
+             showType(topV.typerep) ++ 
+             "), not " ++ showType(free.typerep))]
+    | _ -> [err(top.location, 
+           "free must be function of type void(" ++
+           showType(topV.typerep) ++ "), not " ++ 
+           showType(free.typerep))]
+    end;
+              
   forwards to
     mkErrorCheck(childErrors ++ localErrors,
       ableC_Expr{
@@ -51,16 +115,9 @@ top::Expr ::= topV::Expr leq::Expr lub::Expr disp::Expr
     topV.errors ++ leq.errors ++
     lub.errors ++ disp.errors;  
 
-  local localErrors::[Message] =
-    checkLvarHeaderDef(top.location, top.env);
-
-  forwards to
-    mkErrorCheck(childErrors ++ localErrors,
-      ableC_Expr{
-       inst _newLattice<$directTypeExpr{topV.typerep}>($Expr{topV},    
-       $Expr{leq}, $Expr{lub}, $Expr{disp}, inst _defaultFree<$directTypeExpr{topV.typerep}>)
-      }
-    );
+  forwards to newLattice(topV, leq, lub, disp, 
+    ableC_Expr{inst _defaultFree<$directTypeExpr{topV.typerep}>},
+    location=top.location);
 }
 
 //********************** Production to add to various structures *************
