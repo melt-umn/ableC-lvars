@@ -358,7 +358,7 @@ int main(int argc, char **argv) {
       freeze(x);
       printf("Actual value: ");
       show(get x);
-      printf("\n");
+
       show(x);
       printf("\n");
     }

@@ -4,18 +4,18 @@
 
 #### PPOPP Paper:
 
-+ Add more on concrete/abstract syntax with put operation
 + Add references to big examples
 + Discuss future work
 + Look at style resources and spiff up writing
 + Talk about problems with freeing in drawbacks sections
 + Tidy up examples in parallel-examples, tidy up header file
 + Change "show" back to "display"?
-+ Way to have get return actual value instead of activation set when frozen?
 + Check that arguments to lattice() are function pointers?
 + Fix customer examples with erroring out on top (maybe use lub directly?)
 + Re-time graph and fold examples
-+ Possibly re-add to paper small example showing threshold/activation/get
++ getFst from act set function (to process result of get) or getFrozen()?
++ Fix types to remove bottom element
++ Consider making show function optional (like with free)
 
 #### LVars Functionality:
 
