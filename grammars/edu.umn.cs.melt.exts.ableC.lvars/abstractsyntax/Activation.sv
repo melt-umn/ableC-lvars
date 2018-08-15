@@ -139,7 +139,7 @@ abstract production showAct
 top::Expr ::= baseType::Type a::Expr
 {
   propagate substituted;
-  top.pp = pp"show(${a.pp})";
+  top.pp = pp"display(${a.pp})";
 
   local localErrors::[Message] =
     checkLvarHeaderDef(top.location, top.env) ++ baseType.errors ++ a.errors;
@@ -147,7 +147,7 @@ top::Expr ::= baseType::Type a::Expr
   forwards to
     mkErrorCheck(localErrors,
     ableC_Expr{
-      inst _showActivation<$directTypeExpr{baseType}>($Expr{a})
+      inst _displayActivation<$directTypeExpr{baseType}>($Expr{a})
     });
 }
 

@@ -33,12 +33,6 @@ top::Type ::= q::Qualifiers sub::Type
   
   top.withTypeQualifiers = actType(foldQualifier(top.addedTypeQualifiers ++
                                    q.qualifiers), sub);
-  
-  top.pointerShowProd =
-    case sub.showProd of
-      just(_) -> just(showAct(sub, _, location=_))
-    | nothing() -> nothing()
-    end;
 
   forwards to
     tagType(
@@ -82,12 +76,6 @@ top::Type ::= q::Qualifiers sub::Type
   
   top.withTypeQualifiers = threshType(foldQualifier(top.addedTypeQualifiers ++
                                    q.qualifiers), sub);
-  
-  top.pointerShowProd =
-    case sub.showProd of
-      just(_) -> just(showThresh(sub, _, location=_))
-    | nothing() -> nothing()
-    end;
 
   forwards to
     tagType(
@@ -131,13 +119,6 @@ top::Type ::= q::Qualifiers sub::Type
   
   top.withTypeQualifiers = lvarType(foldQualifier(top.addedTypeQualifiers ++
                                    q.qualifiers), sub);
-
-  
-  top.pointerShowProd =
-    case sub.showProd of
-      just(_) -> just(showLvar(sub, _, location=_))
-    | nothing() -> nothing()
-    end;
 
   forwards to
     tagType(

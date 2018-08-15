@@ -13,6 +13,7 @@ marking terminal Freeze_t 'freeze' lexer classes {Ckeyword}, precedence = 1;
 marking terminal CheckLeq_t 'checkLeq' lexer classes {Ckeyword};
 marking terminal CheckLub_t 'checkLub' lexer classes {Ckeyword};
 marking terminal CheckLat_t 'checkLattice' lexer classes {Ckeyword};
+marking terminal Display_t 'display' lexer classes {Ckeyword};
 
 terminal In_t 'in' lexer classes {Ckeyword};
 terminal With_t 'with' lexer classes {Ckeyword};
@@ -68,6 +69,10 @@ concrete productions top::UnaryOp_c
 | 'freeActSets'
   {
     top.ast = freeActSets(top.expr, location=top.location);
+  }
+| 'display'
+  {
+    top.ast = showLvars(top.expr, location=top.location);
   }
 
 concrete productions top::PrimaryExpr_c

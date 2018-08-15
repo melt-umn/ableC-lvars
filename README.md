@@ -6,7 +6,6 @@
 
 + Add references to big examples
 + Discuss future work
-+ Look at style resources and spiff up writing
 + Talk about problems with freeing in drawbacks sections
 + Tidy up examples in parallel-examples, tidy up header file
 + Change "show" back to "display"?
@@ -15,7 +14,7 @@
 + getFst from act set function (to process result of get) or getFrozen()?
 + Fix types to remove unnecessary bottom element
 + Consider making show function optional (like with free)
-+ Add precedence level nonterminal to ableC for -> operator at same precedence as ==
++ Make precedence level at same level as assignment operator for channels extension
 
 #### LVars Functionality:
 

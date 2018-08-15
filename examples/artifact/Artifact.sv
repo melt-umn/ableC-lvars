@@ -17,7 +17,6 @@ parser extendedParser :: cst:Root {
   edu:umn:cs:melt:exts:ableC:algebraicDataTypes;
   edu:umn:cs:melt:exts:ableC:lvars;
   edu:umn:cs:melt:exts:ableC:cilk;
-  edu:umn:cs:melt:exts:ableC:string;
 } 
 
 function main

@@ -144,7 +144,7 @@ abstract production showThresh
 top::Expr ::= baseType::Type t::Expr
 {
   propagate substituted;
-  top.pp = pp"show(${t.pp})";
+  top.pp = pp"display(${t.pp})";
 
   local localErrors::[Message] =
     checkLvarHeaderDef(top.location, top.env) ++
@@ -153,6 +153,6 @@ top::Expr ::= baseType::Type t::Expr
   forwards to 
     mkErrorCheck(localErrors, 
     ableC_Expr{
-      inst _showThreshold<$directTypeExpr{baseType}>($Expr{t})
+      inst _displayThreshold<$directTypeExpr{baseType}>($Expr{t})
     });
 }

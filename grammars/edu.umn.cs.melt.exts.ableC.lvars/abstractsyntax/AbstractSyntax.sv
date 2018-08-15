@@ -250,20 +250,11 @@ top::Expr ::= thresh::Expr
 
 // ************************* show productions *********************************
 
-aspect function getShowOverloadProd
-Maybe<(Expr ::= Expr Location)> ::= t::Type env::Decorated Env
-{
-  overloads <-
-    [pair(
-       "edu:umn:cs:melt:exts:ableC:lvars:lvars",
-       \ e::Expr loc::Location -> showLvars(e, location=loc))];
-} 
-
 abstract production showLvars
 top::Expr ::= e::Expr
 {
   propagate substituted;
-  top.pp = pp"show(${e.pp})";
+  top.pp = pp"display(${e.pp})";
   
   local localErrors::[Message] =
     checkLvarHeaderDef(top.location, top.env) ++ e.errors;
@@ -278,7 +269,7 @@ top::Expr ::= e::Expr
         showLvar(t, e, location=top.location)
     | _ ->
         errorExpr([err(top.location, 
-      "Can't use show() with <" ++
+      "Can't use display() with <" ++
        showType(e.typerep) ++">")], location=top.location)
     end;
       
@@ -291,7 +282,7 @@ abstract production showLvar
 top::Expr ::= baseType::Type l::Expr
 {
   propagate substituted;
-  top.pp = pp"show(${l.pp})";
+  top.pp = pp"display(${l.pp})";
 
   local localErrors::[Message] =
     checkLvarHeaderDef(top.location, top.env) ++ baseType.errors ++ l.errors;
@@ -299,7 +290,7 @@ top::Expr ::= baseType::Type l::Expr
   forwards to
     mkErrorCheck(localErrors,
     ableC_Expr{
-      inst _showLvar<$directTypeExpr{baseType}>($Expr{l})
+      inst _displayLvar<$directTypeExpr{baseType}>($Expr{l})
     });
 }
 

@@ -27,7 +27,7 @@ template<a> struct _Lattice {
   a _top;
   int (*_leq)();
   a (* _lub)();
-  void (*_show)();
+  void (*_display)();
   void (*_free)();
 };
 
@@ -35,12 +35,12 @@ template<a> struct _Lattice {
 
 template<a>
 static Lattice<a>* _newLattice(a greatest, int (*leq)(),
-                   a (*lub)(), void (*showMethod)(), void (*freeMethod)()) {
+                   a (*lub)(), void (*displayMethod)(), void (*freeMethod)()) {
   Lattice<a> * l = malloc(sizeof(Lattice<a>)); 
   l->_top = greatest;
   l->_leq = leq;
   l-> _lub = lub;
-  l->_show = showMethod;
+  l->_display = displayMethod;
   l->_free = freeMethod;
   return l;
 }
@@ -86,18 +86,18 @@ static ActivationSet<a>* _newActivationSet(Lattice<a>* l, int size) {
   return act;
 }
 
-// to print out a given activation set (using the lattice's show method)
+// to print out a given activation set (using the lattice's display method)
 
 template<a>
-static void _showActivation(ActivationSet<a>* act){
+static void _displayActivation(ActivationSet<a>* act){
   printf("{");  
   int i = 0;
   for (; i < act->_index - 1; i++) {
-    act ->_lattice->_show(act->_set[i]);
+    act ->_lattice->_display(act->_set[i]);
     printf(", ");
   }
   for (; i < act->_index; i++) {
-    act ->_lattice->_show(act->_set[i]);
+    act ->_lattice->_display(act->_set[i]);
   }
 
   printf("}");
@@ -181,9 +181,9 @@ static int _incompat(Lattice<a> * l, ActivationSet<a> *Q, ActivationSet<a> *R) {
   #ifdef DEBUG
     if (Q -> _lattice != l || R -> _lattice != l) {
       printf("Error: The activation sets ");
-      show(Q);
+      display(Q);
       printf(" and ");
-      show(R);
+      display(R);
       printf(" don't belong to the same lattice!\n");
       exit(0);
     }
@@ -200,11 +200,11 @@ static int _incompat(Lattice<a> * l, ActivationSet<a> *Q, ActivationSet<a> *R) {
       if (!(l->_leq(l->_top, l->_lub(q, r)))) {
         #ifdef DEBUG
           printf("Error: ");
-          l->_show(q);
+          l->_display(q);
           printf(" and ");
-          l->_show(r);
+          l->_display(r);
           printf(" are compatible, with lub ");
-          l->_show(l->_lub(q, r));
+          l->_display(l->_lub(q, r));
           printf("!\n");
           exit(0);
         #endif
@@ -224,9 +224,9 @@ static ThresholdSet<a>* _addThreshold(ThresholdSet<a>* t, ActivationSet<a>* act)
   #ifdef DEBUG
     if (t->_lattice != act->_lattice) {
       printf("Error: activation set ");
-      show(act);
+      display(act);
       printf(" and threshold set ");
-      show(t);
+      display(t);
       printf(" do not have the same lattice. \n");
       exit(0);
     }
@@ -290,18 +290,18 @@ static void _freeActSets(ThresholdSet<a>* t) {
   }
 } 
 
-// to print a threshold set, using the show method of the lattice
+// to print a threshold set, using the display method of the lattice
 
 template<a>
-static void _showThreshold(ThresholdSet<a>* t){
+static void _displayThreshold(ThresholdSet<a>* t){
   printf("{");
   int i = 0;
   for (; i < t->_index - 1; i++) {
-    show(t->_a_sets[i]);
+    display(t->_a_sets[i]);
     printf(", ");
   }
   for (; i < t->_index; i++) {
-    show(t->_a_sets[i]);
+    display(t->_a_sets[i]);
   }
   printf("}");
 }
@@ -318,16 +318,16 @@ template<a> struct _Lvar {
 };
 
 template<a>
-static void _showLvar(Lvar<a>* l) {
+static void _displayLvar(Lvar<a>* l) {
   pthread_mutex_lock(&(l->_mutex));
   if (l->_frozen) {
     if (!l->_bot) {
-      l->_lattice->_show(l->_value);
+      l->_lattice->_display(l->_value);
     }
   }
   else {
     #ifdef DEBUG
-      printf("Error: Can't show a lvar before it is frozen!\n");
+      printf("Error: Can't display a lvar before it is frozen!\n");
       exit(0);
     #endif
 
@@ -393,7 +393,7 @@ static int _put(Lvar<a>* l, a newState) {
 
   if (l->_lattice->_leq(l->_lattice->_top, newState)) {
     printf("Error: invalid put of ");
-    l->_lattice->_show(newState);
+    l->_lattice->_display(newState);
     printf("\n");
     exit(0);
   }
@@ -408,9 +408,9 @@ static int _put(Lvar<a>* l, a newState) {
     // if the lub is top, we have an invalid put
     if (l->_lattice->_leq(l->_lattice->_top, newValue)){
       printf("Error: invalid put of ");
-      l->_lattice->_show(newState);
+      l->_lattice->_display(newState);
       printf(" into lvar of value ");
-      l->_lattice->_show(oldState);
+      l->_lattice->_display(oldState);
       printf("\n");
       exit(0);
     }
@@ -459,9 +459,9 @@ static int _put_destructive(Lvar<a>* l, a newState) {
 
   if (l->_lattice->_leq(l->_lattice->_top, newValue)){
     printf("Error: invalid put of ");
-    l->_lattice->_show(newState);
+    l->_lattice->_display(newState);
     printf(" into lvar of value ");
-    l->_lattice->_show(oldState);
+    l->_lattice->_display(oldState);
     printf("\n");
     exit(0);
   }
@@ -586,9 +586,9 @@ int _checkLeq(Lattice<a>* D, a repElemSmall, a repElemBig) {
   } 
   if (!D->_leq(repElemSmall, repElemBig)) {
     printf("according to specified test values, leq(");
-    D->_show(repElemSmall);
+    D->_display(repElemSmall);
     printf(", ");
-    D->_show(repElemBig);
+    D->_display(repElemBig);
     printf(") should return 1\n");
     result = 0;
   }
@@ -607,45 +607,45 @@ int _checkLub(Lattice<a>* D, a rep1, a rep2, a expLub, int (*eq)()) {
   }
   if (!eq(D->_lub(rep1, D->_top), D->_top)) {
     printf("lub(");
-    D->_show(rep1);
+    D->_display(rep1);
     printf(", top) should return top\n");
     result = 0;
   }
   if (!eq(D->_lub(D->_top, rep1), D->_top)) {
     printf("lub(top, ");
-    D->_show(rep1);
+    D->_display(rep1);
     printf(") should return top\n");
     result = 0;
   }
   if (!eq(D->_lub(rep2, D->_top), D->_top)) {
     printf("lub(");
-    D->_show(rep2);
+    D->_display(rep2);
     printf(", top) should return top\n");
     result = 0;
   }
   if (!eq(D->_lub(D->_top, rep2), D->_top)) {
     printf("lub(top, ");
-    D->_show(rep2);
+    D->_display(rep2);
     printf(") should return top\n");
     result = 0;
   } 
   if (!eq(D->_lub(rep2, rep1), expLub)) {
     printf("lub(");
-    D->_show(rep2);
+    D->_display(rep2);
     printf(", "); 
-    D->_show(rep1);
+    D->_display(rep1);
     printf(") should return ");
-    D->_show(expLub);
+    D->_display(expLub);
     printf("\n");
     result = 0;
   }
   if (!eq(D->_lub(rep1, rep2), expLub)) {
     printf("lub(");
-    D->_show(rep1);
+    D->_display(rep1);
     printf(", "); 
-    D->_show(rep2);
+    D->_display(rep2);
     printf(") should return ");
-    D->_show(expLub);
+    D->_display(expLub);
     printf("\n");
     result = 0;
   }
