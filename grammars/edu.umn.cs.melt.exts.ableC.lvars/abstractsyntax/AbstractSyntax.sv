@@ -334,7 +334,7 @@ abstract production getCallNoThresh
 top::Expr ::= lvar::Expr
 {
   propagate substituted;
-  top.pp = pp"get(${lvar.pp})";
+  top.pp = pp"get ${lvar.pp}";
 
   local localErrors::[Message] =
     checkLvarHeaderDef(top.location, top.env) ++ lvar.errors;
@@ -345,7 +345,7 @@ top::Expr ::= lvar::Expr
         getCallHelperNoThresh(l_t, lvar, location=top.location)
     | _ ->
        errorExpr([err(top.location, 
-       "get() expected first argument of type Lvar*, got type "
+       "get expected first argument of type Lvar*, got type "
         ++ showType(lvar.typerep))], location=top.location)
     end;
 

@@ -8,13 +8,14 @@
 + Discuss future work
 + Talk about problems with freeing in drawbacks sections
 + Tidy up examples in parallel-examples, tidy up header file
-+ Change "show" back to "display"?
-+ Fix customer examples with erroring out on top (maybe use lub directly?)
 + Re-time graph and fold examples
-+ getFst from act set function (to process result of get) or getFrozen()?
++ convert to value from act set function (to process result of get) or getFrozen()?
 + Fix types to remove unnecessary bottom element
 + Consider making show function optional (like with free)
-+ Make precedence level at same level as assignment operator for channels extension
++ get x after freeze returns actual value, not activation set
++ fix syntax in error messages
++ create go extension that exports both run and channels
++ better syntax for getLattice
 
 #### LVars Functionality:
 
@@ -33,6 +34,7 @@
 + Add freezing examples
 + Better positive tests
 + Add tests for new features
++ Fix customer examples with erroring out on top (maybe use lub directly?)
 
 #### Usability:
 
@@ -42,7 +44,6 @@
 + Update readme guide to include new examples, the addition of freezing and freeing, other updates
 + Is there a way to error out only on the first missing include of a header?
 + Should lub always create a new copy instead of referencing old ones so that programmer can free without messing up lvar, instead of sometimes returning the original and sometimes making a new one? Otherwise can't safely free lub taken in passing, since might be freeing a value you need.
-+ Overload free instead of having separate free for each thing
 + Make get binary prefix operator, and have get lvar {{a1}, {a2}} automatically create threshold set?
 
 ### Things to think about:

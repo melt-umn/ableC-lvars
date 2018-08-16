@@ -1,11 +1,8 @@
 #include "lvars.xh"
 #include "intFold.xh"
 #include "cilk.xh"
-
 #include <time.h>
-#   define CLOCK_REALTIME		0
-typedef __clockid_t clockid_t;
-extern int clock_gettime (clockid_t __clock_id, struct timespec *__tp) __THROW;
+
 long nsdiff(struct timespec *end_time, struct timespec *start_time)
 {
     return (end_time->tv_sec - start_time->tv_sec) * 1E9
