@@ -43,6 +43,7 @@ int main(int argc, char **argv) {
   Lvar<Int*>* l = newLvar lat;
   put (I(2)) in l;
   display(get l with t);
+  free(getLattice(l));
   // displays the activation set {I(1), I(2)}
   // since value of l is at or above I(2)
 }

@@ -14,6 +14,7 @@ marking terminal CheckLeq_t 'checkLeq' lexer classes {Ckeyword};
 marking terminal CheckLub_t 'checkLub' lexer classes {Ckeyword};
 marking terminal CheckLat_t 'checkLattice' lexer classes {Ckeyword};
 marking terminal Display_t 'display' lexer classes {Ckeyword};
+marking terminal GetLattice_t 'getLattice' lexer classes {Ckeyword};
 
 terminal In_t 'in' lexer classes {Ckeyword};
 terminal With_t 'with' lexer classes {Ckeyword};
@@ -65,6 +66,10 @@ concrete productions top::UnaryOp_c
 | 'freeLattice'
   {
     top.ast = freeLattice(top.expr, location=top.location);
+  }
+| 'getLattice'
+  {
+    top.ast = getLattice(top.expr, location=top.location);
   }
 | 'freeActSets'
   {

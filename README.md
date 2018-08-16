@@ -3,26 +3,22 @@
 ## To-do:
 
 #### PPOPP Paper:
-
-+ Add references to big examples
++ tidy up header file
++ time run, cilk, pthread with heavy fold + light map (gcd?)
++ time run, cilk, pthread with heavy fold + heavy map
++ Consider making show function optional (like with free)
++ fix syntax in error messages
++ general templated make_lvar function?
 + Discuss future work
 + Talk about problems with freeing in drawbacks sections
-+ Tidy up examples in parallel-examples, tidy up header file
-+ Re-time graph and fold examples
-+ convert to value from act set function (to process result of get) or getFrozen()?
-+ Fix types to remove unnecessary bottom element
-+ Consider making show function optional (like with free)
-+ get x after freeze returns actual value, not activation set
-+ fix syntax in error messages
-+ create go extension that exports both run and channels
-+ better syntax for getLattice
++ revise paper-- example intro, refer to line numbers
 
 #### LVars Functionality:
 
 + Use new free functionality within activation, threshold, etc. if helpful to free individual elements
 + Have Top() and Bot() automatically generated-- since test these in put, would it work to get rid of top and bottom entirely (just have bot be a starting state, and top an error state, but the user cannot manually put in either value?)
-+ Work on speeding up thread waiting/locking process
-+ Implement other Lvish features-- incrementable counter, event handlers
++ Work on speeding up thread waiting/locking process (each thread has own value of lvar, merge? make a copy and take lub of that?)
++ Implement other Lvish features-- incrementable counter, event handlers (templated make_lvar function that takes a leq and a fold function?)
 + Getter methods
 
 #### Examples:
@@ -35,6 +31,7 @@
 + Better positive tests
 + Add tests for new features
 + Fix customer examples with erroring out on top (maybe use lub directly?)
++ Fix types to remove unnecessary bottom element in examples
 
 #### Usability:
 
@@ -49,7 +46,7 @@
 ### Things to think about:
 
 + Does it make sense to free old value in put?
-+ Is it okay to only check threshold set compatibility in debug mode, since it affects determinism?
++ Is it okay to only check threshold set compatibility in debug mode, since it affects determinism? __attribute_constructor to check once before running?
 
 ## Guide:
 

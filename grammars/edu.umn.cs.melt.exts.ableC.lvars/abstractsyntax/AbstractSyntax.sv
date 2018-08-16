@@ -656,5 +656,29 @@ top::Expr ::= lat::Expr rep1::Expr rep2::Expr expLub::Expr eqFunc::Expr
     location=top.location);
 }
 
+abstract production getLattice
+top::Expr ::= lvar::Expr
+{
+  propagate substituted;
+  top.pp = pp"getLattice(${lvar.pp})";
+
+  local localErrors::[Message] =
+    checkLvarHeaderDef(top.location, top.env) ++ lvar.errors;
+
+  local fwrd::Expr =
+    case lvar.typerep of
+      pointerType(_, lvarType(_, t)) -> 
+        ableC_Expr {
+          inst _getLattice<$directTypeExpr{t}>($Expr{lvar})
+        }
+    | _ ->
+        errorExpr([err(top.location, 
+        "Can't use getLattice() with <" ++ showType(lvar.typerep) ++ ">")],
+        location=top.location)
+    end;
+
+  forwards to mkErrorCheck(localErrors, fwrd);
+}
+
 global builtin::Location = builtinLoc("lvars");
 

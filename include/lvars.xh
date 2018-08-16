@@ -371,7 +371,7 @@ static Lvar<a>* _new(Lattice<a>* l) {
 }
 
 template<a>
-static Lattice<a>* getLattice(Lvar<a>* l) {
+static Lattice<a>* _getLattice(Lvar<a>* l) {
   return l->_lattice;
 }
 
