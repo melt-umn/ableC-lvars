@@ -3,15 +3,17 @@
 ## To-do:
 
 #### PPOPP Paper:
+
++ Write short paragraph(s) for commented sections in paper
++ Go through and revise
+
+#### PPOP Artifacts:
+
 + tidy up header file
-+ time run, cilk, pthread with heavy fold + light map (gcd?)
-+ time run, cilk, pthread with heavy fold + heavy map
-+ Consider making show function optional (like with free)
 + fix syntax in error messages
++ Consider making show function optional (like with free)
 + general templated make_lvar function?
-+ Discuss future work
-+ Talk about problems with freeing in drawbacks sections
-+ revise paper-- example intro, refer to line numbers
++ Tidy graph example
 
 #### LVars Functionality:
 
