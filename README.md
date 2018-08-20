@@ -2,23 +2,17 @@
 
 ## To-do:
 
-#### PPOPP Paper:
-
-+ Write short paragraph(s) for commented sections in paper
-+ Go through and revise
-
 #### PPOP Artifacts:
 
 + tidy up header file
 + fix syntax in error messages
 + Consider making show function optional (like with free)
-+ general templated make_lvar function?
-+ Tidy graph example
++ general templated make_lvar function? -- could get type from functions rather than top, but how to develop default top?
++ Since put errors out in case of invalid put, it doesn't need to return an integer.
 
 #### LVars Functionality:
 
-+ Use new free functionality within activation, threshold, etc. if helpful to free individual elements
-+ Have Top() and Bot() automatically generated-- since test these in put, would it work to get rid of top and bottom entirely (just have bot be a starting state, and top an error state, but the user cannot manually put in either value?)
++ Have Top() automatically generated (infer type from functions instead?)
 + Work on speeding up thread waiting/locking process (each thread has own value of lvar, merge? make a copy and take lub of that?)
 + Implement other Lvish features-- incrementable counter, event handlers (templated make_lvar function that takes a leq and a fold function?)
 + Getter methods
@@ -27,7 +21,7 @@
 
 + Fix tests to match new syntax
 + Increase parallelism in customer example (go through in chunks?)
-+ Add frees
++ Add frees (check with valgrind)
 + Check out Cilk paper for good examples
 + Add freezing examples
 + Better positive tests
@@ -56,61 +50,53 @@
 
 Each lvar, activation set, and threshold set is tied to a "lattice," which prescribes how individual elements are ordered with respect to one another. To create a lattice, a programmer must define several components:
 
-#### A data type with a bottom and top element.
+#### A data type with a top element.
 
-The "bottom" element must be "below" every other element in the lattice with respect to the lattice's ordering, and generally represents an "empty" state where no information is yet known. The "top" element represents an "error" state, and must be "above" every other element in the lattice with respect to the lattice's order. 
+The "top" element represents an "error" state, and must be "above" every other element in the lattice with respect to the lattice's order. 
 
-Ex. The file `int.xc` features C's built-in signed `int` type, with bottom `0` and top `100`, as well as C's built-in `double` type, with bottom `0.0` and top `100.0`.
+Ex. The file `int.xc` features C's built-in signed `int` type with top `100`, as well as C's built-in `double` type with top `100.0`.
 
-Ex. The file `and.xc` features a `State*` type, with bottom `Pair(Bot(), Bot())` and top `Top()`.
-
-Ex. The file `pizza.xc` features a `VoteSet*` type, with bottom `Empty()` and top `Top()`.
+Ex. The file `and.xc` features a `State*` type, with top `Top()`.
 
 #### A leq function to determine the order of elements in the lattice.
 
-This function must take as arguments two elements of the lattice's base type. The leq function should return `1` (true) if the first element is at or below the second element in the lattice, and should return `0` (false) otherwise. An element is defined to be "at or below" another element if the second element can be reached, in a series of additive operations (however that is defined for the base type) from the first element. The bottom element is at or below every other element, and every element is at or below the top element. In particular, this function must return `0` if the first element is the top element, regardless of the second element, `1` if the first element is the bottom element, regardless of the second element, and `1` if the second element is the top element (and the first element is not also the top element).
+This function must take as arguments two elements of the lattice's base type. The leq function should return `1` (true) if the first element is at or below the second element in the lattice, and should return `0` (false) otherwise. An element is defined to be "at or below" another element if the second element can be reached, in a series of monotonically increasing operations (however that is defined for the base type) from the first element. Every element is at or below the top element.
 
-Ex. The `leq` function in `int.xc` takes two `int`s and returns `1` if the first `int` is `0`, the second `int` is `100` and the first `int` is not, or the two `int`s are non-`100` and equal. For example, `leq(5, 5) => 1` but `leq(5, 6) => 0`. 
+Ex. The `leq` function in `int.xc` takes two `int`s and returns `1` if the two integers are equal or the second integer is 100. For example, `leq(5, 5) => 1` but `leq(5, 6) => 0`. 
 
-Ex. The `leq` function in `and.xc` takes two `State*`s and returns `1` if the second state could be reached from the first by changing `Bot()` positions to either `T()` or `F()`, or if the second state is `Top()` and the first is not. For example, `leq(Pair(T(), Bot()), Pair(F(), Bot())) => 0` and `leq(Pair(T(), Bot()), Pair(T(), F())) => 1`.
-
-Ex. The `leq` function in `pizza.xc` takes two `VoteSet*`s and returns `1` if the first set is a subset of the second or if the first set features Undecided() votes that could be changed to definitive votes to reach a subset of the second vote set, and returns `0` otherwise. For example, `leq(Set(Kat(No()), Empty()), Set(Kat(Yes()), Empty())) => 0` and `leq(Set(Horace(No()), Empty()), Set(Kat(Yes()), Set(Horace(No()), Empty())))) => 1`.
+Ex. The `leq` function in `and.xc` takes two `State*`s and returns `1` if the second state could be reached from the first by changing `Bot()` positions to either `T()` or `F()`, or if the second state is `Top()`. For example, `leq(Pair(T(), Bot()), Pair(F(), Bot())) => 0` and `leq(Pair(T(), Bot()), Pair(T(), F())) => 1`.
 
 #### A lub function to determine how to "combine" elements in the lattice.
 
-This function must take as arguments two elements of the lattice's base type and return an element of the same type that represents the "least upper bound" of the two elements-- i.e., the lowest element of the lattice that such that both the first argument element and second argument element are "leq" the element in question. Note that the lub of any element with the bottom element is just that element, and that the lub of any element with the top element is the top element. The lub of any element with itself must be the original element.
+This function must take as arguments two elements of the lattice's base type and return an element of the same type that represents the "least upper bound" of the two elements-- i.e., the lowest element of the lattice that such that both the first argument element and second argument element are "leq" the element in question. Note that the lub of any element with the top element is the top element. The lub of any element with itself must traditionally be the original element, though the lub can also represent a more general associative and commutative operation if no get reads will be performed.
 
-Ex. the `lub` function in `int.xc` takes two `int`s and returns 100 if one or both of them are 100, returns the other element if one or both of them are 0, returns 100 if both elements are neither 0 nor 100 but the elements are not equal, and returns the value of both elements if the elements are equal. For example, `lub(5, 5) => 5`, `lub(7, 0) => 7`, and `lub(6, 5) => 100`.
+Ex. the `lub` function in `int.xc` takes two `int`s and returns 100 if one or both of them are 100 or if the elements are not equal, and returns the value of both elements if the elements are equal. For example, `lub(5, 5) => 5` and `lub(6, 5) => 100`.
 
 Ex. the `lub` function in `and.xc` takes two `State*`s and returns the lowest pair that could be reached by legally combining the two pairs of booleans. For example, `lub(Pair(T(), Bot()), Pair(F(), Bot())) => Top()`, `lub(Pair(F(), T()), Pair(F(), Bot())) => Pair(F(), T())`, and `lub(Pair(Bot(), T()), Pair(T(), Bot())) => Pair(T(), T())`.
 
-Ex. the `lub` function in `pizza.xc` takes two `VoteSet*`s and returns their set union, if possible, disregarding `Undecided()` votes. For example, `lub(Set(Horace(Yes()), Empty()), Set(Franz(No()), Empty())) => Set(Horace(Yes()), Set(Franz(No()), Empty()))`.
-
-#### An eq function to determine whether two elements of the lattice are the same element.
-
-Since lvars provide the most functionality when used with programmer-defined algebraic data types, the eq function is used to determine if two elements are identical in terms of the data type in question. The eq function must take as arguments two elements of the lattice's base type and return `1` if the elements are considered equal, `0` otherwise.
-
-Ex. The `eq` function in `int.xc` is the same as the built-in `==` for `int`s.
-
-Ex. The `eq` function in `and.xc` pattern-matches on the subcomponents of each `State*` and `Bl*` to determine if two `State*`s are identical in terms of the algebraic data types used, even if they may not have the same pointers.
-
-Ex. The `eq` function in `pizza.xc` judges equality in terms of set equality (checking set components without paying attention to order).
-
 #### A show function to provide a string representation of an element of the lattice.
 
-The show function must take an element of the lattice's base type and return a `string` (from the ableC-string extension) representing that element.
+The show function must take an element of the lattice's base type and print a representation of that element to the screen.
 
 Ex. The `showInteger` function in `int.xc` returns the default `show()` value for a given integer.
 
 Ex. The `showState` function in `and.xc` returns a string like `"Pair(T(), F())"` or `"Top()"` for given state.
 
-Ex. The `showVoteSet` function in `pizza.xc` returns a string like `"{Horace(Undecided()), Franz(Yes())}"` for the set `Set(Horace(Undecided()), Set(Franz(Yes()), Empty()))`.
+#### (Optional) A free function to indicate how to free an element of the lattice.
+
+The free function must take an element of the lattice's base type and free the element and all of its components. If no free function is provided, the freeing method used will default to doing nothing (e.g., in the case of a lattice of integers or another non-pointer type). 
+
+Ex. In `and.xc`, a programmer might provide a function that, given a `State` pointer, frees both boolean pointers and the `State` pointer itself.
 
 ### Part 2: Creating a Lattice.
 
-If a programmer has defined the necessary lattice components with data elements `topEx` and `bottomEx` of type `baseType` and functions `leqEx`, `lubEx`, `eqEx`, `showEx` as described above, they can create a new lattice `lat` as follows:
+If a programmer has defined the necessary lattice components with data elements `topEx` of type `baseType` and functions `leqEx`, `lubEx`, `showEx`, and `freeEx` as described above, they can create a new lattice `lat` as follows:
 
-`Lattice<baseType> * lat = lattice(bottomEx, topEx, leqEx, lubEx, eqEx, showEx);`
+`Lattice<baseType> * lat = lattice(topEx, leqEx, lubEx, showEx, freeEx);`
+
+or, if the programmer does not want or need to specify a free function,
+
+`Lattice<baseType> * lat = lattice(topEx, leqEx, lubEx, showEx);`
 
 ### Part 3: Creating an Lvar.
 
@@ -124,9 +110,11 @@ Arbitrarily many lattice variables can be created for a given lattice.
 
 To write a value `val` of type `baseType` to a lattice variable `lvar1` of base type `baseType`, a programmer can write the following:
 
-`int success = put(lvar1, val);`
+`put (val) in lvar1;`
 
-Note that `put` returns `1` (true) if the write is a success, and `0` (false) if the write fails. With lvars, a `put` does not write a raw value to the location represented by the lattice variable. Instead, `put` attempts to write the least upper bound of the current value of the lvar and the new value that is indicated by the programmer (i.e., the result of the `lub` for the given lattice) to the lvar. If this lub is the top element of the lattice, the `put` fails. If the result is a valid element of the lattice, the value of the lvar is updated to the lub result.
+If `val` is an identifier, the parentheses are unnecessary.
+
+Note that this `put` operation returns `1` (true) if the write is a success, and `0` (false) if the write fails. With lvars, a `put` does not write a raw value to the location represented by the lattice variable. Instead, `put` attempts to write the least upper bound of the current value of the lvar and the new value that is indicated by the programmer (i.e., the result of the `lub` for the given lattice) to the lvar. If this lub is the top element of the lattice, the `put` fails. If the result is a valid element of the lattice, the value of the lvar is updated to the lub result.
 
 ### Part 5: Creating a Threshold Set.
 

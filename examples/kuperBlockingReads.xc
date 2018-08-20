@@ -21,7 +21,7 @@ int main(int argc, char **argv) {
 
   int start = 1;
   int end = 10;
-  ThresholdSet<Pair*>* t = thresholdSet(D, end - start + 1);
+  ThresholdSet<Pair*>* t = thresholdSet(D, 2);
   for (int i = start; i < end; i++) {
     ActivationSet<Pair*>* a = activationSet(D, 1){IP(I_Bot(), I(i))}; 
     add(t, a);

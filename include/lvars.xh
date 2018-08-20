@@ -382,7 +382,7 @@ static Lattice<a>* _getLattice(Lvar<a>* l) {
 // if update would take state of lvar to top(), returns 0, otherwise 1
 
 template<a>
-static int _put(Lvar<a>* l, a newState) {
+static void _put(Lvar<a>* l, a newState) {
 
   pthread_mutex_lock(&(l->_mutex));
 
@@ -429,8 +429,6 @@ static int _put(Lvar<a>* l, a newState) {
   }
   pthread_mutex_unlock(&(l->_mutex));
   pthread_cond_broadcast(&(l->_cond));
-
-  return 1;
 }
 
 // destructive version of put (doesn't free things upon put)
