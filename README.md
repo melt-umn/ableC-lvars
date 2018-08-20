@@ -112,13 +112,13 @@ To write a value `val` of type `baseType` to a lattice variable `lvar1` of base 
 
 `put (val) in lvar1;`
 
-If `val` is an identifier, the parentheses are unnecessary.
+Note that if `val` is an identifier, the parentheses are unnecessary.
 
-Note that this `put` operation returns `1` (true) if the write is a success, and `0` (false) if the write fails. With lvars, a `put` does not write a raw value to the location represented by the lattice variable. Instead, `put` attempts to write the least upper bound of the current value of the lvar and the new value that is indicated by the programmer (i.e., the result of the `lub` for the given lattice) to the lvar. If this lub is the top element of the lattice, the `put` fails. If the result is a valid element of the lattice, the value of the lvar is updated to the lub result.
+With lvars, a `put` does not write a raw value to the location represented by the lattice variable. Instead, `put` attempts to write the least upper bound of the current value of the lvar and the new value that is indicated by the programmer (i.e., the result of the `lub` for the given lattice) to the lvar. If this lub is the top element of the lattice, the `put` fails and the program errors out. If the result is a valid element of the lattice, the value of the lvar is updated to the lub result.
 
 ### Part 5: Creating a Threshold Set.
 
-In order to read from lattice variables, a programmer must set up a "threshold" set that indicates when an lvar is ready to be read from. Each threshold set is composed of one or more activation sets, and each activation set is composed of one or more elements of the base data type. Once the value of an lvar is at or above one of the values in one of the activation sets with respect to the lattice, its value is accessible to the programmer.
+In order to deterministically read from lattice variables, a programmer must set up a "threshold" set that indicates when an lvar is ready to be read from. Each threshold set is composed of one or more activation sets, and each activation set is composed of one or more elements of the base data type. Once the value of an lvar is at or above one of the values in one of the activation sets with respect to the lattice, the unique matched activation set is accessible to the programmer.
 
 For example, in `and.xc`, an lvar is not ready to read from until either both boolean results in a `Pair` are determined to be `T()` or at least one of the boolean results is determined to be `F()`, at which point the value of the "and" operation is known to be either true or false. To determine when this occurs (and to process the final result) we can create a "true result" activation set and a "false result" activation set for our lattice `D` as follows:
 
@@ -184,42 +184,35 @@ Or:
 
 `ThresholdSet<State*> * thresh = thresholdSet(D, 2){falseSet, trueSet};`
 
-Note that any two activation sets added to a threshold set must be incompatible-- i.e., the lub of any two elements from two different activation sets must be the top element of the lattice.
+Note that any two activation sets added to a threshold set must be incompatible-- i.e., the lub of any two elements from two different activation sets must be the top element of the lattice to ensure that only one activation set is matched by a given element (though an element may match multiple items in the same activation set).
 
 ### Part 6: Reading from Lvars.
 
 Once a programmer has set up a threshold set for a given lattice, they can use it to attempt to read from a lattice variable as in the following example:
 
-`ActivationSet<State*> * result = get(lvar1, thresh);`
+`ActivationSet<State*> * result = get (lvar1) with thresh;`
 
-A call to `get` checks each activation set in the provided threshold set. If the value of the lvar is at or above (in terms of the lattice) some member of some activation set in the threshold set, `get` will return the entire matched activation set. If the value of the lvar is not at or above any member of any of the activation sets, `get` will return `NULL`. 
+Again, the parentheses are unnecessary in the case where `lvar1` is an identifier.
+
+A call to `get` checks each activation set in the provided threshold set. If the value of the lvar is at or above (in terms of the lattice) some member of some activation set in the threshold set, `get` will return the entire matched activation set. If the value of the lvar is not at or above any member of any of the activation sets, `get` will block until a `put` operation makes the `get` valid. Note that this means that the `get` may block indefinitely.
 
 ### Part 7: Cleaning Up.
 
-After a programmer is done using lvars, lattices, activation sets, and threshold sets, they should clean up the utilized memory. Activation sets should be freed separately from their associated threshold sets, and both activation sets and threshold sets can be freed using `freeSet`. All other elements can be freed with an ordinary `free`. For example,
+After a programmer is done using lvars, lattices, activation sets, and threshold sets, they should clean up the utilized memory. Activation sets can be freed separately from their associated threshold sets with `freeSet` or all at once via their threshold set with `freeAllActs`. Threshold sets can also be freed using `freeSet`. Lattices can be freed with `freeLattice`, and LVars can be freed with `freeLvar`. Note that Lvars, Activation Sets, and Threshold Sets should be freed before their lattices. For example,
 
 ```c
-free(lvar1);
+freeLvar(lvar1);
 freeSet(falseSet);
 freeSet(trueSet);
 freeSet(thresh);
-free(lat);
+freeLattice(lat);
 ```
 
 ### Additional Features:
 
-#### Representing Sets As Strings
-
-Threshold and activation sets have `show` methods which provide a `string` representation of the sets. To display the values in an activation set or threshold set, a programmer can write, for example,
-
-```c
-printf("Activation Set: %s\n", show(falseSet).text);
-printf("Threshold Set: %s\n", show(thresh).text);
-```
+#### Displaying LVars Constructs
 
 #### Pre-made Lattices
-
-Currently, one pre-built lattice of natural numbers with `TopNat()`, `BotNat`, and `Int(int)` elements and a `leq` operation based on equality is provided in header file `natural.xh`. More prefabricated lattices are anticipated soon!
 
 #### CHECK and DEBUG modes
 
@@ -227,13 +220,11 @@ To aid in debugging programs that make use of lvars, two debugging modes are pro
 
 #### Freezing
 
-Even though `get()` returns an activation set rather than a value of the base type, it can often be useful to be able to access the actual value inside an lvar. To preserve the determinism of an lvars program, this can only be done once no further updates are performed to an lvar, i.e., once the lvar is "frozen." To freeze an lvar, a programmer can write the following:
+Though `get` returns an activation set rather than a value of the base type, it can often be useful to be able to access the actual value inside an lvar. To preserve the determinism of an lvars program, this can only be done once no further updates are performed to an lvar, i.e., once the lvar is "frozen." To freeze an lvar, a programmer can write the following:
 
 ```c
-freeze(lvar1);
+freeze lvar1;
 ```
 
-The function `freeze` returns the current value of the lvar (which can then be saved to an ordinary, non-lattice variable and used throughout the rest of the program) and locks the lvar against further writes. After an lvar is frozen, any `put` operation on that lvar will fail (return 0 or error out), but the lvar can be represented by a string using `show` just like activation and threshold sets. Calls to `get` still work as usual after an lvar is frozen.
-
-Note: before freezing an lvar, any cilk threads should be synced in order to preserve determinism.
+The function `freeze` returns the current value of the lvar (which can then be saved to an ordinary, non-lattice variable and used throughout the rest of the program) and locks the lvar against further writes. After an lvar is frozen, any `put` operation on that lvar will fail, but the lvar can be displayed using `display` just like activation and threshold sets. Calls to `get` without a provided threshold set will return the actual value of an LVar after it is frozen. Note that before freezing an LVar, any concurrent threads must be synced in order to preserve determinism.
 
