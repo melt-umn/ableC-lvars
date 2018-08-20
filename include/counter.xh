@@ -1,0 +1,58 @@
+#include "lvars.xh"
+
+#ifndef _COUNTER_XH
+#define _COUNTER_XH
+
+int leq_counter(int i1, int i2) {
+  if (i2 == -1) {
+    return 1;
+  }
+  if (i1 == -1) {
+    return 0;
+  }
+  return i1 <= i2;
+}
+
+int lub_counter(int i1, int i2) {
+  if (i1 == -1 || i2 == -1) {
+    return -1;
+  }
+  return i1 + i2;
+}
+
+void show_counter(int i) {
+  printf("%d", i);
+}
+
+// add LvarCounter type
+// can't put with LvarCounter
+// add inc
+
+Lattice<int>* counter_lat;
+
+Lvar<int>* newLvarCounter() {
+  if (counter_lat == NULL) {
+    counter_lat = lattice(-1, leq_counter, lub_counter, show_counter);
+  }
+  Lvar<int>* c = newLvar(counter_lat);
+  return c;
+}
+
+ThresholdSet<int>* makeThreshold(int n) {
+  ActivationSet<int>* a = activationSet(counter_lat, 1){n};
+  ThresholdSet<int>* t = thresholdSet(counter_lat, 1){a};
+  return t;
+}
+
+ActivationSet<int>* getCounter(Lvar<int>* c, int n) {
+  ThresholdSet<int>* t = makeThreshold(n);
+  return get c with t;
+}
+
+void inc(Lvar<int>* c) {
+  put (1) in c;
+}
+
+#endif
+
+

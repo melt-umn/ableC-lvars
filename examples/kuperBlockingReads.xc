@@ -43,3 +43,18 @@ int main(int argc, char **argv) {
 
   return 1;
 }
+
+/*
+
+LvarCounter* c = newLvarCounter();
+for (int i = 0; i < 5; i++) {
+  inc c;
+}
+put (3) in c; // errors out, can't put in lvar counter
+get c with {{3}} // this works
+
+sync;
+freeze c;
+display c;
+
+*/
