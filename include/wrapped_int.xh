@@ -7,17 +7,34 @@ typedef datatype Int Int;
 datatype Int {
   I_Top();
   I(int);
+  Unknown();
 };
 
 void displayWrappedInt(Int* i) {
   match (i) {
     I_Top() -> {printf("I_Top()");}
     I(n) -> {printf("%d", n);}
+    Unknown()-> {printf("?");}
   }
 }
 
 void freeWrappedInt(Int* i) {
   free(i);
+}
+
+int isTopInt(Int* i) {
+  match (i) {
+    I_Top() -> {return 1;}
+    _ -> {return 0;}
+  }
+}
+
+Int* copyWrappedInt(Int* i) {
+  match (i) {
+    I_Top() -> {return I_Top();}
+    I(n) -> {return I(n);}
+    Unknown() -> {return Unknown();}
+  }
 }
 
 Lattice<Int*>* make_lattice_wrapped_int(int (*leqFunc)(Int*, Int*),

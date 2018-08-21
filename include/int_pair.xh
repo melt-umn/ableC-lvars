@@ -1,0 +1,98 @@
+#ifndef _INT_PAIR_LVAR_H
+#define _INT_PAIR_LVAR_H
+
+#include "lvars.xh"
+#include "single_write_int.xh"
+
+typedef datatype Pair Pair;
+datatype Pair {
+  IP_Top();
+  IP(Int*, Int*);
+};
+
+int leq_intPair(Pair* p1, Pair* p2) {
+  match (p2) {
+    IP_Top() -> {return 1;} 
+    IP(i21, i22) -> {
+      match (p1) {
+        IP_Top() -> {return 0;}
+        IP(i11, i12) -> {
+          return leq_single_write_int(i11, i21) &&
+                 leq_single_write_int(i12, i22);
+        }
+      }
+    }
+  }
+}
+
+Pair* lub_intPair(Pair* p1, Pair* p2) {
+  match (p1) {
+    IP_Top() -> {return IP_Top();}
+    IP(i11, i12) -> {
+      match (p2) {
+        IP_Top() -> {return IP_Top();}
+        IP(i21, i22) -> {
+          Int* val1;
+          Int* val2;
+          if (leq_single_write_int(i11, i21)) {
+            val1 = copyWrappedInt(i21);
+          }
+          else if (leq_single_write_int(i21, i11)) {
+            val1 = copyWrappedInt(i11);
+          }
+          else {
+            return IP_Top();
+          }
+
+          if (leq_single_write_int(i12, i22)) {
+            val2 = copyWrappedInt(i22);
+          }
+          else if (leq_single_write_int(i22, i12)) {
+            val2 = copyWrappedInt(i12);
+          }
+          else {
+            return IP_Top();
+          }
+
+          return IP(val1, val2);
+        }
+      }
+    }
+  }
+}
+
+void display_intPair(Pair* p) {
+  match (p) {
+    IP_Top() -> {printf("Error!");}
+    IP(i1, i2) -> {
+      printf("(");
+      displayWrappedInt(i1);
+      printf(", ");
+      displayWrappedInt(i2);
+      printf(")");
+    }
+  }
+}
+
+void free_intPair(Pair* p) {
+  match (p) {
+    IP(i1, i2) -> {
+      freeWrappedInt(i1);
+      freeWrappedInt(i2);
+      free(p);
+    }
+    _ -> {free(p);}
+  }
+}
+
+Lattice<Pair*>* intPairLattice() {
+  return lattice(IP_Top(), leq_intPair, lub_intPair, display_intPair, free_intPair);
+}
+
+Lvar<Pair*>* intPairLvar() {
+  Lattice<Pair*>* lat = intPairLattice();
+  return newLvar lat;
+}
+
+
+#endif

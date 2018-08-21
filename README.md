@@ -31,6 +31,7 @@
 
 #### Usability:
 
++ Discuss constructive vs desctructive put (maybe rename?)
 + Look over and tidy up examples and header file
 + Implement more prefab lattices/data types
 + See if int_set.h lattice can be generalized to other base types to create a more flexible set lattice

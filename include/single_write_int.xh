@@ -11,6 +11,13 @@ int leq_single_write_int(Int* i1, Int* i2) {
       match (i1) {
         I_Top() -> {return 0;}
         I(n2) -> {return n1 == n2;}
+        Unknown() -> {return 1;}
+      }
+    }
+    Unknown() -> {
+      match (i1) {
+        Unknown() -> {return 1;}
+        _ -> {return 0;}
       }
     }
   }
@@ -20,7 +27,7 @@ Int* lub_single_write_int(Int* i1, Int* i2) {
   match (i1) {
     I_Top() -> {return I_Top();}
     I(n1) -> {
-      match (n2) {
+      match (i2) {
         I_Top() -> {return I_Top();}
         I(n2) -> {
           if (n1 == n2) {
@@ -28,8 +35,10 @@ Int* lub_single_write_int(Int* i1, Int* i2) {
           }
           return I_Top();
         }
+        Unknown() -> {return copyWrappedInt(i1);}
       }
     }
+    Unknown() -> {return copyWrappedInt(i2);}
   }
 }
 
