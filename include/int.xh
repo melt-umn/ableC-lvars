@@ -13,8 +13,8 @@ Lattice<int>* make_lattice_int(int top, int (*leqFunc)(int, int),
   return lat;
 }
 
-Lvar<int>* make_lvar_int(int top, int (*leqFunc)(Int*, Int*),
-                                  Int* (*lubFunc)(Int*, Int*)) {
+Lvar<int>* make_lvar_int(int top, int (*leqFunc)(int, int),
+                                  int (*lubFunc)(int, int)) {
   Lattice<int>* lat = make_lattice_int(top, leqFunc, lubFunc);
   Lvar<int>* l = newLvar lat;
   return l;
@@ -26,8 +26,8 @@ Lattice<int>* make_lattice_pos_int(int (*leqFunc)(int, int),
   return lat;
 }
 
-Lvar<int>* make_lvar_pos_int(int (*leqFunc)(Int*, Int*),
-                                  Int* (*lubFunc)(Int*, Int*)) {
+Lvar<int>* make_lvar_pos_int(int (*leqFunc)(int, int),
+                                  int (*lubFunc)(int, int)) {
   Lattice<int>* lat = make_lattice_pos_int(leqFunc, lubFunc);
   Lvar<int>* l = newLvar lat;
   return l;

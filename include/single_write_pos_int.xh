@@ -34,7 +34,7 @@ Lattice<int>* make_lattice_single_write_pos_int() {
                               lub_single_write_pos_int);
 }
 
-Lvar<Int*>* make_lvar_single_write_pos_int() {
+Lvar<int>* make_lvar_single_write_pos_int() {
   Lattice<int>* lat = make_lattice_single_write_pos_int();
   Lvar<int>* l = newLvar lat;
   return l;
