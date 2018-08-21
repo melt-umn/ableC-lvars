@@ -1,0 +1,36 @@
+#ifndef _INT_XH
+#define _INT_XH
+
+#include "lvars.xh"
+
+void displayInt(int i) {
+  printf("%d", i);
+}
+
+Lattice<int>* make_lattice_int(int top, int (*leqFunc)(int, int),
+                                        int (*lubFunc)(int, int)) {
+  Lattice<int>* lat = lattice(top, leqFunc, lubFunc, displayInt);
+  return lat;
+}
+
+Lvar<int>* make_lvar_int(int top, int (*leqFunc)(Int*, Int*),
+                                  Int* (*lubFunc)(Int*, Int*)) {
+  Lattice<int>* lat = make_lattice_int(top, leqFunc, lubFunc);
+  Lvar<int>* l = newLvar lat;
+  return l;
+}
+
+Lattice<int>* make_lattice_pos_int(int (*leqFunc)(int, int),
+                                        int (*lubFunc)(int, int)) {
+  Lattice<int>* lat = lattice(-1, leqFunc, lubFunc, displayInt);
+  return lat;
+}
+
+Lvar<int>* make_lvar_pos_int(int (*leqFunc)(Int*, Int*),
+                                  Int* (*lubFunc)(Int*, Int*)) {
+  Lattice<int>* lat = make_lattice_pos_int(leqFunc, lubFunc);
+  Lvar<int>* l = newLvar lat;
+  return l;
+}
+
+#endif

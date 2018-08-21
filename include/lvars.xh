@@ -52,6 +52,23 @@ static void _freeLattice(Lattice<a>* lat) {
   free(lat);
 }
 
+/* Want to be able to do something like this, but matching fails
+
+template<a>
+static int _leqWithTop(Lattice<a>* lat, a val1, a val2) {
+  match (val2) {
+    lat->_top -> {return 1;}
+    _ -> {
+      match (val1) {
+        lat -> _top -> {return 0;}
+        _ -> {return lat->_leq(val1, val2);}
+      }
+    }
+  }
+}
+
+*/
+
 //*************************** Activation set **********************************
 
 template<a> struct _ActivationSet {

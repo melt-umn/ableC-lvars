@@ -1,0 +1,48 @@
+#ifndef _INCREASING_POS_INT_XH
+#define _INCREASING_POS_INT_XH
+
+#include "lvars.xh"
+#include "int.xh"
+
+int leq_increasing_pos_int(int i1, int i2) {
+  if (i1 < -1 || i2 < -1) {
+    printf("Error: Must use positive integers.\n");
+    exit(0);
+  }
+  if (i2 == -1) {
+    return 1;
+  }
+  if (i1 == -1) {
+    return 0;
+  }
+  return i1 <= i2;
+}
+
+int lub_increasing_pos_int(int i1, int i2) {
+  if (i1 < -1 || i2 < -1) {
+    printf("Error: Must use positive integers.\n");
+    exit(0);
+  }
+  if (i1 == -1 || i2 == -1) {
+    return -1;
+  }
+  if (i1 >= i2) {
+    return i1;
+  }
+  if (i2 >= i1) {
+    return i2;
+  }
+}
+
+Lattice<int>* make_lattice_increasing_pos_int() {
+  return make_lattice_pos_int(leq_increasing_pos_int, 
+                              lub_increasing_pos_int);
+}
+
+Lvar<Int*>* make_lvar_increasing_pos_int() {
+  Lattice<int>* lat = make_lattice_increasing_pos_int();
+  Lvar<int>* l = newLvar lat;
+  return l;
+}
+
+#endif

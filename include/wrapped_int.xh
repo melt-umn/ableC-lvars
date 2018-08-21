@@ -22,9 +22,7 @@ void freeWrappedInt(Int* i) {
 
 Lattice<Int*>* make_lattice_wrapped_int(int (*leqFunc)(Int*, Int*),
                                         Int* (*lubFunc)(Int*, Int*)) {
-  int (*leq)(Int*, Int*) = leqFunc;
-  Int* (*lub)(Int*, Int*) = lubFunc;
-  Lattice<Int*>* lat = lattice(I_Top(), leq, lub, displayWrappedInt, 
+  Lattice<Int*>* lat = lattice(I_Top(), leqFunc, lubFunc, displayWrappedInt, 
                                freeWrappedInt);
   return lat;
 }

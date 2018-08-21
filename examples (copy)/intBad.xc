@@ -29,6 +29,16 @@ void displayInteger(int n) {
   printf("%d", n);
 }
 
+struct putStruct {
+  Lvar<int>* x;
+  int val;
+};
+
+void * putVoid(void* valStruct) {
+  struct putStruct * p = (struct putStruct*) valStruct;
+  put (p->val) in p->x;
+}
+
 cilk int putCilk(Lvar<int>* x, int val, int count);
 cilk int putCilk(Lvar<int>* x, int val, int count) { 
   if (count < 1000) {
@@ -38,7 +48,8 @@ cilk int putCilk(Lvar<int>* x, int val, int count) {
     cilk return result;
   }
   printf("put\n");
-  cilk return put (val) in x;
+  put (val) in x;
+  cilk return 1;
 }
 
 cilk ActivationSet<int> * getCilk(Lvar<int>* x, ThresholdSet<int>* t, int count);
@@ -57,11 +68,9 @@ cilk ActivationSet<int> * getCilk(Lvar<int>* x, ThresholdSet<int>* t, int count)
 cilk ActivationSet<int> * putGetEx(Lvar<int> *x, ThresholdSet<int>* t) {
   ActivationSet<int> * y;
   int result1, result2;
-  for (int i = 0; i < 50; i++) {
-    spawn result1 = putCilk(x, 3, 0);
-    spawn result2 = putCilk(x, 7, 0);
-    spawn y = getCilk(x, t, 0); 
-  }
+  spawn y = getCilk(x, t, 0);
+  spawn result1 = putCilk(x, 3, 0);
+  spawn result2 = putCilk(x, 7, 0);
   sync;
   cilk return y;
 }
@@ -75,7 +84,7 @@ cilk int main(int argc, char **argv) {
   ActivationSet<int> * result;
   spawn result = putGetEx(x, t);
   sync;
-  freeze(x);
+  freeze x;
   printf("Value of x: ");
   display(x);
   printf("\n");

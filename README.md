@@ -8,7 +8,6 @@
 + fix syntax in error messages
 + Consider making show function optional (like with free)
 + general templated make_lvar function? -- could get type from functions rather than top, but how to develop default top?
-+ Fix incompatibility errors from checking of function args
 + Don't need to pattern match on top? Or do I?
 
 #### LVars Functionality:
@@ -42,7 +41,7 @@
 
 ### Things to think about:
 
-+ Does it make sense to free old value in put?
++ Does it make sense to free old value in put? Only works if create new values each time.
 + Is it okay to only check threshold set compatibility in debug mode, since it affects determinism? __attribute_constructor to check once before running?
 
 ## Guide:
