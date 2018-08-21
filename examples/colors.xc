@@ -209,7 +209,8 @@ int main(int argc, char **argv) {
     freeLvar x;
     freeActSets t;
     freeSet t;
-    freeLattice D;         
+    freeLattice D;  
+       
   }
 }
 

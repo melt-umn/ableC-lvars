@@ -51,9 +51,11 @@ static void _freeLattice(Lattice<a>* lat) {
   lat->_free(lat->_top);
   free(lat);
 }
+// Want to be able to do something like this, but matching fails
+// Problem: to test if a value is top, user needs to provide eq function
+// or leq function that we can use to check if value is top
 
-/* Want to be able to do something like this, but matching fails
-
+/*
 template<a>
 static int _leqWithTop(Lattice<a>* lat, a val1, a val2) {
   match (val2) {
@@ -66,7 +68,6 @@ static int _leqWithTop(Lattice<a>* lat, a val1, a val2) {
     }
   }
 }
-
 */
 
 //*************************** Activation set **********************************

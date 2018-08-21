@@ -8,8 +8,8 @@ imports edu:umn:cs:melt:exts:ableC:lvars:concretesyntax;
 imports edu:umn:cs:melt:ableC:abstractsyntax:construction;
 imports edu:umn:cs:melt:ableC:abstractsyntax:env;
 imports edu:umn:cs:melt:ableC:abstractsyntax:construction:parsing;
-imports edu:umn:cs:melt:exts:ableC:templating;
 imports edu:umn:cs:melt:exts:ableC:algebraicDataTypes;
+imports edu:umn:cs:melt:exts:ableC:templating;
 imports edu:umn:cs:melt:exts:ableC:cilk;
 imports edu:umn:cs:melt:exts:ableC:string;
 imports edu:umn:cs:melt:ableC:abstractsyntax:substitution;
@@ -154,6 +154,63 @@ top::Expr ::= topV::Expr leq::Expr lub::Expr disp::Expr
     ableC_Expr{inst _defaultFree<$directTypeExpr{topV.typerep}>},
     location=top.location);
 }
+
+/*
+abstract production leq
+top::Expr ::= lattice::Expr val1::Expr val2::Expr
+{
+
+  propagate substituted;
+  top.pp = pp"leq(${lattice.pp}, ${val1.pp}, ${val2.pp})";
+
+  forwards to
+  case lattice.typerep of
+    pointerType(_, latticeType(_, t)) -> 
+      leq_helper(ableC_Expr{$Expr{lattice}->_top}, val1, val2)
+  |  _ -> errorExpr([err(top.location, 
+         "Must provide a lattice to use leq, not" ++
+         showType(lattice.typerep) ++">")], location=top.location)
+  end;
+}
+
+abstract production leq_helper
+top::Expr ::= lattice::Expr top::Expr val1::Expr val2::Expr
+{
+  propagate substituted;
+  top.pp = pp"leq(${lattice.pp}, ${val1.pp}, ${val2.pp})";
+
+  forwards to
+    matchExpr(val2, 
+      consExprClause(
+	exprClause(
+          constructorPattern(
+            text(
+              top.pp
+            ), nilPattern()
+          ), ableC_Expr{1}
+        ),
+      oneExprClause(
+        defaultClause(
+          matchExpr(val1, 
+            consExprClause(
+	      exprClause(
+                constructorPattern(
+                  text(
+                    top.pp
+                  ), nilPattern()
+                ), ableC_Expr{0}
+              ),
+            oneExprClause(
+              defaultClause( 
+                ableC_Expr{$Expr{lattice}->_leq($Expr{val1}, $Expr{val2})}
+              )
+            )
+          )
+        )
+      )
+    );
+}
+*/
 
 //********************** Production to add to various structures *************
 
