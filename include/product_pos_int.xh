@@ -1,0 +1,40 @@
+#ifndef _PROD_POS_INT_XH
+#define _PROD_POS_INT_XH
+
+#include "lvars.xh"
+#include "int.xh"
+
+int leq_prod_pos_int(int i1, int i2) {
+  if (i1 < -1 || i2 < -1) {
+    printf("Must use positive values\n");
+    exit(0);
+  }
+  if (i2 == -1) {return 1;} 
+  if (i1 == -1) {return 0;}
+  return (i2 % i1) == 0;
+}
+
+int lub_prod_pos_int(int i1, int i2) {
+  if (i1 < -1 || i2 < -1) {
+    printf("Must use positive values\n");
+    exit(0);
+  }
+  if (i1 == -1 || i2 == -1) {
+    return -1;
+  }  
+  return i1 * i2;
+}
+
+Lattice<int>* make_lattice_prod_pos_int() {
+  Lattice<int>* lat = lattice(-1, leq_prod_pos_int, lub_prod_pos_int, 
+                              displayInt);
+  return lat;
+}
+
+Lvar<int>* make_lvar_prod_pos_int() {
+  Lattice<int>* lat = make_lattice_prod_pos_int();
+  Lvar<int>* l = newLvar lat;
+  return l;
+}
+
+#endif
