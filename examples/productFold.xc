@@ -15,7 +15,8 @@ cilk int prodToFrom(Lvar<Int*>* l, int* arr, int start, int end) {
   for (int i = start; i <= end; i++) {
     total = total * arr[i];
   }
-  cilk return put (I(total)) in l;
+  put (I(total)) in l; 
+  cilk return 1;
 }
 
 cilk int multInChunks(Lvar<Int*>*l, int* arr, int len, int numChunks) {

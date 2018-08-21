@@ -34,8 +34,9 @@ template<a> struct _Lattice {
 // to create a new lattice with the fields specified by the user
 
 template<a>
-static Lattice<a>* _newLattice(a greatest, int (*leq)(),
-                   a (*lub)(), void (*displayMethod)(), void (*freeMethod)()) {
+static Lattice<a>* _newLattice(a greatest, int (*leq)(a, a),
+                   a (*lub)(a, a), void (*displayMethod)(a),
+                   void (*freeMethod)(a)) {
   Lattice<a> * l = malloc(sizeof(Lattice<a>)); 
   l->_top = greatest;
   l->_leq = leq;

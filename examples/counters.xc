@@ -1,3 +1,4 @@
+#define DEBUG
 #include "lvars.xh"
 #include "counter.xh"
 

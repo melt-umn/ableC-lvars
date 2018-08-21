@@ -127,25 +127,8 @@ int main(int argc, char **argv) {
 
   // *************** Step 3. Try putting some things in the lvars *************
 
-  int success1 = put (7) in x;
-  if (!success1) {
-    printf("Int put failed!\n");
-    free(x);
-    free(y);
-    free(D);
-    free(D2);
-    return 0;
-  }
-
-  int success2 = put (1.2345) in y;
-  if (!success2) {
-    printf("Double put failed!\n");
-    free(x);
-    free(y);
-    free(D);
-    free(D2);
-    return 0;
-  }
+  put (7) in x;
+  put (1.2345) in y;
 
   // *************** Step 4. Set up the threshold set(s) **********************
 

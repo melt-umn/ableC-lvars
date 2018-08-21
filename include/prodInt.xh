@@ -1,5 +1,5 @@
 #include "lvars.xh"
-#include "int.xh"
+#include "wrapped_int.xh"
 
 #ifndef _PRODINT_XH
 #define _PRODINT_XH
@@ -8,10 +8,8 @@
 
 int leqProdInt(Int* i1, Int* i2) {
   match (i1) {
-    I_Bot() -> {return 1;}
     I(n1) -> {
       match (i2) {
-        I_Bot() -> {return 0;}
         I(n2) -> {
           if (n2 == 0) {
             return 1;
@@ -50,11 +48,9 @@ int leqProdInt(Int* i1, Int* i2) {
 Int* lubProdInt(Int* i1, Int* i2) {
   match (i1) {
     I_Top() -> {return i1;}
-    I_Bot() -> {return i2;}
     I(n1) -> {
       match (i2) {
         I_Top() -> {return i2;}
-        I_Bot() -> {return i1;}
         I(n2) -> {
           return I(n1 * n2);
         }
@@ -64,7 +60,7 @@ Int* lubProdInt(Int* i1, Int* i2) {
 }
 
 Lattice<Int*>* prodIntLattice() {
-  return lattice(I_Top(), leqProdInt, lubProdInt, displayInteger);
+  return lattice(I_Top(), leqProdInt, lubProdInt, displayWrappedInt);
 }
 
 #endif

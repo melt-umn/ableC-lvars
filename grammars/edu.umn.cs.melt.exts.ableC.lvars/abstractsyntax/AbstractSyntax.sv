@@ -32,10 +32,19 @@ top::Expr ::= topV::Expr leq::Expr lub::Expr disp::Expr free::Expr
     checkLvarHeaderDef(top.location, top.env)
     ++
     case leq.typerep of
-      functionType(builtinType(nilQualifier(), signedType(intType())),
-      protoFunctionType([t1, t2], false),_) -> 
+      functionType(t0, protoFunctionType([t1, t2], false),_) -> 
         if compatibleTypes(t1, topV.typerep, false, true)
            && compatibleTypes(t2, topV.typerep, false, true)
+           && t0.isIntegerType
+        then []
+        else [err(top.location, 
+           "leq must be function of type int(" ++ showType(topV.typerep) ++
+           ", " ++ showType(topV.typerep) ++ "), not " ++ 
+           showType(leq.typerep))]
+     | pointerType(_, functionType(t0, protoFunctionType([t1, t2], false),_)) -> 
+        if compatibleTypes(t1, topV.typerep, false, true)
+           && compatibleTypes(t2, topV.typerep, false, true)
+           && t0.isIntegerType
         then []
         else [err(top.location, 
            "leq must be function of type int(" ++ showType(topV.typerep) ++
@@ -49,6 +58,16 @@ top::Expr ::= topV::Expr leq::Expr lub::Expr disp::Expr free::Expr
     ++
     case lub.typerep of
       functionType(outType, protoFunctionType([t1, t2], false),_) -> 
+        if compatibleTypes(outType, topV.typerep, false, true)
+          && compatibleTypes(t1, topV.typerep, false, true)
+          && compatibleTypes(t2, topV.typerep, false, true)
+        then [] 
+        else [err(top.location, 
+               "lub must be function of type " ++
+               showType(topV.typerep) ++ "(" ++ showType(topV.typerep) ++
+               ", " ++ showType(topV.typerep) ++ "), not " ++ 
+               showType(lub.typerep))]
+    | pointerType(_, functionType(outType, protoFunctionType([t1, t2], false),_)) -> 
         if compatibleTypes(outType, topV.typerep, false, true)
           && compatibleTypes(t1, topV.typerep, false, true)
           && compatibleTypes(t2, topV.typerep, false, true)
@@ -74,6 +93,14 @@ top::Expr ::= topV::Expr leq::Expr lub::Expr disp::Expr free::Expr
              "disp must be function of type void(" ++
              showType(topV.typerep) ++ "), not " ++ 
               showType(disp.typerep))]
+    | pointerType(_, functionType(builtinType(nilQualifier(), voidType()),
+      protoFunctionType([t], false),_)) -> 
+        if compatibleTypes(t, topV.typerep, false, true)
+        then []
+        else [err(top.location, 
+             "disp must be function of type void(" ++
+             showType(topV.typerep) ++ "), not " ++ 
+              showType(disp.typerep))]
     | _ -> [err(top.location, 
            "disp must be function of type void(" ++
            showType(topV.typerep) ++ "), not " ++ 
@@ -83,6 +110,14 @@ top::Expr ::= topV::Expr leq::Expr lub::Expr disp::Expr free::Expr
     case free.typerep of
       functionType(builtinType(nilQualifier(), voidType()),
       protoFunctionType([t], false),_) -> 
+        if compatibleTypes(t, topV.typerep, false, true)
+        then []
+        else [err(top.location, 
+             "free must be function of type void(" ++
+             showType(topV.typerep) ++ 
+             "), not " ++ showType(free.typerep))]
+    | pointerType(_, functionType(builtinType(nilQualifier(), voidType()),
+      protoFunctionType([t], false),_)) -> 
         if compatibleTypes(t, topV.typerep, false, true)
         then []
         else [err(top.location, 

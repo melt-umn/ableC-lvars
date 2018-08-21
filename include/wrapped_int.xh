@@ -1,0 +1,43 @@
+#ifndef _WRAPPED_INT_XH
+#define _WRAPPED_INT_XH
+
+#include "lvars.xh"
+
+typedef datatype Int Int;
+datatype Int {
+  I_Top();
+  I(int);
+};
+
+void displayWrappedInt(Int* i) {
+  match (i) {
+    I_Top() -> {printf("I_Top()");}
+    I(n) -> {printf("%d", n);}
+  }
+}
+
+void freeWrappedInt(Int* i) {
+  free(i);
+}
+
+Lattice<Int*>* make_lattice_wrapped_int(int (*leqFunc)(Int*, Int*),
+                                        Int* (*lubFunc)(Int*, Int*)) {
+  int (*leq)(Int*, Int*) = leqFunc;
+  Int* (*lub)(Int*, Int*) = lubFunc;
+  Lattice<Int*>* lat = lattice(I_Top(), leq, lub, displayWrappedInt, 
+                               freeWrappedInt);
+  return lat;
+}
+
+Lvar<Int*>* make_lvar_wrapped_int(int (*leqFunc)(Int*, Int*),
+                                  Int* (*lubFunc)(Int*, Int*)) {
+  Lattice<Int*>* lat = make_lattice_wrapped_int(leqFunc, lubFunc);
+  Lvar<Int*>* l = newLvar lat;
+  return l;
+}
+
+void put_wrapped_int(Lvar<Int*>* l, int i) {
+  put (I(i)) in l;
+}
+
+#endif

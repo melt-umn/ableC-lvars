@@ -8,13 +8,14 @@
 + fix syntax in error messages
 + Consider making show function optional (like with free)
 + general templated make_lvar function? -- could get type from functions rather than top, but how to develop default top?
-+ Since put errors out in case of invalid put, it doesn't need to return an integer.
++ Fix incompatibility errors from checking of function args
++ Don't need to pattern match on top? Or do I?
 
 #### LVars Functionality:
 
 + Have Top() automatically generated (infer type from functions instead?)
 + Work on speeding up thread waiting/locking process (each thread has own value of lvar, merge? make a copy and take lub of that?)
-+ Implement other Lvish features-- incrementable counter, event handlers (templated make_lvar function that takes a leq and a fold function?)
++ Add make_lvar function
 + Getter methods
 
 #### Examples:
