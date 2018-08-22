@@ -15,17 +15,17 @@ cilk int task(int *xs) {
 }
 
 cilk int main (int argc, char **argv) {
-  accum = make_lvar_prod_pos_int();
-
   if (argc < 2) {
     printf("Must enter number of threads that evenly divide %d\n", N);
-    exit(0);
+    cilk return 0;
   }
 
   NUM_THREADS = atoi(argv[1]);
   if (N % NUM_THREADS != 0) {
-    exit(0);
+    cilk return 0;
   }
+
+  accum = make_lvar_prod_pos_int();
   TASK_SIZE = N / NUM_THREADS;
 
   int* arr = malloc(N * sizeof(int));
@@ -42,8 +42,9 @@ cilk int main (int argc, char **argv) {
   freeze accum;
   printf ("Result: %d\n", get accum);
   free(arr);
-  free(getLattice(accum));
-  free(accum);
+  Lattice<int>* lat = getLattice accum;
+  freeLvar accum;
+  freeLattice lat;
 
   cilk return 1;
 }

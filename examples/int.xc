@@ -29,6 +29,12 @@ cilk int main(int argc, char **argv) {
   freeze y;
   printf("Actual Value of y: %d\n", get y);
 
+  freeLvar x;
+  freeLvar y;
+  freeActSets t;
+  freeSet t;
+  freeLattice lat;
+
   cilk return 1;
 }
 
