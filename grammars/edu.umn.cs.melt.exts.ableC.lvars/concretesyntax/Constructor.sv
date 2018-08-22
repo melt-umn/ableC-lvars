@@ -68,7 +68,7 @@ concrete productions top::PrimaryExpr_c
 | 'lattice' '(' order::AssignExpr_c ',' lub::AssignExpr_c ',' 
                 display::AssignExpr_c ')'
   {
-    top.ast = newLatticeNoFree(greatest.ast, order.ast, lub.ast,
+    top.ast = newLatticeNoFree(order.ast, lub.ast,
                          display.ast, location=top.location);
   }
 

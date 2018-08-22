@@ -67,3 +67,4 @@ Ideas:
 
      + Can get rid of freeLattice()
      + Need to fix lattice constructor to not use top as base type
+     + Need to fix newLatticeNoFree to get correct type
