@@ -155,7 +155,6 @@ top::Expr ::= topV::Expr leq::Expr lub::Expr disp::Expr
     location=top.location);
 }
 
-/*
 abstract production leq
 top::Expr ::= lattice::Expr val1::Expr val2::Expr
 {
@@ -166,7 +165,8 @@ top::Expr ::= lattice::Expr val1::Expr val2::Expr
   forwards to
   case lattice.typerep of
     pointerType(_, latticeType(_, t)) -> 
-      leq_helper(ableC_Expr{$Expr{lattice}->_top}, val1, val2)
+      leq_helper(lattice, ableC_Expr{$Expr{lattice}->_top}, val1, val2,
+                 location = top.location)
   |  _ -> errorExpr([err(top.location, 
          "Must provide a lattice to use leq, not" ++
          showType(lattice.typerep) ++">")], location=top.location)
@@ -174,43 +174,69 @@ top::Expr ::= lattice::Expr val1::Expr val2::Expr
 }
 
 abstract production leq_helper
-top::Expr ::= lattice::Expr top::Expr val1::Expr val2::Expr
+e::Expr ::= lattice::Expr top::Expr val1::Expr val2::Expr
 {
   propagate substituted;
-  top.pp = pp"leq(${lattice.pp}, ${val1.pp}, ${val2.pp})";
+  e.pp = pp"leq(${lattice.pp}, ${val1.pp}, ${val2.pp})";
 
   forwards to
-    matchExpr(val2, 
-      consExprClause(
-	exprClause(
-          constructorPattern(
-            text(
-              top.pp
-            ), nilPattern()
-          ), ableC_Expr{1}
+  matchExpr(
+    val2,
+    consExprClause(
+      exprClause(
+        constructorPattern(show(80, top.pp), nilPattern(location = e.location), 
+          location = e.location
         ),
+        realConstant(
+          integerConstant("1", false, noIntSuffix(), location = e.location),
+          location = e.location
+        ),
+        location = e.location
+      ),
       oneExprClause(
-        defaultClause(
-          matchExpr(val1, 
-            consExprClause(
-	      exprClause(
-                constructorPattern(
-                  text(
-                    top.pp
-                  ), nilPattern()
-                ), ableC_Expr{0}
+        exprClause(
+          patternWildcard(location = e.location),
+          parenExpr(
+            matchExpr(
+              val1,
+              consExprClause(
+                exprClause(
+                  constructorPattern(
+                    show(80, top.pp),
+                    nilPattern(location = e.location),
+                    location = e.location
+                  ),
+                  realConstant(
+                    integerConstant("0", false, noIntSuffix(),
+                      location = e.location
+                    ),
+                    location = e.location
+                  ),
+                  location = e.location
+                ),
+                oneExprClause(
+                  exprClause(
+                    patternWildcard(location = e.location),
+                    ableC_Expr{$Expr{lattice}->_leq($Expr{val1}, $Expr{val2})},
+                    location = e.location
+                  ),
+                  location = e.location
+                ),
+                location = e.location
               ),
-            oneExprClause(
-              defaultClause( 
-                ableC_Expr{$Expr{lattice}->_leq($Expr{val1}, $Expr{val2})}
-              )
-            )
-          )
-        )
-      )
-    );
+              location = e.location
+            ), 
+            location = e.location
+          ),
+          location = e.location
+        ),
+        location = e.location
+      ),
+      location = e.location
+    ),
+    location = e.location
+  );
 }
-*/
 
 //********************** Production to add to various structures *************
 

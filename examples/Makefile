@@ -27,7 +27,7 @@ TESTS=$(XC_FILES:.xc=.test)
 # All directories contining extension header files that may be included
 XC_INCLUDE_DIRS=$(wildcard $(EXTS_BASE)/*/include)
 # Flags passed to ableC including the appropriate directories
-override XCFLAGS+=$(addprefix -I,$(XC_INCLUDE_DIRS)) -I/usr/local/include/cilk
+override XCFLAGS+=$(addprefix -I,$(XC_INCLUDE_DIRS)) -I/usr/local/include/cilk #--show-ast
 
 # Flags passed to the C compiler, e.g. to enable various compiler extensions
 override CFLAGS+= -g -O2
@@ -56,7 +56,7 @@ $(LIBS):
 
 $(ABLEC_JAR): $(GRAMMAR_SOURCES)
 	touch $(wildcard $(ARTIFACT)/*.sv)
-	silver-ableC -o $@ $(SVFLAGS) $(ARTIFACT) 
+	silver-ableC -o $@ $(SVFLAGS) $(ARTIFACT)
 
 %.c: %.xc $(ABLEC_JAR)
 	java -Xss6M -jar $(ABLEC_JAR) $< $(XCFLAGS)
