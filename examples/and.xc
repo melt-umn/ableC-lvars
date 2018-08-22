@@ -1,3 +1,4 @@
+#define DEBUG
 #include "lvars.xh"
 #include "cilk.xh"
 
@@ -42,7 +43,7 @@ int leqBl(Bl* b1, Bl* b2) {
   }
 }
 
-int leq(State* s1, State* s2) {
+int leqAnd(State* s1, State* s2) {
   match (s2) {
     Top() -> {return 1;}
     Pair(b21, b22) -> {
@@ -143,7 +144,7 @@ cilk ActivationSet<State*>* getCilk(Lvar<State*>* l, ThresholdSet<State*>* t) {
 
 cilk int main(int argc, char **argv) {
 
-  Lattice<State*>* lat = lattice(Top(), leq, lub, displayState, freeState);
+  Lattice<State*>* lat = lattice(Top(), leqAnd, lub, displayState, freeState);
 
   Lvar<State*>* l1 = newLvar lat;
   Lvar<State*>* l2 = newLvar lat;
