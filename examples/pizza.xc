@@ -22,7 +22,6 @@ typedef datatype VoteSet VoteSet;
 datatype VoteSet {
   Empty ();
   Set (Vote*, VoteSet*);
-  Top ();
 }
 
 // ********************** free function ***************************************
@@ -111,7 +110,6 @@ int isInSet(Vote* v, VoteSet* votes) {
 
 int isVoteSubset(VoteSet* v1, VoteSet* v2) {
   match (v2) {
-    Top() -> {return 1;}
     Empty() -> {
       match (v1) {
         Empty() -> {return 1;}
@@ -120,7 +118,6 @@ int isVoteSubset(VoteSet* v1, VoteSet* v2) {
     }
     Set(hd2, tl2) -> {
       match (v1) {
-        Top() -> {return 0;}
         Empty() -> {return 1;}
         Set(hd1, tl1) -> {
           return isInSet(hd1, v2) && isVoteSubset(tl1, v2);
@@ -149,7 +146,6 @@ Vote* copyPersonVote(Vote* v) {
 
 VoteSet* copyVoteSet(VoteSet* v) {
   match (v) {
-    Top() -> {return Top();}
     Empty() -> {return Empty();}
     Set(hd, tl) -> {
       return Set(copyPersonVote(hd), copyVoteSet(tl));
@@ -166,11 +162,9 @@ YN* getOtherVote(YN* v) {
 
 VoteSet* voteSetUnion(VoteSet* v1, VoteSet* v2) {
   match (v1) {
-    Top() -> {return Top();}
     Empty() -> {return copyVoteSet(v2);}
     Set(hd1, tl1) -> {
       match (v2) {
-        Top() -> {return Top();}
         Empty() -> {return copyVoteSet(v1);}
         Set(hd2, tl2) -> {
           match (hd1) {
@@ -178,48 +172,54 @@ VoteSet* voteSetUnion(VoteSet* v1, VoteSet* v2) {
               Vote* other = Horace(getOtherVote(vote));
               if (isInSet(other, v2)) {
                 freePersonVote(other);
-                return Top();
+                return NULL;
               }
               freePersonVote(other);
               if (isInSet(hd1, v2)) {
                 return voteSetUnion(tl1, v2);
               }
               VoteSet* result = voteSetUnion(tl1, v2);
-              match (result) {
-                Top() -> {return Top();}
-                _ -> {return Set(copyPersonVote(hd1), result);}
+              if (result == NULL) {
+                return result;
+              }
+              else {
+                return Set(copyPersonVote(hd1), result);
               }
             }
             Franz(vote) -> {
               Vote* other = Franz(getOtherVote(vote));
               if (isInSet(other, v2)) {
                 freePersonVote(other);
-                return Top();
+                return NULL;
               }
               freePersonVote(other);
               if (isInSet(hd1, v2)) {
                 return voteSetUnion(tl1, v2);
               }
               VoteSet* result = voteSetUnion(tl1, v2);
-              match (result) {
-                Top() -> {return Top();}
-                _ -> {return Set(copyPersonVote(hd1), result);}
+              if (NULL == result) {
+                return result;
+              }
+              else {
+                return Set(copyPersonVote(hd1), result);
               }
             }
             Kat(vote) -> {
               Vote* other = Kat(getOtherVote(vote));
               if (isInSet(other, v2)) {
                 freePersonVote(other);
-                return Top();
+                return NULL;
               }
               freePersonVote(other);
               if (isInSet(hd1, v2)) {
                 return voteSetUnion(tl1, v2);
               }
               VoteSet* result = voteSetUnion(tl1, v2);
-              match (result) {
-                Top() -> {return Top();}
-                _ -> {return Set(copyPersonVote(hd1), result);}
+              if (NULL == result) {
+                return result;
+              }
+              else {
+                return Set(copyPersonVote(hd1), result);
               }
             }
           }
@@ -227,6 +227,14 @@ VoteSet* voteSetUnion(VoteSet* v1, VoteSet* v2) {
       }
     }
   }
+}
+
+Value<VoteSet*>* lubVoteSet(VoteSet* v1, VoteSet* v2) {
+  VoteSet* result = voteSetUnion(v1, v2);
+  if (result == NULL) {
+    return Top<VoteSet*>;
+  }
+  return value result;
 }
 
 // ******************* display method for our lattice *************************
@@ -275,7 +283,6 @@ void displayInner(VoteSet* v) {
         }
       }
     }
-    Top () -> {printf("Top()");}
   }
 }
 
@@ -286,7 +293,7 @@ void displayVoteSet(VoteSet* v) {
 }
 
 int main(int argc, char **argv) {
-  Lattice<VoteSet*> * D = lattice(Top(), isVoteSubset, voteSetUnion, 
+  Lattice<VoteSet*> * D = lattice(isVoteSubset, lubVoteSet, 
                                   displayVoteSet, freeVoteSet);
 
   Lvar<VoteSet*>* y = newLvar D;

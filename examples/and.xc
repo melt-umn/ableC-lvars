@@ -19,7 +19,6 @@ datatype Bl {
 
 typedef  datatype State  State;
 datatype State {
-  Top ();
   Pair (Bl*, Bl*);
 };
 
@@ -45,10 +44,8 @@ int leqBl(Bl* b1, Bl* b2) {
 
 int leqAnd(State* s1, State* s2) {
   match (s2) {
-    Top() -> {return 1;}
     Pair(b21, b22) -> {
       match (s1) {
-        Top() -> {return 0;}
         Pair(b11, b12) -> { return leqBl(b11, b21) && leqBl(b12, b22);}
       }
     }
@@ -65,16 +62,13 @@ Bl* copy(Bl* b) {
   }
 }
 
-State* lub(State* s1, State* s2) {
+Value<State*>* lub(State* s1, State* s2) {
   match (s1) {
-    Top() -> {return Top();}
     Pair(b11, b12) -> {
       match (s2) {
-        Top() -> {return Top();}
         Pair(b21, b22) -> {
           Bl* bool1;
           Bl* bool2;
-
           if (leqBl(b11, b21)) {
             bool1 = copy(b21);
           }
@@ -82,7 +76,7 @@ State* lub(State* s1, State* s2) {
             bool1 = copy(b11);
           }
           else {
-            return Top();
+            return Top<State*>;
           }
 
           if (leqBl(b12, b22)) {
@@ -92,10 +86,10 @@ State* lub(State* s1, State* s2) {
             bool2 = copy(b12);
           }
           else {
-            return Top();
+            return Top<State*>;
           }
 
-          return Pair(bool1, bool2);
+          return value Pair(bool1, bool2);
         }
       }
     }
@@ -114,7 +108,6 @@ void displayBl(Bl* b) {
 
 void displayState(State* s) {
   match (s) {
-    Top() -> {printf("Top()");}
     Pair(b1, b2) -> {
       printf("(");
       displayBl(b1);
@@ -129,7 +122,6 @@ void displayState(State* s) {
 
 void freeState(State* s) {
   match (s) {
-    Top() -> {free(s);}
     Pair(b1, b2) -> {
       free(b1);
       free(b2);
@@ -144,7 +136,7 @@ cilk ActivationSet<State*>* getCilk(Lvar<State*>* l, ThresholdSet<State*>* t) {
 
 cilk int main(int argc, char **argv) {
 
-  Lattice<State*>* lat = lattice(Top(), leqAnd, lub, displayState, freeState);
+  Lattice<State*>* lat = lattice(leqAnd, lub, displayState, freeState);
 
   Lvar<State*>* l1 = newLvar lat;
   Lvar<State*>* l2 = newLvar lat;

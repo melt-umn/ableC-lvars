@@ -54,6 +54,11 @@ static Value<a>* _newBot() {
   return newVal;
 }
 
+template<a>
+static int _isTop(Value<a>* val) {
+  return val->_top;
+}
+
 template<a> struct _Lattice {
   int (*_leq)(a, a);
   Value<a>* (* _lub)(a, a);
@@ -233,7 +238,7 @@ static int _incompat(Lattice<a> * l, ActivationSet<a> *Q, ActivationSet<a> *R) {
           printf(" and ");
           l->_display(r);
           printf(" are compatible, with lub ");
-          l->_display(l->_lub(q, r));
+          l->_display(l->_lub(q, r)->_val);
           printf("!\n");
           exit(0);
         #endif

@@ -4,7 +4,6 @@ imports edu:umn:cs:melt:exts:ableC:lvars:abstractsyntax;
 marking terminal Lattice_t 'lattice' lexer classes {Ckeyword};
 marking terminal ActivationSet_t 'activationSet' lexer classes {Ckeyword};
 marking terminal ThresholdSet_t 'thresholdSet' lexer classes {Ckeyword};
-marking terminal Value_t 'value' lexer classes {Ckeyword};
 marking terminal Top_t 'Top' lexer classes {Ckeyword};
 
 inherited attribute lattice::Expr;
@@ -81,10 +80,6 @@ concrete productions top::PrimaryExpr_c
   {
     top.ast = init.ast;
     init.lattice = lattice.ast;
-  }
-| 'value' '(' e::AssignExpr_c ')'
-  {
-    top.ast = makeValue(e.ast, location=top.location);
   }
 | 'Top' '<' typ::TypeName_c '>'
   {

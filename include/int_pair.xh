@@ -6,16 +6,13 @@
 
 typedef datatype Pair Pair;
 datatype Pair {
-  IP_Top();
   IP(Int*, Int*);
 };
 
 int leq_intPair(Pair* p1, Pair* p2) {
   match (p2) {
-    IP_Top() -> {return 1;} 
     IP(i21, i22) -> {
       match (p1) {
-        IP_Top() -> {return 0;}
         IP(i11, i12) -> {
           return leq_single_write_int(i11, i21) &&
                  leq_single_write_int(i12, i22);
@@ -25,12 +22,10 @@ int leq_intPair(Pair* p1, Pair* p2) {
   }
 }
 
-Pair* lub_intPair(Pair* p1, Pair* p2) {
+Value<Pair*>* lub_intPair(Pair* p1, Pair* p2) {
   match (p1) {
-    IP_Top() -> {return IP_Top();}
     IP(i11, i12) -> {
       match (p2) {
-        IP_Top() -> {return IP_Top();}
         IP(i21, i22) -> {
           Int* val1;
           Int* val2;
@@ -41,7 +36,7 @@ Pair* lub_intPair(Pair* p1, Pair* p2) {
             val1 = copyWrappedInt(i11);
           }
           else {
-            return IP_Top();
+            return Top<Pair*>;
           }
 
           if (leq_single_write_int(i12, i22)) {
@@ -51,10 +46,10 @@ Pair* lub_intPair(Pair* p1, Pair* p2) {
             val2 = copyWrappedInt(i12);
           }
           else {
-            return IP_Top();
+            return Top<Pair*>;
           }
 
-          return IP(val1, val2);
+          return value(IP(val1, val2));
         }
       }
     }
@@ -63,7 +58,6 @@ Pair* lub_intPair(Pair* p1, Pair* p2) {
 
 void display_intPair(Pair* p) {
   match (p) {
-    IP_Top() -> {printf("Error!");}
     IP(i1, i2) -> {
       printf("(");
       displayWrappedInt(i1);
@@ -86,7 +80,7 @@ void free_intPair(Pair* p) {
 }
 
 Lattice<Pair*>* intPairLattice() {
-  return lattice(IP_Top(), leq_intPair, lub_intPair, display_intPair, free_intPair);
+  return lattice(leq_intPair, lub_intPair, display_intPair, free_intPair);
 }
 
 Lvar<Pair*>* intPairLvar() {

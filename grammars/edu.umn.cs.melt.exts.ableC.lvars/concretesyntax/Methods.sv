@@ -15,6 +15,7 @@ marking terminal CheckLub_t 'checkLub' lexer classes {Ckeyword};
 marking terminal CheckLat_t 'checkLattice' lexer classes {Ckeyword};
 marking terminal Display_t 'display' lexer classes {Ckeyword};
 marking terminal GetLattice_t 'getLattice' lexer classes {Ckeyword};
+marking terminal Value_t 'value' lexer classes {Ckeyword};
 
 terminal In_t 'in' lexer classes {Ckeyword};
 terminal With_t 'with' lexer classes {Ckeyword};
@@ -78,6 +79,10 @@ concrete productions top::UnaryOp_c
 | 'display'
   {
     top.ast = showLvars(top.expr, location=top.location);
+  }
+| 'value'
+  {
+    top.ast = makeValue(top.expr, location=top.location);
   }
 
 concrete productions top::PrimaryExpr_c

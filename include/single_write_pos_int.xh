@@ -18,15 +18,15 @@ int leq_single_write_pos_int(int i1, int i2) {
   return i1 == i2;
 }
 
-int lub_single_write_pos_int(int i1, int i2) {
+Value<int>* lub_single_write_pos_int(int i1, int i2) {
   if (i1 < -1 || i2 < -1) {
     printf("Error: Must use positive integers.\n");
     exit(0);
   }
   if (i1 == -1 || i2 == -1 || i1 != i2) {
-    return -1;
+    return Top<int>;
   }
-  return i1;
+  return value(i1);
 }
 
 Lattice<int>* make_lattice_single_write_pos_int() {

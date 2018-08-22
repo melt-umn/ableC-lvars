@@ -18,10 +18,21 @@ imports edu:umn:cs:melt:ableC:abstractsyntax:overloadable as ovrld;
 //************************ Lattice constructor production ********************
 
 function latticeCheckHelper
-[Message] ::= loc::Location outType::Type leq::Expr disp::Expr free::Expr
+[Message] ::= loc::Location outType::Type leq::Expr disp::Expr free::Expr e::Decorated Env
 {
+
+  local loc_leq::Expr = leq;
+  loc_leq.returnType = loc_leq.returnType;
+  loc_leq.env = e;
+  local loc_disp::Expr = disp;
+  loc_disp.returnType = loc_leq.returnType;
+  loc_disp.env = e;
+  local loc_free::Expr = free;
+  loc_free.returnType = loc_leq.returnType;
+  loc_free.env = e;
+ 
   return 
-      case leq.typerep of
+      case loc_leq.typerep of
         functionType(t0, protoFunctionType([t1, t2], false),_) -> 
           if compatibleTypes(t1, outType, false, true)
              && compatibleTypes(t2, outType, false, true)
@@ -30,7 +41,7 @@ function latticeCheckHelper
           else [err(loc, 
                "leq must be function of type int(" ++ 
                showType(outType) ++ ", " ++ showType(outType)
-               ++ "), not " ++ showType(leq.typerep))]
+               ++ "), not " ++ showType(loc_leq.typerep))]
       | pointerType(_, 
           functionType(t0, protoFunctionType([t1, t2], false),_)) -> 
             if compatibleTypes(t1, outType, false, true)
@@ -40,18 +51,18 @@ function latticeCheckHelper
             else [err(loc, 
                   "leq must be function of type int(" ++ 
                   showType(outType) ++ ", " ++ showType(outType)
-                  ++ "), not " ++ showType(leq.typerep))]
+                  ++ "), not " ++ showType(loc_leq.typerep))]
     
       | _ -> [err(loc, 
              "leq must be function of type int(" ++ 
               showType(outType) ++ ", " ++ 
               showType(outType) ++ "), not " ++ 
-              showType(leq.typerep))]
+              showType(loc_leq.typerep))]
       end
 
       ++ 
     
-      case disp.typerep of 
+      case loc_disp.typerep of 
         functionType(builtinType(nilQualifier(), voidType()),
         protoFunctionType([t], false),_) -> 
           if compatibleTypes(t, outType, false, true)
@@ -59,7 +70,7 @@ function latticeCheckHelper
           else [err(loc, 
                "disp must be function of type void(" ++
                showType(outType) ++ "), not " ++ 
-               showType(disp.typerep))]
+               showType(loc_disp.typerep))]
       | pointerType(_, functionType(builtinType(nilQualifier(), voidType()),
         protoFunctionType([t], false),_)) -> 
           if compatibleTypes(t, outType, false, true)
@@ -67,16 +78,16 @@ function latticeCheckHelper
           else [err(loc, 
                "disp must be function of type void(" ++
                showType(outType) ++ "), not " ++ 
-               showType(disp.typerep))]
+               showType(loc_disp.typerep))]
       | _ -> [err(loc, 
              "disp must be function of type void(" ++
              showType(outType) ++ "), not " ++ 
-             showType(disp.typerep))]
+             showType(loc_disp.typerep))]
       end
       
       ++
 
-      case free.typerep of
+      case loc_free.typerep of
         functionType(builtinType(nilQualifier(), voidType()),
         protoFunctionType([t], false),_) -> 
           if compatibleTypes(t, outType, false, true)
@@ -84,7 +95,7 @@ function latticeCheckHelper
           else [err(loc, 
                "free must be function of type void(" ++
                showType(outType) ++ 
-               "), not " ++ showType(free.typerep))]
+               "), not " ++ showType(loc_free.typerep))]
       | pointerType(_, functionType(builtinType(nilQualifier(), voidType()),
         protoFunctionType([t], false),_)) -> 
           if compatibleTypes(t, outType, false, true)
@@ -92,19 +103,24 @@ function latticeCheckHelper
           else [err(loc, 
                "free must be function of type void(" ++
                showType(outType) ++ 
-               "), not " ++ showType(free.typerep))]
+               "), not " ++ showType(loc_free.typerep))]
       | _ -> [err(loc, 
              "free must be function of type void(" ++
              showType(outType) ++ "), not " ++ 
-             showType(free.typerep))]
+             showType(loc_free.typerep))]
       end;
 }
 
 function getTypeFromLub
-Type ::= lub::Expr
+Type ::= lub::Expr e::Decorated Env
 {
+
+  local loc_lub::Expr = lub;
+  loc_lub.returnType = loc_lub.returnType;
+  loc_lub.env = e;
+
   return
-    case lub.typerep of
+    case loc_lub.typerep of
       functionType(outValueType, protoFunctionType([t1, t2], false),_) ->
         case outValueType of
           pointerType(_, valueType(_, outTypeActual)) -> outTypeActual
@@ -139,14 +155,15 @@ top::Expr ::= leq::Expr lub::Expr disp::Expr free::Expr
           pointerType(_, valueType(_, outType)) -> 
             if compatibleTypes(t1, outType, false, true)
               && compatibleTypes(t2, outType, false, true)
-            then latticeCheckHelper(top.location, outType, leq, disp, free)
+            then latticeCheckHelper(top.location, outType, leq, disp, free,
+                                    openScopeEnv(top.env))
             else [err(top.location, 
                "lub must be function of type Value<" ++
                showType(outType) ++ ">* (" ++ showType(outType) ++
                ", " ++ showType(outType) ++ "), not " ++ 
                showType(lub.typerep))]
        | _ -> [err(top.location, 
-          "lub must be function of type Value<a>*(), not " ++ 
+          "lub must be function of type Value<a>*(a, a), not " ++ 
           showType(lub.typerep))]
        end
     | pointerType(_, functionType(outValueType, 
@@ -155,25 +172,27 @@ top::Expr ::= leq::Expr lub::Expr disp::Expr free::Expr
           pointerType(_, valueType(_, outType)) -> 
             if compatibleTypes(t1, outType, false, true)
               && compatibleTypes(t2, outType, false, true)
-            then latticeCheckHelper(top.location, outType, leq, disp, free)
+            then latticeCheckHelper(top.location, outType, leq, disp, free,
+                                    openScopeEnv(top.env))
             else [err(top.location, 
                "lub must be function of type Value<" ++
                showType(outType) ++ ">* (" ++ showType(outType) ++
                ", " ++ showType(outType) ++ "), not " ++ 
                showType(lub.typerep))]
        | _ -> [err(top.location, 
-          "lub must be function of type Value<a>*(), not " ++ 
+          "lub must be function of type Value<a>*(a, a), not " ++ 
           showType(lub.typerep))]
        end
     | _ -> [err(top.location, 
-           "lub must be function of type Value<a>*(), not " ++ 
+           "lub must be function of type Value<a>*(a, a), not " ++ 
            showType(lub.typerep))]
     end;
               
   forwards to
     mkErrorCheck(childErrors ++ localErrors,
       ableC_Expr{
-       inst _newLattice<$directTypeExpr{getTypeFromLub(lub)}>(    
+       inst _newLattice<$directTypeExpr{getTypeFromLub(lub, 
+         openScopeEnv(top.env))}>(    
        $Expr{leq}, $Expr{lub}, $Expr{disp}, $Expr{free})
       }
     );
@@ -191,7 +210,8 @@ top::Expr ::= leq::Expr lub::Expr disp::Expr
     lub.errors ++ disp.errors;  
 
   forwards to newLattice(leq, lub, disp, 
-    ableC_Expr{inst _defaultFree<$directTypeExpr{getTypeFromLub(lub)}>},
+    ableC_Expr{inst _defaultFree<$directTypeExpr
+      {getTypeFromLub(lub, openScopeEnv(top.env))}>},
     location=top.location);
 }
 
