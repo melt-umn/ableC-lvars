@@ -9,12 +9,10 @@ datatype Color {
   Green();
   Blue();
   Violet();
-  Top();
 };
 
 int leqColor(Color* c1, Color* c2) {
   match (c2) {
-    Top() -> {return 1;}
     Red() -> {
       match (c1) {
         Red() -> {return 1;}
@@ -60,62 +58,60 @@ int leqColor(Color* c1, Color* c2) {
   }
 }
 
-Color* lubColor(Color* c1, Color* c2) {
+Value<Color*>* lubColor(Color* c1, Color* c2) {
   match (c1) {
-    Top() -> {return Top();}
     Red() -> {
       match (c2) {
-        Red() -> {return Red();}
-        Orange() -> {return Orange();}
-        Yellow() -> {return Orange();}
-        Green() -> {return Top();}
-        Blue() -> {return Violet();}
-        Violet() -> {return Violet();}
-        Top() -> {return Top();}
+        Red() -> {return value(Red());}
+        Orange() -> {return value(Orange());}
+        Yellow() -> {return value(Orange());}
+        Green() -> {return Top<Color*>;}
+        Blue() -> {return value(Violet());}
+        Violet() -> {return value(Violet());}
       }
     }
     Orange() -> {
       match (c2) {
-        Red() -> {return Orange();}
-        Orange() -> {return Orange();}
-        Yellow() -> {return Orange();}
-        _ -> {return Top();}
+        Red() -> {return value(Orange());}
+        Orange() -> {return value(Orange());}
+        Yellow() -> {return value(Orange());}
+        _ -> {return Top<Color*>;}
       }
     }
     Yellow() -> {
       match (c2) {
-        Red() -> {return Orange();}
-        Orange() -> {return Orange();}
-        Yellow() -> {return Yellow();}
-        Green() -> {return Green();}
-        Blue() -> {return Green();}
-        _ -> {return Top();}
+        Red() -> {return value(Orange());}
+        Orange() -> {return value(Orange());}
+        Yellow() -> {return value(Yellow());}
+        Green() -> {return value(Green());}
+        Blue() -> {return value(Green());}
+        _ -> {return Top<Color*>;}
       }
     }
     Green() -> {
       match (c2) {
-        Yellow() -> {return Green();}
-        Green() -> {return Green();}
-        Blue() -> {return Green();}
-        _ -> {return Top();}
+        Yellow() -> {return value(Green());}
+        Green() -> {return value(Green());}
+        Blue() -> {return value(Green());}
+        _ -> {return Top<Color*>;}
       }
     }
     Blue() -> {
       match (c2) {
-        Red() -> {return Violet();}
-        Yellow() -> {return Green();}
-        Green() -> {return Green();}
-        Blue() -> {return Blue();}
-        Violet() -> {return Violet();}
-        _ -> {return Top();}
+        Red() -> {return value(Violet());}
+        Yellow() -> {return value(Green());}
+        Green() -> {return value(Green());}
+        Blue() -> {return value(Blue());}
+        Violet() -> {return value(Violet());}
+        _ -> {return Top<Color*>;}
       }
     }
     Violet() -> {
       match (c2) {
-        Red() -> {return Violet();}
-        Blue() -> {return Violet();}
-        Violet() -> {return Violet();}
-        _ -> {return Top();}
+        Red() -> {return value(Violet());}
+        Blue() -> {return value(Violet());}
+        Violet() -> {return value(Violet());}
+        _ -> {return Top<Color*>;}
       }
     }
   }
@@ -141,9 +137,6 @@ void displayColor(Color* c) {
     Violet() -> { 
       printf("Violet");
     }
-    Top() -> { 
-      printf("Invalid Color");
-    }
   }
 }
 
@@ -166,9 +159,6 @@ Color* getColor(char* c) {
   if (strcmp("violet\0", c) == 0) {
     return Violet();
   }
-  else {
-    return Top();
-  }
 }
 
 void freeColor(Color* c) {
@@ -185,7 +175,7 @@ int main(int argc, char **argv) {
     Color* c1 = getColor(argv[1]);
     Color* c2 = getColor(argv[2]);
 
-    Lattice<Color*> * D = lattice(Top(), leqColor, lubColor, 
+    Lattice<Color*> * D = lattice(leqColor, lubColor, 
                                   displayColor, freeColor);
     Lvar<Color*>* x = newLvar D;
 

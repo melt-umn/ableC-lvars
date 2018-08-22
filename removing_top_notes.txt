@@ -64,3 +64,6 @@ Ideas:
 
   + Have lub return a value struct instead of a raw value; could create a new one
     with concrete syntax top, value(...), or bot
+
+     + Can get rid of freeLattice()
+     + Need to fix lattice constructor to not use top as base type

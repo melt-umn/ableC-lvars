@@ -18,19 +18,27 @@ imports edu:umn:cs:melt:ableC:abstractsyntax:overloadable as ovrld;
 //************************ Lattice constructor production ********************
 
 abstract production newLattice
-top::Expr ::= topV::Expr leq::Expr lub::Expr disp::Expr free::Expr
+top::Expr ::= leq::Expr lub::Expr disp::Expr free::Expr
 {
   propagate substituted;
   top.pp =
-    pp"lattice(${topV.pp}, ${leq.pp}, ${lub.pp}, ${disp.pp}, ${free.pp})";
+    pp"lattice(${leq.pp}, ${lub.pp}, ${disp.pp}, ${free.pp})";
 
   local childErrors::[Message] =
-    topV.errors ++ leq.errors ++
+    leq.errors ++
     lub.errors ++ disp.errors ++ free.errors;  
+
+{-- Need to get rid of topV, use value inside Value<a> return value from lub? --}
 
   local localErrors::[Message] = 
     checkLvarHeaderDef(top.location, top.env)
-    ++
+    case lub.typerep of
+      functionType(outType, protoFunctionType([t1, t2], false),_) -> 
+        if compatibleTypes(outType, topV.typerep, false, true)
+          && compatibleTypes(t1, topV.typerep, false, true)
+          && compatibleTypes(t2, topV.typerep, false, true)
+        then  
+
     case leq.typerep of
       functionType(t0, protoFunctionType([t1, t2], false),_) -> 
         if compatibleTypes(t1, topV.typerep, false, true)
@@ -54,34 +62,6 @@ top::Expr ::= topV::Expr leq::Expr lub::Expr disp::Expr free::Expr
             "leq must be function of type int(" ++ showType(topV.typerep) ++
             ", " ++ showType(topV.typerep) ++ "), not " ++ 
             showType(leq.typerep))]
-    end
-    ++
-    case lub.typerep of
-      functionType(outType, protoFunctionType([t1, t2], false),_) -> 
-        if compatibleTypes(outType, topV.typerep, false, true)
-          && compatibleTypes(t1, topV.typerep, false, true)
-          && compatibleTypes(t2, topV.typerep, false, true)
-        then [] 
-        else [err(top.location, 
-               "lub must be function of type " ++
-               showType(topV.typerep) ++ "(" ++ showType(topV.typerep) ++
-               ", " ++ showType(topV.typerep) ++ "), not " ++ 
-               showType(lub.typerep))]
-    | pointerType(_, functionType(outType, protoFunctionType([t1, t2], false),_)) -> 
-        if compatibleTypes(outType, topV.typerep, false, true)
-          && compatibleTypes(t1, topV.typerep, false, true)
-          && compatibleTypes(t2, topV.typerep, false, true)
-        then [] 
-        else [err(top.location, 
-               "lub must be function of type " ++
-               showType(topV.typerep) ++ "(" ++ showType(topV.typerep) ++
-               ", " ++ showType(topV.typerep) ++ "), not " ++ 
-               showType(lub.typerep))]
-    | _ -> [err(top.location, 
-           "lub must be function of type " ++
-           showType(topV.typerep) ++ "(" ++ showType(topV.typerep) ++
-           ", " ++ showType(topV.typerep) ++ "), not " ++ 
-           showType(lub.typerep))]
     end
     ++ 
     case disp.typerep of 
@@ -129,6 +109,28 @@ top::Expr ::= topV::Expr leq::Expr lub::Expr disp::Expr free::Expr
            showType(topV.typerep) ++ "), not " ++ 
            showType(free.typerep))]
     end;
+        else [err(top.location, 
+               "lub must be function of type " ++
+               showType(topV.typerep) ++ "(" ++ showType(topV.typerep) ++
+               ", " ++ showType(topV.typerep) ++ "), not " ++ 
+               showType(lub.typerep))]
+    | pointerType(_, functionType(outType, protoFunctionType([t1, t2], false),_)) -> 
+        if compatibleTypes(outType, topV.typerep, false, true)
+          && compatibleTypes(t1, topV.typerep, false, true)
+          && compatibleTypes(t2, topV.typerep, false, true)
+        then [] 
+        else [err(top.location, 
+               "lub must be function of type " ++
+               showType(topV.typerep) ++ "(" ++ showType(topV.typerep) ++
+               ", " ++ showType(topV.typerep) ++ "), not " ++ 
+               showType(lub.typerep))]
+    | _ -> [err(top.location, 
+           "lub must be function of type " ++
+           showType(topV.typerep) ++ "(" ++ showType(topV.typerep) ++
+           ", " ++ showType(topV.typerep) ++ "), not " ++ 
+           showType(lub.typerep))]
+    end;
+    
               
   forwards to
     mkErrorCheck(childErrors ++ localErrors,
