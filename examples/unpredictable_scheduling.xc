@@ -59,7 +59,7 @@ cilk int main(int argc, char **argv) {
   freeLvar x;
   freeSet a1;
   freeSet t;
-  freeLattice D;
+  free(D);
   cilk return 1;
 
 }

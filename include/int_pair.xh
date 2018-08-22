@@ -2,7 +2,7 @@
 #define _INT_PAIR_LVAR_H
 
 #include "lvars.xh"
-#include "single_write_int.xh"
+#include "single_write_wrapped_int.xh"
 
 typedef datatype Pair Pair;
 datatype Pair {

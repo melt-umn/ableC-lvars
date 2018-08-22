@@ -395,6 +395,6 @@ int main(int argc, char **argv) {
   freeSet t;
   freeLvar y;
   freeLvar n;
-  freeLattice D;
+  free(D);
 }
 

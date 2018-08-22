@@ -44,7 +44,7 @@ cilk int main (int argc, char **argv) {
   free(arr);
   Lattice<int>* lat = getLattice accum;
   freeLvar accum;
-  freeLattice lat;
+  free(lat);
 
   cilk return 1;
 }

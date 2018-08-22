@@ -80,11 +80,6 @@ static Lattice<a>* _newLattice(int (*leqFunc)(a, a),
   return l;
 }
 
-template<a>
-static void _freeLattice(Lattice<a>* lat) {
-  free(lat);
-}
-
 //*************************** Activation set **********************************
 
 template<a> struct _ActivationSet {
@@ -593,54 +588,6 @@ static a _freeze(Lvar<a>* l) {
   } 
   a result = l->_value->_val;
   pthread_mutex_unlock(&(l->_mutex));
-  return result;
-}
-
-// ***************************** testing functions ****************************
-
-// must specify two example elements such that the first precedes
-// the second in the lattice
-
-template<a>
-int _checkLeq(Lattice<a>* D, a repElemSmall, a repElemBig) { 
-  int result = 1;
-  if (!D->_leq(repElemSmall, repElemBig)) {
-    printf("according to specified test values, leq(");
-    D->_display(repElemSmall);
-    printf(", ");
-    D->_display(repElemBig);
-    printf(") should return 1\n");
-    result = 0;
-  }
-  return result;
-}
-
-// must specify two representative elements and their least upper bound,
-// along with an equality function for the base type of the lattice
-
-template<a>
-int _checkLub(Lattice<a>* D, a rep1, a rep2, a expLub, int (*eq)()) {
-  int result = 1;
-  if (!eq(D->_lub(rep2, rep1), expLub)) {
-    printf("lub(");
-    D->_display(rep2);
-    printf(", "); 
-    D->_display(rep1);
-    printf(") should return ");
-    D->_display(expLub);
-    printf("\n");
-    result = 0;
-  }
-  if (!eq(D->_lub(rep1, rep2), expLub)) {
-    printf("lub(");
-    D->_display(rep1);
-    printf(", "); 
-    D->_display(rep2);
-    printf(") should return ");
-    D->_display(expLub);
-    printf("\n");
-    result = 0;
-  }
   return result;
 }
 

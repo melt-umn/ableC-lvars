@@ -1,6 +1,3 @@
-+ Can get rid of freeLattice()
 + create make_lvar (maybe with default show?)
-+ Re-check valgrind
-+ don't need to differentiate with pos int
++ don't need to differentiate with pos int, don't need wrapped int except for int pair
 + Infer value(..) automatically for return value when function returns a Value<a>*?
-+ check valgrind with check and debug-- incompat might need to free

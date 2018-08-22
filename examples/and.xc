@@ -1,4 +1,4 @@
-#define DEBUG
+#define CHECK
 #include "lvars.xh"
 #include "cilk.xh"
 
@@ -173,7 +173,7 @@ cilk int main(int argc, char **argv) {
   freeLvar l2;
   freeActSets t;
   freeSet t;
-  freeLattice lat;
+  free(lat);
 
   cilk return 1;
 }

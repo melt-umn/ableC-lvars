@@ -33,7 +33,7 @@ cilk int main(int argc, char **argv) {
   freeLvar y;
   freeActSets t;
   freeSet t;
-  freeLattice lat;
+  free(lat);
 
   cilk return 1;
 }

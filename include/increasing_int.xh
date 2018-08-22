@@ -6,10 +6,8 @@
 
 int leq_increasing_int(Int* i1, Int* i2) {
   match (i2) {
-    I_Top() -> {return 1;}
     I(n1) -> {
       match (i1) {
-        I_Top() -> {return 0;}
         I(n2) -> {return n1 <= n2;}
       }
     }
@@ -18,10 +16,8 @@ int leq_increasing_int(Int* i1, Int* i2) {
 
 Int* lub_increasing_int(Int* i1, Int* i2) {
   match (i1) {
-    I_Top() -> {return I_Top();}
     I(n1) -> {
       match (n2) {
-        I_Top() -> {return I_Top();}
         I(n2) -> {
           if (n1 <= n2) {
             return I(n2);
@@ -29,7 +25,6 @@ Int* lub_increasing_int(Int* i1, Int* i2) {
           if (n2 <= n1) {
             return I(n1);
           }
-          return I_Top();
         }
       }
     }

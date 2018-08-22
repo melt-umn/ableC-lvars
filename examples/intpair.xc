@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
   freeActSets t;
   freeSet t;
   freeLvar p;
-  freeLattice D;
+  free(D);
 
   return 1;
 }
