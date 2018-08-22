@@ -159,6 +159,9 @@ Color* getColor(char* c) {
   if (strcmp("violet\0", c) == 0) {
     return Violet();
   }
+  else {
+    return NULL;
+  }
 }
 
 void freeColor(Color* c) {
@@ -166,19 +169,22 @@ void freeColor(Color* c) {
 }
 
 int main(int argc, char **argv) {
-
-  if (argc != 3) {
-    printf("Must enter two color names\n");
+  if (argc < 3) {
+    printf("Must enter two color names\n"); 
+    exit(0);
   }
 
   else {
     Color* c1 = getColor(argv[1]);
     Color* c2 = getColor(argv[2]);
 
+    if (c1 == NULL || c2 == NULL) {
+      exit(0);
+    }
+
     Lattice<Color*> * D = lattice(leqColor, lubColor, 
                                   displayColor, freeColor);
     Lvar<Color*>* x = newLvar D;
-
     put c1 in x;
     put c2 in x;
     

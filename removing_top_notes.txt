@@ -1,9 +1,7 @@
-     + Can get rid of freeLattice()
-     + Way to wrap everything that isn't top in value()?
-     + Need to fix lattice constructor to not use top as base type
-     + Need to fix newLatticeNoFree to get correct type
-     + create make_lvar (maybe with default show?)
-     + Re-check valgrind
-     + make isTop function that users can access
-     + don't need to differentiate with pos int
-     + fix segfault in colors.xc
++ Can get rid of freeLattice()
++ create make_lvar (maybe with default show?)
++ Re-check valgrind
++ make isTop function that users can access
++ don't need to differentiate with pos int
++ fix segfault in colors.xc
++ Infer value(..) automatically for return value when function returns a Value<a>*?

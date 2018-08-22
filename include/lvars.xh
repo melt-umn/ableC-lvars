@@ -49,7 +49,7 @@ static Value<a>* _newTop() {
 template<a>
 static Value<a>* _newBot() {
   Value<a>* newVal = malloc(sizeof(Value<a>));
-  newVal->_bot = 0;
+  newVal->_top = 0;
   newVal->_bot = 1;
   return newVal;
 }
