@@ -715,5 +715,29 @@ top::Expr ::= lvar::Expr
   forwards to mkErrorCheck(localErrors, fwrd);
 }
 
+abstract production makeValue
+top::Expr ::= val::Expr
+{
+  propagate substituted;
+  top.pp = pp"value(${val.pp})";
+
+  forwards to 
+    ableC_Expr{
+      inst _newValue<$directTypeExpr{val.typerep}>($Expr{val})
+    };
+}
+
+abstract production makeTop
+top::Expr ::= typ::TypeName
+{
+  propagate substituted;
+  top.pp = pp"top<${typ.pp}>";
+
+  forwards to 
+    ableC_Expr{
+      inst _newTop<$directTypeExpr{typ.typerep}>()
+    };
+}
+
 global builtin::Location = builtinLoc("lvars");
 

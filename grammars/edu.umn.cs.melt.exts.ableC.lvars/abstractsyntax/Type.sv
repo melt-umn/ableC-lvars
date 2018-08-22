@@ -172,4 +172,46 @@ top::Type ::= q::Qualifiers sub::Type
         templateMangledRefId("_Lattice", [sub])));
 }
 
+//********************************* Value ****************************
+
+abstract production valueTypeExpr 
+top::BaseTypeExpr ::= q::Qualifiers sub::TypeName
+{
+  propagate substituted;
+  top.pp = pp"${terminate(space(), q.pps)}Value<${sub.pp}>";
+  
+  sub.env = globalEnv(top.env);
+  
+  local localErrors::[Message] = sub.errors;
+  
+  forwards to
+    if !null(localErrors)
+    then errorTypeExpr(localErrors)
+    else
+      injectGlobalDeclsTypeExpr(
+        foldDecl([
+          templateTypeExprInstDecl(
+            q,
+            name("_Value", location=builtin),
+            consTypeName(sub, nilTypeName()))]),
+        directTypeExpr(valueType(q, sub.typerep)));
+}
+
+abstract production valueType
+top::Type ::= q::Qualifiers sub::Type
+{
+  top.lpp = pp"${terminate(space(), q.pps)}Value<${sub.lpp}${sub.rpp}>";
+  top.rpp = pp"";
+  
+  top.withTypeQualifiers = valueType(foldQualifier(top.addedTypeQualifiers ++
+                                   q.qualifiers), sub);
+
+  forwards to
+    tagType(
+      q,
+      refIdTagType(
+        structSEU(),
+        templateMangledName("_Value", [sub]),
+        templateMangledRefId("_Value", [sub])));
+}
 

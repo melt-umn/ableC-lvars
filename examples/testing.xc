@@ -7,7 +7,6 @@ datatype Color {
   Green();
   Blue();
   Violet();
-  Top();
 };
 
 int main(int argc, char **argv) {

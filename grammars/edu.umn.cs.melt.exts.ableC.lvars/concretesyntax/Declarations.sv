@@ -7,9 +7,10 @@ imports edu:umn:cs:melt:ableC:concretesyntax;
 imports edu:umn:cs:melt:exts:ableC:templating:abstractsyntax;
 
 marking terminal Lat_t 'Lattice' lexer classes {Ckeyword};
-marking terminal Lv_r 'Lvar' lexer classes {Ckeyword};
+marking terminal Lvar_t 'Lvar' lexer classes {Ckeyword};
 marking terminal Thresh_t 'ThresholdSet' lexer classes {Ckeyword};
-marking terminal Act_r 'ActivationSet' lexer classes {Ckeyword};
+marking terminal Act_t 'ActivationSet' lexer classes {Ckeyword};
+marking terminal Val_t 'Value' lexer classes {Ckeyword};
 
 concrete productions top::TypeSpecifier_c
 | 'Lattice' '<' params::TypeName_c '>'
@@ -32,6 +33,12 @@ concrete productions top::TypeSpecifier_c
   top.realTypeSpecifiers = [threshTypeExpr(top.givenQualifiers, params.ast)];
   top.preTypeSpecifiers = []; 
   }
+| 'Value' '<' params::TypeName_c '>'
+  {
+  top.realTypeSpecifiers = [valueTypeExpr(top.givenQualifiers, params.ast)];
+  top.preTypeSpecifiers = []; 
+  }
+
 
 
 

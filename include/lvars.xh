@@ -24,10 +24,27 @@ int _lvarCheckValue = 1;
 //******************************** Lattice ************************************
 
 template<a> struct _Value {
-  a value;
+  a val;
   int top;
   int bot;
 };
+
+template<a>
+static Value<a>* _newValue(a val) {
+  Value<a>* newVal = malloc(sizeof(Value<a>));
+  newVal->val = a;
+  newVal->top = 0;
+  newVal->bot = 0;
+  return newVal;
+}
+
+template<a>
+static Value<a>* _newTop() {
+  Value<a>* newVal = malloc(sizeof(Value<a>));
+  newVal->top = 1;
+  newVal->bot = 0;
+  return newVal;
+}
 
 template<a> struct _Lattice {
   a _top;
