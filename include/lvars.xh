@@ -231,19 +231,23 @@ static int _incompat(Lattice<a> * l, ActivationSet<a> *Q, ActivationSet<a> *R) {
     for (int j = 0; j < R->_index; j++) {
       a q = Q->_set[i];
       a r = R->_set[j];
-      if (!l->_lub(q, r)->_top) {
+      Value<a>* lubRes = l->_lub(q, r);
+      if (!lubRes->_top) {
         #ifdef DEBUG
           printf("Error: ");
           l->_display(q);
           printf(" and ");
           l->_display(r);
           printf(" are compatible, with lub ");
-          l->_display(l->_lub(q, r)->_val);
+          l->_display(lubRes->_val);
           printf("!\n");
           exit(0);
         #endif
+        l->_free(lubRes->_val);
+        free(lubRes);
         return 0;
       }
+      free(lubRes);
     }
   }
   return 1;
@@ -425,6 +429,7 @@ static void _put(Lvar<a>* l, a newState) {
     exit(0);
   }
   if (l->_value->_bot) {
+    free(l->_value);
     l->_value = value(newState);
   } 
   else {
@@ -440,17 +445,19 @@ static void _put(Lvar<a>* l, a newState) {
       exit(0);
     }
     // otherwise, we can update the value and free the old and new states
-    l->_value = newValue;
+
     // if the old state does not match our top or bottom pointer
     // (or the new value), we can free
     if (oldState != newValue->_val) {
-      l->_lattice->_free(oldState); 
+      l->_lattice->_free(l->_value->_val); 
     } 
     // if the new state does not match our top or bottom pointer
     // (or the new value), we can free
     if (newState != newValue->_val) {
       l->_lattice->_free(newState); 
-    }   
+    }  
+    free(l->_value);
+    l->_value = newValue;
   }
   pthread_mutex_unlock(&(l->_mutex));
   pthread_cond_broadcast(&(l->_cond));

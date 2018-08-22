@@ -86,6 +86,7 @@ Value<State*>* lub(State* s1, State* s2) {
             bool2 = copy(b12);
           }
           else {
+            free(bool1);
             return Top<State*>;
           }
 
