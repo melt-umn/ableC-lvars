@@ -23,6 +23,12 @@ int _lvarCheckValue = 1;
 
 //******************************** Lattice ************************************
 
+template<a> struct _Value {
+  a value;
+  int top;
+  int bot;
+};
+
 template<a> struct _Lattice {
   a _top;
   int (*_leq)();
@@ -198,7 +204,7 @@ static int _incompat(Lattice<a> * l, ActivationSet<a> *Q, ActivationSet<a> *R) {
     for (int j = 0; j < R->_index; j++) {
       a q = Q->_set[i];
       a r = R->_set[j];
-      if (!leq(l, l->_top, l->_lub(q, r))) {
+      if (!l->_leq(l->_top, l->_lub(q, r))) {
         #ifdef DEBUG
           printf("Error: ");
           l->_display(q);

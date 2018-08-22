@@ -9,6 +9,7 @@
 + Consider making show function optional (like with free)
 + general templated make_lvar function? -- could get type from functions rather than top, but how to develop default top?
 + Don't need to pattern match on top? Or do I?
++ Make list of rules to follow for programmers (return copies in put vs must handle freeing in putD, must provide match statements if top is algebraic datatype)
 
 #### LVars Functionality:
 
@@ -46,6 +47,10 @@
 + Is it okay to only check threshold set compatibility in debug mode, since it affects determinism? __attribute_constructor to check once before running?
 
 ## Guide:
+
+### Rules: 
+
++ 
 
 ### Part 1: Lattice Components.
 

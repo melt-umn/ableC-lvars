@@ -36,3 +36,31 @@ top::Expr ::= lattice::Expr top::Expr val1::Expr val2::Expr
 
   end;
 }
+
+Problems: 
+  + Can't match on top, since it isn't defined at compile time
+    (string repr is just "(l)->_top")
+  + Can't use regular equality, since it leads to incorrect results 
+    w/ algebraic data types.
+  + Could have user provide eq, but that would still involve them matching on 
+    top
+  + Can't just make top an internal flag, since programmer needs to be able to 
+    return top in case of error in their lub
+  + Programmers need top value to match type of values in lattice, regardless of 
+    that type (to be able to return in lub)
+
+Ideas:
+  + Create a wrapper
+ 
+   Top()
+   Val(a)
+   Bot()
+
+   Needs to be different for every type user can throw at you so that multiple 
+   lattice are possible... Maybe void pointer? Then create for each builtin type?
+
+  + Lub returns a pair: (a, int); int indicates whether value is top.
+    Kind of a pain for users to create an array/struct
+
+  + Have lub return a value struct instead of a raw value; could create a new one
+    with concrete syntax top, value(...), or bot
