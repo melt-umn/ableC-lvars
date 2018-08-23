@@ -7,7 +7,7 @@
 + tidy up header file
 + fix syntax in error messages
 + Consider making show function optional (like with free)
-+ Make list of rules to follow for programmers (return copies in put vs must handle freeing in putD, must provide match statements if top is algebraic datatype)
++ Make list of rules to follow for programmers (return copies in put vs must handle freeing in putD rather than providing a free function, must provide match statements if top is algebraic datatype)
 
 #### LVars Functionality:
 
@@ -19,17 +19,14 @@
 + Fix tests to match new syntax
 + Increase parallelism in customer example (go through in chunks?)
 + Add frees (check with valgrind)
-+ Check out Cilk paper for good examples
-+ Add freezing examples
 + Better positive tests
 + Add tests for new features
-+ Fix customer examples with erroring out on top (maybe use lub directly?)
-+ Fix types to remove unnecessary bottom element in examples
++ Fix customer examples with erroring out on top (maybe use lub directly? use single lvar with set of customers?)
 
 #### Usability:
 
 + Discuss constructive vs destructive put (maybe rename?)
-+ Look over and tidy up examples and header file
++ Look over and tidy up header file
 + Implement more prefab lattices/data types
 + See if int_set.h lattice can be generalized to other base types to create a more flexible set lattice
 + Update readme guide to include new examples, the addition of freezing and freeing, other updates
