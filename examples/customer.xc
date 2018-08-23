@@ -20,6 +20,39 @@ datatype CustomerDatabase {
   CD_Set(Customer*, CustomerDatabase*);
 };
 
+
+// ********************************** free ************************************
+
+void free_products(ProductSet* p) {
+  match (p) {
+    P_Empty() -> {free(p);}
+    P_Set(hd, tl) -> {
+      free_products(tl);
+      free(p);
+    }
+  }
+}
+
+void free_customer(Customer* c) {
+  match (c) {
+    Cust(id, prods) -> {
+      free_products(prods);
+      free(c);
+    }
+  }
+}
+
+void free_customer_database(CustomerDatabase* c) {
+  match (c) {
+    CD_Empty() -> {free(c);}
+    CD_Set(hd, tl) -> {
+      free_customer(hd);
+      free_customer_database(tl);
+      free(c);
+    }
+  }
+}
+
 // ************************ leq ***********************************************
 
 int isInPset(int prod, ProductSet* p) {
@@ -185,13 +218,15 @@ CustomerDatabase* union_customer_database(CustomerDatabase* c1,
           Customer* cust_in_c2 = find_customer(hd, c2);
           // if customer id doesn't exist in c2
           if (cust_in_c2 == NULL) {
-            return CD_Set(copy_customer(hd), union_customer_database(tl, c2)); 
+            return CD_Set(copy_customer(hd), result); 
           }
           // if customer id does exist in c2, take union of prod sets
           Customer* newCust = union_customer(hd, cust_in_c2);
-          return CD_Set(newCust, 
+          free_customer_database(result);
+          CustomerDatabase* res = CD_Set(newCust, 
                  union_customer_database(tl, 
-                 remove_customer(cust_in_c2, c2))); 
+                 remove_customer(cust_in_c2, c2)));
+          return res; 
         }
       }
     }
@@ -254,38 +289,6 @@ void display_customer_database(CustomerDatabase* c) {
   printf("}");
 }
 
-// ********************************** free ************************************
-
-void free_products(ProductSet* p) {
-  match (p) {
-    P_Empty() -> {free(p);}
-    P_Set(hd, tl) -> {
-      free_products(tl);
-      free(p);
-    }
-  }
-}
-
-void free_customer(Customer* c) {
-  match (c) {
-    Cust(id, prods) -> {
-      free_products(prods);
-      free(c);
-    }
-  }
-}
-
-void free_customer_database(CustomerDatabase* c) {
-  match (c) {
-    CD_Empty() -> {free(c);}
-    CD_Set(hd, tl) -> {
-      free_customer(hd);
-      free_customer_database(tl);
-      free(c);
-    }
-  }
-}
-
 // **************************** constructor ***********************************
 
 Lattice<CustomerDatabase*>* lattice_customer_database() {
@@ -344,6 +347,12 @@ cilk int main(int argc, char **argv) {
   spawn result1 = add_data(store1_cs, numStore1);
   sync;
 
+  freeLvar(data);
+  free(lat);
+  for (int i = 0; i < numStore1; i++) {
+    free(store1_cs[i]);
+  }
+  free(store1_cs);
   cilk return 1;
 }
 
