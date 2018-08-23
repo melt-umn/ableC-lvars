@@ -26,7 +26,7 @@ int isInPset(int prod, ProductSet* p) {
   match (p) {
     P_Empty() -> {return 0;}
     P_Set(hd, tl) -> {
-      return prod == hd || isInPset(prod, p);
+      return prod == hd || isInPset(prod, tl);
     }
   }
 }
@@ -334,20 +334,14 @@ cilk int main(int argc, char **argv) {
   Lattice<CustomerDatabase*>* lat = lattice_customer_database();
   data = newLvar lat;
 
-  int numStore1 = 1000;
-  int numStore2 = 1000;
-  int numStore3 = 1000;
+  int numStore1 = 10;
 
   // read from file
 
   int** store1_cs = readStoreData("store1.csv", numStore1);
-  int** store2_cs = readStoreData("store2.csv", numStore2);
-  int** store3_cs = readStoreData("store3.csv", numStore3);
 
-  int result1, result2, result3;
+  int result1;
   spawn result1 = add_data(store1_cs, numStore1);
-  spawn result2 = add_data(store2_cs, numStore2);
-  spawn result3 = add_data(store3_cs, numStore3);
   sync;
 
   cilk return 1;
