@@ -103,6 +103,26 @@ CustomerDatabase* copy_customer_database(CustomerDatabase* c) {
   }
 }
 
+Customer* find_customer(Customer* c, CustomerDatabase* cs) {
+  match (cs) {
+    CD_Empty() -> {return NULL;}
+    CD_Set(hd, tl) -> {
+      match (c) {
+        Cust(id1, _) -> {
+          match (hd) {
+            Cust(id2, _) -> {
+              if (id1 == id2) {
+                return hd;
+              }
+              return find_customer(c, tl);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 CustomerDatabase* union_customer_database(CustomerDatabase* c1, 
                                           CustomerDatabase* c2) {
   match (c1) {
@@ -115,13 +135,21 @@ CustomerDatabase* union_customer_database(CustomerDatabase* c1,
           if (result == NULL) {
             return NULL;
           }
-          CustomerDatabase* cust_in_c2 = remove_customer(hd, c2);
+          Customer* cust_in_c2 = find_customer(hd, c2);
           // if customer id doesn't exist in c2
           if (cust_in_c2 == NULL) {
             return CD_Set(copy_customer(hd), union_customer_database(tl, c2)); 
           }
           // if customer id does exist in c2, take union of prod sets
-          return CD_Set(copy_customer(hd), union_customer_database(tl, c2));
+          match (hd) {
+            Cust(id1, prods1) -> {
+              match (cust_in_c2) {
+                Cust(id2, prods2) -> {
+                  //make new cust from union of prod sets
+                }
+              } 
+            }
+          }
         }
       }
     }
