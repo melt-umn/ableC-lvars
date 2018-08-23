@@ -1,0 +1,26 @@
+#ifndef _MAX_INT_XH
+#define _MAX_INT_XH
+
+#include "lvars.xh"
+#include "int.xh"
+
+int leq_max_int(int i1, int i2) {
+  return i1 <= i2;
+}
+
+Value<int>* lub_max_int(int i1, int i2) {
+  if (i1 >= i2) {
+    return value i1;
+  }
+  return value i2;
+}
+
+Lattice<int>* lattice_max_int() {
+  return lattice_int(leq_max_int, lub_max_int);
+}
+
+Lvar<int>* makeLvar_max_int() {
+  return makeLvar_int(leq_max_int, lub_max_int);
+}
+
+#endif

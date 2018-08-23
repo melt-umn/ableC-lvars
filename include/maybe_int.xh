@@ -1,0 +1,73 @@
+#ifndef _MAYBE_INT_XH
+#define _MAYBE_INT_XH
+
+#include "lvars.xh"
+
+typedef datatype MaybeInt MaybeInt;
+datatype MaybeInt {
+  Int_Some(int);
+  Int_None();
+}
+
+MaybeInt* copy_maybe_int(MaybeInt* i) {
+  match (i) {
+    Int_Some(n) -> {return Int_Some(n);}
+    Int_None() -> {return Int_None();}
+  }
+}
+
+int leq_maybe_int(MaybeInt* i1, MaybeInt* i2) {
+  match (i1) {
+    Int_Some(n1) -> {
+      match (i2) {
+        Int_Some(n2) -> {return n1 == n2;}
+        Int_None() -> {return 0;}
+      }
+    }
+    Int_None() -> {return 1;}
+  }
+}
+
+Value<MaybeInt*>* lub_maybe_int(MaybeInt* i1, MaybeInt* i2) {
+  match (i1) {
+    Int_Some(n1) -> {
+      match (n2) {
+        Int_Some(n2) -> {
+          if (n1 == n2) {
+            return value Int_Some(n1);
+          } 
+          return Top<MaybeInt*>;
+        }
+        Int_None() -> {return copy_maybe_int(i1);}
+      }
+    }
+    Int_None() -> {return copy_maybe_int(i2);}
+  }
+}
+
+void display_maybe_int(MaybeInt* i) {
+  match (i) {
+    Int_Some(n) -> {printf("%d", n);}
+    Int_None() -> {printf("?");}
+  }
+}
+
+void free_maybe_int(MaybeInt* i) {
+  free(i);
+}
+
+void put_maybe_int(Lvar<MaybeInt*>* l, int val) {
+  put (Int_Some(val)) in l;
+}
+
+Lattice<MaybeInt*>* lattice_maybe_int() {
+  return lattice(leq_maybe_int, lub_maybe_int, 
+                                    display_maybe_int, free_maybe_int);
+}
+
+Lvar<MaybeInt*>* makeLvar_maybe_int() {
+  Lattice<MaybeInt*> lat = lattice_maybe_int();
+  return newLvar lat;
+}
+
+#endif

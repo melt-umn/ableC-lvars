@@ -1,3 +1,0 @@
-+ create make_lvar (maybe with default show?)
-+ don't need to differentiate with pos int, don't need wrapped int except for int pair
-+ Infer value(..) automatically for return value when function returns a Value<a>*?

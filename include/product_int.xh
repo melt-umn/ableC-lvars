@@ -1,0 +1,40 @@
+#ifndef _PROD_INT_XH
+#define _PROD_INT_XH
+
+#include "lvars.xh"
+#include "int.xh"
+
+int leq_product_int(int i1, int i2) {
+  if (i1 == 0) {
+    return i2 == 0;
+  }
+  if (i2 == 0) {
+    return 1;
+  }
+  if (i1 > 0 && i2 > 0) {
+    return (i2 % i1) == 0;
+  }
+  if (i1 > 0 && i2 < 0) {
+    return ((-i2) % i1) == 0;
+  }
+  if (i1 < 0 && i2 > 0) {
+    return (i2 % (-i1)) == 0;
+  }
+  if (i1 < 0 && i2 < 0) {
+    return ((-i2) % (-i1)) == 0;
+  }
+}
+
+Value<int>* lub_product_int(int i1, int i2) {
+  return value (i1 * i2);
+}
+
+Lattice<int>* lattice_product_int() {
+  return lattice_int(leq_product_int, lub_product_int);
+}
+
+Lvar<int>* makeLvar_product_int() {
+  return makeLvar_int(leq_product_int, lub_product_int);
+}
+
+#endif

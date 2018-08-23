@@ -1,90 +1,91 @@
-#ifndef _INT_PAIR_LVAR_H
-#define _INT_PAIR_LVAR_H
+#ifndef _INT_PAIR_XH
+#define _INT_PAIR_XH
 
 #include "lvars.xh"
-#include "single_write_wrapped_int.xh"
+#include "maybe_int.xh"
 
-typedef datatype Pair Pair;
-datatype Pair {
-  IP(Int*, Int*);
-};
-
-int leq_intPair(Pair* p1, Pair* p2) {
-  match (p2) {
-    IP(i21, i22) -> {
-      match (p1) {
-        IP(i11, i12) -> {
-          return leq_single_write_int(i11, i21) &&
-                 leq_single_write_int(i12, i22);
-        }
-      }
-    }
-  }
+typedef datatype IntPair IntPair;
+datatype IntPair {
+  Int_Pair(MaybeInt*, MaybeInt*);
 }
 
-Value<Pair*>* lub_intPair(Pair* p1, Pair* p2) {
+int leq_int_pair(IntPair* p1, IntPair* p2) {
   match (p1) {
-    IP(i11, i12) -> {
+    Int_Pair(i1, i2) -> {
       match (p2) {
-        IP(i21, i22) -> {
-          Int* val1;
-          Int* val2;
-          if (leq_single_write_int(i11, i21)) {
-            val1 = copyWrappedInt(i21);
-          }
-          else if (leq_single_write_int(i21, i11)) {
-            val1 = copyWrappedInt(i11);
-          }
-          else {
-            return Top<Pair*>;
-          }
-
-          if (leq_single_write_int(i12, i22)) {
-            val2 = copyWrappedInt(i22);
-          }
-          else if (leq_single_write_int(i22, i12)) {
-            val2 = copyWrappedInt(i12);
-          }
-          else {
-            return Top<Pair*>;
-          }
-
-          return value(IP(val1, val2));
+        Int_Pair(i3, i4) -> {
+          return leq_maybe_int(i1, i3) &&
+                 leq_maybe_int(i2, i4);
         }
       }
     }
   }
 }
 
-void display_intPair(Pair* p) {
+Value<IntPair*>* lub_int_pair(IntPair* p1, IntPair* p2) {
+  match (p1) {
+    Int_Pair(i1, i2) -> {
+      match (p2) {
+        Int_Pair(i3, i4) -> {
+
+          MaybeInt* val1;
+          if (leq_maybe_int(i1, i3)) {
+            val1 = copy_maybe_int(i3);
+          }
+          else if (leq_maybe_int(i3, i1)) {
+            val1 = copy_maybe_int(i1);
+          }
+          else {
+            return Top<IntPair*>
+          }
+
+          MaybeInt* val2;
+          if (leq_maybe_int(i2, i4)) {
+            val2 = copy_maybe_int(i4);
+          }
+          else if (leq_maybe_int(i4, i2)) {
+            val2 = copy_maybe_int(i2);
+          }
+          else {
+            return Top<IntPair*>
+          } 
+
+          return value (Int_Pair(val1, val2));
+
+        } 
+      }
+    }
+  }
+}
+
+void display_int_pair(IntPair* p) {
   match (p) {
-    IP(i1, i2) -> {
+    Int_Pair(i1, i2) -> {
       printf("(");
-      displayWrappedInt(i1);
+      display_maybe_int(i1);
       printf(", ");
-      displayWrappedInt(i2);
+      display_maybe_int(i2);
       printf(")");
     }
   }
 }
 
-void free_intPair(Pair* p) {
+void free_int_pair(IntPair* p) {
   match (p) {
-    IP(i1, i2) -> {
-      freeWrappedInt(i1);
-      freeWrappedInt(i2);
+    Int_Pair(i1, i2) -> {
+      free_maybe_int(i1);
+      free_maybe_int(i2);
       free(p);
     }
-    _ -> {free(p);}
   }
 }
 
-Lattice<Pair*>* intPairLattice() {
-  return lattice(leq_intPair, lub_intPair, display_intPair, free_intPair);
+Lattice<IntPair*>* lattice_int_pair() {
+  return lattice(leq_int_pair, lub_int_pair, display_int_pair, free_int_pair);
 }
 
-Lvar<Pair*>* intPairLvar() {
-  Lattice<Pair*>* lat = intPairLattice();
+Lvar<IntPair*>* makeLvar_int_pair() {
+  Lattice<IntPair*>* lat = lattice_int_pair();
   return newLvar lat;
 }
 

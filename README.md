@@ -19,6 +19,7 @@
 
 #### Examples:
 
++ Re-fix headers and examples with makeLvar etc.
 + Fix tests to match new syntax
 + Increase parallelism in customer example (go through in chunks?)
 + Add frees (check with valgrind)
@@ -47,6 +48,7 @@
 
 + Does it make sense to free old value in put? Only works if create new values each time.
 + Is it okay to only check threshold set compatibility in debug mode, since it affects determinism? __attribute_constructor to check once before running?
++ Infer value(..) automatically for return value when function returns a Value<a>*?
 
 ## Guide:
 
