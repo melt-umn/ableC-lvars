@@ -40,7 +40,9 @@ ThresholdSet<int>* make_counter_threshold(int n) {
 
 ActivationSet<int>* get_counter(Lvar<int>* c, int n) {
   ThresholdSet<int>* t = make_counter_threshold(n);
-  return get c with t;
+  ActivationSet<int>* result = get c with t;
+  freeSet t;
+  return result;
 }
 
 #endif
