@@ -1,0 +1,8 @@
+#ifndef _COUNTER_XH
+#define _COUNTER_XH
+
+#include "lvars.xh"
+
+
+
+#endif

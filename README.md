@@ -12,12 +12,10 @@
 #### LVars Functionality:
 
 + Work on speeding up thread waiting/locking process (each thread has own value of lvar, merge? make a copy and take lub of that?)
-+ Add make_lvar function
 + Getter methods?
 
 #### Examples:
 
-+ Re-fix examples with makeLvar etc.
 + Fix tests to match new syntax
 + Increase parallelism in customer example (go through in chunks?)
 + Add frees (check with valgrind)
@@ -30,7 +28,7 @@
 
 #### Usability:
 
-+ Discuss constructive vs desctructive put (maybe rename?)
++ Discuss constructive vs destructive put (maybe rename?)
 + Look over and tidy up examples and header file
 + Implement more prefab lattices/data types
 + See if int_set.h lattice can be generalized to other base types to create a more flexible set lattice
@@ -41,6 +39,7 @@
 + Reorganize abstract/concrete syntax
 + Make display optional, too (w/ default display)
 + Break abstract syntax into smaller files
++ Add nice syntax for counter lvar (maybe without specifying type, etc.)
 
 ### Things to think about:
 
