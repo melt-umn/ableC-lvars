@@ -17,7 +17,7 @@ void quiesce(Lvar<int>* quiescer, int num_threads) {
   ActivationSet<int>* result = get_counter(quiescer, num_threads);
   freeSet result;
   freeLvar quiescer;
-  freeLattice lat;
+  free(lat);
 }
 
 #endif

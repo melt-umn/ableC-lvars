@@ -32,15 +32,12 @@ cilk int task(int *xs) {
 cilk int main (int argc, char **argv) {
   accum = makeLvar_int(leq, g);
 
-  // declare, allocate and fill array `arr` with 
-  // `NUM_THREADS * TASK_SIZE` values 
-
   if (argc < 2) {
     exit(0);
   }
 
   NUM_THREADS = atoi(argv[1]);
-  if (N % NUM_THREADS != 0) {
+  if (N % NUM_THREADS != 0 || NUM_THREADS <= 0) {
     exit(0);
   }
   TASK_SIZE = N / NUM_THREADS;

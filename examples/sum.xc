@@ -21,7 +21,7 @@ cilk int main (int argc, char **argv) {
   }
 
   NUM_THREADS = atoi(argv[1]);
-  if (N % NUM_THREADS != 0) {
+  if (N % NUM_THREADS != 0 || NUM_THREADS <= 0) {
     cilk return 0;
   }
 
