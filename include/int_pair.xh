@@ -36,7 +36,7 @@ Value<IntPair*>* lub_int_pair(IntPair* p1, IntPair* p2) {
             val1 = copy_maybe_int(i1);
           }
           else {
-            return Top<IntPair*>
+            return Top<IntPair*>;
           }
 
           MaybeInt* val2;
@@ -47,7 +47,7 @@ Value<IntPair*>* lub_int_pair(IntPair* p1, IntPair* p2) {
             val2 = copy_maybe_int(i2);
           }
           else {
-            return Top<IntPair*>
+            return Top<IntPair*>;
           } 
 
           return value (Int_Pair(val1, val2));

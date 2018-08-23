@@ -1,13 +1,13 @@
 #include "lvars.xh"
 #include "cilk.xh"
-#include "single_write_pos_int.xh"
+#include "single_write_int.xh"
 
 cilk ActivationSet<int>* getCilk(Lvar<int>* l, ThresholdSet<int>* t) {
   cilk return get l with t;
 }
 
 cilk int main(int argc, char **argv) {
-  Lattice<int>* lat = make_lattice_single_write_pos_int();
+  Lattice<int>* lat = lattice_single_write_int();
 
   Lvar<int>* x = newLvar lat;
   Lvar<int>* y = newLvar lat;

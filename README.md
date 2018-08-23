@@ -7,8 +7,6 @@
 + tidy up header file
 + fix syntax in error messages
 + Consider making show function optional (like with free)
-+ general templated make_lvar function? -- could get type from functions rather than top, but how to develop default top?
-+ Don't need to pattern match on top? Or do I?
 + Make list of rules to follow for programmers (return copies in put vs must handle freeing in putD, must provide match statements if top is algebraic datatype)
 
 #### LVars Functionality:
@@ -19,7 +17,7 @@
 
 #### Examples:
 
-+ Re-fix headers and examples with makeLvar etc.
++ Re-fix examples with makeLvar etc.
 + Fix tests to match new syntax
 + Increase parallelism in customer example (go through in chunks?)
 + Add frees (check with valgrind)

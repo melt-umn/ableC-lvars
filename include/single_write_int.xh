@@ -12,7 +12,7 @@ Value<int>* lub_single_write_int(int i1, int i2) {
   if (i1 == i2) {
     return value i1;
   }
-  return Top<int>
+  return Top<int>;
 }
 
 Lattice<int>* lattice_single_write_int() {

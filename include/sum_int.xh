@@ -16,7 +16,7 @@ Lattice<int>* lattice_sum_int() {
   return lattice_int(leq_sum_int, lub_sum_int);
 }
 
-Lvar<int>* makeLvarsum_int() {
+Lvar<int>* makeLvar_sum_int() {
   return makeLvar_int(leq_sum_int, lub_sum_int);
 }
 

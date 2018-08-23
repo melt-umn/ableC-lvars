@@ -1,6 +1,6 @@
 #include "lvars.xh"
 #include <cilk.xh>
-#include "increasing_pos_int.xh"
+#include "max_int.xh"
 
 cilk int putCilk(Lvar<int>* x, int val, int count);
 cilk int putCilk(Lvar<int>* x, int val, int count) { 
@@ -41,7 +41,7 @@ cilk ActivationSet<int> * runPutGet(Lvar<int> *x, ThresholdSet<int>* t) {
 
 cilk int main(int argc, char **argv) {
 
-  Lattice<int> * D = make_lattice_increasing_pos_int();
+  Lattice<int> * D = lattice_max_int();
   Lvar<int> *x = newLvar D;
   ActivationSet<int> * a1 = activationSet(D){6};
   ThresholdSet<int> * t = thresholdSet(D){a1};

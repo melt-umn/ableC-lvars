@@ -1,5 +1,5 @@
 #include "lvars.xh"
-#include "sum_pos_int.xh"
+#include "sum_int.xh"
 #include <cilk.xh>
 
 Lvar<int>* accum;
@@ -25,7 +25,7 @@ cilk int main (int argc, char **argv) {
     cilk return 0;
   }
 
-  accum = make_lvar_sum_pos_int();
+  accum = makeLvar_sum_int();
   TASK_SIZE = N / NUM_THREADS;
 
   int* arr = malloc(N * sizeof(int));

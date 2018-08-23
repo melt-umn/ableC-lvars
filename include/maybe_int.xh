@@ -31,17 +31,17 @@ int leq_maybe_int(MaybeInt* i1, MaybeInt* i2) {
 Value<MaybeInt*>* lub_maybe_int(MaybeInt* i1, MaybeInt* i2) {
   match (i1) {
     Int_Some(n1) -> {
-      match (n2) {
+      match (i2) {
         Int_Some(n2) -> {
           if (n1 == n2) {
             return value Int_Some(n1);
           } 
           return Top<MaybeInt*>;
         }
-        Int_None() -> {return copy_maybe_int(i1);}
+        Int_None() -> {return value copy_maybe_int(i1);}
       }
     }
-    Int_None() -> {return copy_maybe_int(i2);}
+    Int_None() -> {return value copy_maybe_int(i2);}
   }
 }
 
@@ -66,7 +66,7 @@ Lattice<MaybeInt*>* lattice_maybe_int() {
 }
 
 Lvar<MaybeInt*>* makeLvar_maybe_int() {
-  Lattice<MaybeInt*> lat = lattice_maybe_int();
+  Lattice<MaybeInt*>* lat = lattice_maybe_int();
   return newLvar lat;
 }
 
