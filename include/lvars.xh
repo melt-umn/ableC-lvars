@@ -591,4 +591,17 @@ static a _freeze(Lvar<a>* l) {
   return result;
 }
 
+template<a>
+static void _defaultDisplay(a val){
+  printf("No display method provided.");
+}
+
+template<a>
+static Lvar<a>* _makeLvar(int (*leqFunc)(a, a), Value<a>* (*lub)(a, a), 
+                          void (*displayMethod)(a), void (*freeMethod)(a)) {
+  Lattice<a>* lat = lattice(leqFunc, lub, displayMethod, freeMethod);
+  Lvar<a>* l = newLvar lat;
+  return l;
+}
+
 #endif // LVARS_H_

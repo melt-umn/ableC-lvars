@@ -13,10 +13,9 @@
 
 #### LVars Functionality:
 
-+ Have Top() automatically generated (infer type from functions instead?)
 + Work on speeding up thread waiting/locking process (each thread has own value of lvar, merge? make a copy and take lub of that?)
 + Add make_lvar function
-+ Getter methods
++ Getter methods?
 
 #### Examples:
 
@@ -40,6 +39,9 @@
 + Is there a way to error out only on the first missing include of a header?
 + Should lub always create a new copy instead of referencing old ones so that programmer can free without messing up lvar, instead of sometimes returning the original and sometimes making a new one? Otherwise can't safely free lub taken in passing, since might be freeing a value you need.
 + Make get binary prefix operator, and have get lvar {{a1}, {a2}} automatically create threshold set?
++ Reorganize abstract/concrete syntax
++ Make display optional, too (w/ default display)
++ Break abstract syntax into smaller files
 
 ### Things to think about:
 
@@ -47,10 +49,6 @@
 + Is it okay to only check threshold set compatibility in debug mode, since it affects determinism? __attribute_constructor to check once before running?
 
 ## Guide:
-
-### Rules: 
-
-+ 
 
 ### Part 1: Lattice Components.
 

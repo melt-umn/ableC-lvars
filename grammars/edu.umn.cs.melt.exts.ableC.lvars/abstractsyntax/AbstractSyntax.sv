@@ -215,6 +215,39 @@ top::Expr ::= leq::Expr lub::Expr disp::Expr
     location=top.location);
 }
 
+abstract production makeLvar
+top::Expr ::= leq::Expr lub::Expr disp::Expr free::Expr
+{
+  propagate substituted;
+  top.pp =
+    pp"makeLvar(${leq.pp}, ${lub.pp}, ${disp.pp}, ${free.pp})";
+
+  local childErrors::[Message] =
+    leq.errors ++ lub.errors ++ disp.errors ++ free.errors;
+
+  forwards to newCall(newLattice(leq, lub, disp, free,
+     location=top.location), location=top.location);
+}
+
+abstract production makeLvarDefaults
+top::Expr ::= leq::Expr lub::Expr
+{
+  propagate substituted;
+  top.pp =
+    pp"makeLvar(${leq.pp}, ${lub.pp})";
+
+  local childErrors::[Message] =
+    leq.errors ++
+    lub.errors;
+
+  local baseType::Type = getTypeFromLub(lub, openScopeEnv(top.env));
+
+  forwards to newCall(newLattice(leq, lub, 
+     ableC_Expr{inst _defaultDisplay<$directTypeExpr{baseType}>}, 
+     ableC_Expr{inst _defaultFree<$directTypeExpr{baseType}>},
+     location=top.location), location=top.location);
+}
+
 //********************** Production to add to various structures *************
 
 // adds to either threshold set or activation set depending on the type
