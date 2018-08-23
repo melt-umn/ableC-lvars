@@ -207,20 +207,21 @@ static ThresholdSet<a>* _newThresholdSet(Lattice<a> * l, int size) {
 
 template<a>
 static int _incompat(Lattice<a> * l, ActivationSet<a> *Q, ActivationSet<a> *R) {
-  #ifdef DEBUG
-    if (Q -> _lattice != l || R -> _lattice != l) {
-      printf("Error: The activation sets ");
-      display(Q);
-      printf(" and ");
-      display(R);
-      printf(" don't belong to the same lattice!\n");
-      exit(0);
+
+  #if defined(DEBUG) || defined(CHECK)
+    if (!inst _eqLattice<a>(Q -> _lattice, l) || 
+        !inst _eqLattice<a>(R -> _lattice, l)) {
+      #ifdef DEBUG
+        printf("Error: The activation sets ");
+        display(Q);
+        printf(" and ");
+        display(R);
+        printf(" don't belong to the same lattice!\n");
+        exit(0);
+      #endif
+      return 0;
     }
   #endif
-
-  if (Q -> _lattice != l || R -> _lattice != l) {
-    return 0;
-  }
 
   for (int i = 0; i < Q->_index; i++) {
     for (int j = 0; j < R->_index; j++) {
@@ -254,20 +255,17 @@ static int _incompat(Lattice<a> * l, ActivationSet<a> *Q, ActivationSet<a> *R) {
 
 template<a>
 static ThresholdSet<a>* _addThreshold(ThresholdSet<a>* t, ActivationSet<a>* act) {
-  #ifdef DEBUG
-    if (t->_lattice != act->_lattice) {
-      printf("Error: activation set ");
-      display(act);
-      printf(" and threshold set ");
-      display(t);
-      printf(" do not have the same lattice. \n");
-      exit(0);
-    }
-  #endif
-
-  #ifdef CHECK
-    if (t->_lattice != act->_lattice) {
-      return t; //don't change t if a is not legit
+  #if defined(DEBUG) || defined(CHECK)
+    if (!inst _eqLattice<a>(t->_lattice, act->_lattice)) {
+      #ifdef DEBUG
+        printf("Error: activation set ");
+        display(act);
+        printf(" and threshold set ");
+        display(t);
+        printf(" do not have the same lattice. \n");
+        exit(0);
+      #endif
+      return t;
     }
   #endif
 
@@ -535,15 +533,12 @@ template<a>
 static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
   pthread_mutex_lock(&(l->_mutex));
 
-  #ifdef DEBUG
-    if (l->_lattice != t->_lattice) {
-      printf("Error: can't get() when Lvar doesn't have same lattice as threshold set.\n");
-      exit(0);
-    }
-  #endif
-
-  #ifdef CHECK
-    if (l->_lattice != t->_lattice) {
+  #if defined(DEBUG) || defined(CHECK)
+    if (!inst _eqLattice<a>(l->_lattice, t->_lattice)) {
+      #ifdef DEBUG
+        printf("Error: can't get() when Lvar doesn't have same lattice as threshold set.\n");
+        exit(0);
+      #endif
       pthread_mutex_unlock(&(l->_mutex));
       return NULL;
     }
@@ -602,6 +597,12 @@ static Lvar<a>* _makeLvar(int (*leqFunc)(a, a), Value<a>* (*lub)(a, a),
   Lattice<a>* lat = lattice(leqFunc, lub, displayMethod, freeMethod);
   Lvar<a>* l = newLvar lat;
   return l;
+}
+
+template<a>
+static int _eqLattice(Lattice<a>* l1, Lattice<a>* l2) {
+  return (l1->_leq == l2->_leq) && (l1->_lub == l2->_lub) &&
+         (l1->_display == l2->_display) && (l1->_free == l2->_free);
 }
 
 #endif // LVARS_H_

@@ -1,4 +1,4 @@
-#define CHECK
+#define DEBUG
 #include "lvars.xh"
 #include "cilk.xh"
 
@@ -140,7 +140,7 @@ cilk int main(int argc, char **argv) {
   Lattice<State*>* lat = lattice(leqAnd, lub, displayState, freeState);
 
   Lvar<State*>* l1 = newLvar lat;
-  Lvar<State*>* l2 = newLvar lat;
+  Lvar<State*>* l2 = makeLvar(leqAnd, lub, displayState, freeState);
 
   put (Pair(Bot(), T())) in l1;
   put (Pair(Bot(), T())) in l1;
@@ -160,6 +160,7 @@ cilk int main(int argc, char **argv) {
 
   ActivationSet<State*>* result;
   spawn result = getCilk(l2, t);
+
   put (Pair(F(), Bot())) in l2;
   sync;
 
@@ -170,10 +171,12 @@ cilk int main(int argc, char **argv) {
   // clean-up
 
   freeLvar l1;
+  Lattice<State*>* lat2 = getLattice l2;
   freeLvar l2;
   freeActSets t;
   freeSet t;
   free(lat);
+  free(lat2);
 
   cilk return 1;
 }
