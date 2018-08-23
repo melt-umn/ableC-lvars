@@ -467,13 +467,10 @@ static void _put_destructive(Lvar<a>* l, a newState) {
     printf("Error: can't write to a frozen lvar.\n");
     exit(0);
   }
-
   if (l->_value->_bot) {
+    free(l->_value);
     l->_value = value(newState);
-    pthread_mutex_unlock(&(l->_mutex));
-    pthread_cond_broadcast(&(l->_cond));
   } 
-
   else {
     a oldState = l->_value->_val;
     Value<a>* newValue = l-> _lattice-> _lub(oldState, newState);
@@ -487,11 +484,10 @@ static void _put_destructive(Lvar<a>* l, a newState) {
       exit(0);
     } 
 
-    l->_value = newValue;
-    pthread_mutex_unlock(&(l->_mutex));
-    pthread_cond_broadcast(&(l->_cond));
-
+    free(newValue);
   }
+  pthread_mutex_unlock(&(l->_mutex));
+  pthread_cond_broadcast(&(l->_cond));
 }
 
 // takes an lvar and a threshold set.
@@ -521,8 +517,9 @@ static a _frozenGet(Lvar<a>* l) {
     exit(0);
   }
   if (!l->_value->_bot) {
+    a val = l->_value->_val;
     pthread_mutex_unlock(&(l->_mutex));
-    return l->_value->_val; 
+    return val; 
   }
   printf("Error: can't get bottom value\n");
   exit(0);
@@ -546,8 +543,9 @@ static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
 
   if (l->_frozen) {
     if (!l->_value->_bot) {
+      a val = l->_value->_val;
       pthread_mutex_unlock(&(l->_mutex));
-      return activationSet(l->_lattice, 1){l->_value->_val}; 
+      return activationSet(l->_lattice, 1){val}; 
     }
     pthread_mutex_unlock(&(l->_mutex));
     return NULL;
@@ -557,8 +555,9 @@ static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
   while (actReached == NULL) {
     if (l->_frozen) {
       if (!l->_value->_bot) {
+        a val = l->_value->_val;
         pthread_mutex_unlock(&(l->_mutex));
-        return activationSet(l->_lattice, 1){l->_value->_val}; 
+        return activationSet(l->_lattice, 1){val}; 
       }
       pthread_mutex_unlock(&(l->_mutex));
       return NULL;

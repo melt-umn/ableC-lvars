@@ -18,6 +18,8 @@ parser extendedParser :: cst:Root {
   edu:umn:cs:melt:exts:ableC:lvars;
   edu:umn:cs:melt:exts:ableC:cilk;
   edu:umn:cs:melt:exts:ableC:run;
+  edu:umn:cs:melt:exts:ableC:tensorAlgebra;
+  edu:umn:cs:melt:exts:ableC:string;
 } 
 
 function main

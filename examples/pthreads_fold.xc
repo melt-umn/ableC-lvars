@@ -53,24 +53,25 @@ int main (int argc, char **argv) {
     arr[i] = i + 1;
   }
 
-  pthread_t * threads = malloc(NUM_THREADS * sizeof(pthread_t));
+  pthread_t* threadArr;
+  threadArr = malloc(NUM_THREADS * sizeof(pthread_t));
 
   for (int i = 0; i < NUM_THREADS; ++i) {
-    if (pthread_create(&threads[i], NULL, task, (void *) (&arr[i * TASK_SIZE]))) {
+    if (pthread_create(&threadArr[i], NULL, task, (void *) (&arr[i * TASK_SIZE]))) {
       printf("Error creating thread.\n");
       exit(0);
     }
   }
 
   for (int i = 0; i < NUM_THREADS; i++) {
-    pthread_join(threads[i], NULL);
+    pthread_join(threadArr[i], NULL);
   }
 
   quiesce(done, NUM_THREADS);
 
   freeze accum;
   printf ("Result: %d\n", get accum);
-  free(threads);
+  free(threadArr);
   free(arr);
   Lattice<int>* lat = getLattice accum;
   freeLvar accum;
