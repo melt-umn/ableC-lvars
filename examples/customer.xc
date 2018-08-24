@@ -185,16 +185,16 @@ Customer* union_customer(Customer* c1, Customer* c2) {
 
 CustomerDatabase* remove_customer(Customer* c, CustomerDatabase* cs) {
   match (cs) {
-    CD_Empty() -> {return CD_Empty();}
+    CD_Empty() -> {return cs;}
     CD_Set(hd, tl) -> {
       match (c) {
         Cust(id1, prods1) -> {
           match (hd) {
             Cust(id2, prods2) -> {
               if (id1 == id2) {
-                return copy_customer_database(tl);
+                return tl;
               }
-              return CD_Set(copy_customer(hd), remove_customer(c, tl));
+              return CD_Set(hd, remove_customer(c, tl));
             }
           }
         }
