@@ -1,5 +1,6 @@
 #include "lvars.xh"
 #include <cilk.xh>
+#include <string.h>
 
 // *************** data types set-up ******************************************
 
@@ -245,18 +246,24 @@ Value<CustomerDatabase*>* lub_customer_database(CustomerDatabase* c1,
 
 // ********************************* display **********************************
 
-void display_products(ProductSet* p) {
+void display_inner_products(ProductSet* p) {
   match (p) {
     P_Set(hd, tl) -> {
       printf("%d", hd);
       match (tl) {
         P_Set(_, _) -> {
           printf(", ");
-          display_products(tl);
+          display_inner_products(tl);
         }
       }
     }
   }
+}
+
+void display_products(ProductSet* p) {
+  printf("{");
+  display_inner_products(p);
+  printf("}");
 }
 
 void display_customer(Customer* c) {
@@ -298,6 +305,8 @@ Lattice<CustomerDatabase*>* lattice_customer_database() {
 
 Lvar<CustomerDatabase*>* data;
 
+// *************************** processing data ********************************
+
 // to read customer-product entries from a file into an array of integer arrays
 
 int** readStoreData(char* filename, int num) {
@@ -332,27 +341,156 @@ cilk int add_data(int** store, int len) {
   cilk return 1;
 }
 
+// **************************** user interaction ******************************
+
+int lookupCustomer(int id) {
+  Customer* cust_to_find = Cust(id, P_Empty());
+  Customer* result = find_customer(cust_to_find, get data);
+  if (result == NULL) {
+    free_customer(cust_to_find);
+    return 0;
+  }
+  display_customer(result);
+  printf("\n");
+  free_customer(cust_to_find);
+  return 1;
+}
+
+int lookupProdSetHelper(ProductSet* p, CustomerDatabase* d) {
+  match (d) {
+    CD_Empty() -> {return 0;}
+    CD_Set(hd, tl) -> {
+      match (hd) {
+        Cust(id, prods) -> {
+          if (leq_product_set(p, prods)) {
+            printf("Customer #%d\n", id);
+            lookupProdSetHelper(p, tl);
+            return 1;
+          }
+          return lookupProdSetHelper(p, tl);
+        }
+      }
+    }
+  }
+}
+
+int lookupProdSet(ProductSet* p) {
+  return lookupProdSetHelper(p, get data);
+}
+
+int userInteraction() {
+
+  // print guide
+
+  printf("Commands:\n");
+  printf("  print:          display all customer entries\n");
+  printf("  exit:           exit the program\n");
+  printf("  display customer <id>:  display the products purchased by a customer \
+                                                           with a given id\n");
+  printf("  display products <number of products>: <prod 1> <prod 2> ... <prod n>\
+     : display the customer ids of those who purchased all listed products\n");
+  
+  char cmd[128];
+  int success;
+
+  while (1) {
+    printf(">>> ");                 
+    success = fscanf(stdin, "%s", cmd); 
+
+    if (success == EOF) {               
+      printf("\n");                  
+      break;                         
+    }
+
+    if (strcmp("exit", cmd) == 0){     
+      printf("\n");
+      break;                          
+    }
+
+    else if (strcmp("print", cmd) == 0){  
+      display data;
+    }
+
+    else if (strcmp("display", cmd) == 0){
+      fscanf(stdin, " %s", cmd);
+
+      if (strcmp("customer", cmd) == 0) {
+        int custID;
+        fscanf(stdin, " %d", &custID);
+        success = lookupCustomer(custID);
+ 
+        if (!success) {
+          printf("Customer %d not found.\n", custID);
+        } 
+      }
+
+      else if (strcmp("products", cmd) == 0) {
+        int numProds;
+        int nextProd;
+        ProductSet* result = P_Empty();
+        success = fscanf(stdin, " %d:", &numProds);
+
+        for (int i = 0; i < numProds; i++) {
+          success = fscanf(stdin, " %d", &nextProd);
+          result = P_Set(nextProd, result);
+        }
+
+        success = lookupProdSet(result);
+
+        if (!success) {
+          printf("Product Set ");
+          display_products(result);
+          printf(" not found.\n");
+        }
+        free_products(result);
+      }
+    }
+
+    else {                             
+      printf("Unknown command. %s\n",cmd);
+    }
+  }  
+  // end main while loop
+  return 0;
+}
+
 cilk int main(int argc, char **argv) {
 
   Lattice<CustomerDatabase*>* lat = lattice_customer_database();
   data = newLvar lat;
 
-  int numStore1 = 10;
-
-  // read from file
+  int numStore1 = 1000;
+  int numStore2 = 1000;
+  int numStore3 = 1000;
 
   int** store1_cs = readStoreData("store1.csv", numStore1);
+  int** store2_cs = readStoreData("store2.csv", numStore1);
+  int** store3_cs = readStoreData("store3.csv", numStore1);
 
-  int result1;
+  int result1, result2, result3;
   spawn result1 = add_data(store1_cs, numStore1);
+  spawn result2 = add_data(store2_cs, numStore2);
+  spawn result3 = add_data(store3_cs, numStore3);
   sync;
+
+  freeze data;
+
+  userInteraction();
 
   freeLvar(data);
   free(lat);
   for (int i = 0; i < numStore1; i++) {
     free(store1_cs[i]);
   }
+  for (int i = 0; i < numStore2; i++) {
+    free(store2_cs[i]);
+  }
+  for (int i = 0; i < numStore3; i++) {
+    free(store3_cs[i]);
+  }
   free(store1_cs);
+  free(store2_cs);
+  free(store3_cs);
   cilk return 1;
 }
 
