@@ -70,10 +70,10 @@ top::Expr ::= lattice::Expr elems::[Expr] size::Expr
           size, location=top.location)
         else
           errorExpr([err(top.location,
-          "Activation set size must be an integer, not a " ++
+          "activationSet() expected size argument of type integer, not " ++
           showType(size.typerep))], location=top.location) 
     | _ -> errorExpr([err(top.location,
-          "activationSet() expected argument of type Lattice*, got type " 
+          "activationSet() expected first argument of type Lattice<a>*, not " 
           ++ showType(lattice.typerep))], location=top.location)
     end;
 
@@ -99,9 +99,9 @@ top::Expr ::= basetype::Type actSet::Expr item::Expr
     if compatibleTypes(basetype, item.typerep, false, true)
     then []
     else
-      [err(top.location, "Trying to add elements of type <" ++
-       showType(item.typerep) ++ "> to an activation set with <" ++
-       showType(basetype) ++ "> elements")];
+      [err(top.location, "can't add elements of type " ++
+       showType(item.typerep) ++ " to ActivationSet<" ++
+       showType(basetype) ++ ">*")];
 
   forwards to
     mkErrorCheck(localErrors ++ childErrors,
@@ -120,7 +120,7 @@ abstract production freeAct
 top::Expr ::= baseType::Type a::Expr
 {
   propagate substituted;
-  top.pp = pp"freeSet(${a.pp})";
+  top.pp = pp"freeSet ${a.pp}";
 
   local localErrors::[Message] =
     checkLvarHeaderDef(top.location, top.env) ++ baseType.errors ++ a.errors;
@@ -139,7 +139,7 @@ abstract production showAct
 top::Expr ::= baseType::Type a::Expr
 {
   propagate substituted;
-  top.pp = pp"display(${a.pp})";
+  top.pp = pp"display ${a.pp}";
 
   local localErrors::[Message] =
     checkLvarHeaderDef(top.location, top.env) ++ baseType.errors ++ a.errors;

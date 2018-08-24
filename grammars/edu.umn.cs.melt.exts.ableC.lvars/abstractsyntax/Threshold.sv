@@ -70,10 +70,10 @@ top::Expr ::= lattice::Expr elems::[Expr] size::Expr
           size, location=top.location)
         else
           errorExpr([err(top.location,
-          "Threshold set size must be an integer, not a " ++
+          "thresholdSet() expected size argument of type integer, not " ++
           showType(size.typerep))], location=top.location) 
     | _ -> errorExpr([err(top.location,
-          "thresholdSet() expected argument of type Lattice*, got type " 
+          "thresholdSet() expected first argument of type Lattice<a>*, not " 
           ++ showType(lattice.typerep))], location=top.location)
     end;
 
@@ -104,12 +104,15 @@ top::Expr ::= basetype::Type threshSet::Expr item::Expr
              }
         else
           errorExpr([err(top.location,
-          "Trying to add activation set with base type " ++
-          showType(a_t) ++ " to a threshold set with " ++
-          showType(basetype) ++ " elements")], location = top.location)
+          "can't add ActivationSet<" ++
+          showType(a_t) ++ ">* to ThresholdSet<" ++
+          showType(basetype) ++ ">* (activation set has wrong base type)")],
+          location = top.location)
     | _ -> errorExpr([err(top.location,
-           "Trying to add element of type " ++
-           showType(item.typerep) ++ "instead of an activation set to a threshold set")],
+           "can't add element of type " ++
+           showType(item.typerep) ++ "to ThresholdSet<" ++
+           showType(basetype) ++ ">* (can only add " ++
+           "ActivationSet<" ++ showType(basetype) ++ ">*)")],
            location = top.location)
     end;
 
@@ -125,7 +128,7 @@ abstract production freeThresh
 top::Expr ::= baseType::Type t::Expr
 {
   propagate substituted;
-  top.pp = pp"freeSet(${t.pp})";
+  top.pp = pp"freeSet ${t.pp}";
 
   local localErrors::[Message] =
     checkLvarHeaderDef(top.location, top.env) ++
@@ -144,7 +147,7 @@ abstract production showThresh
 top::Expr ::= baseType::Type t::Expr
 {
   propagate substituted;
-  top.pp = pp"display(${t.pp})";
+  top.pp = pp"display ${t.pp}";
 
   local localErrors::[Message] =
     checkLvarHeaderDef(top.location, top.env) ++

@@ -297,7 +297,7 @@ top::Expr ::= set::Expr
         freeThresh(t, set, location=top.location)
     | _ ->
         errorExpr([err(top.location, 
-        "Can only use freeSet with ActivationSet<a>* or ThresholdSet<a>*, not " 
+        "freeSet expected argument of type ActivationSet<a>* or ThresholdSet<a>*, got " 
         ++ showType(set.typerep))], location=top.location)
     end;
 
@@ -321,7 +321,7 @@ top::Expr ::= lvar::Expr
         }
     | _ ->
         errorExpr([err(top.location, 
-        "Can only use freeLvar with Lvar<a>*, not " ++ showType(lvar.typerep))],
+        "freeLvar expected argument of type Lvar<a>*, got " ++ showType(lvar.typerep))],
         location=top.location)
     end;
 
@@ -332,7 +332,7 @@ abstract production freeActSets
 top::Expr ::= thresh::Expr
 {
   propagate substituted;
-  top.pp = pp"freeActSets(${thresh.pp})";
+  top.pp = pp"freeActSets ${thresh.pp}";
 
   local localErrors::[Message] =
     checkLvarHeaderDef(top.location, top.env) ++ thresh.errors;
@@ -345,7 +345,8 @@ top::Expr ::= thresh::Expr
         }
     | _ ->
         errorExpr([err(top.location, 
-        "Can't use freeActSets() with <" ++ showType(thresh.typerep) ++ ">")],
+        "freeActSets expected argument of type ThresholdSet<a>*, got "
+        ++ showType(thresh.typerep))],
         location=top.location)
     end;
 
@@ -373,7 +374,7 @@ top::Expr ::= e::Expr
         showLvar(t, e, location=top.location)
     | _ ->
         errorExpr([err(top.location, 
-      "Can only use display with ActivationSet<a>*, ThresholdSet<a>*, or " ++
+      "display expected argument of type ActivationSet<a>*, ThresholdSet<a>*, or " ++
        "Lvar<a>*, not " ++ showType(e.typerep))], location=top.location)
     end;
       
