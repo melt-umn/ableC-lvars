@@ -114,7 +114,6 @@ int leq_customer_database(CustomerDatabase* c1, CustomerDatabase* c2) {
   }
 }
 
-
 // ************************** lub *********************************************
 
 ProductSet* copy_products(ProductSet* p) {
@@ -242,7 +241,6 @@ Value<CustomerDatabase*>* lub_customer_database(CustomerDatabase* c1,
   }
   return value result;
 }
-
 
 // ********************************* display **********************************
 

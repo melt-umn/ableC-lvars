@@ -1,0 +1,26 @@
+#ifndef _SINGLE_WRITE_DOUBLE_XH
+#define _SINGLE_WRITE_DOUBLE_XH
+
+#include "lvars.xh"
+#include "double.xh"
+
+int leq_single_write_double(double i1, double i2) {
+  return i1 == i2;
+}
+
+Value<double>* lub_single_write_double(double i1, double i2) {
+  if (i1 == i2) {
+    return value i1;
+  }
+  return Top<double>;
+}
+
+Lattice<double>* lattice_single_write_double() {
+  return lattice_double(leq_single_write_double, lub_single_write_double);
+}
+
+Lvar<double>* makeLvar_max_double() {
+  return makeLvar_double(leq_single_write_double, lub_single_write_double);
+}
+
+#endif

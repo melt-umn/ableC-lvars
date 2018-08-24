@@ -4,10 +4,9 @@
 
 #### PPOP Artifacts:
 
-+ tidy up header file
-+ fix syntax in error messages
++ fix syntax in error messages (e.g., remove parentheses)
 + Consider making show function optional (like with free)
-+ Make list of rules to follow for programmers (return copies in put vs must handle freeing in putD rather than providing a free function, must provide match statements if top is algebraic datatype)
++ Make list of rules to follow for programmers (return copies in put vs must handle freeing in putD rather than providing a free function)
 
 #### LVars Functionality:
 
@@ -17,21 +16,16 @@
 #### Examples:
 
 + Fix tests to match new syntax
-+ Increase parallelism in customer example (go through in chunks?)
-+ Add frees (check with valgrind)
 + Better positive tests
 + Add tests for new features
-+ Fix customer examples with erroring out on top (maybe use lub directly? use single lvar with set of customers?)
 
 #### Usability:
 
-+ Discuss constructive vs destructive put (maybe rename?)
 + Look over and tidy up header file
 + Implement more prefab lattices/data types
 + See if int_set.h lattice can be generalized to other base types to create a more flexible set lattice
 + Update readme guide to include new examples, the addition of freezing and freeing, other updates
-+ Is there a way to error out only on the first missing include of a header?
-+ Should lub always create a new copy instead of referencing old ones so that programmer can free without messing up lvar, instead of sometimes returning the original and sometimes making a new one? Otherwise can't safely free lub taken in passing, since might be freeing a value you need.
++ Is there a way to error out only on the first missing include of a header, and suppress other errors?
 + Make get binary prefix operator, and have get lvar {{a1}, {a2}} automatically create threshold set?
 + Reorganize abstract/concrete syntax
 + Make display optional, too (w/ default display)

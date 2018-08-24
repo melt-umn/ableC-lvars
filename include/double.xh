@@ -1,0 +1,21 @@
+#ifndef _DOUBLE_XH
+#define _DOUBLE_XH
+
+#include "lvars.xh"
+
+void display_double(double d) {
+  printf("%f", d);
+}
+
+Lattice<double>* lattice_double(int (*leqFunc)(double, double),
+                          Value<double>* (*lubFunc)(double, double)) {
+  return lattice(leqFunc, lubFunc, display_double);
+}
+
+Lvar<double>* makeLvar_double(int (*leqFunc)(double, double),
+                        Value<double>* (*lubFunc)(double, double)) {
+  Lattice<double>* lat = lattice_double(leqFunc, lubFunc);
+  return newLvar lat;
+}
+
+#endif
