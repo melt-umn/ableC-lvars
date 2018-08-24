@@ -2,36 +2,39 @@
 
 ## To-do:
 
-#### PPOP Artifacts:
+### Fixes:
 
-+ fix up readmes in various folders
-+ do I need locks in threshold/activation sets? or just warn people?
-+ destructive/constructive should be feature of lattice, not put (since incompat assumes
-  non-destructive)-- could say destr_lattice() or something, have flag in lattice that 
-  indicates whether destructive to use appropriate put
-+ Consider making show function optional (like with free)
-+ Make list of rules to follow for programmers (return copies in put vs must handle freeing in putD rather than providing a free function, putD must mutate first arg)
-+ Work on speeding up thread waiting/locking process (each thread has own value of lvar, merge? make a copy and take lub of that?)
-+ Getter methods?
-+ Fix tests to match new syntax
-+ Better positive tests
-+ Add tests for new features
++ Fix up READMEs
+    + abstractsyntax
+    + concretesyntax
+    + include
+    + tests
+    + ableC-lvars
+        + Make list of rules to follow for programmers (return copies in put vs must handle freeing in putD rather than providing a free function, putD must mutate first arg, etc.)
+        + Update with new features
++ Make destructive part of the lattice instead
+    + flag in lattice
+    + incompat can be avoided without having CHECK_DESTRUCT
+    + automatically uses correct put instead of having user type putD
++ Make show optional (h
++ Consider making providing display function optional (like with free)
++ Work on speeding up thread waiting/locking process
++ Consider adding other getter methods
++ Fix up tests
+    + Add positive tests for all checks in header and good things
 + Implement more prefab lattices/data types
-+ See if int_set.h lattice can be generalized to other base types to create a more flexible set lattice
-+ Update readme guide to include new examples, the addition of freezing and freeing, other updates
-+ Is there a way to error out only on the first missing include of a header, and suppress other errors?
-+ Make get binary prefix operator, and have get lvar {{a1}, {a2}} automatically create threshold set?
-+ Reorganize abstract/concrete syntax
-+ Make display optional, too (w/ default display)
-+ Break abstract syntax into smaller files
+    + See if int_set.h lattice can be generalized to other base types to create a more flexible set lattice
++ See if way to error out only on the first missing include of a header, and suppress other errors that come from missing header
 + Add nice syntax for counter lvar (maybe without specifying type, etc.)
 + Test timing
++ Fix up abstract/concrete syntax
 
 ### Things to think about:
 
++ Do I need to lock threshold sets and activation sets, in case different threads try to change them?
 + Does it make sense to free old value in put? Only works if create new values each time.
-+ Is it okay to only check threshold set compatibility in debug mode, since it affects determinism? __attribute_constructor to check once before running?
 + Infer value(..) automatically for return value when function returns a Value<a>*?
++ Make get binary prefix operator, and have get lvar {{a1}, {a2}} automatically create threshold set?
 
 ## Guide:
 

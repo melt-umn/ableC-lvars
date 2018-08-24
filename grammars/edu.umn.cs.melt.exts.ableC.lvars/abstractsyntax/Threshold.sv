@@ -159,3 +159,30 @@ top::Expr ::= baseType::Type t::Expr
       inst _displayThreshold<$directTypeExpr{baseType}>($Expr{t})
     });
 }
+
+
+abstract production freeActSets
+top::Expr ::= thresh::Expr
+{
+  propagate substituted;
+  top.pp = pp"freeActSets ${thresh.pp}";
+
+  local localErrors::[Message] =
+    checkLvarHeaderDef(top.location, top.env) ++ thresh.errors;
+
+  local fwrd::Expr =
+    case thresh.typerep of
+      pointerType(_, threshType(_, t)) -> 
+        ableC_Expr {
+          inst _freeActSets<$directTypeExpr{t}>($Expr{thresh})
+        }
+    | _ ->
+        errorExpr([err(top.location, 
+        "freeActSets expected argument of type ThresholdSet<a>*, got "
+        ++ showType(thresh.typerep))],
+        location=top.location)
+    end;
+
+  forwards to mkErrorCheck(localErrors, fwrd);
+}
+
