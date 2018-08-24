@@ -4,14 +4,11 @@
 
 #### PPOP Artifacts:
 
-+ add pointer type checks-- then can return NULL in freeze, etc.
 + fix up readmes in various folders
-+ check valgrind with resizing act and thresh sets
 + do I need locks in threshold/activation sets? or just warn people?
 + destructive/constructive should be feature of lattice, not put (since incompat assumes
   non-destructive)-- could say destr_lattice() or something, have flag in lattice that 
   indicates whether destructive to use appropriate put
-+ add NULL checks
 + Consider making show function optional (like with free)
 + Make list of rules to follow for programmers (return copies in put vs must handle freeing in putD rather than providing a free function, putD must mutate first arg)
 + Work on speeding up thread waiting/locking process (each thread has own value of lvar, merge? make a copy and take lub of that?)
@@ -32,7 +29,6 @@
 
 ### Things to think about:
 
-+ Can error messages be removed, if already taken care of by type system?
 + Does it make sense to free old value in put? Only works if create new values each time.
 + Is it okay to only check threshold set compatibility in debug mode, since it affects determinism? __attribute_constructor to check once before running?
 + Infer value(..) automatically for return value when function returns a Value<a>*?
