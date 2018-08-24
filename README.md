@@ -4,14 +4,14 @@
 
 #### PPOP Artifacts:
 
-+ true CHECK_DESTRUCT
++ add pointer type checks-- then can return NULL in freeze, etc.
 + fix up readmes in various folders
 + check valgrind with resizing act and thresh sets
 + do I need locks in threshold/activation sets? or just warn people?
 + destructive/constructive should be feature of lattice, not put (since incompat assumes
   non-destructive)-- could say destr_lattice() or something, have flag in lattice that 
   indicates whether destructive to use appropriate put
-+ check if NULL can be passed in if cast to different type
++ add NULL checks
 + Consider making show function optional (like with free)
 + Make list of rules to follow for programmers (return copies in put vs must handle freeing in putD rather than providing a free function, putD must mutate first arg)
 + Work on speeding up thread waiting/locking process (each thread has own value of lvar, merge? make a copy and take lub of that?)
@@ -19,7 +19,6 @@
 + Fix tests to match new syntax
 + Better positive tests
 + Add tests for new features
-+ Look over and tidy up header file
 + Implement more prefab lattices/data types
 + See if int_set.h lattice can be generalized to other base types to create a more flexible set lattice
 + Update readme guide to include new examples, the addition of freezing and freeing, other updates

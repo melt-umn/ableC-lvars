@@ -561,10 +561,18 @@ top::Expr ::= lvarBaseType::Type lvar::Expr value::Expr
           ++ showType(lvarBaseType) ++ ">*")];
 
   forwards to 
-    mkErrorCheck(localErrors ++ childErrors,
-    ableC_Expr{
-      inst _put<$directTypeExpr{lvarBaseType}>($Expr{lvar}, $Expr{value})
-    });
+    case lvarBaseType of
+      pointerType(_, _) -> 
+        mkErrorCheck(localErrors ++ childErrors,
+        ableC_Expr{
+          inst _put<$directTypeExpr{lvarBaseType}>($Expr{lvar}, $Expr{value}, 1)
+        })
+    | _ -> 
+        mkErrorCheck(localErrors ++ childErrors,
+        ableC_Expr{
+          inst _put<$directTypeExpr{lvarBaseType}>($Expr{lvar}, $Expr{value}, 0)
+        }) 
+    end;
 }
 
 // to check for errors in a call to putD(), and forward onward as appropriate
@@ -614,10 +622,20 @@ top::Expr ::= lvarBaseType::Type lvar::Expr value::Expr
           ++ showType(lvarBaseType) ++ ">*")];
 
   forwards to 
-    mkErrorCheck(localErrors ++ childErrors,
-    ableC_Expr{
-      inst _put_destructive<$directTypeExpr{lvarBaseType}>($Expr{lvar}, $Expr{value})
-    });
+    case lvarBaseType of
+      pointerType(_, _) -> 
+        mkErrorCheck(localErrors ++ childErrors,
+        ableC_Expr{
+          inst _put_destructive<$directTypeExpr{lvarBaseType}>($Expr{lvar}, 
+          $Expr{value}, 1)
+        })
+    | _ -> 
+        mkErrorCheck(localErrors ++ childErrors,
+        ableC_Expr{
+          inst _put_destructive<$directTypeExpr{lvarBaseType}>($Expr{lvar}, 
+          $Expr{value}, 0)
+        }) 
+    end;
 }
 
 //******************************** new productions ****************************

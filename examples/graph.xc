@@ -1,3 +1,5 @@
+#define DEBUG
+#define CHECK_DESTRUCT
 #include "tensors.xh"
 #include "lvars.xh"
 #include "cilk.xh"

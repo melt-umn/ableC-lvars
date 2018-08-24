@@ -104,12 +104,22 @@ top::Expr ::= basetype::Type actSet::Expr item::Expr
        showType(basetype) ++ ">*")];
 
   forwards to
-    mkErrorCheck(localErrors ++ childErrors,
-      ableC_Expr{
-        inst _addAct<$directTypeExpr{basetype}>
-        ($Expr{actSet}, $Expr{item})
-      }
-    );
+    case basetype of
+      pointerType(_, _) -> 
+        mkErrorCheck(localErrors ++ childErrors,
+          ableC_Expr{
+            inst _addAct<$directTypeExpr{basetype}>
+            ($Expr{actSet}, $Expr{item}, 1)
+          }
+        )
+    | _ -> 
+        mkErrorCheck(localErrors ++ childErrors,
+          ableC_Expr{
+            inst _addAct<$directTypeExpr{basetype}>
+            ($Expr{actSet}, $Expr{item}, 0)
+          }
+        )
+    end;
 }
 
 // to free an activation set
