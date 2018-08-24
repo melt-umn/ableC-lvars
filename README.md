@@ -4,23 +4,20 @@
 
 #### PPOP Artifacts:
 
-+ fix syntax in error messages (e.g., remove parentheses)
++ fix up readmes in various folders
++ check valgrind with resizing act and thresh sets
++ do I need locks in threshold/activation sets? or just warn people?
++ destructive/constructive should be feature of lattice, not put (since incompat assumes
+  non-destructive)-- could say destr_lattice() or something, have flag in lattice that 
+  indicates whether destructive to use appropriate put
++ check if NULL can be passed in if cast to different type
 + Consider making show function optional (like with free)
-+ Make list of rules to follow for programmers (return copies in put vs must handle freeing in putD rather than providing a free function)
-
-#### LVars Functionality:
-
++ Make list of rules to follow for programmers (return copies in put vs must handle freeing in putD rather than providing a free function, putD must mutate first arg)
 + Work on speeding up thread waiting/locking process (each thread has own value of lvar, merge? make a copy and take lub of that?)
 + Getter methods?
-
-#### Examples:
-
 + Fix tests to match new syntax
 + Better positive tests
 + Add tests for new features
-
-#### Usability:
-
 + Look over and tidy up header file
 + Implement more prefab lattices/data types
 + See if int_set.h lattice can be generalized to other base types to create a more flexible set lattice
@@ -30,9 +27,8 @@
 + Reorganize abstract/concrete syntax
 + Make display optional, too (w/ default display)
 + Break abstract syntax into smaller files
-+ Missing space in   "Trying to add element of type " ++
-           showType(item.typerep) ++ "instead of an activation set to a threshold set")],
 + Add nice syntax for counter lvar (maybe without specifying type, etc.)
++ Test timing
 
 ### Things to think about:
 

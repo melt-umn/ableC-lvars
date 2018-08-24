@@ -1,34 +1,35 @@
+#ifndef _LVARS_XH
+#define _LVARS_XH
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
 
-// Note that many functions are statically checked to see if
-// they are called with NULL arguments, so in many cases
-// we don't also have to check this dynamically
-
 // Use #define CHECK before including lvars.xh to check against invalid cases
-// but don't see error messages or exit (instead,
-// silently ignore the invalid function calls and move on as much as possible)
+// but don't see error messages or exit (instead, silently ignore the invalid 
+// operations and move on as much as possible)
 
 // Use #define DEBUG to print error messages and exit should anything
 // bad occur (checks same things as CHECK, but doesn't try to 
 // silently continue)
 
+// Use #define CHECK_DESTRUCT to skip the check for threshold set compatibility
+// (needed if want to use CHECK or DEBUG but can't take lub without mutating)
+
 // If both CHECK and DEBUG are defined, will go with the stronger DEBUG
 
-#ifndef _LVARS_XH
-#define _LVARS_XH
+int _lvarCheckValue = 1; // to ensure that the header is included
 
-int _lvarCheckValue = 1;
+// ******************************* Value **************************************
 
-//******************************** Lattice ************************************
-
+// wrapper for value in an lvar
 template<a> struct _Value {
-  a _val;
+  a _val; // may be uninitialized if _top or _bot are set
   int _top;
   int _bot;
 };
 
+// to create a Value<a>* from a value of type a
 template<a>
 static Value<a>* _newValue(a val) {
   Value<a>* newVal = malloc(sizeof(Value<a>));
@@ -38,6 +39,7 @@ static Value<a>* _newValue(a val) {
   return newVal;
 }
 
+// to create a Value<a>* set to top
 template<a>
 static Value<a>* _newTop() {
   Value<a>* newVal = malloc(sizeof(Value<a>));
@@ -46,6 +48,7 @@ static Value<a>* _newTop() {
   return newVal;
 }
 
+// to create a Value<a>* set to bottom
 template<a>
 static Value<a>* _newBot() {
   Value<a>* newVal = malloc(sizeof(Value<a>));
@@ -54,11 +57,15 @@ static Value<a>* _newBot() {
   return newVal;
 }
 
+// to check if a value is at top
 template<a>
 static int _isTop(Value<a>* val) {
   return val->_top;
 }
 
+//******************************** Lattice ************************************
+
+// lattice indicates how values should be compared, combined, displayed, freed
 template<a> struct _Lattice {
   int (*_leq)(a, a);
   Value<a>* (* _lub)(a, a);
@@ -66,8 +73,7 @@ template<a> struct _Lattice {
   void (*_free)(a);
 };
 
-// to create a new lattice with the fields specified by the user
-
+// to create a new lattice from fields specified by the user
 template<a>
 static Lattice<a>* _newLattice(int (*leqFunc)(a, a),
                    Value<a>* (*lub)(a, a), void (*displayMethod)(a),
@@ -80,29 +86,108 @@ static Lattice<a>* _newLattice(int (*leqFunc)(a, a),
   return l;
 }
 
-//*************************** Activation set **********************************
+// to check whether two lattices (that may have different pointers) have the
+// same leq, lub, free, and display (making them functionally equivalent)
 
+template<a>
+static int _eqLattice(Lattice<a>* l1, Lattice<a>* l2) {
+  return (l1->_leq == l2->_leq) && (l1->_lub == l2->_lub) &&
+         (l1->_display == l2->_display) && (l1->_free == l2->_free);
+}
+
+// if no free method is provided, defaults to doing nothing
+template<a>
+static void _defaultFree(a val) {
+  return;
+}
+
+// if no display method is provided, defaults to doing nothing
+template<a>
+static void _defaultDisplay(a val){
+  printf("No display method provided.");
+}
+
+//********************************* Lvar **************************************
+
+// LVar is associated with a lattice, has a value, and is either frozen or not
+template<a> struct _Lvar {
+  Lattice<a> * _lattice;
+  Value<a>* _value;
+  int _frozen; // if 0, lvar is not frozen; if 1, lvar is frozen
+  pthread_mutex_t _mutex;
+  pthread_cond_t _cond;
+};
+
+// returns pointer to a new lvar for a given lattice
+// lvar has initial value that is the bottom element of the lattice
+// lvar is initially not frozen
+template<a>
+static Lvar<a>* _new(Lattice<a>* l) {
+  Lvar<a>* lvarNew = malloc(sizeof(Lvar<a>)); 
+  lvarNew->_value = inst _newBot<a>();
+  lvarNew-> _lattice = l;
+  lvarNew-> _frozen = 0;
+  lvarNew->_cond = (pthread_cond_t) PTHREAD_COND_INITIALIZER;
+  lvarNew->_mutex = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
+  return lvarNew;
+}
+
+// to display a frozen LVar, using the display method of the lattice
+template<a>
+static void _displayLvar(Lvar<a>* l) {
+  pthread_mutex_lock(&(l->_mutex));
+  if (l->_frozen) { // note that only can be frozen if not at bottom
+    l->_lattice->_display(l->_value->_val);
+  }
+  else {
+    #ifdef DEBUG
+      printf("Error: Can't display a lvar before it is frozen!\n");
+      exit(0);
+    #endif
+    printf("<Lvar Value Unavailable>");
+  }
+  pthread_mutex_unlock(&(l->_mutex));
+}
+
+// to free an LVar, using the free method of the lattice
+template<a>
+static void _freeLvar(Lvar<a>* l) {
+  pthread_mutex_lock(&(l->_mutex));
+  if (!l->_value->_bot) {
+    l->_lattice->_free(l->_value->_val);
+  }
+  free(l->_value);
+  pthread_mutex_unlock(&(l->_mutex));
+  free(l);
+  return;
+}
+
+// to get the lattice from an lvar
+template<a>
+static Lattice<a>* _getLattice(Lvar<a>* l) {
+  return l->_lattice;
+}
+
+//*************************** Activation Set **********************************
+
+// set of values from a given lattice
 template<a> struct _ActivationSet {
-  int _size; // how big is the set array?
+  int _size; // actual size of _set array
   a* _set;   
-  int _index; // what is the next index to fill in the set array?
+  int _index; // next available index in _set array
   Lattice<a>* _lattice;
 };
 
 // to create a new activation set, given a lattice and an initial size
-
 template<a>
 static ActivationSet<a>* _newActivationSet(Lattice<a>* l, int size) {
 
-  #ifdef DEBUG
+  #if defined(DEBUG) || defined(CHECK)
     if (size < 0) {
-      printf("Can't create an activation set of negative size!\n");  
-      exit(0);
-    }
-  #endif
-
-  #ifdef CHECK
-    if (size < 0) {
+      #ifdef DEBUG
+        printf("Error: can't create an activation set of negative size!\n");  
+        exit(0);
+      #endif
       size = 0;
     }
   #endif
@@ -115,37 +200,24 @@ static ActivationSet<a>* _newActivationSet(Lattice<a>* l, int size) {
   return act;
 }
 
-// to print out a given activation set (using the lattice's display method)
-
+// to display a given activation set (using the lattice's display method)
 template<a>
 static void _displayActivation(ActivationSet<a>* act){
   printf("{");  
   int i = 0;
   for (; i < act->_index - 1; i++) {
-    act ->_lattice->_display(act->_set[i]);
+    act->_lattice->_display(act->_set[i]);
     printf(", ");
   }
   for (; i < act->_index; i++) {
-    act ->_lattice->_display(act->_set[i]);
+    act->_lattice->_display(act->_set[i]);
   }
 
   printf("}");
 }
 
-// to add a single element to an activation set
-
-template<a>
-static ActivationSet<a>* _addAct(ActivationSet<a>* act, a element) {
-  if (act->_index >= act->_size) {
-     inst _resizeActSet<a>(act, 2 * act->_size + 1);
-  }
-  act->_set[act->_index] = element;
-  act->_index++;
-  return act;
-}
-
 // to copy an activation set's set over to a new, bigger array of size newSize
-
+// (only used internally, so no checking for valid size)
 template<a>
 static int _resizeActSet(ActivationSet<a>* act, int newSize) {
   a* newSet = malloc(sizeof(a*) * newSize);
@@ -158,6 +230,17 @@ static int _resizeActSet(ActivationSet<a>* act, int newSize) {
   return 1;
 } 
 
+// to add a single element to an activation set (resizing if necessary)
+template<a>
+static ActivationSet<a>* _addAct(ActivationSet<a>* act, a element) {
+  if (act->_index >= act->_size) {
+     inst _resizeActSet<a>(act, 2 * act->_size + 1);
+  }
+  act->_set[act->_index] = element;
+  act->_index++;
+  return act;
+}
+
 // to free an activation set and its components
 template<a>
 static int _freeActivation(ActivationSet<a>* act) {
@@ -169,28 +252,26 @@ static int _freeActivation(ActivationSet<a>* act) {
   return 1;
 }
 
-//****** Threshold set******
+// ********************************** Threshold Set ***************************
 
+// set of activation sets from a given lattice
 template<a> struct _ThresholdSet {
   Lattice<a>* _lattice;
-  int _size;
-  int _index;
-  ActivationSet<a> ** _a_sets;
+  int _size; // actual size of _a_sets array
+  int _index; // next available index in _a_sets arrays
+  ActivationSet<a>** _a_sets;
 };
 
 // to build a new threshold set, given a lattice and an initial size
-
 template<a>
 static ThresholdSet<a>* _newThresholdSet(Lattice<a> * l, int size) {
-  #ifdef DEBUG
-    if (size < 0) {
-      printf("Error: Can't create a threshold set of negative size!\n");
-      exit(0);
-    }
-  #endif
 
-  #ifdef CHECK
+  #if defined(DEBUG) || defined(CHECK)
     if (size < 0) {
+      #ifdef DEBUG
+        printf("Error: Can't create a threshold set of negative size!\n");
+        exit(0);
+      #endif
       size = 0;
     }
   #endif
@@ -203,26 +284,12 @@ static ThresholdSet<a>* _newThresholdSet(Lattice<a> * l, int size) {
   return t;
 }
 
-// to check whether two activation sets are incompatible
-
+// to check whether two activation sets are compatible
+// in DEBUG mode, program will error out if compatible
+// in CHECK mode, will just carry on 
 template<a>
-static int _incompat(Lattice<a> * l, ActivationSet<a> *Q, ActivationSet<a> *R) {
-
-  #if defined(DEBUG) || defined(CHECK)
-    if (!inst _eqLattice<a>(Q -> _lattice, l) || 
-        !inst _eqLattice<a>(R -> _lattice, l)) {
-      #ifdef DEBUG
-        printf("Error: The activation sets ");
-        display(Q);
-        printf(" and ");
-        display(R);
-        printf(" don't belong to the same lattice!\n");
-        exit(0);
-      #endif
-      return 0;
-    }
-  #endif
-
+static int _incompat(Lattice<a> * l, ActivationSet<a> *Q, 
+                                     ActivationSet<a> *R) {
   for (int i = 0; i < Q->_index; i++) {
     for (int j = 0; j < R->_index; j++) {
       a q = Q->_set[i];
@@ -249,12 +316,29 @@ static int _incompat(Lattice<a> * l, ActivationSet<a> *Q, ActivationSet<a> *R) {
   return 1;
 }
 
-// to add an activation set to a threshold set
-// if the activation set is compatible with an activation set that is already
-// in the threshold set, does nothing
-
+// to copy a threshold set's set over to a new, bigger array of size newSize
+// used internally only, so newSize is assumed to be valid
 template<a>
-static ThresholdSet<a>* _addThreshold(ThresholdSet<a>* t, ActivationSet<a>* act) {
+static int _resizeThresholdSet(ThresholdSet<a>* t, int newSize) {
+ ActivationSet<a>** newSet = malloc(sizeof(ActivationSet<a>*) * newSize);
+ for (int i = 0; i < t->_index; i++) {
+   newSet[i] = t->_a_sets[i];
+ }
+ free(t->_a_sets);
+ t->_a_sets= newSet;
+ t->_size = newSize;
+ return 1;
+}
+
+// to add an activation set to a threshold set, resizing if necessary
+// if the activation set is compatible with an activation set that is already
+// in the threshold set, errors out in DEBUG mode and skips adding the new
+// activation set in CHECK mode (doesn't perform this check if CHECK_DESTRUCT
+// mode is on)
+template<a>
+static ThresholdSet<a>* _addThreshold(ThresholdSet<a>* t, 
+                                       ActivationSet<a>* act) {
+  // check that threshold and activation have same lattice
   #if defined(DEBUG) || defined(CHECK)
     if (!inst _eqLattice<a>(t->_lattice, act->_lattice)) {
       #ifdef DEBUG
@@ -265,15 +349,12 @@ static ThresholdSet<a>* _addThreshold(ThresholdSet<a>* t, ActivationSet<a>* act)
         printf(" do not have the same lattice. \n");
         exit(0);
       #endif
-      return t;
+      return t; // if check mode, add just fails silently
     }
   #endif
 
-  if (t->_index >= t->_size) {
-     inst _resizeThresholdSet<a>(t, 2 * t->_size + 1);
-  }
-
-  #if defined(CHECK) || defined(DEBUG)
+  // make sure new addition is incompatible with existing members
+  #if (defined(CHECK) || defined(DEBUG)) && !defined(CHECK_DESTRUCT)
     for (int i = 0; i < t->_index; i++) {
       if (!inst _incompat<a>(t ->_lattice, t->_a_sets[i], act)) {
         return t;
@@ -281,28 +362,16 @@ static ThresholdSet<a>* _addThreshold(ThresholdSet<a>* t, ActivationSet<a>* act)
     }
   #endif
 
+  if (t->_index >= t->_size) {
+     inst _resizeThresholdSet<a>(t, 2 * t->_size + 1);
+  }
+
   t->_a_sets[t->_index] = act;
   t->_index++;
   return t;
 }
 
-// to copy a threshold set's set over to a new, bigger array of size newSize
-
-template<a>
-static int _resizeThresholdSet(ThresholdSet<a>* t, int newSize) {
- ActivationSet<a>** newSet = malloc(sizeof(ActivationSet<a>*) * newSize);
- for (int i = 0; i < t->_index; i++) {
-   newSet[i] = t->_a_sets[i];
- }
-
- free(t->_a_sets);
- t->_a_sets= newSet;
- t->_size = newSize;
- return 1;
-}
-
-// to free a threshold set
-
+// to free a threshold set (will *not* free activation sets inside)
 template<a>
 static int _freeThreshold(ThresholdSet<a> *t) {
   free(t->_a_sets);
@@ -313,7 +382,6 @@ static int _freeThreshold(ThresholdSet<a> *t) {
 // to free all of the activation sets in a threshold set
 // note that this only makes sense if the activation sets will
 // not be needed again and are not shared with other threshold sets
-
 template<a>
 static void _freeActSets(ThresholdSet<a>* t) {
   for (int i = 0; i < t->_index; i++) {
@@ -321,8 +389,7 @@ static void _freeActSets(ThresholdSet<a>* t) {
   }
 } 
 
-// to print a threshold set, using the display method of the lattice
-
+// to display a threshold set, using the display method of the lattice
 template<a>
 static void _displayThreshold(ThresholdSet<a>* t){
   printf("{");
@@ -337,81 +404,11 @@ static void _displayThreshold(ThresholdSet<a>* t){
   printf("}");
 }
 
-//********************************* Lvar **************************************
-
-template<a> struct _Lvar {
-  Lattice<a> * _lattice;
-  Value<a>* _value;
-  int _frozen; // if 0, lvar is not frozen; if 1, lvar is frozen
-  pthread_mutex_t _mutex;
-  pthread_cond_t _cond;
-};
-
-template<a>
-static void _displayLvar(Lvar<a>* l) {
-  pthread_mutex_lock(&(l->_mutex));
-  if (l->_frozen) {
-    if (!l->_value->_bot) {
-      l->_lattice->_display(l->_value->_val);
-    }
-  }
-  else {
-    #ifdef DEBUG
-      printf("Error: Can't display a lvar before it is frozen!\n");
-      exit(0);
-    #endif
-
-    printf("<Lvar Value Unavailable>");
-  }
-  pthread_mutex_unlock(&(l->_mutex));
-}
-
-// must be used only after completely done with lvar (synced, etc)
-
-template<a>
-static void _defaultFree(a val) {
-  return;
-}
-
-template<a>
-static void _freeLvar(Lvar<a>* l) {
-  pthread_mutex_lock(&(l->_mutex));
-  // note that top and bottom will be freed with lattice, not lvar
-  if (!l->_value->_bot) {
-    l->_lattice->_free(l->_value->_val);
-    free(l->_value);
-  }
-  pthread_mutex_unlock(&(l->_mutex));
-  free(l);
-  return;
-}
-
-// returns pointer to a new lvar for a given lattice
-// lvar has initial value that is the bottom element of the lattice
-// lvar is initially not frozen
-
-template<a>
-static Lvar<a>* _new(Lattice<a>* l) {
-  Lvar<a>* lvarNew = malloc(sizeof(Lvar<a>)); 
-  lvarNew->_value = inst _newBot<a>();
-  lvarNew-> _lattice = l;
-  lvarNew-> _frozen = 0;
-  lvarNew->_cond = (pthread_cond_t) PTHREAD_COND_INITIALIZER;
-  lvarNew->_mutex = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
-  return lvarNew;
-}
-
-template<a>
-static Lattice<a>* _getLattice(Lvar<a>* l) {
-  return l->_lattice;
-}
-
-//*********************** put and get methods ***************************
+//*********************** read and write methods ******************************
 
 // takes an lvar and a new value for that lvar, and updates the lvar's value to
-// the lub of the old value and the new value
-// if update would take state of lvar to top(), returns 0, otherwise 1
-
+// the lub of the old value and the new value, erroring out if update would
+// take value to top
 template<a>
 static void _put(Lvar<a>* l, a newState) {
 
@@ -421,13 +418,18 @@ static void _put(Lvar<a>* l, a newState) {
     printf("Error: can't write to a frozen lvar.\n");
     exit(0);
   }
+
+  // if lvar has no value yet, value is automatically set to newState
   if (l->_value->_bot) {
     free(l->_value);
     l->_value = value(newState);
   } 
+
+  // otherwise, we have to check on the lub of the current and new values
   else {
     a oldState = l->_value->_val;
     Value<a>* newValue = l->_lattice->_lub(oldState, newState);
+
     // if the lub is top, we have an invalid put
     if (newValue->_top){
       printf("Error: invalid put of ");
@@ -437,18 +439,10 @@ static void _put(Lvar<a>* l, a newState) {
       printf("\n");
       exit(0);
     }
-    // otherwise, we can update the value and free the old and new states
 
-    // if the old state does not match our top or bottom pointer
-    // (or the new value), we can free
-    if (oldState != newValue->_val) {
-      l->_lattice->_free(l->_value->_val); 
-    } 
-    // if the new state does not match our top or bottom pointer
-    // (or the new value), we can free
-    if (newState != newValue->_val) {
-      l->_lattice->_free(newState); 
-    }  
+    // otherwise, we can free (since copies are returned in lub)
+    l->_lattice->_free(newState); 
+    l->_lattice->_free(l->_value->_val);  
     free(l->_value);
     l->_value = newValue;
   }
@@ -456,8 +450,8 @@ static void _put(Lvar<a>* l, a newState) {
   pthread_cond_broadcast(&(l->_cond));
 }
 
-// destructive version of put (doesn't free things upon put)
-
+// destructive version of put (same as above, but doesn't free things upon put;
+// lub is assumed to mutate its first argument)
 template<a>
 static void _put_destructive(Lvar<a>* l, a newState) {
 
@@ -467,10 +461,12 @@ static void _put_destructive(Lvar<a>* l, a newState) {
     printf("Error: can't write to a frozen lvar.\n");
     exit(0);
   }
+
   if (l->_value->_bot) {
     free(l->_value);
     l->_value = value(newState);
   } 
+
   else {
     a oldState = l->_value->_val;
     Value<a>* newValue = l-> _lattice-> _lub(oldState, newState);
@@ -586,22 +582,11 @@ static a _freeze(Lvar<a>* l) {
 }
 
 template<a>
-static void _defaultDisplay(a val){
-  printf("No display method provided.");
-}
-
-template<a>
 static Lvar<a>* _makeLvar(int (*leqFunc)(a, a), Value<a>* (*lub)(a, a), 
                           void (*displayMethod)(a), void (*freeMethod)(a)) {
   Lattice<a>* lat = lattice(leqFunc, lub, displayMethod, freeMethod);
   Lvar<a>* l = newLvar lat;
   return l;
-}
-
-template<a>
-static int _eqLattice(Lattice<a>* l1, Lattice<a>* l2) {
-  return (l1->_leq == l2->_leq) && (l1->_lub == l2->_lub) &&
-         (l1->_display == l2->_display) && (l1->_free == l2->_free);
 }
 
 #endif // LVARS_H_

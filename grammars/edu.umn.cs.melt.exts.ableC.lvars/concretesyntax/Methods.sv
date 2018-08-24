@@ -12,11 +12,16 @@ marking terminal Freeze_t 'freeze' lexer classes {Ckeyword}, precedence = 1;
 marking terminal Display_t 'display' lexer classes {Ckeyword};
 marking terminal GetLattice_t 'getLattice' lexer classes {Ckeyword};
 marking terminal Value_t 'value' lexer classes {Ckeyword};
+marking terminal IsTop_t 'isTop' lexer classes {Ckeyword};
 
 terminal In_t 'in' lexer classes {Ckeyword};
 terminal With_t 'with' lexer classes {Ckeyword};
 
 concrete productions top::UnaryOp_c
+| 'isTop' 
+  {
+    top.ast = isTop(top.expr, location=top.location);
+  }
 | 'newLvar' 
   {
     top.ast = newCall(top.expr, location=top.location);

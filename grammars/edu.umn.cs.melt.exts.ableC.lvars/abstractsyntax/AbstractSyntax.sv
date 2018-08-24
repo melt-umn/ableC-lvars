@@ -736,5 +736,24 @@ top::Expr ::= typ::TypeName
     };
 }
 
+abstract production isTop
+top::Expr ::= val::Expr
+{
+  propagate substituted;
+  top.pp = pp"isTop ${val.pp}";
+
+  forwards to
+    case val.typerep of
+      pointerType(_, valueType(_, t)) -> 
+        ableC_Expr{
+          inst _isTop<$directTypeExpr{t}>($Expr{val})
+        }
+    | _ -> errorExpr([err(top.location,
+           "isTop expected argument of type Value<a>*, got type " ++
+           showType(val.typerep))], location=top.location)
+    end;
+}
+
+
 global builtin::Location = builtinLoc("lvars");
 
