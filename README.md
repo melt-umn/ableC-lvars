@@ -30,10 +30,13 @@
 + Reorganize abstract/concrete syntax
 + Make display optional, too (w/ default display)
 + Break abstract syntax into smaller files
++ Missing space in   "Trying to add element of type " ++
+           showType(item.typerep) ++ "instead of an activation set to a threshold set")],
 + Add nice syntax for counter lvar (maybe without specifying type, etc.)
 
 ### Things to think about:
 
++ Can error messages be removed, if already taken care of by type system?
 + Does it make sense to free old value in put? Only works if create new values each time.
 + Is it okay to only check threshold set compatibility in debug mode, since it affects determinism? __attribute_constructor to check once before running?
 + Infer value(..) automatically for return value when function returns a Value<a>*?
