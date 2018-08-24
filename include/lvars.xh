@@ -168,6 +168,15 @@ static Lattice<a>* _getLattice(Lvar<a>* l) {
   return l->_lattice;
 }
 
+// to make a lattice and an lvar from that lattice
+template<a>
+static Lvar<a>* _makeLvar(int (*leqFunc)(a, a), Value<a>* (*lub)(a, a), 
+                          void (*displayMethod)(a), void (*freeMethod)(a)) {
+  Lattice<a>* lat = lattice(leqFunc, lub, displayMethod, freeMethod);
+  Lvar<a>* l = newLvar lat;
+  return l;
+}
+
 //*************************** Activation Set **********************************
 
 // set of values from a given lattice
@@ -404,7 +413,7 @@ static void _displayThreshold(ThresholdSet<a>* t){
   printf("}");
 }
 
-//*********************** read and write methods ******************************
+//*********************** put *************************************************
 
 // takes an lvar and a new value for that lvar, and updates the lvar's value to
 // the lub of the old value and the new value, erroring out if update would
@@ -447,6 +456,7 @@ static void _put(Lvar<a>* l, a newState) {
     l->_value = newValue;
   }
   pthread_mutex_unlock(&(l->_mutex));
+  // to tell any blocked gets to check again
   pthread_cond_broadcast(&(l->_cond));
 }
 
@@ -486,15 +496,18 @@ static void _put_destructive(Lvar<a>* l, a newState) {
   pthread_cond_broadcast(&(l->_cond));
 }
 
-// takes an lvar and a threshold set.
-// if lvar's state is at or above some element in some activation set in the 
-// threshold set, returns the entire activation set in question in T
+// ********************************** get *************************************
 
+// takes an lvar and a threshold set
+// if lvar's state is at or above some element in some activation set in the 
+// threshold set, returns the entire activation set in question
 template<a>
 static ActivationSet<a>* _thresholdReached(Lvar<a>* l, ThresholdSet<a> * t) {
+  // if l doesn't have a value yet threshold cannot be reached
   if (l->_value->_bot) {
     return NULL;
   }
+  // otherwise check every element in every act set until match is found
   for (int i = 0; i < t->_index; i++) {
     for (int j = 0; j < t->_a_sets[i]->_index; j++) {
       if (l-> _lattice->_leq(t->_a_sets[i]->_set[j], l->_value->_val)) {
@@ -502,34 +515,25 @@ static ActivationSet<a>* _thresholdReached(Lvar<a>* l, ThresholdSet<a> * t) {
       }
     }
   }
+
+  // no match found
   return NULL;
 }
 
-template<a>
-static a _frozenGet(Lvar<a>* l) {
-  pthread_mutex_lock(&(l->_mutex));
-  if (!l->_frozen) {
-    printf("Error: unless frozen, must specify threshold set when getting from an lvar\n");
-    exit(0);
-  }
-  if (!l->_value->_bot) {
-    a val = l->_value->_val;
-    pthread_mutex_unlock(&(l->_mutex));
-    return val; 
-  }
-  printf("Error: can't get bottom value\n");
-  exit(0);
-}
-  
-
+// takes an lvar and a threshold set
+// if lvar's state is at or above some element in some activation set in the 
+// threshold set, returns the entire activation set in question, otherwise 
+// blocks until a put updates the lvar and get can check again
 template<a>
 static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
   pthread_mutex_lock(&(l->_mutex));
 
+  // make sure that lvar and threshold set have same lattice
   #if defined(DEBUG) || defined(CHECK)
     if (!inst _eqLattice<a>(l->_lattice, t->_lattice)) {
       #ifdef DEBUG
-        printf("Error: can't get() when Lvar doesn't have same lattice as threshold set.\n");
+        printf("Error: can't get when Lvar doesn't have same");
+        printf(" lattice as threshold set.\n");
         exit(0);
       #endif
       pthread_mutex_unlock(&(l->_mutex));
@@ -537,27 +541,25 @@ static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
     }
   #endif
 
-  if (l->_frozen) {
-    if (!l->_value->_bot) {
-      a val = l->_value->_val;
-      pthread_mutex_unlock(&(l->_mutex));
-      return activationSet(l->_lattice, 1){val}; 
-    }
-    pthread_mutex_unlock(&(l->_mutex));
-    return NULL;
-  }
-    
+  // attempt to get matching activation set
   ActivationSet<a>* actReached = inst _thresholdReached<a>(l, t);
+
+  // if there was no match, keep checking until a put creates a match
   while (actReached == NULL) {
+    // if l is frozen, no more writes can occur, and the get will never
+    // complete for the given threshold set, so we return a singleton
+    // set with the LVar's actual value
     if (l->_frozen) {
       if (!l->_value->_bot) {
         a val = l->_value->_val;
         pthread_mutex_unlock(&(l->_mutex));
         return activationSet(l->_lattice, 1){val}; 
       }
+      // if the lvar doesn't have a value, we just return an empty act set
       pthread_mutex_unlock(&(l->_mutex));
-      return NULL;
+      return activationSet(l->_lattice, 0); 
     }
+    // if l isn't frozen, wait for potential put updates and try again
     pthread_cond_wait(&(l->_cond), &(l->_mutex));
     actReached = inst _thresholdReached<a>(l, t);
   }
@@ -565,28 +567,43 @@ static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
   return actReached;
 }
 
+//****************************** freeze ***************************************
+
 // takes an lvar and returns the exact value of the lvar as its result
 // updates the lvar to be "frozen", preventing any further updates
-
 template<a>
 static a _freeze(Lvar<a>* l) {
   pthread_mutex_lock(&(l->_mutex));
   l->_frozen = 1;
+  // if the lvar doesn't have a value, we have nothing to return
   if (l->_value->_bot) { 
-      printf("Error: can't freeze lvar with no value.\n");
-      exit(0);
+    printf("Error: can't freeze lvar with no value.\n");
+    exit(0);
   } 
+  // otherwise return the value of the lvar
   a result = l->_value->_val;
   pthread_mutex_unlock(&(l->_mutex));
   return result;
 }
 
+
+// to get from a frozen lvar
+// returns actual value rather than activation set
 template<a>
-static Lvar<a>* _makeLvar(int (*leqFunc)(a, a), Value<a>* (*lub)(a, a), 
-                          void (*displayMethod)(a), void (*freeMethod)(a)) {
-  Lattice<a>* lat = lattice(leqFunc, lub, displayMethod, freeMethod);
-  Lvar<a>* l = newLvar lat;
-  return l;
+static a _frozenGet(Lvar<a>* l) {
+  pthread_mutex_lock(&(l->_mutex));
+  if (!l->_frozen) {
+    printf("Error: unless frozen, must specify threshold ");
+    printf("set when getting from an lvar\n");
+    exit(0);
+  }
+  if (!l->_value->_bot) {
+    a val = l->_value->_val;
+    pthread_mutex_unlock(&(l->_mutex));
+    return val; 
+  }
+  printf("Error: can't get bottom value.\n");
+  exit(0);
 }
 
 #endif // LVARS_H_

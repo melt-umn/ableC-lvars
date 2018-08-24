@@ -4,6 +4,7 @@
 
 #### PPOP Artifacts:
 
++ true CHECK_DESTRUCT
 + fix up readmes in various folders
 + check valgrind with resizing act and thresh sets
 + do I need locks in threshold/activation sets? or just warn people?
