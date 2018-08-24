@@ -68,7 +68,7 @@ function latticeCheckHelper
           if compatibleTypes(t, outType, false, true)
           then []
           else [err(loc, 
-               "disp must be function of type void(" ++
+               "display must be function of type void(" ++
                showType(outType) ++ "), not " ++ 
                showType(loc_disp.typerep))]
       | pointerType(_, functionType(builtinType(nilQualifier(), voidType()),
@@ -76,11 +76,11 @@ function latticeCheckHelper
           if compatibleTypes(t, outType, false, true)
           then []
           else [err(loc, 
-               "disp must be function of type void(" ++
+               "display must be function of type void(" ++
                showType(outType) ++ "), not " ++ 
                showType(loc_disp.typerep))]
       | _ -> [err(loc, 
-             "disp must be function of type void(" ++
+             "display must be function of type void(" ++
              showType(outType) ++ "), not " ++ 
              showType(loc_disp.typerep))]
       end
@@ -269,8 +269,8 @@ top::Expr ::= set::Expr item::Expr
         addThresh(t, set, item, location=top.location)
     | _ ->
         errorExpr([err(top.location, 
-        "Can only add to threshold set or activation set, not <" ++
-         showType(set.typerep) ++">")], location=top.location)
+        "Can only add to ActivationSet<a>* or ThresholdSet<a>*, not " ++
+         showType(set.typerep))], location=top.location)
     end;
 
    forwards to mkErrorCheck(localErrors, fwrd);
@@ -284,7 +284,7 @@ abstract production freeSet
 top::Expr ::= set::Expr
 {
   propagate substituted;
-  top.pp = pp"freeSet(${set.pp})";
+  top.pp = pp"freeSet ${set.pp}";
 
   local localErrors::[Message] =
     checkLvarHeaderDef(top.location, top.env) ++ set.errors;
@@ -297,8 +297,8 @@ top::Expr ::= set::Expr
         freeThresh(t, set, location=top.location)
     | _ ->
         errorExpr([err(top.location, 
-        "Can't use freeSet() with <" ++ showType(set.typerep) ++ ">")],
-        location=top.location)
+        "Can only use freeSet with ActivationSet<a>* or ThresholdSet<a>*, not " 
+        ++ showType(set.typerep))], location=top.location)
     end;
 
   forwards to mkErrorCheck(localErrors, fwrd);
@@ -308,7 +308,7 @@ abstract production freeLvar
 top::Expr ::= lvar::Expr
 {
   propagate substituted;
-  top.pp = pp"freeLvar(${lvar.pp})";
+  top.pp = pp"freeLvar ${lvar.pp}";
 
   local localErrors::[Message] =
     checkLvarHeaderDef(top.location, top.env) ++ lvar.errors;
@@ -321,7 +321,7 @@ top::Expr ::= lvar::Expr
         }
     | _ ->
         errorExpr([err(top.location, 
-        "Can't use freeLvar() with <" ++ showType(lvar.typerep) ++ ">")],
+        "Can only use freeLvar with Lvar<a>*, not " ++ showType(lvar.typerep))],
         location=top.location)
     end;
 
@@ -358,7 +358,7 @@ abstract production showLvars
 top::Expr ::= e::Expr
 {
   propagate substituted;
-  top.pp = pp"display(${e.pp})";
+  top.pp = pp"display ${e.pp}";
   
   local localErrors::[Message] =
     checkLvarHeaderDef(top.location, top.env) ++ e.errors;
@@ -373,8 +373,8 @@ top::Expr ::= e::Expr
         showLvar(t, e, location=top.location)
     | _ ->
         errorExpr([err(top.location, 
-      "Can't use display() with <" ++
-       showType(e.typerep) ++">")], location=top.location)
+      "Can only use display with ActivationSet<a>*, ThresholdSet<a>*, or " ++
+       "Lvar<a>*, not " ++ showType(e.typerep))], location=top.location)
     end;
       
   forwards to mkErrorCheck(localErrors, fwrd);
@@ -386,7 +386,7 @@ abstract production showLvar
 top::Expr ::= baseType::Type l::Expr
 {
   propagate substituted;
-  top.pp = pp"display(${l.pp})";
+  top.pp = pp"display ${l.pp}";
 
   local localErrors::[Message] =
     checkLvarHeaderDef(top.location, top.env) ++ baseType.errors ++ l.errors;
@@ -406,7 +406,7 @@ abstract production getCall
 top::Expr ::= lvar::Expr threshold::Expr
 {
   propagate substituted;
-  top.pp = pp"get(${lvar.pp}, ${threshold.pp})";
+  top.pp = pp"get ${lvar.pp} with ${threshold.pp}";
 
   local localErrors::[Message] =
     checkLvarHeaderDef(top.location, top.env) ++ lvar.errors ++ threshold.errors;
@@ -419,13 +419,15 @@ top::Expr ::= lvar::Expr threshold::Expr
             getCallHelper(l_t, lvar, t_t, threshold, location=top.location)
         | _ -> 
            errorExpr([err(top.location, 
-           "get() expected second argument of type ThresholdSet*, got type "
-           ++ showType(threshold.typerep))], location=top.location)
+           "get expected second argument of type ThresholdSet<a>*, not "
+           ++ showType(threshold.typerep) ++ " (expression must be of the " ++
+           "form 'get Lvar<a>* with ThresholdSet<a>*')")], location=top.location)
         end
     | _ ->
        errorExpr([err(top.location, 
-       "get() expected first argument of type Lvar*, got type "
-        ++ showType(lvar.typerep))], location=top.location)
+           "get expected first argument of type Lvar<a>*, not "
+           ++ showType(lvar.typerep) ++ " (expression must be of the " ++
+           "form 'get Lvar<a>* with ThresholdSet<a>*')")], location=top.location)
     end;
 
   forwards to 
@@ -449,8 +451,9 @@ top::Expr ::= lvar::Expr
         getCallHelperNoThresh(l_t, lvar, location=top.location)
     | _ ->
        errorExpr([err(top.location, 
-       "get expected first argument of type Lvar*, got type "
-        ++ showType(lvar.typerep))], location=top.location)
+           "get expected first argument of type Lvar<a>*, not "
+           ++ showType(lvar.typerep) ++ " (expression must be of the " ++
+           "form 'get Lvar<a>*')")], location=top.location)
     end;
 
   forwards to 
@@ -466,7 +469,7 @@ abstract production getCallHelper
 top::Expr ::=  lvarBaseType::Type lvar::Expr threshBaseType::Type threshold::Expr 
 {
   propagate substituted;
-  top.pp = pp"get(${lvar.pp}, ${threshold.pp})";
+  top.pp = pp"get ${lvar.pp} with ${threshold.pp}";
 
   local childErrors::[Message] = lvarBaseType.errors ++ lvar.errors ++
                                  threshBaseType.errors ++ threshold.errors;
@@ -476,9 +479,9 @@ top::Expr ::=  lvarBaseType::Type lvar::Expr threshBaseType::Type threshold::Exp
     if compatibleTypes(lvarBaseType, threshBaseType, false, true)
     then []
     else [err(top.location, 
-          "Threshold set of type " ++ showType(lvarBaseType) ++
-          " expected, but got threshold set of type "
-          ++ showType(threshBaseType))];
+          "get expected ThresholdSet<" ++ showType(lvarBaseType) ++
+          ">*, but got ThresholdSet<"
+          ++ showType(threshBaseType) ++ ">*" )];
 
   forwards to 
     mkErrorCheck(localErrors ++ childErrors,
@@ -494,7 +497,7 @@ abstract production getCallHelperNoThresh
 top::Expr ::=  lvarBaseType::Type lvar::Expr
 {
   propagate substituted;
-  top.pp = pp"get(${lvar.pp})";
+  top.pp = pp"get ${lvar.pp}";
 
   local childErrors::[Message] = lvarBaseType.errors ++ lvar.errors;
 
@@ -516,7 +519,7 @@ abstract production putCall
 top::Expr ::= lvar::Expr value::Expr
 {
   propagate substituted;
-  top.pp = pp"put(${lvar.pp}, ${value.pp})";
+  top.pp = pp"put (${value.pp}) in ${lvar.pp}";
 
   local localErrors::[Message] = 
     checkLvarHeaderDef(top.location, top.env) ++ lvar.errors ++ value.errors;
@@ -526,8 +529,9 @@ top::Expr ::= lvar::Expr value::Expr
       pointerType(_, lvarType(_, l_t)) ->
         putCallHelper(l_t, lvar, value, location=top.location)
     | _ -> errorExpr([err(top.location, 
-          "put() expected first argument of type Lvar*, got type <"
-          ++ showType(lvar.typerep) ++ ">")], location=top.location)
+          "put expected second argument of type Lvar<a>*, got type "
+          ++ showType(lvar.typerep) ++ "(expression must be of the form " ++
+          "'put (a) in Lvar<a>*')")], location=top.location)
     end;
 
   forwards to 
@@ -541,7 +545,7 @@ abstract production putCallHelper
 top::Expr ::= lvarBaseType::Type lvar::Expr value::Expr
 {
   propagate substituted;
-  top.pp = pp"put(${lvar.pp}, ${value.pp})";
+  top.pp = pp"put (${value.pp}) in ${lvar.pp}";
 
   local childErrors::[Message] = lvarBaseType.errors ++ lvar.errors ++
                                 value.errors;
@@ -551,9 +555,9 @@ top::Expr ::= lvarBaseType::Type lvar::Expr value::Expr
     if compatibleTypes(lvarBaseType, value.typerep, false, true)
     then []
     else [err(top.location, 
-          "Can't put value of type <" ++
-          showType(value.typerep) ++ "> in an Lvar of type <"
-          ++ showType(lvarBaseType) ++ ">")];
+          "can't put value of type " ++
+          showType(value.typerep) ++ " in Lvar<"
+          ++ showType(lvarBaseType) ++ ">*")];
 
   forwards to 
     mkErrorCheck(localErrors ++ childErrors,
@@ -568,7 +572,7 @@ abstract production destrPutCall
 top::Expr ::= lvar::Expr value::Expr
 {
   propagate substituted;
-  top.pp = pp"putD(${lvar.pp}, ${value.pp})";
+  top.pp = pp"putD (${value.pp}) in ${lvar.pp}";
 
   local localErrors::[Message] = 
     checkLvarHeaderDef(top.location, top.env) ++ lvar.errors ++ value.errors;
@@ -578,8 +582,9 @@ top::Expr ::= lvar::Expr value::Expr
       pointerType(_, lvarType(_, l_t)) ->
         putDCallHelper(l_t, lvar, value, location=top.location)
     | _ -> errorExpr([err(top.location, 
-          "putD() expected first argument of type Lvar*, got type <"
-          ++ showType(lvar.typerep) ++ ">")], location=top.location)
+          "putD expected second argument of type Lvar<a>*, got type "
+          ++ showType(lvar.typerep) ++ "(expression must be of the form " ++
+          "'putD (a) in Lvar<a>*')")], location=top.location)
     end;
 
   forwards to 
@@ -593,7 +598,7 @@ abstract production putDCallHelper
 top::Expr ::= lvarBaseType::Type lvar::Expr value::Expr
 {
   propagate substituted;
-  top.pp = pp"putD(${lvar.pp}, ${value.pp})";
+  top.pp = pp"putD (${value.pp}) in ${lvar.pp}";
 
   local childErrors::[Message] = lvarBaseType.errors ++ lvar.errors ++
                                 value.errors;
@@ -603,9 +608,9 @@ top::Expr ::= lvarBaseType::Type lvar::Expr value::Expr
     if compatibleTypes(lvarBaseType, value.typerep, false, true)
     then []
     else [err(top.location, 
-          "Can't put value of type <" ++
-          showType(value.typerep) ++ "> in an Lvar of type <"
-          ++ showType(lvarBaseType) ++ ">")];
+          "can't putD value of type " ++
+          showType(value.typerep) ++ " in Lvar<"
+          ++ showType(lvarBaseType) ++ ">*")];
 
   forwards to 
     mkErrorCheck(localErrors ++ childErrors,
@@ -622,7 +627,7 @@ abstract production newCall
 top::Expr ::= l::Expr
 {
   propagate substituted;
-  top.pp = pp"newLvar(${l.pp})";
+  top.pp = pp"newLvar ${l.pp}";
 
   local localErrors::[Message] = l.errors ++
     checkLvarHeaderDef(top.location, top.env);
@@ -634,8 +639,8 @@ top::Expr ::= l::Expr
           inst _new<$directTypeExpr{l_t}>($Expr{l})
         }
     | _ -> errorExpr([err(top.location,
-          "newLvar() expected argument of type Lattice*, got type <"
-          ++ showType(l.typerep) ++ ">")], location=top.location)
+          "newLvar expected argument of type Lattice<a>*, got type "
+          ++ showType(l.typerep))], location=top.location)
     end;
 
   forwards to 
@@ -659,7 +664,7 @@ abstract production freeze
 top::Expr ::= lvar::Expr
 {
   propagate substituted;
-  top.pp = pp"freeze(${lvar.pp})";
+  top.pp = pp"freeze ${lvar.pp}";
 
   local localErrors::[Message] = 
     checkLvarHeaderDef(top.location, top.env) ++ lvar.errors;
@@ -671,8 +676,8 @@ top::Expr ::= lvar::Expr
           inst _freeze<$directTypeExpr{l_t}>($Expr{lvar})
         }
     | _ -> errorExpr([err(top.location, 
-          "freeze() expected first argument of type Lvar*, got type <"
-          ++ showType(lvar.typerep) ++ ">")], location=top.location)
+          "freeze expected argument of type Lvar<a>*, got type "
+          ++ showType(lvar.typerep))], location=top.location)
     end;
 
   forwards to 
@@ -685,7 +690,7 @@ abstract production getLattice
 top::Expr ::= lvar::Expr
 {
   propagate substituted;
-  top.pp = pp"getLattice(${lvar.pp})";
+  top.pp = pp"getLattice ${lvar.pp}";
 
   local localErrors::[Message] =
     checkLvarHeaderDef(top.location, top.env) ++ lvar.errors;
@@ -698,7 +703,8 @@ top::Expr ::= lvar::Expr
         }
     | _ ->
         errorExpr([err(top.location, 
-        "Can't use getLattice() with <" ++ showType(lvar.typerep) ++ ">")],
+        "getLattice expected argument of type Lvar<a>*, got type "
+        ++ showType(lvar.typerep))],
         location=top.location)
     end;
 
@@ -709,7 +715,7 @@ abstract production makeValue
 top::Expr ::= val::Expr
 {
   propagate substituted;
-  top.pp = pp"value(${val.pp})";
+  top.pp = pp"value ${val.pp}";
 
   forwards to 
     ableC_Expr{
@@ -721,7 +727,7 @@ abstract production makeTop
 top::Expr ::= typ::TypeName
 {
   propagate substituted;
-  top.pp = pp"top<${typ.pp}>";
+  top.pp = pp"Top<${typ.pp}>";
 
   forwards to 
     ableC_Expr{
