@@ -62,11 +62,11 @@ void display_int_set(IntSet* set) {
 void put_int_set(Lvar<IntSet*>* l, int val) {
   IntSet* new = new_intset();
   intset_insert(new, val);
-  putD new in l; 
+  put new in l; 
 }
 
 Lattice<IntSet*>* lattice_int_set() {
-  return lattice(leq_int_set, lub_int_set, display_int_set);
+  return destr_lattice(leq_int_set, lub_int_set, display_int_set);
 }
 
 #endif

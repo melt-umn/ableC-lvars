@@ -10,12 +10,9 @@
     + include
     + tests
     + ableC-lvars
-        + Make list of rules to follow for programmers (return copies in put vs must handle freeing in putD rather than providing a free function, putD must mutate first arg, etc.)
+        + Make list of rules to follow for programmers (return copies in put vs must handle freeing in lubD rather than providing a free function, lubD must mutate first arg, etc.)
         + Update with new features
-+ Make destructive part of the lattice instead
-    + flag in lattice
-    + incompat can be avoided without having CHECK_DESTRUCT
-    + automatically uses correct put instead of having user type putD
++ recheck valgrind for destructive
 + Consider making providing display function optional (like with free)
 + Work on speeding up thread waiting/locking process
 + Consider adding other getter methods
@@ -27,6 +24,7 @@
 + Test timing
 + Fix up abstract/concrete syntax
 + Check that error handling is done only once (with helper productions, etc.)
++ Should put be a statement instead of an expression?
 
 ### Things to think about:
 

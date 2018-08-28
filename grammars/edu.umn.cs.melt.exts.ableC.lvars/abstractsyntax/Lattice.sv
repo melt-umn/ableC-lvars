@@ -1,7 +1,8 @@
 grammar edu:umn:cs:melt:exts:ableC:lvars:abstractsyntax;
 
 function latticeCheckHelper
-[Message] ::= loc::Location outType::Type leq::Expr disp::Expr free::Expr e::Decorated Env
+[Message] ::= loc::Location outType::Type leq::Expr disp::Expr free::Expr 
+              e::Decorated Env
 {
 
   local loc_leq::Expr = leq;
@@ -91,7 +92,7 @@ function latticeCheckHelper
              "free must be function of type void(" ++
              showType(outType) ++ "), not " ++ 
              showType(loc_free.typerep))]
-      end;
+      end; 
 }
 
 function getTypeFromLub
@@ -120,7 +121,7 @@ Type ::= lub::Expr e::Decorated Env
 }
 
 abstract production newLattice
-top::Expr ::= leq::Expr lub::Expr disp::Expr free::Expr
+top::Expr ::= leq::Expr lub::Expr disp::Expr free::Expr destr::Expr
 {
   propagate substituted;
   top.pp =
@@ -182,36 +183,36 @@ top::Expr ::= leq::Expr lub::Expr disp::Expr free::Expr
       ableC_Expr{
        inst _newLattice<$directTypeExpr{getTypeFromLub(lub, 
          openScopeEnv(top.env))}>(    
-       $Expr{leq}, $Expr{lub}, $Expr{disp}, $Expr{free})
+       $Expr{leq}, $Expr{lub}, $Expr{disp}, $Expr{free}, $Expr{destr})
       }
     );
 }
 
 abstract production newLatticeNoFree
-top::Expr ::= leq::Expr lub::Expr disp::Expr
+top::Expr ::= leq::Expr lub::Expr disp::Expr destr::Expr
 {
   propagate substituted;
   top.pp = pp"lattice(${leq.pp}, ${lub.pp}, ${disp.pp})";
 
   forwards to newLattice(leq, lub, disp, 
     ableC_Expr{inst _defaultFree<$directTypeExpr
-      {getTypeFromLub(lub, openScopeEnv(top.env))}>},
+      {getTypeFromLub(lub, openScopeEnv(top.env))}>}, destr, 
     location=top.location);
 }
 
 abstract production makeLvar
-top::Expr ::= leq::Expr lub::Expr disp::Expr free::Expr
+top::Expr ::= leq::Expr lub::Expr disp::Expr free::Expr destr::Expr
 {
   propagate substituted;
   top.pp =
     pp"makeLvar(${leq.pp}, ${lub.pp}, ${disp.pp}, ${free.pp})";
 
-  forwards to newCall(newLattice(leq, lub, disp, free,
+  forwards to newCall(newLattice(leq, lub, disp, free, destr, 
      location=top.location), location=top.location);
 }
 
 abstract production makeLvarDefaults
-top::Expr ::= leq::Expr lub::Expr
+top::Expr ::= leq::Expr lub::Expr destr::Expr
 {
   propagate substituted;
   top.pp =
@@ -221,6 +222,6 @@ top::Expr ::= leq::Expr lub::Expr
 
   forwards to newCall(newLattice(leq, lub, 
      ableC_Expr{inst _defaultDisplay<$directTypeExpr{baseType}>}, 
-     ableC_Expr{inst _defaultFree<$directTypeExpr{baseType}>},
+     ableC_Expr{inst _defaultFree<$directTypeExpr{baseType}>}, destr, 
      location=top.location), location=top.location);
 }

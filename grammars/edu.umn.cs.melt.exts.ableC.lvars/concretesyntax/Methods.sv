@@ -2,7 +2,6 @@ grammar edu:umn:cs:melt:exts:ableC:lvars:concretesyntax;
 
 marking terminal New_t 'newLvar' lexer classes {Ckeyword};
 marking terminal Put_t 'put' lexer classes {Ckeyword};
-marking terminal DestrPut_t 'putD' lexer classes {Ckeyword};
 marking terminal Get_t 'get' lexer classes {Ckeyword};
 marking terminal Add_t 'add' lexer classes {Ckeyword};
 marking terminal FreeSet_t 'freeSet' lexer classes {Ckeyword};
@@ -34,15 +33,6 @@ concrete productions top::UnaryOp_c
 | 'put' '(' value::AssignExpr_c ')' 'in'
   {
     top.ast = putCall(top.expr, value.ast, location=top.location);
-  }
-| 'putD' id::Identifier_t 'in'
-  {
-    top.ast = destrPutCall(top.expr, declRefExpr(fromId(id), location=top.location),
-              location=top.location);
-  }
-| 'putD' '(' value::AssignExpr_c ')' 'in'
-  {
-    top.ast = destrPutCall(top.expr, value.ast, location=top.location);
   }
 | 'get' id::Identifier_t 'with'
   {

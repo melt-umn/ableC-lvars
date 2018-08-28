@@ -13,9 +13,6 @@
 // bad occur (checks same things as CHECK, but doesn't try to 
 // silently continue)
 
-// Use #define CHECK_DESTRUCT to skip the check for threshold set compatibility
-// (needed if want to use CHECK or DEBUG but can't take lub without mutating)
-
 // If both CHECK and DEBUG are defined, will go with the stronger DEBUG
 
 int _lvarCheckValue = 1; // to ensure that the header is included
@@ -71,13 +68,14 @@ template<a> struct _Lattice {
   Value<a>* (* _lub)(a, a);
   void (*_display)(a);
   void (*_free)(a);
+  int _destructive;
 };
 
 // to create a new lattice from fields specified by the user
 template<a>
 static Lattice<a>* _newLattice(int (*leqFunc)(a, a),
                    Value<a>* (*lub)(a, a), void (*displayMethod)(a),
-                   void (*freeMethod)(a)) {
+                   void (*freeMethod)(a), int destr) {
 
   #if defined(CHECK) || defined(DEBUG)
     if (leqFunc == NULL || lub == NULL || displayMethod == NULL ||
@@ -92,6 +90,7 @@ static Lattice<a>* _newLattice(int (*leqFunc)(a, a),
   l-> _lub = lub;
   l->_display = displayMethod;
   l->_free = freeMethod;
+  l->_destructive = destr;
   return l;
 }
 
@@ -101,7 +100,8 @@ static Lattice<a>* _newLattice(int (*leqFunc)(a, a),
 template<a>
 static int _eqLattice(Lattice<a>* l1, Lattice<a>* l2) {
   return (l1->_leq == l2->_leq) && (l1->_lub == l2->_lub) &&
-         (l1->_display == l2->_display) && (l1->_free == l2->_free);
+         (l1->_display == l2->_display) && (l1->_free == l2->_free)
+         && (l1->_destructive == l2->_destructive);
 }
 
 // if no free method is provided, defaults to doing nothing
@@ -206,15 +206,6 @@ static Lattice<a>* _getLattice(Lvar<a>* l) {
   #endif
 
   return l->_lattice;
-}
-
-// to make a lattice and an lvar from that lattice
-template<a>
-static Lvar<a>* _makeLvar(int (*leqFunc)(a, a), Value<a>* (*lub)(a, a), 
-                          void (*displayMethod)(a), void (*freeMethod)(a)) {
-  Lattice<a>* lat = lattice(leqFunc, lub, displayMethod, freeMethod);
-  Lvar<a>* l = newLvar lat;
-  return l;
 }
 
 //*************************** Activation Set **********************************
@@ -423,8 +414,7 @@ static int _resizeThresholdSet(ThresholdSet<a>* t, int newSize) {
 // to add an activation set to a threshold set, resizing if necessary
 // if the activation set is compatible with an activation set that is already
 // in the threshold set, errors out in DEBUG mode and skips adding the new
-// activation set in CHECK mode (doesn't perform this check if CHECK_DESTRUCT
-// mode is on)
+// activation set in CHECK mode
 template<a>
 static ThresholdSet<a>* _addThreshold(ThresholdSet<a>* t, 
                                        ActivationSet<a>* act) {
@@ -448,16 +438,19 @@ static ThresholdSet<a>* _addThreshold(ThresholdSet<a>* t,
   #endif
 
   // make sure new addition is incompatible with existing members
-  #if (defined(CHECK) || defined(DEBUG)) && !defined(CHECK_DESTRUCT)
-    for (int i = 0; i < t->_index; i++) {
-      if (!inst _incompat<a>(t ->_lattice, t->_a_sets[i], act)) {
-        return t;
+  #if (defined(CHECK) || defined(DEBUG))
+    // can only take lub in passing if non-destructive
+    if (!t->_lattice->_destructive) {
+      for (int i = 0; i < t->_index; i++) {
+        if (!inst _incompat<a>(t ->_lattice, t->_a_sets[i], act)) {
+          return t;
+        }
       }
     }
   #endif
 
   if (t->_index >= t->_size) {
-     inst _resizeThresholdSet<a>(t, 2 * t->_size + 1);
+    inst _resizeThresholdSet<a>(t, 2 * t->_size + 1);
   }
 
   t->_a_sets[t->_index] = act;
@@ -571,63 +564,20 @@ static void _put(Lvar<a>* l, a newState, int ptr) {
       exit(0);
     }
 
-    // otherwise, we can free (since copies are returned in lub)
-    l->_lattice->_free(newState); 
-    l->_lattice->_free(l->_value->_val);  
-    free(l->_value);
-    l->_value = newValue;
+    if (!l->_lattice->_destructive) {
+      // otherwise, we can free (since copies are returned in lub)
+      l->_lattice->_free(newState); 
+      l->_lattice->_free(l->_value->_val);  
+      free(l->_value);
+      l->_value = newValue;
+    }
+    else {
+      free(newValue);
+    }
+
   }
   pthread_mutex_unlock(&(l->_mutex));
   // to tell any blocked gets to check again
-  pthread_cond_broadcast(&(l->_cond));
-}
-
-// destructive version of put (same as above, but doesn't free things upon put;
-// lub is assumed to mutate its first argument)
-template<a>
-static void _put_destructive(Lvar<a>* l, a newState, int ptr) {
-
-  #if defined(CHECK) || defined(DEBUG)
-    if (l == NULL) {
-      printf("Error: NULL argument supplied to put\n");
-      exit(0);
-    }
-    if (ptr) {
-      if (newState == NULL) {
-        printf("Error: NULL argument supplied to put\n");
-        exit(0);
-      }
-    }
-  #endif
-
-  pthread_mutex_lock(&(l->_mutex));
-
-  if (l->_frozen) {
-    printf("Error: can't write to a frozen lvar.\n");
-    exit(0);
-  }
-
-  if (l->_value->_bot) {
-    free(l->_value);
-    l->_value = value(newState);
-  } 
-
-  else {
-    a oldState = l->_value->_val;
-    Value<a>* newValue = l-> _lattice-> _lub(oldState, newState);
-
-    if (newValue->_top){
-      printf("Error: invalid put of ");
-      l->_lattice->_display(newState);
-      printf(" into lvar of value ");
-      l->_lattice->_display(oldState);
-      printf("\n");
-      exit(0);
-    } 
-
-    free(newValue);
-  }
-  pthread_mutex_unlock(&(l->_mutex));
   pthread_cond_broadcast(&(l->_cond));
 }
 
