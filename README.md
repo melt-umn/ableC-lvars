@@ -12,7 +12,6 @@
     + ableC-lvars
         + Make list of rules to follow for programmers (return copies in put vs must handle freeing in lubD rather than providing a free function, lubD must mutate first arg, etc.)
         + Update with new features
-+ recheck valgrind for destructive
 + Consider making providing display function optional (like with free)
 + Work on speeding up thread waiting/locking process
 + Consider adding other getter methods

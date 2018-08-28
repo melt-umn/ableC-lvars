@@ -144,10 +144,9 @@ top::Expr ::= lvar::Expr
     mkErrorCheck(localErrors, fwrd);
 }
 
-// ********************** put productions *************************************
+// ********************************** put *************************************
 
-// to check for errors in a call to put(), and forward onward as appropriate
-
+// checks for errors in a call to put, and forwards to helper if correct
 abstract production putCall
 top::Expr ::= lvar::Expr value::Expr
 {
@@ -174,9 +173,8 @@ top::Expr ::= lvar::Expr value::Expr
     mkErrorCheck(localErrors, fwrd);
 }
 
-// to put a value into an lvar
-// lvarBaseType helps determine the base type of the lvar
-
+// checks for errors in call to put, and forwards to call to _put<a> if correct
+// lvarBaseType is the base type of the lvar
 abstract production putCallHelper
 top::Expr ::= lvarBaseType::Type lvar::Expr value::Expr
 {
@@ -187,7 +185,6 @@ top::Expr ::= lvarBaseType::Type lvar::Expr value::Expr
                                 value.errors;
 
   local localErrors::[Message] =
-    checkLvarHeaderDef(top.location, top.env) ++
     if compatibleTypes(lvarBaseType, value.typerep, false, true)
     then []
     else [err(top.location, 
@@ -200,18 +197,21 @@ top::Expr ::= lvarBaseType::Type lvar::Expr value::Expr
       pointerType(_, _) -> 
         mkErrorCheck(localErrors ++ childErrors,
         ableC_Expr{
-          inst _put<$directTypeExpr{lvarBaseType}>($Expr{lvar}, $Expr{value}, 1)
+          inst _put<$directTypeExpr{lvarBaseType}>($Expr{lvar}, 
+            $Expr{value}, 1) // last arg indicates whether pointer base or not
         })
     | _ -> 
         mkErrorCheck(localErrors ++ childErrors,
         ableC_Expr{
-          inst _put<$directTypeExpr{lvarBaseType}>($Expr{lvar}, $Expr{value}, 0)
+          inst _put<$directTypeExpr{lvarBaseType}>($Expr{lvar}, 
+            $Expr{value}, 0)
         }) 
     end;
 }
 
-// to determine if the necessary header file is included
+// *************************** other ******************************************
 
+// determines if the necessary header file is included
 function checkLvarHeaderDef
 [Message] ::= loc::Location env::Decorated Env
 {
@@ -220,7 +220,6 @@ function checkLvarHeaderDef
     then []
     else [err(loc, "Missing include of lvars.xh")];
 }
-
 
 global builtin::Location = builtinLoc("lvars");
 
