@@ -1,10 +1,10 @@
 # Abstract Syntax
 
-+ `AbstractSyntax.sv` includes productions for display various LVars constructs, along with productions related to `put` and `get`
-+ `Activation.sv` includes productions to create and add to activation sets
-+ `Lattice.sv` includes productions to create lattices (along with the productions associated with makeLvar)
-+ `Lvar.sv` includes productions to free, freeze, create, and get lattices from lattice variables
-+ `Sets.sv` includes productions to add to and free activation and threshold sets (forwarding to productions in `Activation.sv` or `Threshold.sv` as appropriate)
-+ `Threshold.sv` includes productions to create, add to, and free threshold sets
-+ `Type.sv` includes productions to set-up the types ActivationSet, ThresholdSet, Lvar, Lattice, and Value
-+ `Value.sv` includes productions to create and test for Values
++ `AbstractSyntax.sv`: Handles constructs `display`, `get x with t`, `get x`, and `put value in x`
++ `Activation.sv`: Handles constructs `activationSet` and `add` (for activation sets)
++ `Lattice.sv`: Handles constructs `lattice`, `destr_lattice`, `makeLvar`, and `destr_makeLvar`
++ `Lvar.sv`: Handles constructs `freeLvar`, `newLvar`, `freeze`, and `getLattice`
++ `Sets.sv`: Handles constructs `freeSet` and `add` (forwarding to productions in `Activation.sv` or `Threshold.sv` as appropriate)
++ `Threshold.sv`: Handles constructs `thresholdSet`, `freeActSets`, and `add` (for threshold sets)
++ `Type.sv`: Handles constructs `ActivationSet<a>`, `ThresholdSet<a>`, `Lvar<a>`, `Lattice<a>`, and `Value<a>`
++ `Value.sv`: Handles constructs `value`, `Top<a>`, and `isTop`

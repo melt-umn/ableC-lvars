@@ -5,7 +5,6 @@
 ### Fixes:
 
 + Fix up READMEs
-    + concretesyntax
     + include
     + tests
     + ableC-lvars
