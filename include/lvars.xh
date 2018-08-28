@@ -367,7 +367,7 @@ static ThresholdSet<a>* _newThresholdSet(Lattice<a> * l, int size) {
 
 // to check whether two activation sets are compatible
 // in DEBUG mode, program will error out if compatible
-// in CHECK mode, will just carry on 
+// in CHECK mode, will just carry on
 template<a>
 static int _incompat(Lattice<a> * l, ActivationSet<a> *Q, 
                                      ActivationSet<a> *R) {
@@ -420,7 +420,11 @@ static ThresholdSet<a>* _addThreshold(ThresholdSet<a>* t,
                                        ActivationSet<a>* act) {
   // check that threshold and activation have same lattice
   #if defined(DEBUG) || defined(CHECK) 
-    if (t == NULL || act == NULL) {
+    if (t == NULL) {
+      printf("Error: trying to add to NULL threshold set\n");
+      exit(0);
+    }
+    if (act == NULL) {
       printf("Error: trying to add NULL to threshold set\n");
       exit(0);
     }
