@@ -8,8 +8,11 @@ top::Expr ::= set::Expr item::Expr
   propagate substituted;
   top.pp = pp"add(${set.pp}, ${item.pp})";
 
+  local headerError::[Message] = checkLvarHeaderDef(top.location, top.env);
   local localErrors::[Message] =
-    checkLvarHeaderDef(top.location, top.env) ++ set.errors ++ item.errors;
+    if null(headerError)
+    then set.errors ++ item.errors
+    else headerError;
 
   local fwrd::Expr =
     case set.typerep of
@@ -36,8 +39,11 @@ top::Expr ::= set::Expr
   propagate substituted;
   top.pp = pp"freeSet ${set.pp}";
 
+  local headerError::[Message] = checkLvarHeaderDef(top.location, top.env);
   local localErrors::[Message] =
-    checkLvarHeaderDef(top.location, top.env) ++ set.errors;
+    if null(headerError)
+    then set.errors
+    else headerError;
 
   local fwrd::Expr =
     case set.typerep of

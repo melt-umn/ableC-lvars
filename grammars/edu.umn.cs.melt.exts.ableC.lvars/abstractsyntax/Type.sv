@@ -9,9 +9,13 @@ top::BaseTypeExpr ::= q::Qualifiers sub::TypeName
   top.pp = pp"${terminate(space(), q.pps)}ActivationSet<${sub.pp}>";
   
   sub.env = globalEnv(top.env);
-  
-  local localErrors::[Message] = sub.errors;
-  
+
+  local headerError::[Message] = checkLvarHeaderDef(builtin, top.env);
+  local localErrors::[Message] =
+    if null(headerError)
+    then sub.errors
+    else headerError;
+
   forwards to
     if !null(localErrors)
     then errorTypeExpr(localErrors)
@@ -52,8 +56,12 @@ top::BaseTypeExpr ::= q::Qualifiers sub::TypeName
   top.pp = pp"${terminate(space(), q.pps)}ThresholdSet<${sub.pp}>";
   
   sub.env = globalEnv(top.env);
-  
-  local localErrors::[Message] = sub.errors;
+
+  local headerError::[Message] = checkLvarHeaderDef(builtin, top.env);
+  local localErrors::[Message] =
+    if null(headerError)
+    then sub.errors
+    else headerError;
   
   forwards to
     if !null(localErrors)
@@ -96,7 +104,11 @@ top::BaseTypeExpr ::= q::Qualifiers sub::TypeName
   
   sub.env = globalEnv(top.env);
   
-  local localErrors::[Message] = sub.errors;
+  local headerError::[Message] = checkLvarHeaderDef(builtin, top.env);
+  local localErrors::[Message] =
+    if null(headerError)
+    then sub.errors
+    else headerError;
   
   forwards to
     if !null(localErrors)
@@ -138,8 +150,12 @@ top::BaseTypeExpr ::= q::Qualifiers sub::TypeName
   top.pp = pp"${terminate(space(), q.pps)}Lattice<${sub.pp}>";
   
   sub.env = globalEnv(top.env);
-  
-  local localErrors::[Message] = sub.errors;
+
+  local headerError::[Message] = checkLvarHeaderDef(builtin, top.env);
+  local localErrors::[Message] =
+    if null(headerError)
+    then sub.errors
+    else headerError;
   
   forwards to
     if !null(localErrors)
@@ -181,8 +197,12 @@ top::BaseTypeExpr ::= q::Qualifiers sub::TypeName
   top.pp = pp"${terminate(space(), q.pps)}Value<${sub.pp}>";
   
   sub.env = globalEnv(top.env);
-  
-  local localErrors::[Message] = sub.errors;
+
+  local headerError::[Message] = checkLvarHeaderDef(builtin, top.env);
+  local localErrors::[Message] =
+    if null(headerError)
+    then sub.errors
+    else headerError;
   
   forwards to
     if !null(localErrors)

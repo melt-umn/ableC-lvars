@@ -6,8 +6,11 @@ top::Expr ::= lvar::Expr
   propagate substituted;
   top.pp = pp"freeLvar ${lvar.pp}";
 
+  local headerError::[Message] = checkLvarHeaderDef(top.location, top.env);
   local localErrors::[Message] =
-    checkLvarHeaderDef(top.location, top.env) ++ lvar.errors;
+    if null(headerError)
+    then lvar.errors
+    else headerError;
 
   local fwrd::Expr =
     case lvar.typerep of
@@ -32,8 +35,11 @@ top::Expr ::= baseType::Type l::Expr
   propagate substituted;
   top.pp = pp"display ${l.pp}";
 
+  local headerError::[Message] = checkLvarHeaderDef(top.location, top.env);
   local localErrors::[Message] =
-    checkLvarHeaderDef(top.location, top.env) ++ baseType.errors ++ l.errors;
+    if null(headerError)
+    then baseType.errors ++ l.errors
+    else headerError;
 
   forwards to
     mkErrorCheck(localErrors,
@@ -51,8 +57,11 @@ top::Expr ::= l::Expr
   propagate substituted;
   top.pp = pp"newLvar ${l.pp}";
 
-  local localErrors::[Message] = l.errors ++
-    checkLvarHeaderDef(top.location, top.env);
+  local headerError::[Message] = checkLvarHeaderDef(top.location, top.env);
+  local localErrors::[Message] =
+    if null(headerError)
+    then l.errors
+    else headerError;
 
   local fwrd::Expr =
     case l.typerep of
@@ -75,8 +84,11 @@ top::Expr ::= lvar::Expr
   propagate substituted;
   top.pp = pp"freeze ${lvar.pp}";
 
-  local localErrors::[Message] = 
-    checkLvarHeaderDef(top.location, top.env) ++ lvar.errors;
+  local headerError::[Message] = checkLvarHeaderDef(top.location, top.env);
+  local localErrors::[Message] =
+    if null(headerError)
+    then lvar.errors
+    else headerError;
 
   local fwrd::Expr =
     case lvar.typerep of
@@ -99,8 +111,11 @@ top::Expr ::= lvar::Expr
   propagate substituted;
   top.pp = pp"getLattice ${lvar.pp}";
 
+  local headerError::[Message] = checkLvarHeaderDef(top.location, top.env);
   local localErrors::[Message] =
-    checkLvarHeaderDef(top.location, top.env) ++ lvar.errors;
+    if null(headerError)
+    then lvar.errors
+    else headerError;
 
   local fwrd::Expr =
     case lvar.typerep of

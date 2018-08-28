@@ -10,7 +10,6 @@ top::Expr ::= latticeBaseType::Type lattice::Expr size::Expr
   top.pp = pp"thresholdSet(${lattice.pp}, ${size.pp})";
 
   local localErrors::[Message] =
-    checkLvarHeaderDef(top.location, top.env) ++
     latticeBaseType.errors ++ lattice.errors ++ size.errors;
 
   forwards to 
@@ -33,7 +32,6 @@ top::Expr ::= latticeBaseType::Type lattice::Expr elems::[Expr] size::Expr
   top.pp = pp"thresholdSet(${lattice.pp})";
 
   local localErrors::[Message] =
-    checkLvarHeaderDef(top.location, top.env) ++
     latticeBaseType.errors ++ lattice.errors ++ size.errors;
 
   local fwrd::Expr =
@@ -58,8 +56,11 @@ top::Expr ::= lattice::Expr elems::[Expr] size::Expr
   propagate substituted;
   top.pp = pp"thresholdSet(${lattice.pp}, ${size.pp})";
 
+  local headerError::[Message] = checkLvarHeaderDef(top.location, top.env);
   local localErrors::[Message] =
-    checkLvarHeaderDef(top.location, top.env) ++ lattice.errors;
+    if null(headerError)
+    then lattice.errors
+    else headerError;
 
   local fwrd::Expr = 
     case lattice.typerep of
@@ -90,9 +91,11 @@ top::Expr ::= basetype::Type threshSet::Expr item::Expr
   propagate substituted;
   top.pp = pp"add(${threshSet.pp}, ${item.pp})";
 
+  local headerError::[Message] = checkLvarHeaderDef(top.location, top.env);
   local localErrors::[Message] =
-    checkLvarHeaderDef(top.location, top.env) ++
-    threshSet.errors ++ item.errors;
+    if null(headerError)
+    then threshSet.errors ++ item.errors
+    else headerError;
 
   local fwrd::Expr = 
     case item.typerep of
@@ -110,7 +113,7 @@ top::Expr ::= basetype::Type threshSet::Expr item::Expr
           location = top.location)
     | _ -> errorExpr([err(top.location,
            "can't add element of type " ++
-           showType(item.typerep) ++ "to ThresholdSet<" ++
+           showType(item.typerep) ++ " to ThresholdSet<" ++
            showType(basetype) ++ ">* (can only add " ++
            "ActivationSet<" ++ showType(basetype) ++ ">*)")],
            location = top.location)
@@ -130,9 +133,11 @@ top::Expr ::= baseType::Type t::Expr
   propagate substituted;
   top.pp = pp"freeSet ${t.pp}";
 
+  local headerError::[Message] = checkLvarHeaderDef(top.location, top.env);
   local localErrors::[Message] =
-    checkLvarHeaderDef(top.location, top.env) ++
-    baseType.errors ++ t.errors;
+    if null(headerError)
+    then baseType.errors ++ t.errors
+    else headerError;
 
   forwards to
     mkErrorCheck(localErrors,
@@ -149,9 +154,11 @@ top::Expr ::= baseType::Type t::Expr
   propagate substituted;
   top.pp = pp"display ${t.pp}";
 
+  local headerError::[Message] = checkLvarHeaderDef(top.location, top.env);
   local localErrors::[Message] =
-    checkLvarHeaderDef(top.location, top.env) ++
-    baseType.errors ++ t.errors;
+    if null(headerError)
+    then baseType.errors ++ t.errors
+    else headerError;
 
   forwards to 
     mkErrorCheck(localErrors, 
@@ -167,8 +174,11 @@ top::Expr ::= thresh::Expr
   propagate substituted;
   top.pp = pp"freeActSets ${thresh.pp}";
 
+  local headerError::[Message] = checkLvarHeaderDef(top.location, top.env);
   local localErrors::[Message] =
-    checkLvarHeaderDef(top.location, top.env) ++ thresh.errors;
+    if null(headerError)
+    then thresh.errors
+    else headerError;
 
   local fwrd::Expr =
     case thresh.typerep of

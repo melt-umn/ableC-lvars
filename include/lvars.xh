@@ -161,15 +161,16 @@ static void _displayLvar(Lvar<a>* l) {
   pthread_mutex_lock(&(l->_mutex));
   if (l->_frozen) { // note that only can be frozen if not at bottom
     l->_lattice->_display(l->_value->_val);
+    pthread_mutex_unlock(&(l->_mutex));
   }
   else {
+    pthread_mutex_unlock(&(l->_mutex));
     #ifdef DEBUG
       printf("Error: Can't display a lvar before it is frozen!\n");
       exit(0);
     #endif
     printf("<Lvar Value Unavailable>");
   }
-  pthread_mutex_unlock(&(l->_mutex));
 }
 
 // to free an LVar, using the free method of the lattice
@@ -299,9 +300,11 @@ static ActivationSet<a>* _addAct(ActivationSet<a>* act, a element, int ptr) {
       printf("Error: trying to add to NULL\n");
       exit(0);
     }
-    if (ptr && element == NULL) {
-      printf("Error: trying to add NULL to activation set\n");
-      exit(0);
+    if (ptr) {
+      if (element == NULL) {
+        printf("Error: trying to add NULL to activation set\n");
+        exit(0);
+      }
     }
   #endif
 
@@ -532,9 +535,11 @@ static void _put(Lvar<a>* l, a newState, int ptr) {
       printf("Error: NULL argument supplied to put\n");
       exit(0);
     }
-    if (ptr && newState == NULL) {
-      printf("Error: NULL argument supplied to put\n");
-      exit(0);
+    if (ptr) {
+      if (newState == NULL) {
+        printf("Error: NULL argument supplied to put\n");
+        exit(0);
+      }
     }
   #endif
 
@@ -587,9 +592,11 @@ static void _put_destructive(Lvar<a>* l, a newState, int ptr) {
       printf("Error: NULL argument supplied to put\n");
       exit(0);
     }
-    if (ptr && newState == NULL) {
-      printf("Error: NULL argument supplied to put\n");
-      exit(0);
+    if (ptr) {
+      if (newState == NULL) {
+        printf("Error: NULL argument supplied to put\n");
+        exit(0);
+      }
     }
   #endif
 

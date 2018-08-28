@@ -75,7 +75,7 @@ concrete productions top::UnaryOp_c
   }
 | 'display'
   {
-    top.ast = showLvars(top.expr, location=top.location);
+    top.ast = displayHelper(top.expr, location=top.location);
   }
 | 'value'
   {

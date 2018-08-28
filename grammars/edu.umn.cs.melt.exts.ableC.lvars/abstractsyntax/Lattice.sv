@@ -130,7 +130,7 @@ top::Expr ::= leq::Expr lub::Expr disp::Expr free::Expr
     leq.errors ++
     lub.errors ++ disp.errors ++ free.errors;
 
-  local localErrors::[Message] = 
+  local lvarErrors::[Message] = 
     checkLvarHeaderDef(top.location, top.env) ++ 
     case lub.typerep of
       functionType(outValueType, protoFunctionType([t1, t2], false),_) ->
@@ -170,9 +170,15 @@ top::Expr ::= leq::Expr lub::Expr disp::Expr free::Expr
            "lub must be function of type Value<a>*(a, a), not " ++ 
            showType(lub.typerep))]
     end;
+
+  local headerError::[Message] = checkLvarHeaderDef(top.location, top.env);
+  local localErrors::[Message] =
+    if null(headerError)
+    then lvarErrors ++ childErrors
+    else headerError;
               
   forwards to
-    mkErrorCheck(childErrors ++ localErrors,
+    mkErrorCheck(localErrors,
       ableC_Expr{
        inst _newLattice<$directTypeExpr{getTypeFromLub(lub, 
          openScopeEnv(top.env))}>(    
@@ -185,12 +191,7 @@ abstract production newLatticeNoFree
 top::Expr ::= leq::Expr lub::Expr disp::Expr
 {
   propagate substituted;
-  top.pp =
-    pp"lattice(${leq.pp}, ${lub.pp}, ${disp.pp})";
-
-  local childErrors::[Message] =
-    leq.errors ++
-    lub.errors ++ disp.errors;  
+  top.pp = pp"lattice(${leq.pp}, ${lub.pp}, ${disp.pp})";
 
   forwards to newLattice(leq, lub, disp, 
     ableC_Expr{inst _defaultFree<$directTypeExpr
@@ -205,9 +206,6 @@ top::Expr ::= leq::Expr lub::Expr disp::Expr free::Expr
   top.pp =
     pp"makeLvar(${leq.pp}, ${lub.pp}, ${disp.pp}, ${free.pp})";
 
-  local childErrors::[Message] =
-    leq.errors ++ lub.errors ++ disp.errors ++ free.errors;
-
   forwards to newCall(newLattice(leq, lub, disp, free,
      location=top.location), location=top.location);
 }
@@ -218,10 +216,6 @@ top::Expr ::= leq::Expr lub::Expr
   propagate substituted;
   top.pp =
     pp"makeLvar(${leq.pp}, ${lub.pp})";
-
-  local childErrors::[Message] =
-    leq.errors ++
-    lub.errors;
 
   local baseType::Type = getTypeFromLub(lub, openScopeEnv(top.env));
 

@@ -10,7 +10,6 @@ top::Expr ::= latticeBaseType::Type lattice::Expr size::Expr
   top.pp = pp"activationSet(${lattice.pp}, ${size.pp})";
 
   local localErrors::[Message] =
-    checkLvarHeaderDef(top.location, top.env) ++
     latticeBaseType.errors ++ lattice.errors ++ size.errors;
 
   forwards to 
@@ -33,7 +32,6 @@ top::Expr ::= latticeBaseType::Type lattice::Expr elems::[Expr] size::Expr
   top.pp = pp"activationSet(${lattice.pp})";
 
   local localErrors::[Message] = 
-    checkLvarHeaderDef(top.location, top.env) ++
     latticeBaseType.errors ++ lattice.errors ++ size.errors;
 
   local fwrd::Expr =
@@ -58,8 +56,11 @@ top::Expr ::= lattice::Expr elems::[Expr] size::Expr
   propagate substituted;
   top.pp = pp"activationSet(${lattice.pp}, ${size.pp})";
 
+  local headerError::[Message] = checkLvarHeaderDef(top.location, top.env);
   local localErrors::[Message] =
-    checkLvarHeaderDef(top.location, top.env) ++ lattice.errors ++ size.errors;
+    if null(headerError)
+    then lattice.errors ++ size.errors
+    else headerError;
 
   local fwrd::Expr = 
     case lattice.typerep of
@@ -94,7 +95,7 @@ top::Expr ::= basetype::Type actSet::Expr item::Expr
   local childErrors::[Message] =
     basetype.errors ++ actSet.errors ++ item.errors;
 
-  local localErrors::[Message] =
+  local lvarErrors::[Message] =
     checkLvarHeaderDef(top.location, top.env) ++
     if compatibleTypes(basetype, item.typerep, false, true)
     then []
@@ -103,17 +104,23 @@ top::Expr ::= basetype::Type actSet::Expr item::Expr
        showType(item.typerep) ++ " to ActivationSet<" ++
        showType(basetype) ++ ">*")];
 
+  local headerError::[Message] = checkLvarHeaderDef(top.location, top.env);
+  local localErrors::[Message] =
+    if null(headerError)
+    then lvarErrors ++ childErrors
+    else headerError;
+
   forwards to
     case basetype of
       pointerType(_, _) -> 
-        mkErrorCheck(localErrors ++ childErrors,
+        mkErrorCheck(localErrors,
           ableC_Expr{
             inst _addAct<$directTypeExpr{basetype}>
             ($Expr{actSet}, $Expr{item}, 1)
           }
         )
     | _ -> 
-        mkErrorCheck(localErrors ++ childErrors,
+        mkErrorCheck(localErrors,
           ableC_Expr{
             inst _addAct<$directTypeExpr{basetype}>
             ($Expr{actSet}, $Expr{item}, 0)
@@ -132,8 +139,11 @@ top::Expr ::= baseType::Type a::Expr
   propagate substituted;
   top.pp = pp"freeSet ${a.pp}";
 
+  local headerError::[Message] = checkLvarHeaderDef(top.location, top.env);
   local localErrors::[Message] =
-    checkLvarHeaderDef(top.location, top.env) ++ baseType.errors ++ a.errors;
+    if null(headerError)
+    then baseType.errors ++ a.errors
+    else headerError;
 
   forwards to
     mkErrorCheck(localErrors, 
@@ -151,8 +161,11 @@ top::Expr ::= baseType::Type a::Expr
   propagate substituted;
   top.pp = pp"display ${a.pp}";
 
+  local headerError::[Message] = checkLvarHeaderDef(top.location, top.env);
   local localErrors::[Message] =
-    checkLvarHeaderDef(top.location, top.env) ++ baseType.errors ++ a.errors;
+    if null(headerError)
+    then baseType.errors ++ a.errors
+    else headerError;
 
   forwards to
     mkErrorCheck(localErrors,
