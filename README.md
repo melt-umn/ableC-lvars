@@ -17,10 +17,10 @@ Each lattice variable is associated with a "lattice," which prescribes how indiv
 
 ### A datatype, either built-in to C or created by the programmer.
 
-Each lattice can only contain elements of a single type.
+Each lattice can only contain elements of a single type. A lattice with base type `a` has type `Lattice<a>` (e.g., `Lattice<int>` or `Lattice<Pair*>`).
 
 ### A `leq` function to determine the order of any two elements of the lattice.
 
-This function must take two elements of the lattice's base type as 
+The `leq` function must take two elements of the lattice's base type as arguments and return an integer. The function should return 1 if the first argument element "precedes" the second argument element in the lattice, and 0 otherwise. 
 
 
