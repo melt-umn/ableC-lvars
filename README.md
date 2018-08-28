@@ -5,7 +5,6 @@
 ### Fixes:
 
 + Fix up READMEs
-    + abstractsyntax
     + concretesyntax
     + include
     + tests
