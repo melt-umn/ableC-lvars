@@ -1,5 +1,8 @@
 grammar edu:umn:cs:melt:exts:ableC:lvars:abstractsyntax;
 
+// *************** lattice construction ***************************************
+
+// check types of functions provided to lattice constructor
 function latticeCheckHelper
 [Message] ::= loc::Location outType::Type leq::Expr disp::Expr free::Expr 
               e::Decorated Env
@@ -95,6 +98,7 @@ function latticeCheckHelper
       end; 
 }
 
+// extract the desired base type for a lattice from the return of lub
 function getTypeFromLub
 Type ::= lub::Expr e::Decorated Env
 {
@@ -120,6 +124,7 @@ Type ::= lub::Expr e::Decorated Env
     end;
 }
 
+// check for errors and call lattice constructor
 abstract production newLattice
 top::Expr ::= leq::Expr lub::Expr disp::Expr free::Expr destr::Expr
 {
@@ -188,6 +193,7 @@ top::Expr ::= leq::Expr lub::Expr disp::Expr free::Expr destr::Expr
     );
 }
 
+// sub default free into newLattice production
 abstract production newLatticeNoFree
 top::Expr ::= leq::Expr lub::Expr disp::Expr destr::Expr
 {
@@ -196,10 +202,11 @@ top::Expr ::= leq::Expr lub::Expr disp::Expr destr::Expr
 
   forwards to newLattice(leq, lub, disp, 
     ableC_Expr{inst _defaultFree<$directTypeExpr
-      {getTypeFromLub(lub, openScopeEnv(top.env))}>}, destr, 
+    {getTypeFromLub(lub, openScopeEnv(top.env))}>}, destr, 
     location=top.location);
 }
 
+// to make a new lattice and lvar from that lattice
 abstract production makeLvar
 top::Expr ::= leq::Expr lub::Expr disp::Expr free::Expr destr::Expr
 {
@@ -211,6 +218,7 @@ top::Expr ::= leq::Expr lub::Expr disp::Expr free::Expr destr::Expr
      location=top.location), location=top.location);
 }
 
+// sub default free and show into makeLvar
 abstract production makeLvarDefaults
 top::Expr ::= leq::Expr lub::Expr destr::Expr
 {

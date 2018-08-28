@@ -30,11 +30,17 @@ top::Expr ::= e::Expr
   local fwrd::Expr =
     case e.typerep of
       pointerType(_, actType(_, t)) -> 
-        showAct(t, e, location=top.location)
+        ableC_Expr{
+          inst _displayActivation<$directTypeExpr{t}>($Expr{e})
+        }
     | pointerType(_, threshType(_, t)) ->
-        showThresh(t, e, location=top.location)
+        ableC_Expr{
+          inst _displayThreshold<$directTypeExpr{t}>($Expr{e})
+        }
     | pointerType(_, lvarType(_, t)) ->
-        showLvar(t, e, location=top.location)
+        ableC_Expr{
+          inst _displayLvar<$directTypeExpr{t}>($Expr{e})
+        }
     | _ ->
         errorExpr([err(top.location, 
       "display expected argument of type ActivationSet<a>*, " ++
@@ -181,9 +187,6 @@ top::Expr ::= lvarBaseType::Type lvar::Expr value::Expr
   propagate substituted;
   top.pp = pp"put (${value.pp}) in ${lvar.pp}";
 
-  local childErrors::[Message] = lvarBaseType.errors ++ lvar.errors ++
-                                value.errors;
-
   local localErrors::[Message] =
     if compatibleTypes(lvarBaseType, value.typerep, false, true)
     then []
@@ -195,13 +198,13 @@ top::Expr ::= lvarBaseType::Type lvar::Expr value::Expr
   forwards to 
     case lvarBaseType of
       pointerType(_, _) -> 
-        mkErrorCheck(localErrors ++ childErrors,
+        mkErrorCheck(localErrors,
         ableC_Expr{
           inst _put<$directTypeExpr{lvarBaseType}>($Expr{lvar}, 
             $Expr{value}, 1) // last arg indicates whether pointer base or not
         })
     | _ -> 
-        mkErrorCheck(localErrors ++ childErrors,
+        mkErrorCheck(localErrors,
         ableC_Expr{
           inst _put<$directTypeExpr{lvarBaseType}>($Expr{lvar}, 
             $Expr{value}, 0)

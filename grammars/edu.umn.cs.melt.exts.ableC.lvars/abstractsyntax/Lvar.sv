@@ -1,5 +1,8 @@
 grammar edu:umn:cs:melt:exts:ableC:lvars:abstractsyntax;
 
+// *************** lvar productions *******************************************
+
+// checks for errors and forwards to _freeLvar<a> if correct
 abstract production freeLvar
 top::Expr ::= lvar::Expr
 {
@@ -20,37 +23,14 @@ top::Expr ::= lvar::Expr
         }
     | _ ->
         errorExpr([err(top.location, 
-        "freeLvar expected argument of type Lvar<a>*, got " ++ showType(lvar.typerep))],
-        location=top.location)
+        "freeLvar expected argument of type Lvar<a>*, got " ++ 
+        showType(lvar.typerep))], location=top.location)
     end;
 
   forwards to mkErrorCheck(localErrors, fwrd);
 }
 
-// to show an lvar (if possible)
-
-abstract production showLvar 
-top::Expr ::= baseType::Type l::Expr
-{
-  propagate substituted;
-  top.pp = pp"display ${l.pp}";
-
-  local headerError::[Message] = checkLvarHeaderDef(top.location, top.env);
-  local localErrors::[Message] =
-    if null(headerError)
-    then baseType.errors ++ l.errors
-    else headerError;
-
-  forwards to
-    mkErrorCheck(localErrors,
-    ableC_Expr{
-      inst _displayLvar<$directTypeExpr{baseType}>($Expr{l})
-    });
-}
-
-
-// to create a new lvar from a lattice
-
+// checks for errors and forwards to _new<a> if correct
 abstract production newCall
 top::Expr ::= l::Expr
 {
@@ -78,6 +58,7 @@ top::Expr ::= l::Expr
     mkErrorCheck(localErrors, fwrd);
 }
 
+// checks for errors and forwards to _freeze<a> if correct
 abstract production freeze
 top::Expr ::= lvar::Expr
 {
@@ -105,6 +86,8 @@ top::Expr ::= lvar::Expr
     mkErrorCheck(localErrors, fwrd);
 }
 
+
+// checks for errors and forwards to _getLattice<a> if correct
 abstract production getLattice
 top::Expr ::= lvar::Expr
 {

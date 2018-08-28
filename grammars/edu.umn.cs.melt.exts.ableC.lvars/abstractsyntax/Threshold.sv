@@ -1,55 +1,34 @@
 grammar edu:umn:cs:melt:exts:ableC:lvars:abstractsyntax;
 
-// to create a new threshold set of a given size for a given lattice
-// latticeBaseType helps determine the base type of the lattice
+// ********************* initialization ***************************************
 
-abstract production newThreshHelper
-top::Expr ::= latticeBaseType::Type lattice::Expr size::Expr
-{
-  propagate substituted;
-  top.pp = pp"thresholdSet(${lattice.pp}, ${size.pp})";
-
-  local localErrors::[Message] =
-    latticeBaseType.errors ++ lattice.errors ++ size.errors;
-
-  forwards to 
-    mkErrorCheck(localErrors, 
-    ableC_Expr{
-      inst _newThresholdSet<$directTypeExpr{latticeBaseType}>
-      ($Expr{lattice}, $Expr{size})
-    });
-}
-
-// to create a new threshold set of a given size for a given lattice,
-// with a set of initial values
-
-// latticeBaseType helps determine the base type of the lattice
-
+// creates a new threshold set of a given size for a given lattice;
+// threshold set is empty or has initial values
+// latticeBaseType is the base type of the lattice
 abstract production threshInitHelper
 top::Expr ::= latticeBaseType::Type lattice::Expr elems::[Expr] size::Expr
 {
   propagate substituted;
   top.pp = pp"thresholdSet(${lattice.pp})";
 
-  local localErrors::[Message] =
-    latticeBaseType.errors ++ lattice.errors ++ size.errors;
-
   local fwrd::Expr =
-    // if there are no more elements to add, make a new activation set
+    // if there are no more elements to add, make a new threshold set
     if null(elems)
-    then newThreshHelper(latticeBaseType, lattice, size, location = top.location)
-    // otherwise, add the next element on to the activation set created from
+    then ableC_Expr{
+           inst _newThresholdSet<$directTypeExpr{latticeBaseType}>
+           ($Expr{lattice}, $Expr{size})
+         }
+    // otherwise, add the next element on to the threshold set created from
     // the tail of the elements list
     else addThresh(latticeBaseType,
          threshInitHelper(latticeBaseType, lattice, tail(elems),
          size, location = top.location),
          head(elems), location=top.location);
 
-  forwards to mkErrorCheck(localErrors, fwrd);
+  forwards to mkErrorCheck([], fwrd);
 }
 
-// create a new threshold set when a size and a list of elements are provided
-
+// creates a new threshold set from a size and a list of elements
 abstract production newThreshWithInitAndSize
 top::Expr ::= lattice::Expr elems::[Expr] size::Expr
 {
@@ -81,21 +60,17 @@ top::Expr ::= lattice::Expr elems::[Expr] size::Expr
   forwards to mkErrorCheck(localErrors, fwrd);
 }
 
-// to add an element to a threshold set
-// note that type is assumed to be threshold set at this point
-// baseType indicates the base value of the threshold set's lattice
+// ************************ adding ********************************************
 
+// adds an element to a threshold set
+// baseType indicates the base type of the threshold set's lattice
 abstract production addThresh
 top::Expr ::= basetype::Type threshSet::Expr item::Expr
 {
   propagate substituted;
   top.pp = pp"add(${threshSet.pp}, ${item.pp})";
 
-  local headerError::[Message] = checkLvarHeaderDef(top.location, top.env);
-  local localErrors::[Message] =
-    if null(headerError)
-    then threshSet.errors ++ item.errors
-    else headerError;
+  local localErrors::[Message] = item.errors;
 
   local fwrd::Expr = 
     case item.typerep of
@@ -123,51 +98,9 @@ top::Expr ::= basetype::Type threshSet::Expr item::Expr
     mkErrorCheck(localErrors, fwrd);
 }
 
-// to free a threshold set
-// by this point, t is assumed to be a threshold set
-// baseType helps determine the underlying type of the threshold set
+// ****************************** freeing *************************************
 
-abstract production freeThresh
-top::Expr ::= baseType::Type t::Expr
-{
-  propagate substituted;
-  top.pp = pp"freeSet ${t.pp}";
-
-  local headerError::[Message] = checkLvarHeaderDef(top.location, top.env);
-  local localErrors::[Message] =
-    if null(headerError)
-    then baseType.errors ++ t.errors
-    else headerError;
-
-  forwards to
-    mkErrorCheck(localErrors,
-    ableC_Expr{
-      inst _freeThreshold<$directTypeExpr{baseType}>($Expr{t})
-    });
-}
-
-// to show a threshold set
-
-abstract production showThresh
-top::Expr ::= baseType::Type t::Expr
-{
-  propagate substituted;
-  top.pp = pp"display ${t.pp}";
-
-  local headerError::[Message] = checkLvarHeaderDef(top.location, top.env);
-  local localErrors::[Message] =
-    if null(headerError)
-    then baseType.errors ++ t.errors
-    else headerError;
-
-  forwards to 
-    mkErrorCheck(localErrors, 
-    ableC_Expr{
-      inst _displayThreshold<$directTypeExpr{baseType}>($Expr{t})
-    });
-}
-
-
+// checks for errors, forwards to _freeActSets<a> if correct
 abstract production freeActSets
 top::Expr ::= thresh::Expr
 {

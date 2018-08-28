@@ -21,9 +21,10 @@
     + See if int_set.h lattice can be generalized to other base types to create a more flexible set lattice
 + Add nice syntax for counter lvar (maybe without specifying type, etc.)
 + Test timing
-+ Fix up abstract/concrete syntax
 + Check that error handling is done only once (with helper productions, etc.)
 + Should put be a statement instead of an expression?
++ Have one free construct (e.g., lvar_free) for all frees?
++ err vs. errorExpr?
 
 ### Things to think about:
 

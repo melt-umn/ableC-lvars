@@ -188,7 +188,7 @@ top::Type ::= q::Qualifiers sub::Type
         templateMangledRefId("_Lattice", [sub])));
 }
 
-//********************************* Value ****************************
+//********************************* Value type ********************************
 
 abstract production valueTypeExpr 
 top::BaseTypeExpr ::= q::Qualifiers sub::TypeName

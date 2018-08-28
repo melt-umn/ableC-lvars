@@ -1,5 +1,8 @@
 grammar edu:umn:cs:melt:exts:ableC:lvars:abstractsyntax;
 
+// ********************* Value type productions *******************************
+
+// wraps a value in a Value<a> type
 abstract production makeValue
 top::Expr ::= val::Expr
 {
@@ -19,6 +22,7 @@ top::Expr ::= val::Expr
     });
 }
 
+// initializes a Value<a> to top
 abstract production makeTop
 top::Expr ::= typ::TypeName
 {
@@ -38,6 +42,7 @@ top::Expr ::= typ::TypeName
     });
 }
 
+// checks if a value is top or not
 abstract production isTop
 top::Expr ::= val::Expr
 {

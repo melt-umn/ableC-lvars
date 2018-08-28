@@ -1,7 +1,8 @@
 grammar edu:umn:cs:melt:exts:ableC:lvars:abstractsyntax;
 
-// adds to either threshold set or activation set depending on the type
+// ********************* activation/threshold set productions *****************
 
+// adds to either threshold set or activation set depending on the type
 abstract production add
 top::Expr ::= set::Expr item::Expr
 {
@@ -29,10 +30,7 @@ top::Expr ::= set::Expr item::Expr
    forwards to mkErrorCheck(localErrors, fwrd);
 }
 
-//********************** Freeing production **********************************
-
 // frees either threshold set or activation set depending on the type
-
 abstract production freeSet
 top::Expr ::= set::Expr
 {
@@ -48,13 +46,18 @@ top::Expr ::= set::Expr
   local fwrd::Expr =
     case set.typerep of
       pointerType(_, actType(_, t)) -> 
-        freeAct(t, set, location=top.location)
+        ableC_Expr{
+          inst _freeActivation<$directTypeExpr{t}>($Expr{set})
+        }
     | pointerType(_, threshType(_, t)) ->
-        freeThresh(t, set, location=top.location)
+        ableC_Expr{
+          inst _freeThreshold<$directTypeExpr{t}>($Expr{set})
+        }
     | _ ->
         errorExpr([err(top.location, 
-        "freeSet expected argument of type ActivationSet<a>* or ThresholdSet<a>*, got " 
-        ++ showType(set.typerep))], location=top.location)
+        "freeSet expected argument of type ActivationSet<a>* or " ++
+        "ThresholdSet<a>*, got " ++ showType(set.typerep))], 
+        location=top.location)
     end;
 
   forwards to mkErrorCheck(localErrors, fwrd);
