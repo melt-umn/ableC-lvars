@@ -5,7 +5,6 @@
 ### Fixes:
 
 + Fix up READMEs
-    + include
     + tests
     + ableC-lvars
         + Make list of rules to follow for programmers (return copies in put vs must handle freeing in lubD rather than providing a free function, lubD must mutate first arg, etc.)
