@@ -1,17 +1,3 @@
-### A show function to provide a string representation of an element of the lattice.
-
-The show function must take an element of the lattice's base type and print a representation of that element to the screen.
-
-Ex. The `showInteger` function in `int.xc` returns the default `show()` value for a given integer.
-
-Ex. The `showState` function in `and.xc` returns a string like `"Pair(T(), F())"` or `"Top()"` for given state.
-
-### (Optional) A free function to indicate how to free an element of the lattice.
-
-The free function must take an element of the lattice's base type and free the element and all of its components. If no free function is provided, the freeing method used will default to doing nothing (e.g., in the case of a lattice of integers or another non-pointer type). 
-
-Ex. In `and.xc`, a programmer might provide a function that, given a `State` pointer, frees both boolean pointers and the `State` pointer itself.
-
 ## Part 2: Creating a Lattice.
 
 If a programmer has defined the necessary lattice components with data elements `topEx` of type `baseType` and functions `leqEx`, `lubEx`, `showEx`, and `freeEx` as described above, they can create a new lattice `lat` as follows:
