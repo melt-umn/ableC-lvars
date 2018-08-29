@@ -26,5 +26,4 @@ This directory includes the following example LVars programs:
 + `cilk_fold.xc` (using cilk to map-fold over an array of integers)
 + `pthreads_fold.xc` (using pthreads to map-fold over an array of integers)
 + `run_fold.xc` (using the run extension to map-fold over an array of integers)
-+ `graph.xc` (map-folding over a graph)
 

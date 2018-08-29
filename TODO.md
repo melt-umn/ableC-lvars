@@ -2,9 +2,9 @@
 
 + Fix up READMEs
     + tests
-    + ableC-lvars
-        + Make list of rules to follow for programmers (return copies in put vs must handle freeing in lubD rather than providing a free function, lubD must mutate first arg, etc.)
-        + Update with new features
+    + guide
+        + Add comparison with Kuper implementation (benefits, costs)
+        + Warn about changing threshold/activation after initialization phase
 + Work on speeding up thread waiting/locking process
 + Consider adding other getter methods
 + Add positive tests for non-error cases
@@ -17,6 +17,5 @@
 + Have one free construct (e.g., lvar_free) for all frees?
 + err vs. errorExpr?
 + Move graph example and fold examples to parallel_examples
-+ Add comparison with Kuper implementation (benefits, costs)
-+ Warn about changing threshold/activation after initialization phase
+
 
