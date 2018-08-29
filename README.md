@@ -81,15 +81,15 @@ Note that no `free` function can be specified when constructing a destructive la
 
 Once a programmer has a lattice `lat`, they can create an associated lattice variable as follows:
 
-`Lvar<a>* x = newLvar lat;`
+`Lvar<a>* lvar = newLvar lat;`
 
-This initialized the LVar `x` to have a value at the "bottom" of the lattice. Arbitrarily many lattice variables can be created for a given lattice.
+This initialized the LVar `lvar` to have a value at the "bottom" of the lattice. Arbitrarily many lattice variables can be created for a given lattice.
 
 ## Part 4: Writing to LVars.
 
-To write a value `val` of type `a` to a lattice variable `x` of base type `a`, a programmer can write the following:
+To write a value `val` of type `a` to a lattice variable `lvar` of base type `a`, a programmer can write the following:
 
-`put (val) in x;`
+`put (val) in lvar;`
 
 Note that if `val` is an identifier, the parentheses are unnecessary.
 
@@ -124,9 +124,84 @@ add(falseSet, Pair(Bot(), F()));
 add(trueSet, Pair(T(), T()));
 ```
 
+We can also add elements to activation sets at the same time as initialization:
+
+```c
+ActivationSet<State*> * falseSet = activationSet(lat){Pair(F(), Bot()), Pair(F(), T()),
+                                                     Pair(T(), F()), Pair(F(), F()),
+                                                     Pair(Bot(), F())};
+ActivationSet<State*> * trueSet = activationSet(lat){Pair(T(), T())};
+
+Additionally, with either initialization format, we can specify an initial size for our activation sets:
+
+```c
+ActivationSet<State*> * falseSet = activationSet(lat, 5);
+ActivationSet<State*> * trueSet = activationSet(lat, 1);
+
+ActivationSet<State*> * falseSet = activationSet(lat, 5){Pair(F(), Bot()), Pair(F(), T()),
+                                                     Pair(T(), F()), Pair(F(), F()),
+                                                     Pair(Bot(), F())};
+ActivationSet<State*> * trueSet = activationSet(lat, 1){Pair(T(), T())};
+```
+
 #### Creating Threshold Sets.
+
+Once we have created one or more activation sets, we can use them to form a threshold set. Note that any two activation sets added to a threshold set must be incompatible-- i.e., the lub of any two elements from two different activation sets must be the top element of the lattice to ensure that only one activation set is matched by a given element (though an element may match multiple items in the same activation set). The syntax for adding to and initializing a threshold set is very similar to that for an activation set:
+
+
+```c
+ThresholdSet<State*> * thresh = thresholdSet(lat);
+add(thresh, falseSet);
+add(thresh, trueSet);
+```
+
+Or:
+
+`ThresholdSet<State*> * thresh = thresholdSet(lat){falseSet, trueSet};`
+
+Or:
+
+```c
+ThresholdSet<State*> * thresh = thresholdSet(lat, 2);
+add(thresh, falseSet);
+add(thresh, trueSet);
+```
+
+#### Using `get`.
+
+Once a programmer has set up a threshold set for a given lattice, they can use it to attempt to read from a lattice variable as in the following example:
+
+`ActivationSet<State*> * result = get (lvar) with thresh;`
+
+
+Note that, again, the parentheses are unnecessary in the case where `lvar` is an identifier.
+
+A call to `get` checks the current value of the LVar against each activation set in the provided threshold set. If the value of the LVar is at or above (in terms of the lattice's `leq` ordering) some member of some activation set in the threshold set, the `get` will return the entire matched activation set. If the value of the LVar is not yet at or above any member of any of the activation sets, `get` will block until a `put` operation makes the `get` valid. Note that this means that the `get` may block indefinitely.
 
 ### Reading from LVars with `freeze`.
 
+Though `get` returns an activation set rather than a value of the base type, it can often be useful to be able to access the actual value inside an LVar. To preserve the determinism of an LVars program, this can only be done once no further updates are performed to an LVar, i.e., once the LVar is "frozen." To freeze an lvar, a programmer can write the following:
+
+```c
+freeze lvar;
+```
+The `freeze` operation locks the lvar against further writes-- after an LVar is frozen, any `put` operation on that LVar will fail. After an LVar is frozen, calls to `get` without a provided threshold set will return the actual value of the LVar rather than an activation set. Note that before freezing an LVar, any concurrent threads must be "synced" or "quiesced" in order to preserve determinism-- if `freeze` operations are interleaved with `put`s and `get`s, a program may error out in some schedules and not in others.
+
+## Part 6: Displaying Results.
+
+## Part 7: Cleaning Up.
+
+After a programmer is done using LVars, lattices, activation sets, and threshold sets, they should clean up the utilized memory. Activation sets can be freed separately from their associated threshold sets with `freeSet` or all at once via their threshold set with `freeAllActs`. Threshold sets can also be freed using `freeSet`. Lattices can be freed with an ordinary `free`, and LVars can be freed with `freeLvar`. Note that Lvars, Activation Sets, and Threshold Sets should be freed before their lattices. For example,
+
+```c
+freeLvar lvar;
+freeAllSets thresh;
+freeSet thresh;
+free(lat);
+```
+
+## Part 8: CHECK and DEBUG Modes.
+
+To aid in debugging programs that make use of LVars, two debugging modes are provided to programmers. If the line `#define CHECK` is included before including the header `lvars.xh`, calls to methods in `lvars.xh` will be more rigourously checked to prevent errors, with the program continuing silently where possible (e.g., replacing a negative size with a size of 0), and erroring out or returning `0` or `NULL` when recovery isn't possible. If the line `#define DEBUG` is included before including the header `lvars.xh`, the same checks as in `CHECK` mode will be performed, but the program will print an error message and exit upon any detected problem. If both `CHECK` and `DEBUG` are defined, the stronger mode, `DEBUG`, will be used.
 
 
