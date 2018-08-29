@@ -83,9 +83,9 @@ Once a programmer has a lattice `lat`, they can create an associated lattice var
 
 `Lvar<a>* lvar = newLvar lat;`
 
-This initialized the LVar `lvar` to have a value at the "bottom" of the lattice. Arbitrarily many lattice variables can be created for a given lattice.
+This initializes the LVar `lvar` to have a value at the "bottom" of the lattice. Arbitrarily many lattice variables can be created for a given lattice.
 
-## Part 4: Writing to LVars
+## Part 4: Writing to LVars with `put`
 
 To write a value `val` of type `a` to a lattice variable `lvar` of base type `a`, a programmer can write the following:
 
@@ -133,7 +133,7 @@ ActivationSet<State*> * falseSet = activationSet(lat){Pair(F(), Bot()), Pair(F()
 ActivationSet<State*> * trueSet = activationSet(lat){Pair(T(), T())};
 ```
 
-Additionally, with either initialization format, we can specify an initial size for our activation sets:
+Additionally, with either initialization format, we can specify an initial size for our activation sets. Note that activation sets are automatically resized if the number of elements exceeds the initially specified size.
 
 ```c
 ActivationSet<State*> * falseSet = activationSet(lat, 5);
@@ -147,8 +147,7 @@ ActivationSet<State*> * trueSet = activationSet(lat, 1){Pair(T(), T())};
 
 #### Creating Threshold Sets
 
-Once we have created one or more activation sets, we can use them to form a threshold set. Note that any two activation sets added to a threshold set must be incompatible-- i.e., the lub of any two elements from two different activation sets must be the top element of the lattice to ensure that only one activation set is matched by a given element (though an element may match multiple items in the same activation set). The syntax for adding to and initializing a threshold set is very similar to that for an activation set:
-
+Once we have created one or more activation sets, we can use them to form a threshold set. The syntax for adding to and initializing a threshold set is very similar to that for an activation set:
 
 ```c
 ThresholdSet<State*> * thresh = thresholdSet(lat);
@@ -168,16 +167,21 @@ add(thresh, falseSet);
 add(thresh, trueSet);
 ```
 
+Like activation sets, threshold sets are automatically resized if too many elements are added. 
+
+Note that any two activation sets added to a threshold set must be incompatible-- i.e., the lub of any two elements from two different activation sets must be the top element of the lattice to ensure that only one activation set is matched by a given element (though an element may match multiple items in the same activation set). If DEBUG or CHECK mode is on and the lattice associated with a threshold set is non-destructive (see discussion later in the guide), each activation set that is added to the threshold set is checked for compatibility with all of the other activation sets already in the threshold set. If the new activation set is found to be compatible with a pre-existing activation set, adding the new activation set will fail.
+
 #### Using `get`
 
 Once a programmer has set up a threshold set for a given lattice, they can use it to attempt to read from a lattice variable as in the following example:
 
 `ActivationSet<State*> * result = get (lvar) with thresh;`
 
-
 Note that, again, the parentheses are unnecessary in the case where `lvar` is an identifier.
 
-A call to `get` checks the current value of the LVar against each activation set in the provided threshold set. If the value of the LVar is at or above (in terms of the lattice's `leq` ordering) some member of some activation set in the threshold set, the `get` will return the entire matched activation set. If the value of the LVar is not yet at or above any member of any of the activation sets, `get` will block until a `put` operation makes the `get` valid. Note that this means that the `get` may block indefinitely.
+A call to `get` checks the current value of the LVar against each activation set in the provided threshold set. If the value of the LVar is at or above (in terms of the lattice's `leq` ordering) some member of some activation set in the threshold set, the `get` will return the entire matched activation set. If the value of the LVar is not yet at or above any member of any of the activation sets, `get` will block until a `put` operation makes the `get` valid. Note that this means that the `get` may block indefinitely.'
+
+In the case that an LVar is frozen (see following section), if the value of the LVar has reached a given activation set, that activation set will be returned. Otherwise, since no more writes can occur, the `get` will return a singleton activation set containing the actual value of the LVar (or an empty set in the case that the LVar has not yet been written to).
 
 ### Reading from LVars with `freeze`
 
@@ -186,13 +190,30 @@ Though `get` returns an activation set rather than a value of the base type, it 
 ```c
 freeze lvar;
 ```
-The `freeze` operation locks the lvar against further writes-- after an LVar is frozen, any `put` operation on that LVar will fail. After an LVar is frozen, calls to `get` without a provided threshold set will return the actual value of the LVar rather than an activation set. Note that before freezing an LVar, any concurrent threads must be "synced" or "quiesced" in order to preserve determinism-- if `freeze` operations are interleaved with `put`s and `get`s, a program may error out in some schedules and not in others.
+The `freeze` operation locks the lvar against further writes-- after an LVar is frozen, any `put` operation on that LVar will fail. Note that before freezing an LVar, any concurrent threads must be "synced" or "quiesced" in order to preserve determinism-- if `freeze` operations are interleaved with `put`s and `get`s, a program may error out in some schedules and not in others. 
+
+After an LVar is frozen, calls to `get` without a provided threshold set will return the actual value of the LVar rather than an activation set. If no value has been written to the LVar before it was frozen, the program will error out (since no further writes can occur to make the value valid).
 
 ## Part 6: Displaying Results
 
+Programmers can print representations of activation sets, threshold sets, and frozen LVars to the screen using the `display` construct. These representations use the `display_a` method provided when constructing the lattice to print individual elements. For example, programmers can write
+
+```c
+freeze lvar;
+display lvar;
+```
+```c
+display falseSet;
+```
+```c
+display thresh;
+```
+
+Note that `display` will fail when used on a non-frozen LVar.
+
 ## Part 7: Cleaning Up
 
-After a programmer is done using LVars, lattices, activation sets, and threshold sets, they should clean up the utilized memory. Activation sets can be freed separately from their associated threshold sets with `freeSet` or all at once via their threshold set with `freeAllActs`. Threshold sets can also be freed using `freeSet`. Lattices can be freed with an ordinary `free`, and LVars can be freed with `freeLvar`. Note that Lvars, Activation Sets, and Threshold Sets should be freed before their lattices. For example,
+After a programmer is done using LVars, lattices, activation sets, and threshold sets, they should clean up the utilized memory. Activation sets can be freed separately from their associated threshold sets with `freeSet` or all at once via their threshold set with `freeAllActs`. Threshold sets can also be freed using `freeSet`. Lattices can be freed with an ordinary `free`, and LVars can be freed with `freeLvar` (which also frees their final value). Note that Lvars, Activation Sets, and Threshold Sets should be freed before their lattices. For example,
 
 ```c
 freeLvar lvar;
@@ -203,6 +224,44 @@ free(lat);
 
 ## Part 8: CHECK and DEBUG Modes
 
-To aid in debugging programs that make use of LVars, two debugging modes are provided to programmers. If the line `#define CHECK` is included before including the header `lvars.xh`, calls to methods in `lvars.xh` will be more rigourously checked to prevent errors, with the program continuing silently where possible (e.g., replacing a negative size with a size of 0), and erroring out or returning `0` or `NULL` when recovery isn't possible. If the line `#define DEBUG` is included before including the header `lvars.xh`, the same checks as in `CHECK` mode will be performed, but the program will print an error message and exit upon any detected problem. If both `CHECK` and `DEBUG` are defined, the stronger mode, `DEBUG`, will be used.
+To aid in debugging programs that make use of LVars, two debugging modes are provided to programmers.
+
+If the line `#define CHECK` is included before including the header `lvars.xh`, calls to methods in `lvars.xh` will be more rigourously checked to prevent errors, with the program continuing silently where possible (e.g., replacing a negative size with a size of 0), and erroring out or returning `0` or `NULL` when recovery isn't possible.
+
+If the line `#define DEBUG` is included before including the header `lvars.xh`, the same checks as in `CHECK` mode will be performed, but the program will print an error message and exit upon any detected problem. If both `CHECK` and `DEBUG` are defined, the stronger mode, `DEBUG`, will be used.
+
+## Part 9: Additional Features
+
+The LVars extension includes a few other constructs that make working with lattices easier.
+
+### `isTop`
+
+This construct can be used to check if a `Value<a>` is the top value. This may be useful in recursive `lub` functions.
+
+### `makeLvar`
+
+This construct creates a new lattice and returns a new LVar for that lattice. If a programmer is not using multiple LVars from the same lattice, they may find it easier to create the LVar on its own using `makeLvar`.
+
+For example,
+
+```c
+makeLvar(leqFunc, lubFunc)
+```
+
+or
+
+```c
+makeLvar(leqFunc, lubFunc, displayFunc, freeFunc)
+```
+
+### `getLattice`
+
+When `makeLvar` is used, programmers don't have direct access to an LVar's associated lattice. In order to be able to free the lattice and use the LVar's lattice when creating activation sets and threshold sets, programmers can use the `getLattice` construct. 
+
+For example,
+
+```c
+getLattice lvar
+```
 
 

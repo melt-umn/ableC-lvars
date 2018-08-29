@@ -159,8 +159,13 @@ static void _displayLvar(Lvar<a>* l) {
   #endif
 
   pthread_mutex_lock(&(l->_mutex));
-  if (l->_frozen) { // note that only can be frozen if not at bottom
-    l->_lattice->_display(l->_value->_val);
+  if (l->_frozen) {
+    if (!l->_value->_bot) {
+      l->_lattice->_display(l->_value->_val);
+    }
+    else {
+      printf("?");
+    }
     pthread_mutex_unlock(&(l->_mutex));
   }
   else {

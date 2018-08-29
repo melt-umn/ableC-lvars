@@ -5,6 +5,9 @@
     + guide
         + Add comparison with Kuper implementation (benefits, costs)
         + Warn about changing threshold/activation after initialization phase
+        + Look at initial draft of PPOPP paper
+        + Warn about having enough threads available for each blocked get
+        + Check that everything in concrete syntax is covered adequately
 + Work on speeding up thread waiting/locking process
 + Consider adding other getter methods
 + Add positive tests for non-error cases
@@ -16,6 +19,5 @@
 + Check that error handling is done only once (with helper productions, etc.)
 + Have one free construct (e.g., lvar_free) for all frees?
 + err vs. errorExpr?
-+ Move graph example and fold examples to parallel_examples
 
 
