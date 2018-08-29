@@ -1,6 +1,6 @@
 # ableC-lvars
 
-The constructs provided by this extension aim to make it harder for programmers to write non-deterministic parallel ableC programs by controlling communication via "lattice variables."
+This extension provides constructs that aim to make it harder for programmers to write non-deterministic ableC programs by controlling inter-thread communication via "lattice variables."
 
 The extension is based on the work of Assistant Professor Lindsey Kuper. The following resources are good places to start looking at her ideas:
 
@@ -17,10 +17,27 @@ Each lattice variable is associated with a "lattice," which prescribes how indiv
 
 ### A datatype, either built-in to C or created by the programmer.
 
+Type/Signature: `a`
+
 Each lattice can only contain elements of a single type. A lattice with base type `a` has type `Lattice<a>` (e.g., `Lattice<int>` or `Lattice<Pair*>`).
 
 ### A `leq` function to determine the order of any two elements of the lattice.
 
-The `leq` function must take two elements of the lattice's base type as arguments and return an integer. The function should return 1 if the first argument element "precedes" the second argument element in the lattice, and 0 otherwise. 
+Type/Signature: `int leqFunction(a elem1, a elem2)`
+
+The `leq` function must take two elements of the lattice's base type as arguments and return an integer. The function should return 1 (truthy) if the first argument element is "at or below" the second argument element with respect to the lattice's ordering (i.e., the second element can be reached, in a series of monotonically increasing operations, from the first element), and 0 (falsy) otherwise. 
+
+For example, the `leq` operation might represent `<=`, `>=`, or `==` between integers or doubles, or a set inclusion operation between sets.
+
+### A `lub` function to determine how to combine any two elements of the lattice.
+
+Type/Signature: `Value<a>* lubFunction(a elem1, a elem2)`
+
+The `lub` function must take two elements of the lattice's base type as arguments and return another element of the lattice's base type, wrapped in a `Value` wrapper type. The function should compute the element of type `a` that represents the "least upper bound" between the two provided elements-- i.e., the lowest element of the lattice that is at or above both arguments with respect to the ordering given in `leq`. This value `lub_result` should then be returned as `value lub_result` to wrap it in the `Value<a>` type. The error, or "top" element of the lattice is above all other elements in the lattice, and the `lub` function should return `Top<a>` in the case that the two elements cannot be combined to form a valid element of the lattice's base type. 
+
+Traditionally, the `lub` operation is idempotent: the `lub` of any element with itself should be the original element. However, the `lub` can also represent a more general associative and commutative operation (e.g., multiplication or addition) in the case that reads are performed only by freezing (see discussion later in this guide).
+
+For example, the `lub` operation might take the maximum or minimum of two integers or doubles, return an argument only if the two supplied arguments are equivalent, or take the union of two sets.
+
 
 

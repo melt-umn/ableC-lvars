@@ -1,19 +1,3 @@
-### A leq function to determine the order of elements in the lattice.
-
-This function must take as arguments two elements of the lattice's base type. The leq function should return `1` (true) if the first element is at or below the second element in the lattice, and should return `0` (false) otherwise. An element is defined to be "at or below" another element if the second element can be reached, in a series of monotonically increasing operations (however that is defined for the base type) from the first element. Every element is at or below the top element.
-
-Ex. The `leq` function in `int.xc` takes two `int`s and returns `1` if the two integers are equal or the second integer is 100. For example, `leq(5, 5) => 1` but `leq(5, 6) => 0`. 
-
-Ex. The `leq` function in `and.xc` takes two `State*`s and returns `1` if the second state could be reached from the first by changing `Bot()` positions to either `T()` or `F()`, or if the second state is `Top()`. For example, `leq(Pair(T(), Bot()), Pair(F(), Bot())) => 0` and `leq(Pair(T(), Bot()), Pair(T(), F())) => 1`.
-
-### A lub function to determine how to "combine" elements in the lattice.
-
-This function must take as arguments two elements of the lattice's base type and return an element of the same type that represents the "least upper bound" of the two elements-- i.e., the lowest element of the lattice that such that both the first argument element and second argument element are "leq" the element in question. Note that the lub of any element with the top element is the top element. The lub of any element with itself must traditionally be the original element, though the lub can also represent a more general associative and commutative operation if no get reads will be performed.
-
-Ex. the `lub` function in `int.xc` takes two `int`s and returns 100 if one or both of them are 100 or if the elements are not equal, and returns the value of both elements if the elements are equal. For example, `lub(5, 5) => 5` and `lub(6, 5) => 100`.
-
-Ex. the `lub` function in `and.xc` takes two `State*`s and returns the lowest pair that could be reached by legally combining the two pairs of booleans. For example, `lub(Pair(T(), Bot()), Pair(F(), Bot())) => Top()`, `lub(Pair(F(), T()), Pair(F(), Bot())) => Pair(F(), T())`, and `lub(Pair(Bot(), T()), Pair(T(), Bot())) => Pair(T(), T())`.
-
 ### A show function to provide a string representation of an element of the lattice.
 
 The show function must take an element of the lattice's base type and print a representation of that element to the screen.
