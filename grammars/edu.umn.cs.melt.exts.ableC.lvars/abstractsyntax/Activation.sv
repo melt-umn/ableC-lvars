@@ -82,16 +82,24 @@ top::Expr ::= basetype::Type actSet::Expr item::Expr
     case basetype of
       pointerType(_, _) -> 
         mkErrorCheck(localErrors,
-          ableC_Expr{
+          stmtExpr(
+          ableC_Stmt{
+            if ($Expr{item} == ((void *)0)) {
+              fprintf(stderr, "Error: NULL argument supplied to freeSet\n");
+              exit(1);
+            }
+          },
+          ableC_Expr {
             inst _addAct<$directTypeExpr{basetype}>
-            ($Expr{actSet}, $Expr{item}, 1) // last arg if base type is ptr
-          }
+            ($Expr{actSet}, $Expr{item})
+          },
+          location=top.location)
         )
     | _ -> 
         mkErrorCheck(localErrors,
           ableC_Expr{
             inst _addAct<$directTypeExpr{basetype}>
-            ($Expr{actSet}, $Expr{item}, 0)
+            ($Expr{actSet}, $Expr{item})
           }
         )
     end;

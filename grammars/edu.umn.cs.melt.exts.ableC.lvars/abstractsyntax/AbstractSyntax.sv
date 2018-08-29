@@ -159,7 +159,7 @@ top::Expr ::= lvar::Expr value::Expr
   propagate substituted;
   top.pp = pp"put (${value.pp}) in ${lvar.pp}";
 
-  local headerError::[Message] = checkLvarHeaderDef(top.location, top.env);
+  local headerError::[Message] = checkLvarHeaderDef(builtin, top.env);
   local localErrors::[Message] =
     if null(headerError)
     then lvar.errors ++ value.errors
@@ -195,21 +195,29 @@ top::Expr ::= lvarBaseType::Type lvar::Expr value::Expr
           showType(value.typerep) ++ " in Lvar<"
           ++ showType(lvarBaseType) ++ ">*")];
 
-  forwards to 
+  local fwrd::Expr =
     case lvarBaseType of
-      pointerType(_, _) -> 
-        mkErrorCheck(localErrors,
+      pointerType(_, _) ->
+        stmtExpr( 
+        ableC_Stmt{
+          if ($Expr{value} == ((void *)0)) {
+            fprintf(stderr, "Error: NULL argument supplied to put\n");
+            exit(1);
+          }
+        },
         ableC_Expr{
           inst _put<$directTypeExpr{lvarBaseType}>($Expr{lvar}, 
-            $Expr{value}, 1) // last arg indicates whether pointer base or not
-        })
+            $Expr{value})
+        }, location=top.location)
     | _ -> 
-        mkErrorCheck(localErrors,
         ableC_Expr{
           inst _put<$directTypeExpr{lvarBaseType}>($Expr{lvar}, 
-            $Expr{value}, 0)
-        }) 
+            $Expr{value})
+        }
     end;
+
+  forwards to 
+    mkErrorCheck(localErrors, fwrd);
 }
 
 // *************************** other ******************************************

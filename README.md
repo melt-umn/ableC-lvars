@@ -11,7 +11,7 @@ The extension is based on the work of Assistant Professor Lindsey Kuper. The fol
 + http://composition.al/blog/2014/01/31/how-to-freeze-after-writing/
 + http://composition.al/blog/2014/05/28/the-lvar-that-was-after-all/
 
-## Lattice Components:
+## Part 1: Lattice Components.
 
 Each lattice variable is associated with a "lattice," which prescribes how individual values can be ordered and combined. To create a lattice, a programmer must define several components.
 
@@ -37,7 +37,7 @@ The `lub` function must take two elements of the lattice's base type as argument
 
 For example, the `lub` operation might take the maximum or minimum of two integers or doubles, return an argument only if the two supplied arguments are equivalent, or take the union of two sets.
 
-Traditionally, the `lub` operation is idempotent: the `lub` of any element with itself should be the original element. However, the `lub` can also represent a more general associative and commutative operation (e.g., multiplication or addition) in the case that reads are performed only by freezing (see discussion later in this guide).
+Traditionally, the `lub` operation is idempotent: the `lub` of any element with itself should be the original element (wrapped with `value`). However, the `lub` can also represent a more general associative and commutative operation (e.g., multiplication or addition) in the case that reads are performed only by freezing (see discussion later in this guide).
 
 Note that when the lattice's base type is a pointer type, programmers must be careful to return *copies* of all pointer values, including pointers within algebraic datatypes. This ensures that values that need to be used again are not prematurely freed. There is one exception to this rule: destructive lattices, which are discussed later in the guide.
 
@@ -59,9 +59,74 @@ For example, the `free` function for the algebraic datatype `Pair(Int(int)*, Int
 
 The `free` function is not necessary to provide in the case of non-pointer types like integers, chars, and doubles. If no `free` function is provided, the lattice will default to a `free` that does nothing. However, in the case of pointer types, especially programmer-defined structs and algebraic datatypes, `free` should free all components of any given element of the lattice's base type in order to prevent memory leaks. There is one exception to this: destructive lattices
 
-## Creating a Lattice:
+## Part 2: Creating a Lattice.
 
-### 
+To make a lattice, a programmer can write the following, using `leq_a`, `lub_a`, `display_a`, and `free_a` as described above:
+
+`Lattice<a>* lat = lattice(leq_a, lub_a, display_a)`
+
+or
+
+`Lattice<a>* lat = lattice(leq_a, lub_a, display_a, free_a)`
+
+### Destructive Lattices.
+
+Programmers may also choose to use a destructive lub operation-- for example, a set union that mutates the pre-existing set instead of creating a new copy. This destructive version can make writing non-deterministic programs easier than with traditional lattices and leaves the responsibility of freeing in the hands of the programmer, but may be preferred for space-efficiency reasons. It is possible to construct such a lattice with the following syntax:
+
+`Lattice<a>* lat = destr_lattice(leq_a, lub_a, display_a)`
+
+Note that no `free` function can be specified when constructing a destructive lattice, since programmers are responsible for handling freeing within their `lub` operation. Also note that the `lub` function is assumed to mutate the first argument to form the new value.
+
+## Part 3: Creating an LVar.
+
+Once a programmer has a lattice `lat`, they can create an associated lattice variable as follows:
+
+`Lvar<a>* x = newLvar lat;`
+
+This initialized the LVar `x` to have a value at the "bottom" of the lattice. Arbitrarily many lattice variables can be created for a given lattice.
+
+## Part 4: Writing to LVars.
+
+To write a value `val` of type `a` to a lattice variable `x` of base type `a`, a programmer can write the following:
+
+`put (val) in x;`
+
+Note that if `val` is an identifier, the parentheses are unnecessary.
+
+With LVars, a `put` does not write a raw value to the location represented by the lattice variable. Instead, `put` attempts to write the least upper bound of the current value of the LVar and the new value that is indicated by the programmer (i.e., the result of the `lub` for the given lattice) to the LVar. If this lub is the top element of the lattice, the `put` fails and the program errors out. If the result is a valid element of the lattice, the value of the LVar is updated to the lub result. The first time an LVar is written to after being created, the result of the `put` will be whatever value is being `put` in.
+
+## Part 5: Reading from LVars.
+
+There are two ways to read from an LVar: with `get`, which returns the unique "activation set" matched by the value of the LVar, and with freezing, which prevents future writes to the LVar.
+
+### Reading from LVars with `get`.
+
+In order to deterministically read from lattice variables with `get`, a programmer must set up a "threshold" set that indicates when an LVar is ready to be read from. Each threshold set is composed of one or more activation sets, and each activation set is composed of one or more elements of the base data type. Once the value of an LVar is at or above one of the values in one of the activation sets with respect to the lattice, the unique matched activation set is accessible to the programmer.
+
+#### Creating Activation Sets.
+
+For example, in `and.xc`, an LVar is not ready to read from until either both boolean results in a `Pair` are determined to be `T()` or at least one of the boolean results is determined to be `F()`, at which point the value of the "and" operation is known to be either true or false. To determine when this occurs (and to process the final result) we can create a "true result" activation set and a "false result" activation set for our lattice `lat` as follows:
+
+```c
+ActivationSet<State*>* falseSet = activationSet(lat);
+ActivationSet<State*>* trueSet = activationSet(lat);
+```
+
+To add elements to these sets, we can write:
+
+```c
+add(falseSet, Pair(F(), Bot()));
+add(falseSet, Pair(F(), T()));
+add(falseSet, Pair(T(), F()));
+add(falseSet, Pair(F(), F()));
+add(falseSet, Pair(Bot(), F()));
+
+add(trueSet, Pair(T(), T()));
+```
+
+#### Creating Threshold Sets.
+
+### Reading from LVars with `freeze`.
 
 
 

@@ -80,8 +80,8 @@ static Lattice<a>* _newLattice(int (*leqFunc)(a, a),
   #if defined(CHECK) || defined(DEBUG)
     if (leqFunc == NULL || lub == NULL || displayMethod == NULL ||
         freeMethod == NULL) { 
-      printf("Error: NULL argument supplied to lattice constructor\n");
-      exit(0);
+      fprintf(stderr, "Error: NULL argument supplied to lattice constructor\n");
+      exit(1);
     }
   #endif
 
@@ -134,8 +134,8 @@ template<a>
 static Lvar<a>* _new(Lattice<a>* l) {
   #if defined(CHECK) || defined(DEBUG)
     if (l == NULL) {
-      printf("Error: NULL argument supplied to newLvar\n");
-      exit(0);
+      fprintf(stderr, "Error: NULL argument supplied to newLvar\n");
+      exit(1);
     }
   #endif
   Lvar<a>* lvarNew = malloc(sizeof(Lvar<a>)); 
@@ -153,8 +153,8 @@ static void _displayLvar(Lvar<a>* l) {
 
   #if defined(CHECK) || defined(DEBUG)
     if (l == NULL) {
-      printf("Error: NULL argument supplied to display\n");
-      exit(0);
+      fprintf(stderr, "Error: NULL argument supplied to display\n");
+      exit(1);
     }
   #endif
 
@@ -166,8 +166,8 @@ static void _displayLvar(Lvar<a>* l) {
   else {
     pthread_mutex_unlock(&(l->_mutex));
     #ifdef DEBUG
-      printf("Error: Can't display a lvar before it is frozen!\n");
-      exit(0);
+      fprintf(stderr, "Error: Can't display a lvar before it is frozen!\n");
+      exit(1);
     #endif
     printf("<Lvar Value Unavailable>");
   }
@@ -179,8 +179,8 @@ static void _freeLvar(Lvar<a>* l) {
 
   #if defined(CHECK) || defined(DEBUG)
     if (l == NULL) {
-      printf("Error: NULL argument supplied to freeLvar\n");
-      exit(0);
+      fprintf(stderr, "Error: NULL argument supplied to freeLvar\n");
+      exit(1);
     }
   #endif
 
@@ -200,8 +200,8 @@ static Lattice<a>* _getLattice(Lvar<a>* l) {
 
   #if defined(CHECK) || defined(DEBUG)
     if (l == NULL) {
-      printf("Error: NULL argument supplied to getLattice\n");
-      exit(0);
+      fprintf(stderr, "Error: NULL argument supplied to getLattice\n");
+      exit(1);
     }
   #endif
 
@@ -224,13 +224,13 @@ static ActivationSet<a>* _newActivationSet(Lattice<a>* l, int size) {
 
   #if defined(DEBUG) || defined(CHECK) 
     if (l == NULL) {
-      printf("Error: NULL argument supplied to activationSet()\n");
-      exit(0);
+      fprintf(stderr, "Error: NULL argument supplied to activationSet()\n");
+      exit(1);
     }
     if (size < 0) {
       #ifdef DEBUG
-        printf("Error: can't create an activation set of negative size!\n");  
-        exit(0);
+        fprintf(stderr, "Error: can't create an activation set of negative size!\n");  
+        exit(1);
       #endif
       size = 0;
     }
@@ -250,8 +250,8 @@ static void _displayActivation(ActivationSet<a>* act){
 
   #if defined(CHECK) || defined(DEBUG)
     if (act == NULL) {
-      printf("Error: NULL argument supplied to display\n");
-      exit(0);
+      fprintf(stderr, "Error: NULL argument supplied to display\n");
+      exit(1);
     }
   #endif
 
@@ -284,18 +284,12 @@ static int _resizeActSet(ActivationSet<a>* act, int newSize) {
 
 // to add a single element to an activation set (resizing if necessary)
 template<a>
-static ActivationSet<a>* _addAct(ActivationSet<a>* act, a element, int ptr) {
+static ActivationSet<a>* _addAct(ActivationSet<a>* act, a element) {
 
   #if defined(CHECK) || defined(DEBUG)
     if (act == NULL) {
-      printf("Error: trying to add to NULL\n");
-      exit(0);
-    }
-    if (ptr) {
-      if (element == NULL) {
-        printf("Error: trying to add NULL to activation set\n");
-        exit(0);
-      }
+      fprintf(stderr, "Error: trying to add to NULL\n");
+      exit(1);
     }
   #endif
 
@@ -313,8 +307,8 @@ static int _freeActivation(ActivationSet<a>* act) {
 
   #if defined(CHECK) || defined(DEBUG)
     if (act == NULL) {
-      printf("Error: NULL argument supplied to freeSet\n");
-      exit(0);
+      fprintf(stderr, "Error: NULL argument supplied to freeSet\n");
+      exit(1);
     }
   #endif
 
@@ -342,16 +336,16 @@ static ThresholdSet<a>* _newThresholdSet(Lattice<a> * l, int size) {
 
   #if defined(CHECK) || defined(DEBUG)
     if (l == NULL) {
-      printf("Error: NULL argument supplied to thresholdSet()\n");
-      exit(0);
+      fprintf(stderr, "Error: NULL argument supplied to thresholdSet()\n");
+      exit(1);
     }
   #endif
 
   #if defined(DEBUG) || defined(CHECK)
     if (size < 0) {
       #ifdef DEBUG
-        printf("Error: Can't create a threshold set of negative size!\n");
-        exit(0);
+        fprintf(stderr, "Error: Can't create a threshold set of negative size!\n");
+        exit(1);
       #endif
       size = 0;
     }
@@ -378,14 +372,14 @@ static int _incompat(Lattice<a> * l, ActivationSet<a> *Q,
       Value<a>* lubRes = l->_lub(q, r);
       if (!lubRes->_top) {
         #ifdef DEBUG
-          printf("Error: ");
+          fprintf(stderr, "Error: compatible activation sets!\n");
           l->_display(q);
           printf(" and ");
           l->_display(r);
           printf(" are compatible, with lub ");
           l->_display(lubRes->_val);
-          printf("!\n");
-          exit(0);
+          printf("\n");
+          exit(1);
         #endif
         l->_free(lubRes->_val);
         free(lubRes);
@@ -421,21 +415,18 @@ static ThresholdSet<a>* _addThreshold(ThresholdSet<a>* t,
   // check that threshold and activation have same lattice
   #if defined(DEBUG) || defined(CHECK) 
     if (t == NULL) {
-      printf("Error: trying to add to NULL threshold set\n");
-      exit(0);
+      fprintf(stderr, "Error: trying to add to NULL threshold set\n");
+      exit(1);
     }
     if (act == NULL) {
-      printf("Error: trying to add NULL to threshold set\n");
-      exit(0);
+      fprintf(stderr, "Error: trying to add NULL to threshold set\n");
+      exit(1);
     }
     if (!inst _eqLattice<a>(t->_lattice, act->_lattice)) {
       #ifdef DEBUG
-        printf("Error: activation set ");
-        display(act);
-        printf(" and threshold set ");
-        display(t);
-        printf(" do not have the same lattice. \n");
-        exit(0);
+        fprintf(stderr, 
+                "Error: trying to add activation set of incorrect lattice\n");
+        exit(1);
       #endif
       return t; // if check mode, add just fails silently
     }
@@ -468,8 +459,8 @@ static int _freeThreshold(ThresholdSet<a> *t) {
 
   #if defined(CHECK) || defined(DEBUG)
     if (t == NULL) {
-      printf("Error: NULL argument supplied to freeSet\n");
-      exit(0);
+      fprintf(stderr, "Error: NULL argument supplied to freeSet\n");
+      exit(1);
     }
   #endif
 
@@ -486,8 +477,8 @@ static void _freeActSets(ThresholdSet<a>* t) {
 
   #if defined(CHECK) || defined(DEBUG)
     if (t == NULL) {
-      printf("Error: NULL argument supplied to freeActSets\n");
-      exit(0);
+      fprintf(stderr, "Error: NULL argument supplied to freeActSets\n");
+      exit(1);
     }
   #endif
 
@@ -502,8 +493,8 @@ static void _displayThreshold(ThresholdSet<a>* t){
 
   #if defined(CHECK) || defined(DEBUG)
     if (t == NULL) {
-      printf("Error: NULL argument supplied to display\n");
-      exit(0);
+      fprintf(stderr, "Error: NULL argument supplied to display\n");
+      exit(1);
     }
   #endif
 
@@ -525,26 +516,20 @@ static void _displayThreshold(ThresholdSet<a>* t){
 // the lub of the old value and the new value, erroring out if update would
 // take value to top
 template<a>
-static void _put(Lvar<a>* l, a newState, int ptr) {
+static void _put(Lvar<a>* l, a newState) {
 
   #if defined(CHECK) || defined(DEBUG)
     if (l == NULL) {
-      printf("Error: NULL argument supplied to put\n");
-      exit(0);
-    }
-    if (ptr) {
-      if (newState == NULL) {
-        printf("Error: NULL argument supplied to put\n");
-        exit(0);
-      }
+      fprintf(stderr, "Error: NULL argument supplied to put\n");
+      exit(1);
     }
   #endif
 
   pthread_mutex_lock(&(l->_mutex));
 
   if (l->_frozen) { 
-    printf("Error: can't write to a frozen lvar.\n");
-    exit(0);
+    fprintf(stderr, "Error: can't write to a frozen lvar.\n");
+    exit(1);
   }
 
   // if lvar has no value yet, value is automatically set to newState
@@ -560,12 +545,13 @@ static void _put(Lvar<a>* l, a newState, int ptr) {
 
     // if the lub is top, we have an invalid put
     if (newValue->_top){
-      printf("Error: invalid put of ");
+      fprintf(stderr, "Error: invalid put!\n");
+      printf("Trying to put ");
       l->_lattice->_display(newState);
-      printf(" into lvar of value ");
+      printf(" into LVar of value ");
       l->_lattice->_display(oldState);
       printf("\n");
-      exit(0);
+      exit(1);
     }
 
     if (!l->_lattice->_destructive) {
@@ -618,8 +604,8 @@ static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
 
   #if defined(CHECK) || defined(DEBUG)
     if (l == NULL || t == NULL) {
-      printf("Error: NULL argument supplied to get\n");
-      exit(0);
+      fprintf(stderr, "Error: NULL argument supplied to get\n");
+      exit(1);
     }
   #endif
 
@@ -629,9 +615,9 @@ static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
   #if defined(DEBUG) || defined(CHECK)
     if (!inst _eqLattice<a>(l->_lattice, t->_lattice)) {
       #ifdef DEBUG
-        printf("Error: can't get when Lvar doesn't have same");
-        printf(" lattice as threshold set.\n");
-        exit(0);
+        fprintf(stderr, "Error: can't get when Lvar doesn't have same");
+        fprintf(stderr, " lattice as threshold set.\n");
+        exit(1);
       #endif
       pthread_mutex_unlock(&(l->_mutex));
       return NULL;
@@ -666,29 +652,20 @@ static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
 
 //****************************** freeze ***************************************
 
-// takes an lvar and returns the exact value of the lvar as its result
-// updates the lvar to be "frozen", preventing any further updates
+// takes an lvar and updates the lvar to be "frozen", preventing any further 
+// updates
 template<a>
-static a _freeze(Lvar<a>* l) {
-
+static void _freeze(Lvar<a>* l) {
   #if defined(CHECK) || defined(DEBUG)
     if (l == NULL) {
-      printf("Error: NULL argument supplied to freeze\n");
-      exit(0);
+      fprintf(stderr, "Error: NULL argument supplied to freeze\n");
+      exit(1);
     }
   #endif
 
   pthread_mutex_lock(&(l->_mutex));
   l->_frozen = 1;
-  // if the lvar doesn't have a value, we have nothing to return
-  if (l->_value->_bot) { 
-    printf("Error: can't freeze lvar with no value.\n");
-    exit(0);
-  } 
-  // otherwise return the value of the lvar
-  a result = l->_value->_val;
   pthread_mutex_unlock(&(l->_mutex));
-  return result;
 }
 
 
@@ -699,24 +676,24 @@ static a _frozenGet(Lvar<a>* l) {
 
   #if defined(CHECK) || defined(DEBUG)
     if (l == NULL) {
-      printf("Error: NULL argument supplied to get\n");
-      exit(0);
+      fprintf(stderr, "Error: NULL argument supplied to get\n");
+      exit(1);
     }
   #endif
 
   pthread_mutex_lock(&(l->_mutex));
   if (!l->_frozen) {
-    printf("Error: unless frozen, must specify threshold ");
-    printf("set when getting from an lvar\n");
-    exit(0);
+    fprintf(stderr, "Error: unless frozen, must specify threshold ");
+    fprintf(stderr, "set when getting from an lvar\n");
+    exit(1);
   }
   if (!l->_value->_bot) {
     a val = l->_value->_val;
     pthread_mutex_unlock(&(l->_mutex));
     return val; 
   }
-  printf("Error: can't get bottom value.\n");
-  exit(0);
+  fprintf(stderr, "Error: can't get bottom value.\n");
+  exit(1);
 }
 
 #endif // LVARS_H_

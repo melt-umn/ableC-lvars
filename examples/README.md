@@ -2,10 +2,11 @@
 
 This directory includes the following example LVars programs:
 
-## Simple Integer Examples
+## Simple Integer/Double Examples
 
 + `counter.xc` (integer counter)
 + `int.xc` (single-write integers)
++ `double.xc` (single-write doubles)
 + `unpredictable_scheduling.xc` (puts and gets may occur in different orders)
 
 ## Interesting Lattice Data Structures

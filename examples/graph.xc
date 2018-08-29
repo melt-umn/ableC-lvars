@@ -145,7 +145,8 @@ cilk int main(int argc, char **argv) {
         delete_intsetitr(new_itr);
 
         sync;
-        IntSet* frozen_nbrs = freeze(nbrs);
+        freeze nbrs;
+        IntSet* frozen_nbrs = get nbrs;
         intset_minus(get nbrs, seen);
         delete_intset(new);
         new = frozen_nbrs;
@@ -156,7 +157,7 @@ cilk int main(int argc, char **argv) {
 
     freeze accum;
     printf("Sum = ");
-    display(accum);  
+    display accum;  
     printf("\n");
     Lattice<int>* lat = getLattice accum;
     freeLvar accum;

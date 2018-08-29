@@ -1,34 +1,4 @@
-## Part 2: Creating a Lattice.
-
-If a programmer has defined the necessary lattice components with data elements `topEx` of type `baseType` and functions `leqEx`, `lubEx`, `showEx`, and `freeEx` as described above, they can create a new lattice `lat` as follows:
-
-`Lattice<baseType> * lat = lattice(topEx, leqEx, lubEx, showEx, freeEx);`
-
-or, if the programmer does not want or need to specify a free function,
-
-`Lattice<baseType> * lat = lattice(topEx, leqEx, lubEx, showEx);`
-
-## Part 3: Creating an Lvar.
-
-Once a programmer has a lattice `lat`, they can create an associated lattice variable as follows:
-
-`Lvar<baseType> * lvar1 = newLvar(D);`
-
-Arbitrarily many lattice variables can be created for a given lattice.
-
-## Part 4: Writing to Lvars.
-
-To write a value `val` of type `baseType` to a lattice variable `lvar1` of base type `baseType`, a programmer can write the following:
-
-`put (val) in lvar1;`
-
-Note that if `val` is an identifier, the parentheses are unnecessary.
-
-With lvars, a `put` does not write a raw value to the location represented by the lattice variable. Instead, `put` attempts to write the least upper bound of the current value of the lvar and the new value that is indicated by the programmer (i.e., the result of the `lub` for the given lattice) to the lvar. If this lub is the top element of the lattice, the `put` fails and the program errors out. If the result is a valid element of the lattice, the value of the lvar is updated to the lub result.
-
 ## Part 5: Creating a Threshold Set.
-
-In order to deterministically read from lattice variables, a programmer must set up a "threshold" set that indicates when an lvar is ready to be read from. Each threshold set is composed of one or more activation sets, and each activation set is composed of one or more elements of the base data type. Once the value of an lvar is at or above one of the values in one of the activation sets with respect to the lattice, the unique matched activation set is accessible to the programmer.
 
 For example, in `and.xc`, an lvar is not ready to read from until either both boolean results in a `Pair` are determined to be `T()` or at least one of the boolean results is determined to be `F()`, at which point the value of the "and" operation is known to be either true or false. To determine when this occurs (and to process the final result) we can create a "true result" activation set and a "false result" activation set for our lattice `D` as follows:
 

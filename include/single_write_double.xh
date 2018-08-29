@@ -5,7 +5,7 @@
 #include "double.xh"
 
 int leq_single_write_double(double i1, double i2) {
-  return i1 == i2;
+  return i1 <= i2 + 0.00001 && i1 >= i2 - 0.00001;
 }
 
 Value<double>* lub_single_write_double(double i1, double i2) {

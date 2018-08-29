@@ -3,7 +3,7 @@
 #include "cilk.xh"
 
 // Example demonstrating the use of lvars for Boolean "and" operation
-// Note that user is responsible for providing appropriate type, eq, leq,
+// Note that user is responsible for providing appropriate type, leq,
 // lub, and display functions based on their needs
 
 // Based on example in Kuper Section 2.6.2
