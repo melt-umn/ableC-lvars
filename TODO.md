@@ -9,13 +9,9 @@
     + default display
     + freeing before any puts
     + getLattice
-    + empty activation set (getting, displaying)
-    + empty activation set within threshold set (getting, displaying)
-    + empty threshold set (getting, displaying)
-    + valgrind with all headers (counter, int_set, max_int, product_int, quiesce, single_write_int, sum_int) 
+    + valgrind with all headers (counter, int_set, max_int, product_int, quiesce, sum_int) 
     + negative size act and thresh
     + destructive put
-    + get with empty activation/threshold set when value is at bottom (non-frozen)
     + destr_lattice
     + destr_makeLvar
     + makeLvar
