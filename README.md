@@ -19,7 +19,7 @@ Each lattice variable is associated with a "lattice," which prescribes how indiv
 
 Type/Signature: `a`
 
-Each lattice can only contain elements of a single type. A lattice with base type `a` has type `Lattice<a>` (e.g., `Lattice<int>` or `Lattice<Pair*>`).
+Each lattice can only contain elements of a single type. A lattice with base type `a` has type `Lattice<a>*` (e.g., `Lattice<int>*` or `Lattice<Pair*>*`).
 
 ### A `leq` function to determine the order of any two elements of the lattice
 
@@ -27,15 +27,30 @@ Type/Signature: `int leq_a(a elem1, a elem2)`
 
 The `leq` function must take two elements of the lattice's base type as arguments and return an integer. The function should return 1 (truthy) if the first argument element is "at or below" the second argument element with respect to the lattice's ordering (i.e., the second element can be reached, in a series of monotonically increasing operations, from the first element), and 0 (falsy) otherwise. 
 
-For example, the `leq` operation might represent `<=`, `>=`, or `==` between integers or doubles, or a set inclusion operation between sets.
+For example, the `leq` operation might represent `<=`, `>=`, or `==` (see below) between integers or doubles, or a set inclusion operation between sets.
+
+```c
+int leq_int(int i1, int i2) {
+  return i1 == i2;
+}
+```
 
 ### A `lub` function to determine how to combine any two elements of the lattice
 
 Type/Signature: `Value<a>* lub_a(a elem1, a elem2)`
 
-The `lub` function must take two elements of the lattice's base type as arguments and return another element of the lattice's base type, wrapped in a `Value` wrapper type. The function should compute the element of type `a` that represents the "least upper bound" between the two provided elements-- i.e., the lowest element of the lattice that is at or above both arguments with respect to the ordering given in `leq`. This value `lub_result` should then be returned as `value lub_result` to wrap it in the `Value<a>` type. The error, or "top" element of the lattice is above all other elements in the lattice, and the `lub` function should return `Top<a>` in the case that the two elements cannot be combined to form a valid element of the lattice's base type. 
+The `lub` function must take two elements of the lattice's base type as arguments and return another element of the lattice's base type, wrapped in a `Value` wrapper type. The function should compute the element of type `a` that represents the "least upper bound" between the two provided elements-- i.e., the lowest element of the lattice that is at or above both arguments with respect to the ordering given in `leq`. This value `lub_result` should then be returned as `value lub_result` to wrap it in the `Value<a>*` type. The error, or "top" element of the lattice is above all other elements in the lattice, and the `lub` function should return `Top<a>` in the case that the two elements cannot be combined to form a valid element of the lattice's base type. 
 
-For example, the `lub` operation might take the maximum or minimum of two integers or doubles, return an argument only if the two supplied arguments are equivalent, or take the union of two sets.
+For example, the `lub` operation might take the maximum or minimum of two integers or doubles, return an argument only if the two supplied arguments are equivalent (see below), or take the union of two sets.
+
+```c
+Value<int>* lub_int(int i1, int i2) {
+  if (i1 == i2) {
+    return value i1;
+  }
+  return Top<int>
+}
+```
 
 Traditionally, the `lub` operation is idempotent: the `lub` of any element with itself should be the original element (wrapped with `value`). However, the `lub` can also represent a more general associative and commutative operation (e.g., multiplication or addition) in the case that reads are performed only by freezing (see discussion later in this guide).
 
@@ -47,7 +62,28 @@ Type/Signature: `void display_a(a elem)`
 
 The `display` function must take one element of the lattice's base type as its argument, print that element to the screen, and return nothing.
 
-For example, the `display` function for integers might simply be `printf("%d", elem)`, but the function may be more complicated for programmer-defined types.
+For example, the `display` function for integers might simply be `printf("%d", elem)`, but the function may be more complicated for programmer-defined types. 
+
+```c
+void display_int(MaybeInt* i) {
+  match (i) {
+    Some_I(n) -> {printf("%d", n);}
+    None_I() -> {printf("?");}
+  }
+}
+
+void display_int_pair(Pair* p) {
+  match (p) {
+    Int_Pair(i1, i2) -> {
+      printf("(");
+      display_int(i1);
+      printf(", ");
+      display_int(i2);
+      printf(")");
+    }
+  }
+}
+```
 
 ### (Optional) A `free` function to determine how to free an element of the lattice
 
@@ -55,7 +91,19 @@ Type/Signature: `void free_a(a elem)`
 
 The `free` function must take one element of the lattice's base type as its argument, free that element, and return nothing. 
 
-For example, the `free` function for the algebraic datatype `Pair(Int(int)*, Int(int)*)*` might pattern match on the `Pair` constructor and free both `Int` pointers before freeing the pointer to the entire element.
+For example, the `free` function for the algebraic datatype `Pair(MaybeInt*, MaybeInt*)*` might pattern match on the `Pair` constructor and free both `MaybeInt` pointers before freeing the pointer to the entire element.
+
+```c
+void free_int_pair(Pair* p) {
+  match (p) {
+    Int_Pair(i1, i2) -> {
+      free(i1);
+      free(i2);
+      free(p);
+    }
+  }
+}
+```
 
 The `free` function is not necessary to provide in the case of non-pointer types like integers, chars, and doubles. If no `free` function is provided, the lattice will default to a `free` that does nothing. However, in the case of pointer types, especially programmer-defined structs and algebraic datatypes, `free` should free all components of any given element of the lattice's base type in order to prevent memory leaks. There is one exception to this: destructive lattices
 
@@ -75,11 +123,11 @@ Programmers may also choose to use a destructive lub operation-- for example, a 
 
 `Lattice<a>* lat = destr_lattice(leq_a, lub_a, display_a)`
 
-Note that no `free` function can be specified when constructing a destructive lattice, since programmers are responsible for handling freeing within their `lub` operation. Also note that the `lub` function is assumed to mutate the first argument to form the new value.
+Note that no `free` function can be specified when constructing a destructive lattice, since programmers are responsible for handling freeing within their `lub` operation. Also note that the `lub` function is assumed to mutate the first argument to form the new value upon each `put` (discussed below).
 
 ## Part 3: Creating an LVar
 
-Once a programmer has a lattice `lat`, they can create an associated lattice variable as follows:
+Once a programmer has a lattice `lat`, they can create an associated lattice variable of type `Lvar<a>*` as follows:
 
 `Lvar<a>* lvar = newLvar lat;`
 
@@ -101,7 +149,7 @@ There are two ways to read from an LVar: with `get`, which returns the unique "a
 
 ### Reading from LVars with `get`
 
-In order to deterministically read from lattice variables with `get`, a programmer must set up a "threshold" set that indicates when an LVar is ready to be read from. Each threshold set is composed of one or more activation sets, and each activation set is composed of one or more elements of the base data type. Once the value of an LVar is at or above one of the values in one of the activation sets with respect to the lattice, the unique matched activation set is accessible to the programmer.
+In order to deterministically read from lattice variables with `get`, a programmer must set up a "threshold" set (of type `ThresholdSet<a>*`) that indicates when an LVar is ready to be read from. Each threshold set is composed of one or more activation sets (of type `ActivationSet<a>*`), and each activation set is composed of one or more elements of the base data type. Once the value of an LVar is at or above one of the values in one of the activation sets with respect to the lattice, the unique matched activation set is accessible to the programmer.
 
 #### Creating Activation Sets
 
@@ -147,7 +195,7 @@ ActivationSet<State*> * trueSet = activationSet(lat, 1){Pair(T(), T())};
 
 #### Creating Threshold Sets
 
-Once we have created one or more activation sets, we can use them to form a threshold set. The syntax for adding to and initializing a threshold set is very similar to that for an activation set:
+Once we have created one or more activation sets for a given lattice, we can use them to form a threshold set for that lattice. The syntax for adding to and initializing a threshold set is very similar to that for an activation set:
 
 ```c
 ThresholdSet<State*> * thresh = thresholdSet(lat);
@@ -175,11 +223,11 @@ Note that any two activation sets added to a threshold set must be incompatible-
 
 Once a programmer has set up a threshold set for a given lattice, they can use it to attempt to read from a lattice variable as in the following example:
 
-`ActivationSet<State*> * result = get (lvar) with thresh;`
+`ActivationSet<State*>* result = get (lvar) with thresh;`
 
 Note that, again, the parentheses are unnecessary in the case where `lvar` is an identifier.
 
-A call to `get` checks the current value of the LVar against each activation set in the provided threshold set. If the value of the LVar is at or above (in terms of the lattice's `leq` ordering) some member of some activation set in the threshold set, the `get` will return the entire matched activation set. If the value of the LVar is not yet at or above any member of any of the activation sets, `get` will block until a `put` operation makes the `get` valid. Note that this means that the `get` may block indefinitely.'
+A call to `get` checks the current value of the LVar against each activation set in the provided threshold set. If the value of the LVar is at or above (in terms of the lattice's `leq` ordering) some member of some activation set in the threshold set, the `get` will return the entire matched activation set. If the value of the LVar is not yet at or above any member of any of the activation sets, `get` will block until a `put` operation makes the `get` valid. Note that this means that the `get` may block indefinitely.
 
 In the case that an LVar is frozen (see following section), if the value of the LVar has reached a given activation set, that activation set will be returned. Otherwise, since no more writes can occur, the `get` will return a singleton activation set containing the actual value of the LVar (or an empty set in the case that the LVar has not yet been written to).
 
@@ -213,11 +261,21 @@ Note that `display` will fail when used on a non-frozen LVar.
 
 ## Part 7: Cleaning Up
 
-After a programmer is done using LVars, lattices, activation sets, and threshold sets, they should clean up the utilized memory. Activation sets can be freed separately from their associated threshold sets with `freeSet` or all at once via their threshold set with `freeAllActs`. Threshold sets can also be freed using `freeSet`. Lattices can be freed with an ordinary `free`, and LVars can be freed with `freeLvar` (which also frees their final value). Note that Lvars, Activation Sets, and Threshold Sets should be freed before their lattices. For example,
+After a programmer is done using LVars, lattices, activation sets, and threshold sets, they should clean up the utilized memory. Activation sets can be freed separately from their associated threshold sets with `freeSet` or all at once via their threshold set with `freeActSets`. Threshold sets can also be freed using `freeSet`. Lattices can be freed with an ordinary `free`, and LVars can be freed with `freeLvar` (which also frees their final value). Note that Lvars, Activation Sets, and Threshold Sets should be freed before their lattices. For example,
 
 ```c
 freeLvar lvar;
-freeAllSets thresh;
+freeActSets thresh;
+freeSet thresh;
+free(lat);
+```
+
+or
+
+```c
+freeLvar lvar;
+freeSet trueSet;
+freeSet falseSet;
 freeSet thresh;
 free(lat);
 ```
@@ -236,23 +294,37 @@ The LVars extension includes a few other constructs that make working with latti
 
 ### `isTop`
 
-This construct can be used to check if a `Value<a>` is the top value. This may be useful in recursive `lub` functions.
+This construct can be used to check if a `Value<a>` is the top value. This can be useful in recursive `lub` functions.
 
-### `makeLvar`
+### `makeLvar` and `destr_makeLvar`
 
-This construct creates a new lattice and returns a new LVar for that lattice. If a programmer is not using multiple LVars from the same lattice, they may find it easier to create the LVar on its own using `makeLvar`.
+This construct creates a new lattice and returns a new LVar for that lattice. If a programmer is not using multiple LVars from the same lattice, they may find it easier to create the LVar on its own using `makeLvar` rather than creating the lattice manually.
 
 For example,
 
 ```c
-makeLvar(leqFunc, lubFunc)
+Lvar<a>* lvar = makeLvar(leqFunc, lubFunc)
 ```
 
 or
 
 ```c
-makeLvar(leqFunc, lubFunc, displayFunc, freeFunc)
+Lvar<a>* lvar = makeLvar(leqFunc, lubFunc, displayFunc, freeFunc)
 ```
+
+Programmers may also choose to create an LVar from a destructive lattice (as discussed previously) as follows:
+
+```c
+Lvar<a>* lvar = destr_makeLvar(leqFunc, lubFunc)
+```
+
+or
+
+```c
+Lvar<a>* lvar = destr_makeLvar(leqFunc, lubFunc, displayFunc)
+```
+
+Note that, again, no `free` is provided for the destructive lattice.
 
 ### `getLattice`
 

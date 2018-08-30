@@ -38,10 +38,10 @@ concrete productions top::PrimaryExpr_c
               mkIntConst(0, top.location), location=top.location);
   }
 | 'destr_makeLvar' '(' order::AssignExpr_c ',' lub::AssignExpr_c ',' 
-                display::AssignExpr_c ',' freeMeth::AssignExpr_c ')'
+                display::AssignExpr_c ')'
   {
-    top.ast = makeLvar(order.ast, lub.ast, display.ast, freeMeth.ast,
-              mkIntConst(1, top.location), location=top.location);
+    top.ast = makeLvarNoFree(order.ast, lub.ast, display.ast,
+              location=top.location);
   }
 
 | 'destr_makeLvar' '(' order::AssignExpr_c ',' lub::AssignExpr_c ')'

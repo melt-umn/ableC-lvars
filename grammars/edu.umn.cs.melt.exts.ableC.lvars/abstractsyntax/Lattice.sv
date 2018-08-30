@@ -207,6 +207,23 @@ top::Expr ::= leq::Expr lub::Expr disp::Expr destr::Expr
 }
 
 // to make a new lattice and lvar from that lattice
+// (in destructive case, where no free is provided)
+abstract production makeLvarNoFree
+top::Expr ::= leq::Expr lub::Expr disp::Expr
+{
+  propagate substituted;
+  top.pp =
+    pp"makeLvar(${leq.pp}, ${lub.pp}, ${disp.pp})";
+
+  local baseType::Type = getTypeFromLub(lub, openScopeEnv(top.env));
+
+  forwards to newCall(newLattice(leq, lub, disp, 
+     ableC_Expr{inst _defaultFree<$directTypeExpr{baseType}>}, 
+     mkIntConst(1, top.location), location=top.location),
+     location=top.location);
+}
+
+// to make a new lattice and lvar from that lattice
 abstract production makeLvar
 top::Expr ::= leq::Expr lub::Expr disp::Expr free::Expr destr::Expr
 {
