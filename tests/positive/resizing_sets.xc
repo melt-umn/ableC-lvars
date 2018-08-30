@@ -1,5 +1,6 @@
 #include "lvars.xh"
 #include "max_int.xh"
+
 int main (int argc, char **argv) {
   Lattice<int>* lat = lattice_max_int();
 
