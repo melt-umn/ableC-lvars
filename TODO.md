@@ -2,8 +2,6 @@
 
 + Fix up READMEs
     + tests
-    + guide
-        + Add comparison with Kuper implementation (benefits, costs)
 + Work on speeding up thread waiting/locking process
 + Consider adding other getter methods
 + Add positive tests for non-error cases (e.g. destr_makeLvar)
