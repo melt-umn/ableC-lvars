@@ -294,7 +294,11 @@ The LVars extension includes a few other constructs that make working with latti
 
 ### `isTop`
 
-This construct can be used to check if a `Value<a>` is the top value. This can be useful in recursive `lub` functions.
+This construct can be used to check if a `Value<a>` is the top value. This can be useful in recursive `lub` functions. For example,
+
+```c
+isTop lub_a(val1, val2);
+```
 
 ### `makeLvar` and `destr_makeLvar`
 
@@ -333,7 +337,19 @@ When `makeLvar` is used, programmers don't have direct access to an LVar's assoc
 For example,
 
 ```c
-getLattice lvar
+Lattice<a>* lat = getLattice lvar
 ```
+
+## Warnings
+
+The ableC-lvars extension allows programmers to create lattices for a variety of data types with the trade-off that the programmer must be trusted to provide suitable `leq` and `lub` operations for his or her lattice. As discussed above, to prevent observable non-determinism, each `lub` must represent a commutative and associative operation: `lub(a, lub(b, c)) = lub(lub(a, b), c) = lub(b, lub(a, c))`, etc. Similarly, the `leq` and `lub` methods should correspond to each other-- an element `a` of a lattice should be `leq` another element `b` of the lattice if and only if some element `c` exists such that `lub(a, c) = b`. The ableC-lvars extension is thus not guaranteed to be fully deterministic: some responsibility lies with the programmer to provide valid lattice operations. For the convenience of the programmer, several lattices are available in header files that can be used with the ableC-lvars extension, including lattices of integers, sets, and pairs.
+
+Unlike Kuper's Haskell Lvish implementation, ableC-lvars does not control thread spawning and syncing itself, but relies on the programmer to create threads in a way that makes sense for their problem and preferences (e.g., with ableC-cilk, ableC-run, or pthreads). While this provides more flexibility to the programmer, this versatility also means that some get operations may block forever in the case that the programmer does not provide enough threads for their program to complete-- a thread must be available for each blocked get, along with at least one additional thread to continue executing other tasks. 
+
+While ableC-lvars makes it more difficult for a programmer to write observably non-deterministic programs, the extension does not actively prevent users from performing potentially non-deterministic operations such as freeing, printing, or mutating a value. As in Kuper's LVars model, programmers must "queisce" or "sync" program threads before freezing an LVar to prevent errors. Additionally, programmers should not add elements to threshold or activation sets after spawning multiple threads; `get`s should only be performed with threshold sets that are in a stable state.
+
+## Comparison with Kuper's Lvish Implementation
+
+As discussed above, bringing LVars into the world of C does weaken the guarantees of determinism that can be achieved in a purely functional language such as Haskell. However, actualizing the LVars model as an ableC extension allows programmers who are developing larger C programs to augment portions of their code with key LVars features.
 
 
