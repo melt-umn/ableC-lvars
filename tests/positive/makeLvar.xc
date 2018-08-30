@@ -8,7 +8,8 @@ cilk ActivationSet<IntPair*>* getCilk(Lvar<IntPair*>* l, ThresholdSet<IntPair*>*
 }
 
 cilk int main (int argc, char **argv) {
-  Lvar<IntPair*>* l = makeLvar(leq_int_pair, lub_int_pair);
+  Lvar<IntPair*>* l = makeLvar(leq_int_pair, lub_int_pair,
+                               display_int_pair, free_int_pair);
   Lattice<IntPair*>* lat = getLattice l;
   printf("Before any put: ");
   display l;
