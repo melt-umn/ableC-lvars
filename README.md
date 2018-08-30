@@ -121,7 +121,7 @@ or
 
 ### Destructive Lattices
 
-Programmers may also choose to use a destructive lub operation-- for example, a set union that mutates the pre-existing set instead of creating a new copy. This destructive version can make writing non-deterministic programs easier than with traditional lattices and leaves the responsibility of freeing in the hands of the programmer, but may be preferred for space-efficiency reasons. It is possible to construct such a lattice with the following syntax:
+Programmers may also choose to use a destructive `lub` operation-- for example, a set union that mutates the pre-existing set instead of creating a new copy. This destructive version can make writing non-deterministic programs easier than with traditional lattices and leaves the responsibility of freeing in the hands of the programmer, but may be preferred for space-efficiency reasons. It is possible to construct such a lattice with the following syntax:
 
 `Lattice<a>* lat = destr_lattice(leq_a, lub_a, display_a)`
 
@@ -143,7 +143,7 @@ To write a value `val` of type `a` to a lattice variable `lvar` of base type `a`
 
 Note that if `val` is an identifier, the parentheses are unnecessary.
 
-With LVars, a `put` does not write a raw value to the location represented by the lattice variable. Instead, `put` attempts to write the least upper bound of the current value of the LVar and the new value that is indicated by the programmer (i.e., the result of the `lub` for the given lattice) to the LVar. If this lub is the top element of the lattice, the `put` fails and the program errors out. If the result is a valid element of the lattice, the value of the LVar is updated to the lub result. The first time an LVar is written to after being created, the result of the `put` will be whatever value is being `put` in.
+With LVars, a `put` does not write a raw value to the location represented by the lattice variable. Instead, `put` attempts to write the least upper bound of the current value of the LVar and the new value that is indicated by the programmer (i.e., the result of the `lub` for the given lattice) to the LVar. If this `lub` is the top element of the lattice, the `put` fails and the program errors out. If the result is a valid element of the lattice, the value of the LVar is updated to the `lub` result. The first time an LVar is written to after being created, the result of the `put` will be whatever value is being `put` in.
 
 ## Part 5: Reading from LVars
 
@@ -219,7 +219,7 @@ add(thresh, trueSet);
 
 Like activation sets, threshold sets are automatically resized if too many elements are added. 
 
-Note that any two activation sets added to a threshold set must be incompatible-- i.e., the lub of any two elements from two different activation sets must be the top element of the lattice to ensure that only one activation set is matched by a given element (though an element may match multiple items in the same activation set). If DEBUG or CHECK mode is on and the lattice associated with a threshold set is non-destructive (see discussion later in the guide), each activation set that is added to the threshold set is checked for compatibility with all of the other activation sets already in the threshold set. If the new activation set is found to be compatible with a pre-existing activation set, adding the new activation set will fail.
+Note that any two activation sets added to a threshold set must be incompatible-- i.e., the `lub` of any two elements from two different activation sets must be the top element of the lattice to ensure that only one activation set is matched by a given element (though an element may match multiple items in the same activation set). If DEBUG or CHECK mode is on and the lattice associated with a threshold set is non-destructive (see discussion later in the guide), each activation set that is added to the threshold set is checked for compatibility with all of the other activation sets already in the threshold set. If the new activation set is found to be compatible with a pre-existing activation set, adding the new activation set will fail.
 
 #### Using `get`
 
