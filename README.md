@@ -357,7 +357,7 @@ For example,
 Lattice<a>* lat = getLattice lvar
 ```
 
-## Important Warnings and Comparison with Kuper's LVish Implementation
+## Important Warnings and Discussion
 
 The ableC-lvars extension allows programmers to create lattices for a variety of data types with the trade-off that the programmer must be trusted to provide suitable `leq` and `lub` operations for his or her lattice. As discussed above, to prevent observable non-determinism, each `lub` must represent a commutative and associative operation: `lub(a, lub(b, c)) = lub(lub(a, b), c) = lub(b, lub(a, c))`, etc. Similarly, the `leq` and `lub` methods should correspond to each other-- an element `e1` of a lattice should be `leq` another element `e2` of the lattice if and only if some element `e3` exists such that `lub(e1, e3) = e2`. Since these properties are not testable by the ableC-lvars extension, programs using the extension are not guaranteed to be fully deterministic: some responsibility lies with the programmer to provide valid lattice operations. For the convenience of the programmer, several pre-fabricated lattices are available in header files that can be used with the ableC-lvars extension, including lattices of integers, sets, and pairs.
 

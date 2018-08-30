@@ -195,19 +195,22 @@ top::Expr ::= lvarBaseType::Type lvar::Expr value::Expr
           showType(value.typerep) ++ " in Lvar<"
           ++ showType(lvarBaseType) ++ ">*")];
 
+  local valTempName::String = "_val_" ++ toString(genInt());
+
   local fwrd::Expr =
     case lvarBaseType of
       pointerType(_, _) ->
         stmtExpr( 
         ableC_Stmt{
-          if ($Expr{value} == ((void *)0)) {
+          $directTypeExpr{lvarBaseType} $name{valTempName} = $Expr{value};
+          if ($name{valTempName} == ((void *)0)) {
             fprintf(stderr, "Error: NULL argument supplied to put\n");
             exit(1);
           }
         },
         ableC_Expr{
           inst _put<$directTypeExpr{lvarBaseType}>($Expr{lvar}, 
-            $Expr{value})
+            $name{valTempName})
         }, location=top.location)
     | _ -> 
         ableC_Expr{

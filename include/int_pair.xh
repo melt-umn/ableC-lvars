@@ -47,6 +47,7 @@ Value<IntPair*>* lub_int_pair(IntPair* p1, IntPair* p2) {
             val2 = copy_maybe_int(i2);
           }
           else {
+            free_maybe_int(val1);
             return Top<IntPair*>;
           } 
 

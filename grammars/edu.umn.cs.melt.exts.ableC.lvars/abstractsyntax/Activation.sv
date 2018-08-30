@@ -78,20 +78,24 @@ top::Expr ::= basetype::Type actSet::Expr item::Expr
        showType(item.typerep) ++ " to ActivationSet<" ++
        showType(basetype) ++ ">*")];
 
+
+  local valTempName::String = "_val_" ++ toString(genInt());
+
   forwards to
     case basetype of
       pointerType(_, _) -> 
         mkErrorCheck(localErrors,
           stmtExpr(
           ableC_Stmt{
-            if ($Expr{item} == ((void *)0)) {
+            $directTypeExpr{basetype} $name{valTempName} = $Expr{item};
+            if ($name{valTempName}  == ((void *)0)) {
               fprintf(stderr, "Error: NULL argument supplied to freeSet\n");
               exit(1);
             }
           },
           ableC_Expr {
             inst _addAct<$directTypeExpr{basetype}>
-            ($Expr{actSet}, $Expr{item})
+            ($Expr{actSet}, $name{valTempName})
           },
           location=top.location)
         )
