@@ -17,8 +17,11 @@ The following tests are intended to check the extension's runtime error-checking
 + `frozen_get_null.xc`: Performing a frozen-style get from a NULL LVar.
 + `frozen_get_unfrozen.xc`: Performing a frozen-style get with a non-frozen LVar.
 + `getLattice_null.xc`: Using `getLattice` with a NULL LVar.
++ `get_empty_empty_thresh.xc`: Getting from an empty LVar with an empty threshold set.
++ `get_empty_thresh.xc`: Getting from a non-empty LVar with an empty threshold set.
 + `get_from_null.xc`: Using `get x with t` where `x` is a NULL LVar.
 + `get_mismatch_lattice.xc`: Using `get x with t`, where the base type of the LVar `x` and the threshold set `t` are the same, but their lattices don't match.
++ `get_thresh_empty_act.xc`: Getting from an LVar with {{}}
 + `get_with_null.xc`: Using `get x with t` where `t` is a NULL threshold set.
 + `incompat_act_sets.xc`: Adding compatible activation sets to the same threshold set.
 + `invalid_put.xc`: Putting an invalid value into an LVar.

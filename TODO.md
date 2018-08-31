@@ -1,6 +1,5 @@
 # To-do:
 
-+ Add runtime test for getting with empty thresh and empty empty thresh
 + Check valgrind for all examples
 + Fix memory leak in destructive test
 + Run timing tests
