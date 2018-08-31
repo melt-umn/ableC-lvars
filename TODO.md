@@ -1,20 +1,21 @@
 ## To-do:
 
-+ Recheck valgrind for examples
++ Check valgrind for all examples
 + Update README for test directories
-+ Work on speeding up thread waiting/locking process
-+ Consider adding other getter methods
 + Fix memory leak in destructive test
-+ Add positive tests for non-error cases
-    + valgrind with all headers (counter, int_set, max_int, product_int, quiesce, sum_int) 
-    + all headers (counter, int_set, product_int, quiesce, sum_int)  
-+ Implement more prefab lattices/data types
-    + See if int_set.h lattice can be generalized to other base types to create a more flexible set lattice
-+ Add nice syntax for counter lvar (maybe without specifying type, etc.)
-+ Include quiescing in lvars.xh header file itself?
-+ Test timing
++ Run timing tests
 + Check that error handling is done only once (with helper productions, etc.)
-+ Have one free construct (e.g., lvar_free) for all frees?
 + Better comments in headers/example files
-+ Add checks for empty act/thresh sets in non-frozen get, since will never unblock regardless of puts 
+
+## Ideas for Future Development:
+
++ Figure out a good way to speed up the thread waiting/locking process
++ Implement more prefabricated lattices and datatypes (e.g., a templated set lattice)
+
+## Changes to Consider:
+
++ Currently the extension uses separate free constructs (freeSet and freeLvar)-- should these be combined under a single terminal?
++ Would other getter methods be helpful (e.g., expanding getLattice to work on activation and threshold sets as well as LVars)?
++ Would a freeLvarAndLattice construct be helpful for when makeLvar is used and the LVar's lattice is not directly accessible?
++ Should quiescing and counters be included in the core LVars grammar/header file, or are they better off in separate header files?
 

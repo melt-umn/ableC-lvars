@@ -3,8 +3,10 @@
 #include "cilk.xh"
 
 cilk int checkCounter(Lvar<int>* c) {
-  display(get_counter(c, 10));
+  ActivationSet<int>* result = get_counter(c, 10);
+  display(result);
   printf("\n");
+  freeSet(result);
   exit(0);
   cilk return 1;
 }
@@ -22,5 +24,8 @@ cilk int main(int argc, char **argv) {
   spawn result1 = checkCounter(c);
   spawn result2 = countLoop(c);
   sync;
+  Lattice<int>* lat = getLattice c;
+  freeLvar c;
+  free(c);
   cilk return 1;
 }

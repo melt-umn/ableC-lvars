@@ -647,6 +647,14 @@ static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
       pthread_mutex_unlock(&(l->_mutex));
       return activationSet(l->_lattice, 0); 
     }
+    else {
+      #if defined(CHECK) || defined(DEBUG)
+        if (t->_index == 0 || (t->_index == 1 && t->_a_sets[0]->_index == 0)) {
+          fprintf(stderr, "Error: can't get with empty threshold set.\n");
+          exit(1);
+        }
+      #endif
+    }
     // if l isn't frozen, wait for potential put updates and try again
     pthread_cond_wait(&(l->_cond), &(l->_mutex));
     actReached = inst _thresholdReached<a>(l, t);
