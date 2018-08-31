@@ -1,11 +1,12 @@
 # To-do:
 
++ Add runtime test for getting with empty thresh and empty empty thresh
 + Check valgrind for all examples
-+ Update README for test directories
 + Fix memory leak in destructive test
 + Run timing tests
 + Check that error handling is done only once (with helper productions, etc.)
 + Better comments in headers/example files
++ Add lVar and get to lattice_eq.xc in positive tests
 
 ## Ideas for Future Development:
 
