@@ -1,11 +1,10 @@
 # To-do:
 
-+ Check valgrind for all examples
++ Check valgrind for all examples and positive tests
 + Fix memory leak in destructive test
 + Run timing tests
 + Check that error handling is done only once (with helper productions, etc.)
 + Better comments in headers/example files
-+ Add lVar and get to lattice_eq.xc in positive tests
 
 ## Ideas for Future Development:
 

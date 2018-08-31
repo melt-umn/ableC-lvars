@@ -23,7 +23,11 @@ void freeInt(int i) {
 int main (int argc, char **argv) {
   Lattice<int>* lat1 = lattice(leq, lub, displayInt, freeInt);
   Lattice<int>* lat2 = lattice(leq, lub, displayInt, freeInt);
-  ActivationSet<int>* a = activationSet(lat1);
+  Lattice<int>* lat3 = lattice(leq, lub, displayInt, freeInt);
+  ActivationSet<int>* a = activationSet(lat1){4};
   ThresholdSet<int>* t = thresholdSet(lat2){a};
+  Lvar<int>* l = newLvar lat3;
+  put (4) in l;
+  display (get l with t);
   return 0;
 }
