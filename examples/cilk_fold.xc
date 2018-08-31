@@ -2,6 +2,8 @@
 #include "cilk.xh"
 #include "int.xh"
 
+//Use of LVars for map-fold operation, using Cilk to spawn parallel tasks 
+
 int TASK_SIZE;
 int NUM_THREADS;
 int N = 1200;

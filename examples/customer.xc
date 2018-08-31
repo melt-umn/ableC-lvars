@@ -2,6 +2,9 @@
 #include <cilk.xh>
 #include <string.h>
 
+// Example of LVar representing a database of customers, each with an associated 
+// id number and set of product id numbers
+
 // *************** data types set-up ******************************************
 
 typedef datatype ProductSet ProductSet;

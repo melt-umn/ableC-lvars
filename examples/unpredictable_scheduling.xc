@@ -2,6 +2,9 @@
 #include <cilk.xh>
 #include "max_int.xh"
 
+// Example showing how observable results remain consistent even when puts 
+// and gets are scheduled in different orders
+
 cilk int putCilk(Lvar<int>* x, int val, int count);
 cilk int putCilk(Lvar<int>* x, int val, int count) { 
   if (count < 1000) {

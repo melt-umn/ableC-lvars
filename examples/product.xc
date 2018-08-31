@@ -2,6 +2,8 @@
 #include "product_int.xh"
 #include <cilk.xh>
 
+// Using an LVar to store a product of integers
+
 Lvar<int>* accum;
 int TASK_SIZE;
 int NUM_THREADS;

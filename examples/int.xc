@@ -2,6 +2,8 @@
 #include "cilk.xh"
 #include "single_write_int.xh"
 
+// Simple example of an LVar allowing a single write of an integer value
+
 cilk ActivationSet<int>* getCilk(Lvar<int>* l, ThresholdSet<int>* t) {
   cilk return get l with t;
 }

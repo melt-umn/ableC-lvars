@@ -10,7 +10,8 @@ int main(int argc, char **argv) {
   int end = 10;
   ThresholdSet<IntPair*>* t = thresholdSet(D, 2);
   for (int i = start; i < end; i++) {
-    ActivationSet<IntPair*>* a = activationSet(D, 1){Int_Pair(Int_None(), Int_Some(i))}; 
+    ActivationSet<IntPair*>* a = activationSet(D, 1)
+                                 {Int_Pair(Int_None(), Int_Some(i))}; 
     add(t, a);
   }
 

@@ -2,6 +2,8 @@
 #include "sum_int.xh"
 #include <cilk.xh>
 
+// Using an LVar to compute sum of integers
+
 Lvar<int>* accum;
 int TASK_SIZE;
 int NUM_THREADS;

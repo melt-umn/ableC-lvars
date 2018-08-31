@@ -2,6 +2,9 @@
 #include "counter.xh"
 #include "cilk.xh"
 
+// Showing how puts and blocking gets interact in the context of an
+// integer counter
+
 cilk int checkCounter(Lvar<int>* c) {
   ActivationSet<int>* result = get_counter(c, 10);
   display(result);

@@ -3,6 +3,10 @@
 // Based on example from composition.al post
 // "How to read from an LVar: an illustrated guide"
 
+// LVar representing a set of votes for pizza; if at least one person votes "yes,"
+// the group should get pizza; if everyone votes "no," the group should not get
+// pizza
+
 // ******************** Setting up data types *********************************
 
 typedef datatype YN YN;

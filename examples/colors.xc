@@ -1,6 +1,9 @@
 #include "lvars.xh"
 #include <string.h>
 
+// Somewhat contrived example of using LVars to represent mixing paint colors
+// Lattices don't have to be made up of simple integers
+
 typedef datatype Color Color;
 datatype Color {
   Red();

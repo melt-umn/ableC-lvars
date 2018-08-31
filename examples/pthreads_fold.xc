@@ -3,6 +3,10 @@
 #include "quiesce.xh"
 #include <pthread.h>
 
+
+// Use of LVars for map-fold operation, using pthreads to spawn parallel tasks 
+
+
 int TASK_SIZE;
 int NUM_THREADS;
 int N = 1200;
