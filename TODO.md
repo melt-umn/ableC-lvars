@@ -7,9 +7,7 @@
 + Fix memory leak in destructive test
 + Add positive tests for non-error cases
     + using isTop
-    + freeing before any puts
     + valgrind with all headers (counter, int_set, max_int, product_int, quiesce, sum_int) 
-    + negative size act and thresh
     + all headers (counter, int_set, product_int, quiesce, sum_int)  
 + Implement more prefab lattices/data types
     + See if int_set.h lattice can be generalized to other base types to create a more flexible set lattice
