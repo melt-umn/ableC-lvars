@@ -48,7 +48,9 @@ void display_int_set_helper(IntSetItr* itr) {
       printf("%d, ", next);
       display_int_set_helper(itr);
     }
-    printf("%d", next);
+    else {
+      printf("%d", next);
+    }
   }
 }
 

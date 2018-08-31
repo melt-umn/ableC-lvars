@@ -2,7 +2,6 @@
 
 + Check that error handling is done only once (with helper productions, etc.)
 + Better comments in headers/example files
-+ Fix memory leak in destructive positive test
 
 ## Ideas for Future Development:
 
