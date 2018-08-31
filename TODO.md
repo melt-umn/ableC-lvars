@@ -1,7 +1,6 @@
 # To-do:
 
-+ Check that error handling is done only once (with helper productions, etc.)
-+ Better comments in headers/example files
++ More descriptive comments in header files and examples
 
 ## Ideas for Future Development:
 
