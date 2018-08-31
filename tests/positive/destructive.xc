@@ -1,6 +1,9 @@
 #define CHECK
 #include "lvars.xh"
 
+// Caution: this test has memory leaks, since freeing is not handled in put as 
+// in non-destructive lattice
+
 // ************************** type ********************************************
 
 typedef datatype CharNode CharNode;
@@ -14,6 +17,29 @@ datatype CharSet {
   C_Set(CharNode*);
   C_Empty();
 } 
+
+// ******************* free ***************************************************
+
+void free_char_node(CharNode* c) {
+  match (c) {
+    C_Null() -> {free(c);}
+    C_Node(ch, left, right) -> {
+      free_char_node(left);
+      free_char_node(right);
+      free(c);
+    }
+  }
+}  
+
+void free_char_set(CharSet* c) {
+  match (c) {
+    C_Empty() -> {free(c);}
+    C_Set(hd) -> {
+      free_char_node(hd);
+      free(c);
+    }
+  }
+}
 
 // ******************* leq ****************************************************
 
@@ -56,12 +82,54 @@ int leq_char_set(CharSet* c1, CharSet* c2) {
   }
 }
 
+// ******************************* display ************************************
+
+void display_char_node(CharNode* c) {
+  match (c) {
+    C_Node(ch, left, right) -> {
+      match (left) { 
+        C_Null() -> {
+          printf("%c", ch);
+          match (right) {
+            C_Node(_,_,_) -> {
+              printf(", ");
+              display_char_node(right);
+            }
+          }
+        }
+        C_Node(_,_,_) -> {
+          display_char_node(left);
+          printf(", ");
+          printf("%c", ch);
+          match (right) {
+            C_Node(_,_,_) -> {
+              printf(", ");
+              display_char_node(right);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+void display_char_set(CharSet* c) {
+  match (c) {
+    C_Empty() -> {printf("{}");}
+    C_Set(hd) -> {
+      printf("{");
+      display_char_node(hd);
+      printf("}");
+    }
+  }
+}
+
 // **************************** lub *******************************************
 
 void insert(char c, CharNode* cs) {
   match (cs) {
     C_Null() -> {
-      cs = C_Node(c, C_Null(), C_Null());
+      *cs = *C_Node(c, C_Null(), C_Null());
     }
     C_Node(ch, left, right) -> {
       if (ch == c) {
@@ -88,44 +156,83 @@ void union_char_set(CharNode* c1, CharNode* c2) {
 }
 
 Value<CharSet*>* lub_char_set(CharSet* c1, CharSet* c2) {
-  match (c2) {
-    C_Empty() -> {return value c1;}
-    C_Set(hd2) -> {
-      match (c1) {
-        C_Empty() -> {return value c2;}
-        C_Set(hd1) -> {
+  match (c1) {
+    C_Empty() -> {
+      *c1 = *c2;
+      free(c2);
+      return value c1;
+    }
+    C_Set(hd1) -> {
+      match (c2) {
+        C_Empty() -> {
+          free_char_set(c2);
+          return value c1;
+        }
+        C_Set(hd2) -> {
           union_char_set(hd1, hd2);
-          return value C_Set(hd1);
+          free_char_set(c2);
+          return value c1;
         }
       }
     }
   }
 }
 
-void display_char_node(CharNode* c) {
-  match (c) {
-    C_Node(ch, left, right) -> {
-      printf("%c", ch);
-      match (left) {
-        C_Node(_,_,_) -> {printf(", ");}
-      }
-    }
-  }
-}
-
-void display_char_set(CharSet* c) {
-  match (c) {
-    C_Empty() -> {printf("{}");}
-    C_Set(hd) -> {
-      printf("{");
-      display_char_node(hd);
-      printf("}");
-    }
-  }
-}
-
 int main (int argc, char **argv) {
-  CharSet* c1 = C_Set(C_Node('b', C_Node('a', C_Null(), C_Null()), C_Node('d', C_Node('c', C_Null(), C_Null()), C_Node('e', C_Null(), C_Null()))));
+  CharSet* c1 = C_Set(C_Node('b', C_Node('a', C_Null(), C_Null()), 
+                  C_Node('d', C_Node('c', C_Null(), C_Null()), 
+                  C_Node('e', C_Null(), C_Null()))));
+  CharSet* c2 = C_Set(C_Node('b', C_Node('a', C_Null(), C_Null()), 
+                  C_Node('l', C_Node('c', C_Null(), C_Null()), C_Null()))); 
+  CharSet* c3 = C_Set(C_Node('m', C_Node('l', C_Null(), C_Null()), 
+                C_Node('o', C_Node('n', C_Null(), C_Null()),C_Null()))); 
+  Lattice<CharSet*>* lat = destr_lattice(leq_char_set, lub_char_set, 
+                                         display_char_set);
+  Lvar<CharSet*>* l = newLvar lat;
+  put (C_Empty()) in l;
+  printf("Putting ");
+  display_char_set(c1);
+  put c1 in l;
+  printf("\nPutting ");
+  display_char_set(c2);
+  put c2 in l;
+  printf("\nPutting ");
+  display_char_set(c3);
+  put c3 in l;
+  freeze l;
+  printf("\nFinal value: ");
+  display l;
+  printf("\n");
+  CharSet* result = get l;
+  free_char_set(result);
+  freeLvar l;
+  free(lat);
+
+  l = destr_makeLvar(leq_char_set, lub_char_set, display_char_set);
+  c1 = C_Set(C_Node('b', C_Node('a', C_Null(), C_Null()), C_Node('d', 
+         C_Node('c', C_Null(), C_Null()), C_Node('e', C_Null(), C_Null())))); 
+  c2 = C_Set(C_Node('b', C_Node('a', C_Null(), C_Null()), C_Node('l', 
+         C_Node('c', C_Null(), C_Null()),C_Null()))); 
+  c3 = C_Set(C_Node('m', C_Node('l', C_Null(), C_Null()), C_Node('o', 
+         C_Node('n', C_Null(), C_Null()),C_Null()))); 
+  put (C_Empty()) in l;
+  printf("Putting ");
+  display_char_set(c1);
+  put c1 in l;
+  printf("\nPutting ");
+  display_char_set(c2);
+  put c2 in l;
+  printf("\nPutting ");
+  display_char_set(c3);
+  put c3 in l;
+  freeze l;
+  printf("\nFinal value: ");
+  display l;
+  printf("\n");
+  result = get l;
+  free_char_set(result);
+  freeLvar l;
+  free(lat);
 }
 
 

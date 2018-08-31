@@ -4,14 +4,12 @@
 + Update README for test directories
 + Work on speeding up thread waiting/locking process
 + Consider adding other getter methods
++ Fix memory leak in destructive test
 + Add positive tests for non-error cases
     + using isTop
     + freeing before any puts
     + valgrind with all headers (counter, int_set, max_int, product_int, quiesce, sum_int) 
     + negative size act and thresh
-    + destructive put
-    + destr_lattice
-    + destr_makeLvar
     + all headers (counter, int_set, product_int, quiesce, sum_int)  
 + Implement more prefab lattices/data types
     + See if int_set.h lattice can be generalized to other base types to create a more flexible set lattice

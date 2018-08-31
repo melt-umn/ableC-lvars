@@ -27,9 +27,10 @@ int leq_int_set(IntSet* set1, IntSet* set2) {
 
 Value<IntSet*>* lub_int_set(IntSet* set1, IntSet* set2) {
   if (intset_is_empty(set1)) {
-    delete_intset(set1);
-    set1 = set2;
-    return value set2;
+    delete_intsetnode(set1->root);
+    *set1 = *set2;
+    free(set2);
+    return value set1;
   }
   if (intset_is_empty(set2)) {
     delete_intset(set2);
