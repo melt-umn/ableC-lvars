@@ -29,5 +29,12 @@ int main (int argc, char **argv) {
   Lvar<int>* l = newLvar lat3;
   put (4) in l;
   display (get l with t);
+
+  freeSet a;
+  freeSet t;
+  freeLvar l;
+  free(lat1);
+  free(lat2);
+  free(lat3);
   return 0;
 }

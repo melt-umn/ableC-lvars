@@ -1,10 +1,9 @@
 # To-do:
 
-+ Check valgrind for all examples and positive tests
-+ Fix memory leak in destructive test
 + Run timing tests
 + Check that error handling is done only once (with helper productions, etc.)
 + Better comments in headers/example files
++ Fix memory in destructive positive test
 
 ## Ideas for Future Development:
 
@@ -17,4 +16,5 @@
 + Would other getter methods be helpful (e.g., expanding getLattice to work on activation and threshold sets as well as LVars)?
 + Would a freeLvarAndLattice construct be helpful for when makeLvar is used and the LVar's lattice is not directly accessible?
 + Should quiescing and counters be included in the core LVars grammar/header file, or are they better off in separate header files?
++ Should extension users be provided with a way to free Value<a>* pointers?
 
