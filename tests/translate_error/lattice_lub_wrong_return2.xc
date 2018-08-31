@@ -6,9 +6,8 @@ int leq_ex(int i1, int i2) {
 
 int lub_ex(int i1, int i2) {
   if (i1 == i2) {
-    return value i1;
+    return i1;
   }
-  return Top<int>;
 }
 
 void display_ex(int i) {
