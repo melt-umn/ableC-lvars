@@ -6,7 +6,6 @@
 + Consider adding other getter methods
 + Fix memory leak in destructive test
 + Add positive tests for non-error cases
-    + using isTop
     + valgrind with all headers (counter, int_set, max_int, product_int, quiesce, sum_int) 
     + all headers (counter, int_set, product_int, quiesce, sum_int)  
 + Implement more prefab lattices/data types
