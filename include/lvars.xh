@@ -488,7 +488,8 @@ static void _freeActSets(ThresholdSet<a>* t) {
   #endif
 
   for (int i = 0; i < t->_index; i++) {
-    freeSet(t->_a_sets[i]);
+      ActivationSet<a>* _a_set = t->_a_sets[i];
+      freeSet(_a_set);
   }
 } 
 
@@ -641,11 +642,13 @@ static ActivationSet<a>* _get(Lvar<a>* l, ThresholdSet<a> * t) {
       if (!l->_value->_bot) {
         a val = l->_value->_val;
         pthread_mutex_unlock(&(l->_mutex));
-        return activationSet(l->_lattice, 1){val}; 
+        Lattice<a> * _lattice = l->_lattice;
+        return activationSet(_lattice, 1){val}; 
       }
       // if the lvar doesn't have a value, we just return an empty act set
       pthread_mutex_unlock(&(l->_mutex));
-      return activationSet(l->_lattice, 0); 
+      Lattice<a> * _lattice = l->_lattice;
+      return activationSet(_lattice, 0); 
     }
     else {
       #if defined(CHECK) || defined(DEBUG)

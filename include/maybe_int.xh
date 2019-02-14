@@ -9,17 +9,19 @@ datatype MaybeInt {
   Int_None();
 }
 
+allocate datatype MaybeInt with malloc;
+
 MaybeInt* copy_maybe_int(MaybeInt* i) {
-  match (i) {
-    Int_Some(n) -> {return Int_Some(n);}
-    Int_None() -> {return Int_None();}
+  match (*i) {
+    Int_Some(n) -> {return malloc_Int_Some(n);}
+    Int_None() -> {return malloc_Int_None();}
   }
 }
 
 int leq_maybe_int(MaybeInt* i1, MaybeInt* i2) {
-  match (i1) {
+  match (*i1) {
     Int_Some(n1) -> {
-      match (i2) {
+      match (*i2) {
         Int_Some(n2) -> {return n1 == n2;}
         Int_None() -> {return 0;}
       }
@@ -29,12 +31,12 @@ int leq_maybe_int(MaybeInt* i1, MaybeInt* i2) {
 }
 
 Value<MaybeInt*>* lub_maybe_int(MaybeInt* i1, MaybeInt* i2) {
-  match (i1) {
+  match (*i1) {
     Int_Some(n1) -> {
-      match (i2) {
+      match (*i2) {
         Int_Some(n2) -> {
           if (n1 == n2) {
-            return value Int_Some(n1);
+            return value malloc_Int_Some(n1);
           } 
           return Top<MaybeInt*>;
         }
@@ -46,7 +48,7 @@ Value<MaybeInt*>* lub_maybe_int(MaybeInt* i1, MaybeInt* i2) {
 }
 
 void display_maybe_int(MaybeInt* i) {
-  match (i) {
+  match (*i) {
     Int_Some(n) -> {printf("%d", n);}
     Int_None() -> {printf("?");}
   }
@@ -57,7 +59,7 @@ void free_maybe_int(MaybeInt* i) {
 }
 
 void put_maybe_int(Lvar<MaybeInt*>* l, int val) {
-  put (Int_Some(val)) in l;
+  put (malloc_Int_Some(val)) in l;
 }
 
 Lattice<MaybeInt*>* lattice_maybe_int() {

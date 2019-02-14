@@ -17,7 +17,7 @@ top::Expr ::= lvar::Expr
 
   local fwrd::Expr =
     case lvar.typerep of
-      pointerType(_, lvarType(_, t)) -> 
+      pointerType(_, extType(_, lvarType(t))) -> 
         ableC_Expr {
           inst _freeLvar<$directTypeExpr{t}>($Expr{lvar})
         }
@@ -45,7 +45,7 @@ top::Expr ::= l::Expr
 
   local fwrd::Expr =
     case l.typerep of
-      pointerType(_, latticeType(_, l_t)) ->
+      pointerType(_, extType(_, latticeType(l_t))) ->
         ableC_Expr{
           inst _new<$directTypeExpr{l_t}>($Expr{l})
         }
@@ -73,7 +73,7 @@ top::Expr ::= lvar::Expr
 
   local fwrd::Expr =
     case lvar.typerep of
-      pointerType(_, lvarType(_, l_t)) ->
+      pointerType(_, extType(_, lvarType(l_t))) ->
         ableC_Expr{
           inst _freeze<$directTypeExpr{l_t}>($Expr{lvar})
         }
@@ -102,7 +102,7 @@ top::Expr ::= lvar::Expr
 
   local fwrd::Expr =
     case lvar.typerep of
-      pointerType(_, lvarType(_, t)) -> 
+      pointerType(_, extType(_, lvarType(t))) -> 
         ableC_Expr {
           inst _getLattice<$directTypeExpr{t}>($Expr{lvar})
         }

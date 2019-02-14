@@ -14,28 +14,30 @@ datatype Color {
   Violet();
 };
 
+allocate datatype Color with malloc;
+
 int leqColor(Color* c1, Color* c2) {
-  match (c2) {
+  match (*c2) {
     Red() -> {
-      match (c1) {
+      match (*c1) {
         Red() -> {return 1;}
         _ -> {return 0;}
       }
     }
     Blue() -> {
-      match (c1) {
+      match (*c1) {
         Blue() -> {return 1;}
         _ -> {return 0;}
       }
     }
     Yellow() -> {
-      match (c1) {
+      match (*c1) {
         Yellow() -> {return 1;}
         _ -> {return 0;}
       }
     }
     Orange() -> {
-      match (c1) {
+      match (*c1) {
         Red() -> {return 1;}
         Yellow() -> {return 1;}
         Orange() -> {return 1;}
@@ -43,7 +45,7 @@ int leqColor(Color* c1, Color* c2) {
       }
     }
     Green() -> {
-      match (c1) {
+      match (*c1) {
         Yellow() -> {return 1;}
         Blue() -> {return 1;}
         Green() -> {return 1;}
@@ -51,7 +53,7 @@ int leqColor(Color* c1, Color* c2) {
       }
     }
     Violet() -> {
-      match (c1) {
+      match (*c1) {
         Red() -> {return 1;}
         Blue() -> {return 1;}
         Violet() -> {return 1;}
@@ -62,58 +64,58 @@ int leqColor(Color* c1, Color* c2) {
 }
 
 Value<Color*>* lubColor(Color* c1, Color* c2) {
-  match (c1) {
+  match (*c1) {
     Red() -> {
-      match (c2) {
-        Red() -> {return value(Red());}
-        Orange() -> {return value(Orange());}
-        Yellow() -> {return value(Orange());}
+      match (*c2) {
+        Red() -> {return value(malloc_Red());}
+        Orange() -> {return value(malloc_Orange());}
+        Yellow() -> {return value(malloc_Orange());}
         Green() -> {return Top<Color*>;}
-        Blue() -> {return value(Violet());}
-        Violet() -> {return value(Violet());}
+        Blue() -> {return value(malloc_Violet());}
+        Violet() -> {return value(malloc_Violet());}
       }
     }
     Orange() -> {
-      match (c2) {
-        Red() -> {return value(Orange());}
-        Orange() -> {return value(Orange());}
-        Yellow() -> {return value(Orange());}
+      match (*c2) {
+        Red() -> {return value(malloc_Orange());}
+        Orange() -> {return value(malloc_Orange());}
+        Yellow() -> {return value(malloc_Orange());}
         _ -> {return Top<Color*>;}
       }
     }
     Yellow() -> {
-      match (c2) {
-        Red() -> {return value(Orange());}
-        Orange() -> {return value(Orange());}
-        Yellow() -> {return value(Yellow());}
-        Green() -> {return value(Green());}
-        Blue() -> {return value(Green());}
+      match (*c2) {
+        Red() -> {return value(malloc_Orange());}
+        Orange() -> {return value(malloc_Orange());}
+        Yellow() -> {return value(malloc_Yellow());}
+        Green() -> {return value(malloc_Green());}
+        Blue() -> {return value(malloc_Green());}
         _ -> {return Top<Color*>;}
       }
     }
     Green() -> {
-      match (c2) {
-        Yellow() -> {return value(Green());}
-        Green() -> {return value(Green());}
-        Blue() -> {return value(Green());}
+      match (*c2) {
+        Yellow() -> {return value(malloc_Green());}
+        Green() -> {return value(malloc_Green());}
+        Blue() -> {return value(malloc_Green());}
         _ -> {return Top<Color*>;}
       }
     }
     Blue() -> {
-      match (c2) {
-        Red() -> {return value(Violet());}
-        Yellow() -> {return value(Green());}
-        Green() -> {return value(Green());}
-        Blue() -> {return value(Blue());}
-        Violet() -> {return value(Violet());}
+      match (*c2) {
+        Red() -> {return value(malloc_Violet());}
+        Yellow() -> {return value(malloc_Green());}
+        Green() -> {return value(malloc_Green());}
+        Blue() -> {return value(malloc_Blue());}
+        Violet() -> {return value(malloc_Violet());}
         _ -> {return Top<Color*>;}
       }
     }
     Violet() -> {
-      match (c2) {
-        Red() -> {return value(Violet());}
-        Blue() -> {return value(Violet());}
-        Violet() -> {return value(Violet());}
+      match (*c2) {
+        Red() -> {return value(malloc_Violet());}
+        Blue() -> {return value(malloc_Violet());}
+        Violet() -> {return value(malloc_Violet());}
         _ -> {return Top<Color*>;}
       }
     }
@@ -121,7 +123,7 @@ Value<Color*>* lubColor(Color* c1, Color* c2) {
 }
 
 void displayColor(Color* c) {
-  match (c) {
+  match (*c) {
     Red() -> { 
       printf("Red");
     }
@@ -145,22 +147,22 @@ void displayColor(Color* c) {
 
 Color* getColor(char* c) {
   if (strcmp("red\0", c) == 0) {
-    return Red();
+    return malloc_Red();
   }
   if (strcmp("orange\0", c) == 0) {
-    return Orange();
+    return malloc_Orange();
   }
   if (strcmp("yellow\0", c) == 0) {
-    return Yellow();
+    return malloc_Yellow();
   }
   if (strcmp("green\0", c) == 0) {
-    return Green();
+    return malloc_Green();
   }
   if (strcmp("blue\0", c) == 0) {
-    return Blue();
+    return malloc_Blue();
   }
   if (strcmp("violet\0", c) == 0) {
-    return Violet();
+    return malloc_Violet();
   }
   else {
     return NULL;
@@ -191,8 +193,8 @@ int main(int argc, char **argv) {
     put c1 in x;
     put c2 in x;
     
-    ActivationSet<Color*> * a1 = activationSet(D){Red()};
-    ActivationSet<Color*> * a2 = activationSet(D){Green()};
+    ActivationSet<Color*> * a1 = activationSet(D){malloc_Red()};
+    ActivationSet<Color*> * a2 = activationSet(D){malloc_Green()};
 
     ThresholdSet<Color*> * t = thresholdSet(D){a1, a2};
 

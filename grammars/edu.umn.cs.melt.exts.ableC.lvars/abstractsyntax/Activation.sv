@@ -42,7 +42,7 @@ top::Expr ::= lattice::Expr elems::[Expr] size::Expr
 
   local fwrd::Expr = 
     case lattice.typerep of
-      pointerType(_, latticeType(_, l_t)) ->
+      pointerType(_, extType(_, latticeType(l_t))) ->
         if size.typerep.isIntegerType
         then
           actInitHelper(l_t, lattice, elems,

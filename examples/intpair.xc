@@ -11,12 +11,12 @@ int main(int argc, char **argv) {
   ThresholdSet<IntPair*>* t = thresholdSet(D, 2);
   for (int i = start; i < end; i++) {
     ActivationSet<IntPair*>* a = activationSet(D, 1)
-                                 {Int_Pair(Int_None(), Int_Some(i))}; 
+                                 {malloc_Int_Pair(malloc_Int_None(), malloc_Int_Some(i))}; 
     add(t, a);
   }
 
   Lvar<IntPair*>* p = newLvar D;
-  put (Int_Pair(Int_Some(3), Int_Some(4))) in p;
+  put (malloc_Int_Pair(malloc_Int_Some(3), malloc_Int_Some(4))) in p;
   ActivationSet<IntPair*>* v1 = get (p) with t;
   printf("v1 = ");
   display(v1);

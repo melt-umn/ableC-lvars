@@ -18,24 +18,28 @@ datatype Bl {
   Bot ();
 };
 
+allocate datatype Bl with malloc;
+
 typedef  datatype State  State;
 datatype State {
   Pair (Bl*, Bl*);
 };
 
+allocate datatype State with malloc;
+
 //********************* leq function ******************************************
 
 int leqBl(Bl* b1, Bl* b2) {
-  match (b1) {
+  match (*b1) {
     Bot() -> {return 1;}
     T() -> {
-      match (b2) {
+      match (*b2) {
         T() -> {return 1;}
         _ -> {return 0;}
       }
     }
     F() -> {
-      match (b2) {
+      match (*b2) {
         F() -> {return 1;}
         _ -> {return 0;}
       }
@@ -44,9 +48,9 @@ int leqBl(Bl* b1, Bl* b2) {
 }
 
 int leqAnd(State* s1, State* s2) {
-  match (s2) {
+  match (*s2) {
     Pair(b21, b22) -> {
-      match (s1) {
+      match (*s1) {
         Pair(b11, b12) -> { return leqBl(b11, b21) && leqBl(b12, b22);}
       }
     }
@@ -56,17 +60,17 @@ int leqAnd(State* s1, State* s2) {
 //**************************** lub function ***********************************
 
 Bl* copy(Bl* b) {
-  match (b) {
-    Bot() -> {return Bot();}
-    T() -> {return T();}
-    F() -> {return F();}
+  match (*b) {
+    Bot() -> {return malloc_Bot();}
+    T() -> {return malloc_T();}
+    F() -> {return malloc_F();}
   }
 }
 
 Value<State*>* lub(State* s1, State* s2) {
-  match (s1) {
+  match (*s1) {
     Pair(b11, b12) -> {
-      match (s2) {
+      match (*s2) {
         Pair(b21, b22) -> {
           Bl* bool1;
           Bl* bool2;
@@ -91,7 +95,7 @@ Value<State*>* lub(State* s1, State* s2) {
             return Top<State*>;
           }
 
-          return value Pair(bool1, bool2);
+          return value malloc_Pair(bool1, bool2);
         }
       }
     }
@@ -101,7 +105,7 @@ Value<State*>* lub(State* s1, State* s2) {
 //**************************** display function *******************************
 
 void displayBl(Bl* b) {
-  match (b) {
+  match (*b) {
     Bot() -> {printf("?");}
     T() -> {printf("T");}
     F() -> {printf("F");}
@@ -109,7 +113,7 @@ void displayBl(Bl* b) {
 }
 
 void displayState(State* s) {
-  match (s) {
+  match (*s) {
     Pair(b1, b2) -> {
       printf("(");
       displayBl(b1);
@@ -123,7 +127,7 @@ void displayState(State* s) {
 //*************************** free function ***********************************
 
 void freeState(State* s) {
-  match (s) {
+  match (*s) {
     Pair(b1, b2) -> {
       free(b1);
       free(b2);
@@ -143,15 +147,15 @@ cilk int main(int argc, char **argv) {
   Lvar<State*>* l1 = newLvar lat;
   Lvar<State*>* l2 = makeLvar(leqAnd, lub, displayState, freeState);
 
-  put (Pair(Bot(), T())) in l1;
-  put (Pair(Bot(), T())) in l1;
-  put (Pair(T(), Bot())) in l1;
+  put (malloc_Pair(malloc_Bot(), malloc_T())) in l1;
+  put (malloc_Pair(malloc_Bot(), malloc_T())) in l1;
+  put (malloc_Pair(malloc_T(), malloc_Bot())) in l1;
   
-  ActivationSet<State*>* trueAct = activationSet(lat){Pair(T(), T())};
+  ActivationSet<State*>* trueAct = activationSet(lat){malloc_Pair(malloc_T(), malloc_T())};
   ActivationSet<State*>* falseAct = activationSet(lat){
-                                      Pair(F(), Bot()), Pair(Bot(), F()),
-                                      Pair(F(), T()), Pair(T(), F()), 
-                                      Pair(F(), F())
+                                      malloc_Pair(malloc_F(), malloc_Bot()), malloc_Pair(malloc_Bot(), malloc_F()),
+                                      malloc_Pair(malloc_F(), malloc_T()), malloc_Pair(malloc_T(), malloc_F()), 
+                                      malloc_Pair(malloc_F(), malloc_F())
                                     };
   ThresholdSet<State*>* t = thresholdSet(lat){trueAct, falseAct};
 
@@ -162,7 +166,7 @@ cilk int main(int argc, char **argv) {
   ActivationSet<State*>* result;
   spawn result = getCilk(l2, t);
 
-  put (Pair(F(), Bot())) in l2;
+  put (malloc_Pair(malloc_F(), malloc_Bot())) in l2;
   sync;
 
   printf("After putting (F, ?):\n  Act Set Matched: ");

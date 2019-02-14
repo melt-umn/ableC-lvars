@@ -58,7 +58,7 @@ top::Expr ::= val::Expr
   forwards to
     mkErrorCheck(localErrors, 
     case val.typerep of
-      pointerType(_, valueType(_, t)) -> 
+      pointerType(_, extType(_, valueType(t))) -> 
         ableC_Expr{
           inst _isTop<$directTypeExpr{t}>($Expr{val})
         }

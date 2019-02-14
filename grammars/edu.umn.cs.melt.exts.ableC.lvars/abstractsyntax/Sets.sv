@@ -17,9 +17,9 @@ top::Expr ::= set::Expr item::Expr
 
   local fwrd::Expr =
     case set.typerep of
-      pointerType(_, actType(_, t)) -> 
+      pointerType(_, extType(_, actType(t))) -> 
         addAct(t, set, item, location=top.location)
-    | pointerType(_, threshType(_, t)) ->
+    | pointerType(_, extType(_, threshType(t))) ->
         addThresh(t, set, item, location=top.location)
     | _ ->
         errorExpr([err(top.location, 
@@ -45,11 +45,11 @@ top::Expr ::= set::Expr
 
   local fwrd::Expr =
     case set.typerep of
-      pointerType(_, actType(_, t)) -> 
+      pointerType(_, extType(_, actType(t))) -> 
         ableC_Expr{
           inst _freeActivation<$directTypeExpr{t}>($Expr{set})
         }
-    | pointerType(_, threshType(_, t)) ->
+    | pointerType(_, extType(_, threshType(t))) ->
         ableC_Expr{
           inst _freeThreshold<$directTypeExpr{t}>($Expr{set})
         }

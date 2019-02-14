@@ -15,6 +15,8 @@ datatype YN {
   No ();
 };
 
+allocate datatype YN with malloc;
+
 typedef datatype Vote Vote;
 datatype Vote {
   Horace (YN*);
@@ -22,16 +24,20 @@ datatype Vote {
   Kat (YN *);
 }
 
+allocate datatype Vote with malloc;
+
 typedef datatype VoteSet VoteSet;
 datatype VoteSet {
   Empty ();
   Set (Vote*, VoteSet*);
 }
 
+allocate datatype VoteSet with malloc;
+
 // ********************** free function ***************************************
 
 void freePersonVote(Vote* v) {
-  match (v) {
+  match (*v) {
     Horace(vote) -> {
       free(vote);
       free(v);
@@ -48,7 +54,7 @@ void freePersonVote(Vote* v) {
 }
 
 void freeVoteSet(VoteSet* v) {
-  match (v) {
+  match (*v) {
     Set(hd, tl) -> {
       freePersonVote(hd);
       freeVoteSet(tl);
@@ -61,15 +67,15 @@ void freeVoteSet(VoteSet* v) {
 // *********************** leq method for our lattice *************************
 
 int eqVotes(YN* v1, YN* v2) {
-  match (v1) {
+  match (*v1) {
     Yes() -> {
-      match (v2) {
+      match (*v2) {
         Yes() -> {return 1;} 
         _ -> {return 0;}
       }
     }
     No() -> {
-      match (v2) {
+      match (*v2) {
         No() -> {return 1;}  
         _ -> {return 0;}
       }
@@ -78,21 +84,21 @@ int eqVotes(YN* v1, YN* v2) {
 }
 
 int eqPeopleVotes(Vote* v1, Vote* v2) {
-  match (v1) {
+  match (*v1) {
     Horace(vote1) -> {
-      match (v2) {
+      match (*v2) {
         Horace(vote2) -> {return eqVotes(vote1, vote2);}
         _ -> {return 0;}
       }
     }
     Kat(vote1) -> {
-      match (v2) {
+      match (*v2) {
         Kat(vote2) -> {return eqVotes(vote1, vote2);}
         _ -> {return 0;}
       }
     }
     Franz(vote1) -> {
-      match (v2) {
+      match (*v2) {
         Franz(vote2) -> {return eqVotes(vote1, vote2);}
         _ -> {return 0;}
       }
@@ -101,7 +107,7 @@ int eqPeopleVotes(Vote* v1, Vote* v2) {
 }
 
 int isInSet(Vote* v, VoteSet* votes) {
-  match (votes) {
+  match (*votes) {
     Empty() -> {return 0;}
     Set(hd, tl) -> {
       if (eqPeopleVotes(v, hd)) {
@@ -113,15 +119,15 @@ int isInSet(Vote* v, VoteSet* votes) {
 }
 
 int isVoteSubset(VoteSet* v1, VoteSet* v2) {
-  match (v2) {
+  match (*v2) {
     Empty() -> {
-      match (v1) {
+      match (*v1) {
         Empty() -> {return 1;}
         _ -> {return 0;}
       }
     }
     Set(hd2, tl2) -> {
-      match (v1) {
+      match (*v1) {
         Empty() -> {return 1;}
         Set(hd1, tl1) -> {
           return isInSet(hd1, v2) && isVoteSubset(tl1, v2);
@@ -134,46 +140,46 @@ int isVoteSubset(VoteSet* v1, VoteSet* v2) {
 // ********************* lub function for our lattice *************************
 
 YN* copyVote(YN* v) {
-  match (v) {
-    Yes() -> {return Yes();}
-    No() -> {return No();}
+  match (*v) {
+    Yes() -> {return malloc_Yes();}
+    No() -> {return malloc_No();}
   }
 }
 
 Vote* copyPersonVote(Vote* v) {
-  match (v) {
-    Horace(vote) -> {return Horace(copyVote(vote));}
-    Franz(vote) -> {return Franz(copyVote(vote));}
-    Kat(vote) -> {return Kat(copyVote(vote));}
+  match (*v) {
+    Horace(vote) -> {return malloc_Horace(copyVote(vote));}
+    Franz(vote) -> {return malloc_Franz(copyVote(vote));}
+    Kat(vote) -> {return malloc_Kat(copyVote(vote));}
   }
 }
 
 VoteSet* copyVoteSet(VoteSet* v) {
-  match (v) {
-    Empty() -> {return Empty();}
+  match (*v) {
+    Empty() -> {return malloc_Empty();}
     Set(hd, tl) -> {
-      return Set(copyPersonVote(hd), copyVoteSet(tl));
+      return malloc_Set(copyPersonVote(hd), copyVoteSet(tl));
     }
   }
 }
 
 YN* getOtherVote(YN* v) {
-  match (v) {
-    Yes() -> {return No();}
-    No() -> {return Yes();}
+  match (*v) {
+    Yes() -> {return malloc_No();}
+    No() -> {return malloc_Yes();}
   }
 }
 
 VoteSet* voteSetUnion(VoteSet* v1, VoteSet* v2) {
-  match (v1) {
+  match (*v1) {
     Empty() -> {return copyVoteSet(v2);}
     Set(hd1, tl1) -> {
-      match (v2) {
+      match (*v2) {
         Empty() -> {return copyVoteSet(v1);}
         Set(hd2, tl2) -> {
-          match (hd1) {
+          match (*hd1) {
             Horace(vote) -> {
-              Vote* other = Horace(getOtherVote(vote));
+              Vote* other = malloc_Horace(getOtherVote(vote));
               if (isInSet(other, v2)) {
                 freePersonVote(other);
                 return NULL;
@@ -187,11 +193,11 @@ VoteSet* voteSetUnion(VoteSet* v1, VoteSet* v2) {
                 return result;
               }
               else {
-                return Set(copyPersonVote(hd1), result);
+                return malloc_Set(copyPersonVote(hd1), result);
               }
             }
             Franz(vote) -> {
-              Vote* other = Franz(getOtherVote(vote));
+              Vote* other = malloc_Franz(getOtherVote(vote));
               if (isInSet(other, v2)) {
                 freePersonVote(other);
                 return NULL;
@@ -205,11 +211,11 @@ VoteSet* voteSetUnion(VoteSet* v1, VoteSet* v2) {
                 return result;
               }
               else {
-                return Set(copyPersonVote(hd1), result);
+                return malloc_Set(copyPersonVote(hd1), result);
               }
             }
             Kat(vote) -> {
-              Vote* other = Kat(getOtherVote(vote));
+              Vote* other = malloc_Kat(getOtherVote(vote));
               if (isInSet(other, v2)) {
                 freePersonVote(other);
                 return NULL;
@@ -223,7 +229,7 @@ VoteSet* voteSetUnion(VoteSet* v1, VoteSet* v2) {
                 return result;
               }
               else {
-                return Set(copyPersonVote(hd1), result);
+                return malloc_Set(copyPersonVote(hd1), result);
               }
             }
           }
@@ -244,7 +250,7 @@ Value<VoteSet*>* lubVoteSet(VoteSet* v1, VoteSet* v2) {
 // ******************* display method for our lattice *************************
 
 void displayYN(YN* yn) {
-  match (yn) {
+  match (*yn) {
     Yes () -> {
       printf("Yes()");
     }
@@ -255,7 +261,7 @@ void displayYN(YN* yn) {
 }
 
 void displayVote(Vote* v) {
-  match (v) {
+  match (*v) {
     Horace(yn1) -> {
       printf("Horace(");
       displayYN(yn1);
@@ -275,11 +281,11 @@ void displayVote(Vote* v) {
 }
 
 void displayInner(VoteSet* v) {
-  match (v) {
+  match (*v) {
     Empty () -> {}
     Set (hd, tl) -> {
       displayVote(hd);
-      match (tl) {
+      match (*tl) {
         Empty () -> {}
         other -> { 
           printf(", ");
@@ -303,23 +309,23 @@ int main(int argc, char **argv) {
   Lvar<VoteSet*>* y = newLvar D;
   Lvar<VoteSet*>* n = newLvar D;
 
-  ActivationSet<VoteSet*>* noPizza = activationSet(D){Set(Horace(No()), 
-                                                      Set(Franz(No()), 
-                                                      Set(Kat(No()), 
-                                                      Empty())))};
-  ActivationSet<VoteSet*>* yesPizza = activationSet(D){Set(Horace(Yes()), Empty()),
-                                                       Set(Kat(Yes()), Empty()),
-                                                       Set(Franz(Yes()), Empty())};
+  ActivationSet<VoteSet*>* noPizza = activationSet(D){malloc_Set(malloc_Horace(malloc_No()), 
+                                                      malloc_Set(malloc_Franz(malloc_No()), 
+                                                      malloc_Set(malloc_Kat(malloc_No()), 
+                                                      malloc_Empty())))};
+  ActivationSet<VoteSet*>* yesPizza = activationSet(D){malloc_Set(malloc_Horace(malloc_Yes()), malloc_Empty()),
+                                                       malloc_Set(malloc_Kat(malloc_Yes()), malloc_Empty()),
+                                                       malloc_Set(malloc_Franz(malloc_Yes()), malloc_Empty())};
   ThresholdSet<VoteSet*>* t = thresholdSet(D){noPizza, yesPizza};
 
   printf("Kat votes No\n");
-  put (Set(Kat(No()), Empty())) in y;
+  put (malloc_Set(malloc_Kat(malloc_No()), malloc_Empty())) in y;
   printf("Franz votes No\n");
-  put (Set(Franz(No()), Empty())) in y;
+  put (malloc_Set(malloc_Franz(malloc_No()), malloc_Empty())) in y;
   printf("Kat votes No again\n");
-  put (Set(Kat(No()), Empty())) in y;
+  put (malloc_Set(malloc_Kat(malloc_No()), malloc_Empty())) in y;
   printf("Horace votes Yes\n");
-  put (Set(Horace(Yes()), Empty())) in y;
+  put (malloc_Set(malloc_Horace(malloc_Yes()), malloc_Empty())) in y;
 
   ActivationSet<VoteSet*>*  result1 = get y with t;
   freeze y; 
@@ -335,13 +341,13 @@ int main(int argc, char **argv) {
 
   printf("\n");
   printf("Kat votes No\n");
-  put (Set(Kat(No()), Empty())) in n;
+  put (malloc_Set(malloc_Kat(malloc_No()), malloc_Empty())) in n;
   printf("Franz votes No\n");
-  put (Set(Franz(No()), Empty())) in n;
+  put (malloc_Set(malloc_Franz(malloc_No()), malloc_Empty())) in n;
   //printf("Kat votes tries to change her vote to Yes\n");
   //put (Set(Kat(Yes()), Empty())) in n; (this will produce an invalid put error)
   printf("Horace votes No\n");
-  put (Set(Horace(No()), Empty())) in n;
+  put (malloc_Set(malloc_Horace(malloc_No()), malloc_Empty())) in n;
 
   ActivationSet<VoteSet*>*  result2 = get n with t;
   freeze n; 
@@ -360,7 +366,7 @@ int main(int argc, char **argv) {
 
   printf("\n");
   printf("Franz votes Yes\n");
-  put (Set(Franz(Yes()), Empty())) in y;
+  put (malloc_Set(malloc_Franz(malloc_Yes()), malloc_Empty())) in y;
 
   result1 = get y with t;
   freeze y; 

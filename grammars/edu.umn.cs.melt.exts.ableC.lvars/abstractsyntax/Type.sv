@@ -1,5 +1,7 @@
 grammar edu:umn:cs:melt:exts:ableC:lvars:abstractsyntax;
 
+import edu:umn:cs:melt:ableC:abstractsyntax:overloadable;
+
 //********************************* Activation Set ****************************
 
 abstract production actTypeExpr 
@@ -26,25 +28,30 @@ top::BaseTypeExpr ::= q::Qualifiers sub::TypeName
             q,
             name("_ActivationSet", location=builtin),
             [sub.typerep])]),
-        directTypeExpr(actType(q, sub.typerep)));
+        extTypeExpr(q, actType(sub.typerep)));
 }
 
 abstract production actType
-top::Type ::= q::Qualifiers sub::Type
+top::ExtType ::= sub::Type
 {
-  top.lpp = pp"${terminate(space(), q.pps)}ActivationSet<${sub.lpp}${sub.rpp}>";
-  top.rpp = pp"";
+  top.pp = pp"${terminate(space(), top.givenQualifiers.pps)}ActivationSet<${sub.lpp}${sub.rpp}>";
   
-  top.withTypeQualifiers = actType(foldQualifier(top.addedTypeQualifiers ++
-                                   q.qualifiers), sub);
-
-  forwards to
+  top.host =
     extType(
-      q,
+      top.givenQualifiers,
       refIdExtType(
         structSEU(),
         templateMangledName("_ActivationSet", [sub]),
         templateMangledRefId("_ActivationSet", [sub])));
+
+  top.mangledName = s"ActivationSet_${sub.mangledName}_";
+
+  top.isEqualTo =
+    \ other::ExtType ->
+      case other of
+      | actType(otherSub) -> compatibleTypes(sub, otherSub, false, false)
+      | _ -> false
+      end;
 }
 
 //******************************** Threshold Set type *************************
@@ -73,25 +80,30 @@ top::BaseTypeExpr ::= q::Qualifiers sub::TypeName
             q,
             name("_ThresholdSet", location=builtin),
             [sub.typerep])]),
-        directTypeExpr(threshType(q, sub.typerep)));
+        extTypeExpr(q, threshType(sub.typerep)));
 }
 
 abstract production threshType
-top::Type ::= q::Qualifiers sub::Type
+top::ExtType ::= sub::Type
 {
-  top.lpp = pp"${terminate(space(), q.pps)}ThresholdSet<${sub.lpp}${sub.rpp}>";
-  top.rpp = pp"";
+  top.pp = pp"${terminate(space(), top.givenQualifiers.pps)}ThresholdSet<${sub.lpp}${sub.rpp}>";
   
-  top.withTypeQualifiers = threshType(foldQualifier(top.addedTypeQualifiers ++
-                                   q.qualifiers), sub);
-
-  forwards to
+  top.host =
     extType(
-      q,
+      top.givenQualifiers,
       refIdExtType(
         structSEU(),
         templateMangledName("_ThresholdSet", [sub]),
         templateMangledRefId("_ThresholdSet", [sub])));
+
+  top.mangledName = s"ThresholdSet_${sub.mangledName}_";
+
+  top.isEqualTo =
+    \ other::ExtType ->
+      case other of
+      | threshType(otherSub) -> compatibleTypes(sub, otherSub, false, false)
+      | _ -> false
+      end;
 }
 
 //******************************** Lvar type **********************************
@@ -120,25 +132,30 @@ top::BaseTypeExpr ::= q::Qualifiers sub::TypeName
             q,
             name("_Lvar", location=builtin),
             [sub.typerep])]),
-        directTypeExpr(lvarType(q, sub.typerep)));
+        extTypeExpr(q, lvarType(sub.typerep)));
 }
 
 abstract production lvarType
-top::Type ::= q::Qualifiers sub::Type
+top::ExtType ::= sub::Type
 {
-  top.lpp = pp"${terminate(space(), q.pps)}Lvar<${sub.lpp}${sub.rpp}>";
-  top.rpp = pp"";
+  top.pp = pp"${terminate(space(), top.givenQualifiers.pps)}Lvar<${sub.lpp}${sub.rpp}>";
   
-  top.withTypeQualifiers = lvarType(foldQualifier(top.addedTypeQualifiers ++
-                                   q.qualifiers), sub);
-
-  forwards to
+  top.host =
     extType(
-      q,
+      top.givenQualifiers,
       refIdExtType(
         structSEU(),
         templateMangledName("_Lvar", [sub]),
         templateMangledRefId("_Lvar", [sub])));
+
+  top.mangledName = s"Lvar_${sub.mangledName}_";
+
+  top.isEqualTo =
+    \ other::ExtType ->
+      case other of
+      | lvarType(otherSub) -> compatibleTypes(sub, otherSub, false, false)
+      | _ -> false
+      end;
 }
 
 //******************************** Lattice type *******************************
@@ -167,25 +184,30 @@ top::BaseTypeExpr ::= q::Qualifiers sub::TypeName
             q,
             name("_Lattice", location=builtin),
             [sub.typerep])]),
-        directTypeExpr(latticeType(q, sub.typerep)));
+        extTypeExpr(q, latticeType(sub.typerep)));
 }
 
 abstract production latticeType
-top::Type ::= q::Qualifiers sub::Type
+top::ExtType ::= sub::Type
 {
-  top.lpp = pp"${terminate(space(), q.pps)}Lattice<${sub.lpp}${sub.rpp}>";
-  top.rpp = pp"";
+  top.pp = pp"${terminate(space(), top.givenQualifiers.pps)}Lattice<${sub.lpp}${sub.rpp}>";
   
-  top.withTypeQualifiers = latticeType(foldQualifier(top.addedTypeQualifiers ++
-                                   q.qualifiers), sub);
-
-  forwards to
+  top.host =
     extType(
-      q,
+      top.givenQualifiers,
       refIdExtType(
         structSEU(),
         templateMangledName("_Lattice", [sub]),
         templateMangledRefId("_Lattice", [sub])));
+
+  top.mangledName = s"Lattice_${sub.mangledName}_";
+
+  top.isEqualTo =
+    \ other::ExtType ->
+      case other of
+      | latticeType(otherSub) -> compatibleTypes(sub, otherSub, false, false)
+      | _ -> false
+      end;
 }
 
 //********************************* Value type ********************************
@@ -214,24 +236,29 @@ top::BaseTypeExpr ::= q::Qualifiers sub::TypeName
             q,
             name("_Value", location=builtin),
             [sub.typerep])]),
-        directTypeExpr(valueType(q, sub.typerep)));
+        extTypeExpr(q, valueType(sub.typerep)));
 }
 
 abstract production valueType
-top::Type ::= q::Qualifiers sub::Type
+top::ExtType ::= sub::Type
 {
-  top.lpp = pp"${terminate(space(), q.pps)}Value<${sub.lpp}${sub.rpp}>";
-  top.rpp = pp"";
+  top.pp = pp"${terminate(space(), top.givenQualifiers.pps)}Value<${sub.lpp}${sub.rpp}>";
   
-  top.withTypeQualifiers = valueType(foldQualifier(top.addedTypeQualifiers ++
-                                   q.qualifiers), sub);
-
-  forwards to
+  top.host =
     extType(
-      q,
+      top.givenQualifiers,
       refIdExtType(
         structSEU(),
         templateMangledName("_Value", [sub]),
         templateMangledRefId("_Value", [sub])));
+
+  top.mangledName = s"Value_${sub.mangledName}_";
+
+  top.isEqualTo =
+    \ other::ExtType ->
+      case other of
+      | valueType(otherSub) -> compatibleTypes(sub, otherSub, false, false)
+      | _ -> false
+      end;
 }
 

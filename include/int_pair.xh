@@ -9,10 +9,12 @@ datatype IntPair {
   Int_Pair(MaybeInt*, MaybeInt*);
 }
 
+allocate datatype IntPair with malloc;
+
 int leq_int_pair(IntPair* p1, IntPair* p2) {
-  match (p1) {
+  match (*p1) {
     Int_Pair(i1, i2) -> {
-      match (p2) {
+      match (*p2) {
         Int_Pair(i3, i4) -> {
           return leq_maybe_int(i1, i3) &&
                  leq_maybe_int(i2, i4);
@@ -23,9 +25,9 @@ int leq_int_pair(IntPair* p1, IntPair* p2) {
 }
 
 Value<IntPair*>* lub_int_pair(IntPair* p1, IntPair* p2) {
-  match (p1) {
+  match (*p1) {
     Int_Pair(i1, i2) -> {
-      match (p2) {
+      match (*p2) {
         Int_Pair(i3, i4) -> {
 
           MaybeInt* val1;
@@ -51,7 +53,7 @@ Value<IntPair*>* lub_int_pair(IntPair* p1, IntPair* p2) {
             return Top<IntPair*>;
           } 
 
-          return value (Int_Pair(val1, val2));
+          return value (malloc_Int_Pair(val1, val2));
 
         } 
       }
@@ -60,7 +62,7 @@ Value<IntPair*>* lub_int_pair(IntPair* p1, IntPair* p2) {
 }
 
 void display_int_pair(IntPair* p) {
-  match (p) {
+  match (*p) {
     Int_Pair(i1, i2) -> {
       printf("(");
       display_maybe_int(i1);
@@ -72,7 +74,7 @@ void display_int_pair(IntPair* p) {
 }
 
 void free_int_pair(IntPair* p) {
-  match (p) {
+  match (*p) {
     Int_Pair(i1, i2) -> {
       free_maybe_int(i1);
       free_maybe_int(i2);

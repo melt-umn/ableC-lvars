@@ -43,7 +43,7 @@ top::Expr ::= lattice::Expr elems::[Expr] size::Expr
 
   local fwrd::Expr = 
     case lattice.typerep of
-      pointerType(_, latticeType(_, l_t)) ->
+      pointerType(_, extType(_, latticeType(l_t))) ->
         if size.typerep.isIntegerType
         then
           threshInitHelper(l_t, lattice, elems,
@@ -74,7 +74,7 @@ top::Expr ::= basetype::Type threshSet::Expr item::Expr
 
   local fwrd::Expr = 
     case item.typerep of
-      pointerType(_, actType(_, a_t)) ->
+      pointerType(_, extType(_, actType(a_t))) ->
         if compatibleTypes(basetype, a_t, false, true)
         then ableC_Expr{
                inst _addThreshold<$directTypeExpr{basetype}>
@@ -115,7 +115,7 @@ top::Expr ::= thresh::Expr
 
   local fwrd::Expr =
     case thresh.typerep of
-      pointerType(_, threshType(_, t)) -> 
+      pointerType(_, extType(_, threshType(t))) -> 
         ableC_Expr {
           inst _freeActSets<$directTypeExpr{t}>($Expr{thresh})
         }

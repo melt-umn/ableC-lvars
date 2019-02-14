@@ -29,15 +29,15 @@ top::Expr ::= e::Expr
 
   local fwrd::Expr =
     case e.typerep of
-      pointerType(_, actType(_, t)) -> 
+      pointerType(_, extType(_, actType(t))) -> 
         ableC_Expr{
           inst _displayActivation<$directTypeExpr{t}>($Expr{e})
         }
-    | pointerType(_, threshType(_, t)) ->
+    | pointerType(_, extType(_, threshType(t))) ->
         ableC_Expr{
           inst _displayThreshold<$directTypeExpr{t}>($Expr{e})
         }
-    | pointerType(_, lvarType(_, t)) ->
+    | pointerType(_, extType(_, lvarType(t))) ->
         ableC_Expr{
           inst _displayLvar<$directTypeExpr{t}>($Expr{e})
         }
@@ -69,9 +69,9 @@ top::Expr ::= lvar::Expr threshold::Expr
 
   local fwrd::Expr =
     case lvar.typerep of
-      pointerType(_, lvarType(_, l_t)) ->
+      pointerType(_, extType(_, lvarType(l_t))) ->
         case threshold.typerep of
-          pointerType(_, threshType(_, t_t)) ->
+          pointerType(_, extType(_, threshType(t_t))) ->
             getCallHelper(l_t, lvar, t_t, threshold, location=top.location)
         | _ -> 
            errorExpr([err(top.location, 
@@ -135,7 +135,7 @@ top::Expr ::= lvar::Expr
 
   local fwrd::Expr =
     case lvar.typerep of
-      pointerType(_, lvarType(_, l_t)) ->
+      pointerType(_, extType(_, lvarType(l_t))) ->
         ableC_Expr{
           inst _frozenGet<$directTypeExpr{l_t}>($Expr{lvar})
         }
@@ -167,7 +167,7 @@ top::Expr ::= lvar::Expr value::Expr
 
   local fwrd::Expr =
     case lvar.typerep of
-      pointerType(_, lvarType(_, l_t)) ->
+      pointerType(_, extType(_, lvarType(l_t))) ->
         putCallHelper(l_t, lvar, value, location=top.location)
     | _ -> errorExpr([err(top.location, 
           "put expected second argument of type Lvar<a>*, got type "

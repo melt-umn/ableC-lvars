@@ -111,13 +111,13 @@ Type ::= lub::Expr e::Decorated Env
     case loc_lub.typerep of
       functionType(outValueType, protoFunctionType([t1, t2], false),_) ->
         case outValueType of
-          pointerType(_, valueType(_, outTypeActual)) -> outTypeActual
+          pointerType(_, extType(_, valueType(outTypeActual))) -> outTypeActual
         | _ -> errorType()
         end
     | pointerType(_, functionType(outValueType, 
       protoFunctionType([t1, t2], false),_)) ->
         case outValueType of
-          pointerType(_, valueType(_, outTypeActual)) -> outTypeActual
+          pointerType(_, extType(_, valueType(outTypeActual))) -> outTypeActual
         | _ -> errorType()
         end
     | _ -> errorType()
@@ -141,7 +141,7 @@ top::Expr ::= leq::Expr lub::Expr disp::Expr free::Expr destr::Expr
     case lub.typerep of
       functionType(outValueType, protoFunctionType([t1, t2], false),_) ->
         case outValueType of
-          pointerType(_, valueType(_, outType)) -> 
+          pointerType(_, extType(_, valueType(outType))) -> 
             if compatibleTypes(t1, outType, false, true)
               && compatibleTypes(t2, outType, false, true)
             then latticeCheckHelper(top.location, outType, leq, disp, free,
@@ -158,7 +158,7 @@ top::Expr ::= leq::Expr lub::Expr disp::Expr free::Expr destr::Expr
     | pointerType(_, functionType(outValueType, 
         protoFunctionType([t1, t2], false),_)) -> 
         case outValueType of
-          pointerType(_, valueType(_, outType)) -> 
+          pointerType(_, extType(_, valueType(outType))) -> 
             if compatibleTypes(t1, outType, false, true)
               && compatibleTypes(t2, outType, false, true)
             then latticeCheckHelper(top.location, outType, leq, disp, free,
@@ -250,3 +250,4 @@ top::Expr ::= leq::Expr lub::Expr destr::Expr
      ableC_Expr{inst _defaultFree<$directTypeExpr{baseType}>}, destr, 
      location=top.location), location=top.location);
 }
+
