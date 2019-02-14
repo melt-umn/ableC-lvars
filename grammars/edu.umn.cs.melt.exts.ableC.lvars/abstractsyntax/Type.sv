@@ -25,7 +25,7 @@ top::BaseTypeExpr ::= q::Qualifiers sub::TypeName
           templateTypeExprInstDecl(
             q,
             name("_ActivationSet", location=builtin),
-            consTypeName(sub, nilTypeName()))]),
+            [sub.typerep])]),
         directTypeExpr(actType(q, sub.typerep)));
 }
 
@@ -39,9 +39,9 @@ top::Type ::= q::Qualifiers sub::Type
                                    q.qualifiers), sub);
 
   forwards to
-    tagType(
+    extType(
       q,
-      refIdTagType(
+      refIdExtType(
         structSEU(),
         templateMangledName("_ActivationSet", [sub]),
         templateMangledRefId("_ActivationSet", [sub])));
@@ -72,7 +72,7 @@ top::BaseTypeExpr ::= q::Qualifiers sub::TypeName
           templateTypeExprInstDecl(
             q,
             name("_ThresholdSet", location=builtin),
-            consTypeName(sub, nilTypeName()))]),
+            [sub.typerep])]),
         directTypeExpr(threshType(q, sub.typerep)));
 }
 
@@ -86,9 +86,9 @@ top::Type ::= q::Qualifiers sub::Type
                                    q.qualifiers), sub);
 
   forwards to
-    tagType(
+    extType(
       q,
-      refIdTagType(
+      refIdExtType(
         structSEU(),
         templateMangledName("_ThresholdSet", [sub]),
         templateMangledRefId("_ThresholdSet", [sub])));
@@ -119,7 +119,7 @@ top::BaseTypeExpr ::= q::Qualifiers sub::TypeName
           templateTypeExprInstDecl(
             q,
             name("_Lvar", location=builtin),
-            consTypeName(sub, nilTypeName()))]),
+            [sub.typerep])]),
         directTypeExpr(lvarType(q, sub.typerep)));
 }
 
@@ -133,9 +133,9 @@ top::Type ::= q::Qualifiers sub::Type
                                    q.qualifiers), sub);
 
   forwards to
-    tagType(
+    extType(
       q,
-      refIdTagType(
+      refIdExtType(
         structSEU(),
         templateMangledName("_Lvar", [sub]),
         templateMangledRefId("_Lvar", [sub])));
@@ -166,7 +166,7 @@ top::BaseTypeExpr ::= q::Qualifiers sub::TypeName
           templateTypeExprInstDecl(
             q,
             name("_Lattice", location=builtin),
-            consTypeName(sub, nilTypeName()))]),
+            [sub.typerep])]),
         directTypeExpr(latticeType(q, sub.typerep)));
 }
 
@@ -180,9 +180,9 @@ top::Type ::= q::Qualifiers sub::Type
                                    q.qualifiers), sub);
 
   forwards to
-    tagType(
+    extType(
       q,
-      refIdTagType(
+      refIdExtType(
         structSEU(),
         templateMangledName("_Lattice", [sub]),
         templateMangledRefId("_Lattice", [sub])));
@@ -213,7 +213,7 @@ top::BaseTypeExpr ::= q::Qualifiers sub::TypeName
           templateTypeExprInstDecl(
             q,
             name("_Value", location=builtin),
-            consTypeName(sub, nilTypeName()))]),
+            [sub.typerep])]),
         directTypeExpr(valueType(q, sub.typerep)));
 }
 
@@ -227,9 +227,9 @@ top::Type ::= q::Qualifiers sub::Type
                                    q.qualifiers), sub);
 
   forwards to
-    tagType(
+    extType(
       q,
-      refIdTagType(
+      refIdExtType(
         structSEU(),
         templateMangledName("_Value", [sub]),
         templateMangledRefId("_Value", [sub])));
